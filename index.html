@@ -1,10 +1,10 @@
-<!-- Retest Prototype v02.34 | 19-Column Schema Sync -->
+<!-- Retest Prototype v03.00 | Voice Engine, Profile Manager & Header Redesign -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changeout Pricing Beta v02.34</title>
+    <title>Changeout Pricing Beta v03.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -291,19 +291,22 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
   </head>
   <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden" style="overscroll-behavior: none;">
 
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+
     <!-- MAIN APP HEADER -->
     <header class="bg-slate-950 border-b border-slate-800/80 sticky top-0 z-40 shadow-md w-full">
       <details id="master-header-inner" class="w-full mx-auto group">
         <summary class="px-4 py-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden border-b border-transparent group-open:border-slate-800 transition-colors">
             <div class="flex items-center justify-between w-full">
-                <!-- LEFT: Title & Live Badge -->
-                <div class="flex items-center gap-2">
-                    <h1 class="text-base font-bold font-display tracking-tight text-white">Pricing Beta</h1>
-                    <span class="bg-blue-600/30 text-blue-300 text-xs sm:text-sm font-extrabold px-3 py-1 rounded-full border border-blue-500/50 tracking-wider ml-2">v02.34</span>
+                <!-- LEFT: Title & Live Badge (Double-Decker) -->
+                <div class="flex flex-col items-start gap-0.5">
+                    <h1 class="text-base font-bold font-display tracking-tight text-white leading-tight">Pricing Beta</h1>
+                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.00</span>
                 </div>
 
                 <!-- RIGHT: Always-Visible Controls & Chevron -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
                     <!-- Cart Counter -->
                     <button id="cartButton" onclick="event.preventDefault(); toggleViewSwap()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-800 border border-slate-700 rounded-lg shadow transition-colors cursor-pointer relative">
                         <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
@@ -314,6 +317,11 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                     <!-- Light/Dark Mode -->
                     <button id="themeToggleBtn" onclick="event.preventDefault(); toggleThemeMode()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white" title="Toggle Light/Dark Mode">
                         <i data-lucide="sun" id="themeToggleIcon" class="w-4 h-4"></i>
+                    </button>
+
+                    <!-- Voice Command Mic -->
+                    <button id="voice-btn" onclick="event.preventDefault(); activateVoiceCommand()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white" title="Voice Command">
+                        <i data-lucide="mic" class="w-4 h-4"></i>
                     </button>
 
                     <!-- Settings / Gear -->
@@ -348,11 +356,6 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
               <button onclick="changeColCount(1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded shadow-sm flex items-center justify-center transition-colors cursor-pointer">+</button>
           </div>
 
-          <!-- Reset Grid -->
-          <button id="resetGridBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            Reset
-          </button>
 
           <!-- Force Desktop -->
           <button id="desktopToggleBtn" onclick="toggleForceDesktop()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white" title="Toggle Force Desktop View">
@@ -861,6 +864,33 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
               </div>
               <p class="leading-relaxed">Using the comprehensive 19-column database schema. Dynamic cells adapt to the schema model on the fly!</p>
             </div>
+
+            <!-- Profile Manager (Layout Vault) -->
+            <div class="space-y-3 border-t border-slate-100 pt-4">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="bookmark" class="w-4 h-4 text-slate-500"></i>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Layout Vault</h3>
+              </div>
+              <p class="text-[10px] text-slate-400">Save your current column widths, fonts, and layout settings as a named profile to recall later.</p>
+
+              <!-- Save Row -->
+              <div class="flex gap-2">
+                <input id="profileNameInput" type="text" placeholder="Profile name…" class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                <button onclick="saveLayoutProfile()" class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg cursor-pointer transition-colors">
+                  <i data-lucide="save" class="w-3 h-3"></i> Save
+                </button>
+              </div>
+
+              <!-- Load Row -->
+              <div class="flex gap-2">
+                <select id="profileSelectDropdown" class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer">
+                  <option value="">Select Profile…</option>
+                </select>
+                <button onclick="loadLayoutProfile()" class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                  <i data-lucide="folder-open" class="w-3 h-3"></i> Load
+                </button>
+              </div>
+            </div>
           </section>
 
         </div>
@@ -906,7 +936,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                    <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v02.34</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.00</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -4281,177 +4311,127 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         }
       }
 
-      // Bind reset and export
+      // Bind export
       document.getElementById("exportCodeBtn").addEventListener("click", () => toggleCodeModal(true));
-      
-      document.getElementById("resetGridBtn").addEventListener("click", () => {
-        if (confirm("Reset layout specifications and nested custom matrix variables to system defaults?")) {
-          appState.colCount = 4;
-          appState.rowCount = 6;
-          appState.universalWidth = 230;
-          appState.universalHeight = 185;
-          appState.colGap = 6;
-          appState.rowGap = 14;
-          appState.selectedColIndex = 0;
-          appState.activePillIndex = 0;
-          appState.activeSubIndex = 0;
-          appState.layoutArrangement = "tabbed";
-          appState.uiDensity = "cozy";
-          appState.hideFiltered = false;
-          appState.activeFilters = {};
-          
-          // Re-initialize default grid specifications
-          appState.columns = [
-            {
-              tag: "Col A",
-              theme: "dark",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    {
-                      mapping: "brand",
-                      label: "BRAND LOGO",
-                      flexWeight: 1.0,
-                      fontSize: 14,
-                      align: "center",
-                      valign: "middle"
-                    }
-                  ]
-                },
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "unmapped", label: "A1 P2", flexWeight: 1.0, fontSize: 11, align: "center", valign: "middle" },
-                    { mapping: "unmapped", label: "A1 P2", flexWeight: 1.0, fontSize: 11, align: "center", valign: "middle" },
-                    { mapping: "unmapped", label: "A1 P2", flexWeight: 1.0, fontSize: 11, align: "center", valign: "middle" },
-                    { mapping: "unmapped", label: "A1 P2", flexWeight: 1.0, fontSize: 11, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col B",
-              theme: "sky",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "capacity", label: "CAPACITY", flexWeight: 1.0, fontSize: 14, align: "center", valign: "middle" }
-                  ]
-                },
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "systemType", label: "SYSTEM TYPE", flexWeight: 1.0, fontSize: 12, align: "center", valign: "middle" }
-                  ]
-                },
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "mechanicalStage", label: "COMPRESSOR STAGES", flexWeight: 1.0, fontSize: 13, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col C",
-              theme: "mint",
-              offset: 0,
-              flexWeight: 1.2,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "price", label: "RETAIL PRICE", flexWeight: 1.0, fontSize: 14, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col D",
-              theme: "indigo",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "taxCreditable", label: "TAX ELIGIBLE", flexWeight: 1.0, fontSize: 12, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col E",
-              theme: "amber",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "site", label: "ORIGIN SITE", flexWeight: 1.0, fontSize: 13, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col F",
-              theme: "rose",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "seer2", label: "SEER2 ENERGY", flexWeight: 1.0, fontSize: 13, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col G",
-              theme: "sky",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "ahri", label: "AHRI CERTIFIED", flexWeight: 1.0, fontSize: 12, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            },
-            {
-              tag: "Col H",
-              theme: "dark",
-              offset: 0,
-              flexWeight: 1.0,
-              pills: [
-                {
-                  heightWeight: 1.0,
-                  subdivisions: [
-                    { mapping: "seriesTier", label: "SERIES / TIER", flexWeight: 1.0, fontSize: 13, align: "center", valign: "middle" }
-                  ]
-                }
-              ]
-            }
-          ];
 
-          resetDimensions();
+      // ── TOAST NOTIFICATIONS ──────────────────────────────────────────────
+      function showToast(message) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = 'bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl border border-slate-700 transition-all duration-500 transform -translate-y-full opacity-0';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.classList.remove('-translate-y-full', 'opacity-0'); }, 10);
+        setTimeout(() => {
+          toast.classList.add('-translate-y-full', 'opacity-0');
+          setTimeout(() => toast.remove(), 500);
+        }, 3000);
+      }
+
+      // ── PROFILE MANAGER ───────────────────────────────────────────────────
+      function saveLayoutProfile() {
+        const name = document.getElementById('profileNameInput').value.trim();
+        if (!name) return;
+        let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
+        const stateToSave = JSON.parse(JSON.stringify(appState));
+        stateToSave.activeFilters = {}; // Do not save filters into a layout profile
+        profiles[name] = stateToSave;
+        localStorage.setItem('changeout_profiles_v1', JSON.stringify(profiles));
+        refreshProfileDropdown();
+        document.getElementById('profileNameInput').value = '';
+        showToast('💾 Profile saved: ' + name);
+      }
+
+      function loadLayoutProfile() {
+        const name = document.getElementById('profileSelectDropdown').value;
+        if (!name) return;
+        let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
+        if (profiles[name]) {
+          appState = profiles[name];
+          sanitizeAppState();
+          saveAppState();
+          renderGrid();
           updatePrefLayoutUI();
           updateDensityUI();
-          selectColumnForInspector(0);
-          // renderGrid() is deferred to window 'load' event (live API fetch triggers it)
-          closeSmartModal();
+          showToast('📂 Loaded profile: ' + name);
         }
-      });
+      }
+
+      function refreshProfileDropdown() {
+        const dropdown = document.getElementById('profileSelectDropdown');
+        if (!dropdown) return;
+        let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
+        dropdown.innerHTML = '<option value="">Select Profile…</option>';
+        Object.keys(profiles).forEach(key => {
+          dropdown.innerHTML += `<option value="${key}">${key}</option>`;
+        });
+      }
+      window.addEventListener('load', refreshProfileDropdown);
+
+      // ── VOICE COMMAND ENGINE ──────────────────────────────────────────────
+      function activateVoiceCommand() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+          showToast("⚠️ Voice command not supported in this browser.");
+          return;
+        }
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        const voiceBtn = document.getElementById('voice-btn');
+        if (voiceBtn) {
+          voiceBtn.classList.add('bg-red-600', 'text-white', 'border-red-500');
+          voiceBtn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
+        }
+
+        recognition.start();
+
+        recognition.onresult = function(event) {
+          const speechResult = event.results[0][0].transcript.toUpperCase();
+
+          // Capacity
+          if (speechResult.includes("1.5 TON") || speechResult.includes("ONE AND A HALF TON")) toggleFilter('capacity', '1.5 Ton');
+          if (speechResult.includes("2 TON") || speechResult.includes("TWO TON")) toggleFilter('capacity', '2 Ton');
+          if (speechResult.includes("2.5 TON") || speechResult.includes("TWO AND A HALF TON")) toggleFilter('capacity', '2.5 Ton');
+          if (speechResult.includes("3 TON") || speechResult.includes("THREE TON")) toggleFilter('capacity', '3 Ton');
+          if (speechResult.includes("3.5 TON") || speechResult.includes("THREE AND A HALF TON")) toggleFilter('capacity', '3.5 Ton');
+          if (speechResult.includes("4 TON") || speechResult.includes("FOUR TON")) toggleFilter('capacity', '4 Ton');
+          if (speechResult.includes("5 TON") || speechResult.includes("FIVE TON")) toggleFilter('capacity', '5 Ton');
+
+          // System Type
+          if (speechResult.includes("STRAIGHT COOL") || speechResult.includes("AIR CONDITIONER")) toggleFilter('systemType', 'STRAIGHT COOL');
+          if (speechResult.includes("HEAT PUMP")) toggleFilter('systemType', 'HEAT PUMP');
+          if (speechResult.includes("FURNACE") || speechResult.includes("GAS")) toggleFilter('systemType', 'Gas Furnace');
+
+          // Mechanical Stage
+          if (speechResult.includes("SINGLE STAGE") || speechResult.includes("1 STAGE")) toggleFilter('mechanicalStage', 'SINGLE STAGE');
+          if (speechResult.includes("TWO STAGE") || speechResult.includes("2 STAGE")) toggleFilter('mechanicalStage', '2 STAGE');
+          if (speechResult.includes("VARIABLE")) toggleFilter('mechanicalStage', 'VARIABLE SPEED');
+
+          // Site/Style
+          if (speechResult.includes("STANDARD")) toggleFilter('site', 'Standard');
+          if (speechResult.includes("COASTAL") || speechResult.includes("OCEANA")) toggleFilter('site', 'Oceana');
+
+          showToast('🎙️ Heard: ' + event.results[0][0].transcript);
+        };
+
+        recognition.onerror = function(event) {
+          showToast('⚠️ Voice error: ' + event.error);
+        };
+
+        recognition.onend = function() {
+          if (voiceBtn) {
+            voiceBtn.classList.remove('bg-red-600', 'text-white', 'border-red-500');
+            voiceBtn.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
+          }
+        };
+      }
+
+      // Refresh Lucide icons to pick up any dynamically injected icons
+      if (window.lucide) lucide.createIcons();
     </script>
   </body>
 </html>
