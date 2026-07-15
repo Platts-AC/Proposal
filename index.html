@@ -1,10 +1,10 @@
-<!-- Retest Prototype v03.01 | Collapsible Grid Headers & Live Counter -->
+<!-- Retest Prototype v03.02 | Voice Engine Rewire & Safe Routing -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changeout Pricing Beta v03.01</title>
+    <title>Changeout Pricing Beta v03.02</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -302,7 +302,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                 <!-- LEFT: Title & Live Badge (Double-Decker) -->
                 <div class="flex flex-col items-start gap-0.5">
                     <h1 class="text-base font-bold font-display tracking-tight text-white leading-tight">Pricing Beta</h1>
-                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.01</span>
+                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.02</span>
                 </div>
 
                 <!-- RIGHT: Always-Visible Controls & Chevron -->
@@ -936,7 +936,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.01</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.02</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -4428,18 +4428,33 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
           if (speechResult.includes("5 TON") || speechResult.includes("FIVE TON")) toggleFilter('capacity', '5 Ton');
 
           // System Type
-          if (speechResult.includes("STRAIGHT COOL") || speechResult.includes("AIR CONDITIONER")) toggleFilter('systemType', 'STRAIGHT COOL');
-          if (speechResult.includes("HEAT PUMP")) toggleFilter('systemType', 'HEAT PUMP');
-          if (speechResult.includes("FURNACE") || speechResult.includes("GAS")) toggleFilter('systemType', 'Gas Furnace');
+          if (speechResult.includes("STRAIGHT COOL") || speechResult.includes("AIR CONDITIONER") || speechResult.includes("AC")) toggleFilter('type', 'STRAIGHT COOL');
+          if (speechResult.includes("HEAT PUMP")) toggleFilter('type', 'HEAT PUMP');
+          if (speechResult.includes("FURNACE") || speechResult.includes("GAS")) toggleFilter('type', 'Gas Furnace');
 
           // Mechanical Stage
-          if (speechResult.includes("SINGLE STAGE") || speechResult.includes("1 STAGE")) toggleFilter('mechanicalStage', 'SINGLE STAGE');
-          if (speechResult.includes("TWO STAGE") || speechResult.includes("2 STAGE")) toggleFilter('mechanicalStage', '2 STAGE');
-          if (speechResult.includes("VARIABLE")) toggleFilter('mechanicalStage', 'VARIABLE SPEED');
+          if (speechResult.includes("SINGLE STAGE") || speechResult.includes("1 STAGE") || speechResult.includes("ONE STAGE")) toggleFilter('stage', 'SINGLE STAGE');
+          if (speechResult.includes("TWO STAGE") || speechResult.includes("2 STAGE")) toggleFilter('stage', '2 STAGE');
+          if (speechResult.includes("VARIABLE")) toggleFilter('stage', 'VARIABLE SPEED');
 
-          // Site/Style
-          if (speechResult.includes("STANDARD")) toggleFilter('site', 'Standard');
-          if (speechResult.includes("COASTAL") || speechResult.includes("OCEANA")) toggleFilter('site', 'Oceana');
+          // Application / Style / Site (Substring & Toggle Safety Logic)
+          if (speechResult.includes("ANY COASTAL") || speechResult.includes("ALL COASTAL")) {
+              const activeStyles = appState.activeFilters['style'] || [];
+              if (!activeStyles.includes('COASTAL')) toggleFilter('style', 'COASTAL');
+              if (!activeStyles.includes('APARTMENT COASTAL')) toggleFilter('style', 'APARTMENT COASTAL');
+          } 
+          // Substring / Longest Match First Routing
+          else if (speechResult.includes("APARTMENT COASTAL")) {
+              toggleFilter('style', 'APARTMENT COASTAL');
+          } 
+          else if (speechResult.includes("COASTAL")) {
+              toggleFilter('style', 'COASTAL');
+          } 
+          else if (speechResult.includes("STANDARD")) {
+              toggleFilter('style', 'STANDARD');
+          }
+
+          if (speechResult.includes("OCEANA")) toggleFilter('site', 'Oceana');
 
           showToast('🎙️ Heard: ' + event.results[0][0].transcript);
         };
