@@ -1,10 +1,10 @@
-<!-- Retest Prototype v03.04 | Bidirectional Math Engine & Brand Routing -->
+<!-- Retest Prototype v03.05 | Omnidirectional Math & Zero Trap Fix -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changeout Pricing Beta v03.04</title>
+    <title>Changeout Pricing Beta v03.05</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -302,7 +302,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                 <!-- LEFT: Title & Live Badge (Double-Decker) -->
                 <div class="flex flex-col items-start gap-0.5">
                     <h1 class="text-base font-bold font-display tracking-tight text-white leading-tight">Pricing Beta</h1>
-                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.04</span>
+                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.05</span>
                 </div>
 
                 <!-- RIGHT: Always-Visible Controls & Chevron -->
@@ -936,7 +936,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.04</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.05</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -4481,43 +4481,39 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
           if (speechResult.includes("COMFORTMAKER") || speechResult.includes("C-MAKER")) toggleFilter('brand', 'COMFORTMAKER');
           if (speechResult.includes("RUUD")) toggleFilter('brand', 'RUUD');
 
-          // Math Filter Helper (Overwrites existing ranges so they don't conflict)
-          const setMathFilter = (key, operator, val) => {
-              appState.activeFilters[key] = [operator + val];
-              renderGrid();
-          };
-
-          const extractNum = (str, keywords) => {
-              for (let kw of keywords) {
-                  const regex = new RegExp(kw + "\\s*([1-9]+(?:\\.[1-9]+)?)");
-                  const match = str.match(regex);
-                  if (match) return match[1];
+          // Omnidirectional Math & Exact Match Engine
+          const parseMetric = (speech, metricWord, key) => {
+              if (!speech.includes(metricWord)) return;
+              
+              // Fix Zero Trap: Use \\d+ to successfully capture numbers with zeros
+              const regex = new RegExp(metricWord + ".*?(\\d+(?:\\.\\d+)?)");
+              const match = speech.match(regex);
+              
+              if (match) {
+                  const val = match[1];
+                  const lessKeywords = ["UNDER", "LESS", "MAX", "BELOW"];
+                  const greaterKeywords = ["OVER", "GREATER", "MIN", "AT LEAST"];
+                  
+                  let operator = ""; // Defaults to Exact Match
+                  
+                  // Check the context phrase around the metric for directional keywords
+                  const phraseStart = Math.max(0, speech.indexOf(metricWord) - 25);
+                  const phrase = speech.substring(phraseStart, speech.indexOf(val) + val.length);
+                  
+                  if (lessKeywords.some(kw => phrase.includes(kw))) operator = "<";
+                  else if (greaterKeywords.some(kw => phrase.includes(kw))) operator = ">";
+                  
+                  // Apply the filter. (e.g., '<9000', '>16', or exactly '53.5')
+                  appState.activeFilters[key] = [operator + val]; 
+                  renderGrid();
               }
-              return null;
           };
 
-          // Less Than (<) Routing
-          const lessKeywords = ["UNDER", "LESS THAN", "MAXIMUM", "BELOW"];
-          if (lessKeywords.some(kw => speechResult.includes(kw))) {
-              let p = extractNum(speechResult, lessKeywords.map(k => "PRICE " + k));
-              if (p) setMathFilter('price', '<', p);
-
-              let h = extractNum(speechResult, lessKeywords.map(k => "HEIGHT " + k));
-              if (h) setMathFilter('height', '<', h);
-
-              let w = extractNum(speechResult, lessKeywords.map(k => "WIDTH " + k));
-              if (w) setMathFilter('width', '<', w);
-          }
-
-          // Greater Than (>) Routing
-          const greaterKeywords = ["OVER", "GREATER THAN", "MINIMUM", "AT LEAST"];
-          if (greaterKeywords.some(kw => speechResult.includes(kw))) {
-              let s = extractNum(speechResult, greaterKeywords.map(k => "SEER " + k));
-              if (s) setMathFilter('seer2', '>', s);
-
-              let c = extractNum(speechResult, greaterKeywords.map(k => "CAPACITY " + k));
-              if (c) setMathFilter('capacity', '>', c);
-          }
+          parseMetric(speechResult, "PRICE", "price");
+          parseMetric(speechResult, "HEIGHT", "height");
+          parseMetric(speechResult, "WIDTH", "width");
+          parseMetric(speechResult, "SEER", "seer2");
+          parseMetric(speechResult, "CAPACITY", "capacity");
 
           showToast('🎙️ Heard: ' + event.results[0][0].transcript);
         };
