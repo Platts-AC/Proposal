@@ -1,10 +1,10 @@
-<!-- Retest Prototype v03.05 | Omnidirectional Math & Zero Trap Fix -->
+<!-- Retest Prototype v03.06 | Homophone Auto-Correct Interceptor -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changeout Pricing Beta v03.05</title>
+    <title>Changeout Pricing Beta v03.06</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -302,7 +302,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                 <!-- LEFT: Title & Live Badge (Double-Decker) -->
                 <div class="flex flex-col items-start gap-0.5">
                     <h1 class="text-base font-bold font-display tracking-tight text-white leading-tight">Pricing Beta</h1>
-                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.05</span>
+                    <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.06</span>
                 </div>
 
                 <!-- RIGHT: Always-Visible Controls & Chevron -->
@@ -936,7 +936,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.05</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.06</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -4436,7 +4436,15 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         recognition.start();
 
         recognition.onresult = function(event) {
-          const speechResult = event.results[0][0].transcript.toUpperCase();
+          let speechResult = event.results[0][0].transcript.toUpperCase();
+
+          // Homophone Auto-Correct Interceptor
+          speechResult = speechResult.replace(/WITH UNDER/g, "WIDTH UNDER")
+                                     .replace(/WITH LESS/g, "WIDTH LESS")
+                                     .replace(/WITH OVER/g, "WIDTH OVER")
+                                     .replace(/WITH MAX/g, "WIDTH MAX")
+                                     .replace(/WITH MIN/g, "WIDTH MIN")
+                                     .replace(/WITH (?=\d)/g, "WIDTH "); // Catch Exact Matches (e.g., "With 21")
 
           // Capacity
           if (speechResult.includes("1.5 TON") || speechResult.includes("ONE AND A HALF TON")) toggleFilter('capacity', '1.5 Ton');
