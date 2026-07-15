@@ -1,4 +1,4 @@
-<!-- Retest Prototype v03.12 | Header Unification & Button Cleanup -->
+<!-- Retest Prototype v03.13 | Triple-Stacked Header & Filter Pill Restoration -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Pricing Beta v03.12</title>
+    <title>Changeout Pricing Beta v03.13</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -299,34 +299,43 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
     <!-- MAIN APP HEADER -->
     <header class="bg-slate-950 border-b border-slate-800/80 sticky top-0 z-40 shadow-md w-full">
         <div id="master-header-inner" class="w-full mx-auto px-4 py-3 flex flex-col gap-2">
-            <div class="flex items-center justify-between w-full">
-                <!-- LEFT: Secret Logo Trigger (Platt's) -->
-                <div class="flex-shrink-0 mr-3 cursor-pointer group" onclick="toggleDrawer()" title="Menu">
-                    <img src="./platts.png" alt="Platt's Air and Heat" class="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105">
-                </div>
+            <div class="flex items-start justify-between w-full">
 
-                <!-- CENTER: Double-Stacked Title & Counters -->
-                <div class="flex flex-col items-start justify-center gap-1.5 flex-grow">
-                    <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none">Pricing Beta</h1>
-                    <div class="flex items-center gap-2">
-                        <span class="bg-blue-600/30 text-blue-300 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.12</span>
-                        <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">Loading...</span>
+                <!-- LEFT: Triple-Stacked Branding -->
+                <div class="flex flex-col items-start gap-1">
+                    <!-- 1. Secret Logo Trigger -->
+                    <div class="cursor-pointer group" onclick="toggleDrawer()" title="Menu">
+                        <img src="./platts.png" alt="Platt's Air and Heat" class="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                    </div>
+                    <!-- 2. Title -->
+                    <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1">Pricing Beta</h1>
+                    <!-- 3. Badges -->
+                    <div class="flex items-center gap-1.5 pl-1">
+                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.13</span>
+                        <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                     </div>
                 </div>
 
-                <!-- RIGHT: Always-Visible Controls & Cart -->
-                <div class="flex items-center gap-2 shrink-0">
-                    <!-- Mic -->
-                    <button id="voice-btn" onclick="event.preventDefault(); activateVoiceCommand()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Voice Command">
-                        <i data-lucide="mic" class="w-4 h-4"></i>
-                    </button>
-                    <!-- Gear -->
-                    <button id="gearBtn" onclick="event.preventDefault(); toggleSettingsDrawer()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Settings">
-                        <i data-lucide="settings" class="w-4 h-4"></i>
-                    </button>
+                <!-- RIGHT: 2x2 Tool Grid & Cart -->
+                <div class="flex items-center gap-2 shrink-0 pt-1">
+                    <!-- 2x2 Grid -->
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button id="voice-btn" onclick="event.preventDefault(); activateVoiceCommand()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Voice Command">
+                            <i data-lucide="mic" class="w-4 h-4"></i>
+                        </button>
+                        <button id="gearBtn" onclick="event.preventDefault(); toggleSettingsDrawer()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Settings">
+                            <i data-lucide="settings" class="w-4 h-4"></i>
+                        </button>
+                        <button id="themeToggleBtn" onclick="toggleThemeMode()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Toggle Theme">
+                            <i data-lucide="sun" id="themeToggleIcon" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="toggleFullScreen()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Toggle Fullscreen">
+                            <i data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                     <!-- Cart -->
-                    <button id="cartButton" onclick="event.preventDefault(); toggleViewSwap()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-800 border border-slate-700 rounded-lg shadow transition-colors cursor-pointer relative hover:bg-slate-700 ml-1">
-                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                    <button id="cartButton" onclick="event.preventDefault(); toggleViewSwap()" class="flex flex-col items-center justify-center h-[68px] px-3 text-xs font-semibold text-white bg-slate-800 border border-slate-700 rounded-lg shadow transition-colors cursor-pointer relative hover:bg-slate-700 ml-1">
+                        <i data-lucide="shopping-cart" class="w-4 h-4 mb-1"></i>
                         <span class="hidden sm:inline">Cart</span>
                         <span id="cartCounterBadge" class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md border border-blue-500">0</span>
                     </button>
@@ -335,23 +344,18 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
 
             <!-- DRAWER (Hidden by default, triggered by Logo) -->
             <div id="top-ribbon-drawer" class="hidden flex-col gap-3 pt-3 border-t border-slate-800/80 mt-1">
-                <div class="flex flex-wrap items-center gap-2 text-xs w-full">
+                <!-- RESTORED FILTER PILLS CONTAINER -->
+                <div id="filterPillsContainer" class="flex flex-wrap items-center gap-2 text-xs w-full hidden">
                     <div class="flex items-center gap-1.5 text-slate-400 font-semibold">
                         <i data-lucide="filter" class="w-3.5 h-3.5"></i> Filters:
                     </div>
                     <div id="filterPills" class="flex flex-wrap gap-1.5"></div>
                     <button onclick="clearAllFilters()" class="text-xs text-rose-400 hover:text-rose-300 font-semibold ml-1 hover:underline cursor-pointer">Clear all</button>
                 </div>
-                <!-- Restored Square Tool Buttons -->
-                <div class="flex flex-wrap items-center gap-2 border-t border-slate-800/80 pt-2">
-                    <button id="themeToggleBtn" onclick="toggleThemeMode()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Toggle Theme">
-                        <i data-lucide="sun" id="themeToggleIcon" class="w-4 h-4"></i>
-                    </button>
-                    <button onclick="toggleFullScreen()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Toggle Fullscreen">
-                        <i data-lucide="maximize" class="w-4 h-4"></i>
-                    </button>
+                <!-- Drawer Tools -->
+                <div class="flex flex-wrap items-center gap-2">
                     <!-- Hide Filtered Rows -->
-                    <label for="chkHideFiltered" class="flex items-center gap-2 cursor-pointer select-none ml-1">
+                    <label for="chkHideFiltered" class="flex items-center gap-2 cursor-pointer select-none">
                         <div class="relative">
                             <input type="checkbox" id="chkHideFiltered" onchange="toggleHideFiltered(this.checked)" class="sr-only peer">
                             <div class="w-9 h-5 bg-slate-700 peer-focus:ring-2 peer-focus:ring-blue-500/40 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
@@ -942,7 +946,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.12</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.13</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -3828,7 +3832,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
 
         const matchCounter = document.getElementById('master-match-counter');
         if (matchCounter) {
-          matchCounter.innerText = visibleCount + ' Systems';
+          matchCounter.innerText = visibleCount;
         }
 
         // Create the actual Header Row (Sticky handled by parent accordion)
