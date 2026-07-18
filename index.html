@@ -1,4 +1,4 @@
-<!-- Retest Prototype v03.19 | Price Click Alert Injection -->
+<!-- Retest Prototype v03.20 | Null Event Listener Fix -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Pricing Beta v03.19</title>
+    <title>Changeout Pricing Beta v03.20</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -311,7 +311,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                     <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1">Pricing Beta</h1>
                     <!-- 3. Badges -->
                     <div class="flex items-center gap-1.5 pl-1">
-                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.19</span>
+                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.20</span>
                         <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                     </div>
                 </div>
@@ -946,7 +946,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.19</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.20</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -4477,7 +4477,10 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
       }
 
       // Bind export
-      document.getElementById("exportCodeBtn").addEventListener("click", () => toggleCodeModal(true));
+      const exportCodeBtn = document.getElementById("exportCodeBtn");
+      if (exportCodeBtn) {
+        exportCodeBtn.addEventListener("click", () => toggleCodeModal(true));
+      }
 
       // ── TOAST NOTIFICATIONS ──────────────────────────────────────────────
       function showToast(message) {
