@@ -1,4 +1,4 @@
-<!-- Retest Prototype v03.17 | Price Interceptor Context Repair -->
+<!-- Retest Prototype v03.18 | Object Mapping Hotfix -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Pricing Beta v03.17</title>
+    <title>Changeout Pricing Beta v03.18</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -311,7 +311,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                     <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1">Pricing Beta</h1>
                     <!-- 3. Badges -->
                     <div class="flex items-center gap-1.5 pl-1">
-                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.17</span>
+                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.18</span>
                         <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                     </div>
                 </div>
@@ -946,7 +946,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.17</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.18</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -1513,33 +1513,27 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
           .then(response => response.json())
           .then(result => {
             if (result.status === "success") {
-              HVAC_DATABASE = result.data.map(row => {
-                  const obj = {
-                      sourceRow:       row[ 0 ],
-                      site:            row[ 1 ],
-                      capacity:        row[ 2 ],
-                      systemType:      row[ 3 ],
-                      brand:           row[ 4 ],
-                      seriesTier:      row[ 5 ],
-                      mechanicalStage: row[ 6 ],
-                      applicationStyle: row[ 7 ],
-                      seer2:           row[ 8 ],
-                      eer2:            row[ 9 ],
-                      hspf2:           row[ 10 ],
-                      ahri:            row[ 11 ],
-                      coolingBtu:      row[ 12 ],
-                      heatingBtu:      row[ 13 ],
-                      page:            row[ 14 ],
-                      width:           row[ 15 ],
-                      height:          row[ 16 ],
-                      price:           row[ 17 ],
-                      taxCreditable:   row[ 18 ]
-                  };
-                  row.forEach((val, idx) => {
-                      obj[idx] = val;
-                  });
-                  return obj;
-              });
+              HVAC_DATABASE = result.data.map(row => ({
+                  sourceRow:       row[ 0 ],
+                  site:            row[ 1 ],
+                  capacity:        row[ 2 ],
+                  systemType:      row[ 3 ],
+                  brand:           row[ 4 ],
+                  seriesTier:      row[ 5 ],
+                  mechanicalStage: row[ 6 ],
+                  applicationStyle: row[ 7 ],
+                  seer2:           row[ 8 ],
+                  eer2:            row[ 9 ],
+                  hspf2:           row[ 10 ],
+                  ahri:            row[ 11 ],
+                  coolingBtu:      row[ 12 ],
+                  heatingBtu:      row[ 13 ],
+                  page:            row[ 14 ],
+                  width:           row[ 15 ],
+                  height:          row[ 16 ],
+                  price:           row[ 17 ],
+                  taxCreditable:   row[ 18 ]
+              }));
               // Render grid now that data is loaded
               renderGrid();
             } else {
@@ -4291,8 +4285,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                   subCell.onclick = (e) => {
                     if (e.target.closest('.micro-indicator')) return;
                     e.stopPropagation();
-                    // Fixed Mapping: Brand[4], Capacity[2], SEER2[8], Price[17]
-                    openPriceCalculator(subCell, item[4], item[2], item[8], item[17]);
+                    openPriceCalculator(subCell, item.brand, item.capacity, item.seer2, item.price);
                   };
                 } else {
                   // Clicking the cell: select for Inspector overrides, then filter
