@@ -1,4 +1,4 @@
-<!-- Retest Prototype v03.22 | 3-Tier Dashboard & Check-to-Deduct Price Modal -->
+<!-- Retest Prototype v03.73 | Dynamic Site-Aware Modal, Visual Sync & Scroll Fix -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Pricing Beta v03.22</title>
+    <title>Changeout Lookup v03.73</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -311,17 +311,20 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                     <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1">Pricing Beta</h1>
                     <!-- 3. Badges -->
                     <div class="flex items-center gap-1.5 pl-1">
-                        <span class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.22</span>
+                        <span id="navbarVerBadge" class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v03.73</span>
                         <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                     </div>
                 </div>
 
-                <!-- RIGHT: 2x2 Tool Grid & Cart -->
+                <!-- RIGHT: Tool Grid & Cart -->
                 <div class="flex items-center gap-2 shrink-0 pt-1">
-                    <!-- 2x2 Grid -->
-                    <div class="grid grid-cols-2 gap-1.5">
+                    <!-- Toolbar Buttons -->
+                    <div class="flex items-center gap-1.5">
                         <button id="voice-btn" onclick="event.preventDefault(); activateVoiceCommand()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Voice Command">
                             <i data-lucide="mic" class="w-4 h-4"></i>
+                        </button>
+                        <button id="btnNewQuote" onclick="masterNewQuote()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-rose-400 hover:text-rose-300 shadow-sm" title="New Quote">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         </button>
                         <button id="gearBtn" onclick="event.preventDefault(); toggleSettingsDrawer()" class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm" title="Settings">
                             <i data-lucide="settings" class="w-4 h-4"></i>
@@ -946,7 +949,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <div id="zone-b-header-inner" class="w-full mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-black text-white tracking-wider flex flex-wrap items-center gap-2 preserve-color">
                     Changeout Pricing Beta <span class="text-slate-500 font-medium">|</span> Proposal Builder
-                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.22</span>
+                     <span class="bg-blue-600 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full shadow-md tracking-wider ml-2 preserve-color border border-blue-400">v03.73</span>
                 </h1>
                 <button onclick="toggleViewSwap()" class="bg-slate-800 text-white border border-slate-600 hover:bg-slate-700 font-bold py-1.5 px-4 rounded shadow-md cursor-pointer text-sm transition-colors preserve-color flex items-center gap-2">
                     ← Back to Search
@@ -956,45 +959,89 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         <!-- Dashboard Canvas (3-Tier Layout) -->
         <div class="p-4 flex flex-col gap-4 w-full h-full max-w-4xl mx-auto">
 
-          <!-- TIER 1: Smart Checklist (Tabbed Window) -->
-          <div id="proposal-checklist-container" class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden transition-all duration-300">
-            <div class="bg-slate-900 border-b border-slate-700 p-3 flex justify-between items-center select-none rounded-t-lg">
-              <span class="flex items-center gap-2 text-white text-[11px] font-bold uppercase tracking-widest">
-                <i data-lucide="check-square" class="w-4 h-4 text-blue-400"></i> Smart Scope Checklist
-              </span>
-            </div>
-            <!-- Tabs -->
-            <div class="flex bg-slate-800/80 px-2 pt-2 gap-1 overflow-x-auto no-scrollbar border-b border-slate-700">
-              <button id="prop-tab-btn-outdoor" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-blue-600 text-white shadow-md border-t border-x border-blue-500 whitespace-nowrap">Site / Outdoor</button>
-              <button id="prop-tab-btn-indoor" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Indoor / IAQ</button>
-              <button id="prop-tab-btn-warranty" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Warranties</button>
-            </div>
-            <!-- Content Area -->
-            <div id="proposal-tab-content" class="p-3 flex flex-col gap-2 bg-slate-800">
-              <!-- To be populated dynamically -->
-            </div>
-          </div>
+<!-- TIER 1: Smart Checklist (Collapsible Tabbed Hybrid) -->
+<details id="proposal-checklist-container" class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden transition-all duration-300 group" open>
+  <!-- Accordion Header -->
+  <summary class="bg-slate-900 border-b border-slate-700 p-3 flex justify-between items-center cursor-pointer select-none rounded-t-lg">
+    <span class="flex items-center gap-2 text-white text-[11px] font-bold uppercase tracking-widest">
+      <i data-lucide="check-square" class="w-4 h-4 text-blue-400"></i> Smart Scope Checklist
+    </span>
+    <!-- Always-On Clickable Counters -->
+    <div onclick="event.preventDefault(); event.stopPropagation(); openQuickSummaryModal()" id="checklist-counter-badges" class="flex flex-wrap items-center justify-center gap-1 cursor-pointer hover:opacity-80 transition-opacity mx-2" title="Tap for Quick Summary">
+      <!-- Generated by JS -->
+    </div>
+    <div class="flex items-center gap-4 shrink-0">
+      <button onclick="event.preventDefault(); toggleProposalSettings()" class="text-slate-400 hover:text-white transition-colors cursor-pointer z-10 relative" title="Dashboard Settings">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </summary>
+  <!-- Tabs & Dynamic Content Area -->
+  <div class="flex flex-col w-full bg-slate-800">
+    <!-- Tabs -->
+    <div class="flex bg-slate-800/80 px-2 pt-2 gap-1 overflow-x-auto no-scrollbar border-b border-slate-700">
+      <button onclick="switchProposalTab('outdoor')" id="prop-tab-btn-outdoor" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-blue-600 text-white shadow-md border-t border-x border-blue-500 whitespace-nowrap">Site / Outdoor</button>
+      <button onclick="switchProposalTab('indoor')" id="prop-tab-btn-indoor" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Indoor / IAQ</button>
+      <button onclick="switchProposalTab('warranty')" id="prop-tab-btn-warranty" class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Warranties & Protections</button>
+    </div>
+    <!-- Content -->
+    <div id="proposal-tab-content" class="p-3 pb-12 flex flex-col gap-2 bg-slate-800 max-h-64 overflow-y-auto no-scrollbar">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</details>
 
-          <!-- TIER 2: Selected Systems Sorter -->
-          <div class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden">
-            <div class="bg-slate-900 p-3 flex items-center text-white text-[11px] font-bold uppercase tracking-widest border-b border-slate-700">
-              <i data-lucide="grip-vertical" class="w-4 h-4 mr-2 text-slate-400"></i> Selected Systems Sorter
-            </div>
-            <div id="proposal-sorter-list" class="p-4 flex flex-col gap-2 min-h-[120px] bg-slate-800">
-              <div class="text-slate-500 text-center text-xs italic mt-6 flex flex-col items-center gap-2">
-                <i data-lucide="shopping-cart" class="w-6 h-6 opacity-50"></i>
-                Your selected systems will appear here.
-              </div>
-            </div>
-          </div>
+<!-- TIER 2: Drag-and-Drop Sorter (Collapsible) -->
+<details class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col group transition-all" open>
+  <summary class="bg-slate-900 p-3 flex justify-between items-center cursor-pointer select-none border-b border-slate-700 rounded-t-lg">
+    <span class="flex items-center gap-2 text-white text-[11px] font-bold uppercase tracking-widest">
+      <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400"></i> Selected Systems Sorter
+      <span id="sorter-count-badge" class="ml-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-inner">0</span>
+    </span>
+    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">
+      <span class="group-open:hidden">Tap to Expand</span>
+      <span class="hidden group-open:block">Tap to Collapse</span>
+    </div>
+  </summary>
+  <div id="proposal-sorter-list" class="p-4 flex flex-col gap-2 min-h-[120px] bg-slate-800 max-h-[250px] overflow-y-auto">
+    <div class="text-slate-500 text-center text-xs italic mt-6 flex flex-col items-center gap-2">
+      <i data-lucide="shopping-cart" class="w-6 h-6 opacity-50"></i>
+      Your selected systems will appear here.
+    </div>
+  </div>
+</details>
 
-          <!-- TIER 3: Final Proposal Output Terminal -->
-          <div class="w-full flex flex-col bg-slate-800 border border-slate-700 rounded-lg shadow-xl overflow-hidden min-h-[300px]">
-            <div class="bg-slate-900 p-3 flex justify-between items-center border-b border-slate-700">
-              <span class="text-white text-[11px] font-bold uppercase tracking-widest flex items-center gap-2"><i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i> Final Proposal Output</span>
-            </div>
-            <textarea id="proposal-terminal" class="w-full h-full flex-grow bg-slate-950 text-emerald-400 p-4 font-mono text-sm resize-none focus:outline-none placeholder-slate-700 leading-relaxed" placeholder="Your customized proposal will automatically compile here based on your checklist and selected systems..." readonly></textarea>
-          </div>
+<!-- TIER 3: Final Proposal Output Terminal (Collapsible) -->
+<details class="w-full flex flex-col bg-slate-800 border border-slate-700 rounded-lg shadow-xl overflow-hidden mt-2 group" open>
+  <summary class="bg-slate-900 p-3 flex justify-between items-center cursor-pointer select-none border-b border-slate-700 rounded-t-lg">
+    <span class="text-white text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
+      <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i> Final Proposal Output
+    </span>
+    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex items-center gap-4">
+      <button class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10" onclick="event.preventDefault(); copyProposalText();">📋 Copy Text</button>
+      <span class="group-open:hidden">Tap to Expand</span>
+      <span class="hidden group-open:block">Tap to Collapse</span>
+    </div>
+  </summary>
+  <div class="p-0 h-[340px] flex flex-col">
+      <div id="smart-injector-strip" class="bg-slate-800 border-b border-slate-700 p-2.5 flex flex-col sm:flex-row gap-2 items-center">
+        <select id="inj-category" class="bg-slate-900 text-slate-300 text-[10px] font-bold uppercase tracking-wider border border-slate-700 rounded p-1.5 w-full sm:w-auto" onchange="toggleInjectorPrice()">
+          <option value="note">Standard Note</option>
+          <option value="enhancement">System Enhancement</option>
+          <option value="fee">Additional Fee</option>
+        </select>
+        <label class="flex items-center gap-1 text-[10px] font-bold text-slate-300 uppercase tracking-widest whitespace-nowrap cursor-pointer">
+          <input type="checkbox" id="inj-initial" class="rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-0 w-3 h-3"> Initial
+        </label>
+        <input type="number" id="inj-price" placeholder="$" class="bg-slate-900 text-emerald-400 font-bold text-xs border border-slate-700 rounded p-1.5 w-full sm:w-20 hidden">
+        <input type="text" id="inj-text" placeholder="Type custom scope / notes here..." class="bg-slate-900 text-white text-xs border border-slate-700 rounded p-1.5 flex-1 w-full focus:border-blue-500 focus:outline-none">
+        <button onclick="injectCustomLine()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition-colors shadow-sm w-full sm:w-auto">+ Add</button>
+      </div>
+      <div class="flex-1">
+        <textarea id="proposal-terminal" class="w-full h-full bg-slate-950 text-emerald-400 p-4 font-mono text-sm resize-none focus:outline-none placeholder-slate-700 leading-relaxed rounded-b-lg" placeholder="Your customized proposal will automatically compile here based on your checklist and selected systems..." readonly></textarea>
+      </div>
+  </div>
+</details>
 
         </div>
     </div>
@@ -1510,22 +1557,37 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
       }
 
       // === ZONE B: CHECKLIST DATA & SETTINGS ENGINE ===
-      const dummyEnhancements = {
-        outdoor: [
-          { id: 'cop1', label: 'Overhead Copper Run', price: 470 },
-          { id: 'pad1', label: 'Hurricane Pad', price: 150 },
-          { id: 'crn1', label: 'Crane Services', price: 900 }
-        ],
-        indoor: [
-          { id: 'iaq1', label: '4-inch Merv 11 Filter Kit', price: 321 },
-          { id: 'iaq2', label: 'UV Coil Bulb System', price: 330 },
-          { id: 'cop2', label: 'Keep Existing Copper', price: -450 }
-        ],
-        warranty: [
-          { id: 'war1', label: 'Add Salt Shield Coating', price: 739 },
-          { id: 'war2', label: '10-Year Labor Warranty', price: 1464 }
-        ]
-      };
+const dummyEnhancements = {
+    outdoor: [
+        { label: 'Crane Services', price: 900 },
+        { label: 'Condo Install', price: 225 },
+        { label: 'Overhead Copper Run', price: 470 },
+        { label: '100 ft Copper Line Set', price: 335 },
+        { label: 'Attic Installation', price: 525 },
+        { label: 'Hurricane Pad', price: 150 },
+        { label: 'Keep Existing Pad', price: -75 },
+        { label: 'Ground Rod', price: 225 }
+    ],
+    indoor: [
+        { label: 'Keep Existing Copper', price: -450 },
+        { label: 'Keep Existing Thermostat', price: -120 },
+        { label: 'UV Coil Bulb System', price: 330 },
+        { label: 'Whole House Sanitizer', price: 850 },
+        { label: '4-inch Merv 11 Filter Kit', price: 321 },
+        { label: 'Condensate Pump', price: 135 },
+        { label: 'Duct Sealing (Per Drop)', price: 48 },
+        { label: 'Emerson Wi-Fi Thermostat', price: 125 },
+        { label: 'Wi-Fi Thermostat Upgrade', price: 250 }
+    ],
+    warranty: [
+        { label: 'Salt Shield (Heresite)', price: 0 }, 
+        { label: 'Salt Shield (Infiniguard)', price: 0 },
+        { label: '10-Year Labor Warranty - AC (Standard)', price: 1464 },
+        { label: '10-Year Labor Warranty - AC (Coastal)', price: 1729 },
+        { label: '10-Year Labor Warranty - HP (Standard)', price: 1837 },
+        { label: '10-Year Labor Warranty - HP (Coastal)', price: 2167 }
+    ]
+};
 
       let activePropTab = 'outdoor';
       let propSettings = { density: 'standard', labelFont: 12, dataFont: 14, align: 'left', width: 'flexible', fixedWidth: 1200 };
@@ -1569,26 +1631,149 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         renderProposalChecklist();
       }
 
-      function renderProposalChecklist() {
-        const container = document.getElementById('proposal-tab-content');
-        if (!container) return;
-        const items = dummyEnhancements[activePropTab] || [];
+function renderProposalChecklist() {
+    const container = document.getElementById('proposal-tab-content');
+    if (!container) return;
+    const items = dummyEnhancements[activePropTab] || [];
+    
+    let html = '';
+    if (activePropTab === 'outdoor') {
+        // Site Profile and Refrigerant have been safely removed from Page 2.
+        // They are strictly handled on the Page 1 Pricing Modal to prevent split-brain math.
+    }
+
+    
+
+    items.forEach(item => {
+        let priceText = "";
+        let priceColor = "";
+        let isChecked = false;
+
+        // Dynamic Pricing UI Fix for Salt Shields
+        if (item.label.includes('Salt Shield')) {
+            let sPriceDisplay = "(Dynamic Pricing)";
+            if (typeof selectedProposalRows !== 'undefined' && selectedProposalRows.length > 0) {
+                let prices = new Set();
+                selectedProposalRows.forEach(rowIndex => {
+                    const absIdx = window.systemScratchpads[rowIndex] ? window.systemScratchpads[rowIndex].absoluteIndex : rowIndex;
+                    const sys = HVAC_DATABASE[absIdx];
+                    if (sys) {
+                        const sysCap = String(sys.capacity || '').toUpperCase();
+                        const sysSeer = String(sys.seer2 || '').toUpperCase();
+                        let shields = calculateSystemSaltShield(sysCap, sysSeer);
+                        let val = item.label.includes('Heresite') ? shields.here : shields.infi;
+                        prices.add(val);
+                    }
+                });
+                if (prices.size === 1) sPriceDisplay = `(Add $${Array.from(prices).toLocaleString()})`;
+                else if (prices.size > 1) sPriceDisplay = `(Add $${Array.from(prices).map(v => v.toLocaleString()).join(' / $')})`;
+            }
+            priceText = sPriceDisplay;
+            priceColor = "text-emerald-400";
+            if (window.proposalAppState.saltShield && window.proposalAppState.saltShield.includes(item.label)) isChecked = true;
+        } else if (item.label.includes('Floors')) {
+            priceText = `(Add $${item.price})`;
+            priceColor = "text-emerald-400";
+            if (window.proposalAppState.travelFee === item.price) isChecked = true;
+        } else if (item.price > 0) {
+            priceText = `(Add $${item.price})`;
+            priceColor = "text-emerald-400";
+            if (window.proposalAppState.addons[item.label] !== undefined) isChecked = true;
+        } else if (item.price === 225 && item.label === "Condo Install") {
+            priceText = `(Add $225)`;
+            priceColor = "text-emerald-400";
+            if (window.proposalAppState.addons[item.label] !== undefined) isChecked = true;
+        } else {
+            priceText = `(Deduct $${Math.abs(item.price)})`;
+            priceColor = "text-rose-400";
+            if (window.proposalAppState.deductions[item.label] !== undefined) isChecked = true;
+        }
+
+        let coastalNote = item.label.includes('Coastal') ? `<div class="text-[9px] text-blue-400 italic font-normal mt-0.5 tracking-wide">Systems within 1 mile from Atlantic Coastline</div>` : '';
+        let labelColor = item.label.includes('Coastal') ? 'text-blue-300' : 'text-slate-300';
+
+        html += `
+        <label class="flex items-center justify-between bg-slate-800/50 p-2.5 rounded border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition">
+            <div class="flex items-start gap-2">
+                <input type="checkbox" onchange="handleSmartScopeToggle(this, '${item.label}', ${item.price})" ${isChecked ? 'checked' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 mt-0.5">
+                <div class="flex flex-col">
+                    <span class="text-xs font-semibold ${labelColor}">${item.label}</span>
+                    ${coastalNote}
+                </div>
+            </div>
+            <span class="${priceColor} text-xs font-bold whitespace-nowrap ml-2">${priceText}</span>
+        </label>`;
+    });
+    container.innerHTML = html;
+    if (typeof updateChecklistCounters === 'function') updateChecklistCounters();
+}
+
+window.updateChecklistCounters = function() {
+    let outCount = 0, inCount = 0, warCount = 0;
+
+    dummyEnhancements.outdoor.forEach(item => {
+        if (window.proposalAppState.addons[item.label] !== undefined || window.proposalAppState.deductions[item.label] !== undefined) outCount++;
+    });
+    if (window.proposalAppState.travelFee > 0) outCount++;
+    if (window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.fee > 0) outCount++;
+    if (window.proposalAppState.customLines && window.proposalAppState.customLines.length > 0) outCount += window.proposalAppState.customLines.length;
+
+    dummyEnhancements.indoor.forEach(item => {
+        if (window.proposalAppState.addons[item.label] !== undefined || window.proposalAppState.deductions[item.label] !== undefined) inCount++;
+    });
+    dummyEnhancements.warranty.forEach(item => {
+        if (window.proposalAppState.saltShield && window.proposalAppState.saltShield.includes(item.label)) warCount++;
+        else if (window.proposalAppState.laborWarranty && window.proposalAppState.laborWarranty === item.label) warCount++;
+        else if (window.proposalAppState.addons[item.label] !== undefined) warCount++;
+    });
+
+    // Update Tab Text
+    const btnOut = document.getElementById('prop-tab-btn-outdoor');
+    const btnIn = document.getElementById('prop-tab-btn-indoor');
+    const btnWar = document.getElementById('prop-tab-btn-warranty');
+    if(btnOut) btnOut.innerText = `Site / Outdoor (${outCount})`;
+    if(btnIn) btnIn.innerText = `Indoor / IAQ (${inCount})`;
+    if(btnWar) btnWar.innerText = `Warranties & Protections (${warCount})`;
+
+    // Update Header Badges
+    const badgeWrapper = document.getElementById('checklist-counter-badges');
+    if(badgeWrapper) {
         let html = '';
-        const padClass = propSettings.density === 'compact' ? 'p-1.5' : (propSettings.density === 'relaxed' ? 'p-3' : 'p-2');
-        items.forEach(item => {
-          const priceText = item.price > 0 ? `(Add $${item.price})` : `(Deduct $${Math.abs(item.price)})`;
-          const priceColor = item.price > 0 ? 'text-blue-400' : 'text-emerald-400';
-          html += `
-          <label class="flex items-start justify-between gap-3 cursor-pointer ${padClass} hover:bg-slate-800 rounded transition-colors border border-slate-700 bg-slate-950 shadow-md" style="font-size: ${propSettings.dataFont}px;">
-              <div class="flex items-start gap-3 w-full">
-                  <input type="checkbox" class="w-5 h-5 mt-0.5 rounded bg-slate-900 border-slate-500 text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-950 shrink-0">
-                  <span class="text-slate-100 font-bold tracking-wide leading-snug break-words">${item.label}</span>
-              </div>
-              <span class="font-black ${priceColor} whitespace-nowrap text-[1.1em] shrink-0">${priceText}</span>
-          </label>`;
-        });
-        container.innerHTML = html;
-      }
+        if (outCount > 0) html += `<span class="bg-blue-900/80 text-blue-400 border border-blue-700 px-3 py-1 rounded text-[10px] md:text-xs font-bold shadow-sm">Site: ${outCount}</span>`;
+        if (inCount > 0) html += `<span class="bg-purple-900/80 text-purple-400 border border-purple-700 px-3 py-1 rounded text-[10px] md:text-xs font-bold shadow-sm">IAQ: ${inCount}</span>`;
+        if (warCount > 0) html += `<span class="bg-amber-900/80 text-amber-400 border border-amber-700 px-3 py-1 rounded text-[10px] md:text-xs font-bold shadow-sm">Warranties: ${warCount}</span>`;
+        
+        if (html === '') html = `<span class="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest border border-slate-700 px-3 py-1 rounded border-dashed">0 Selected</span>`;
+        badgeWrapper.innerHTML = html;
+    }
+}
+
+window.handleSmartScopeToggle = function(cb, label, price) {
+    if (label.includes('Salt Shield')) {
+        if (!window.proposalAppState.saltShield) window.proposalAppState.saltShield = [];
+        if (cb.checked && !window.proposalAppState.saltShield.includes(label)) window.proposalAppState.saltShield.push(label);
+        else if (!cb.checked) window.proposalAppState.saltShield = window.proposalAppState.saltShield.filter(x => x !== label);
+    } else if (label.includes('Labor')) {
+        window.proposalAppState.laborWarranty = cb.checked ? label : null;
+    } else if (label.includes('Floors')) {
+        if (cb.checked) {
+            window.proposalAppState.travelFee = price;
+            window.proposalAppState.travelText = label.split('(')[0].trim();
+        } else {
+            window.proposalAppState.travelFee = 0;
+            window.proposalAppState.travelText = "";
+        }
+    } else if (price >= 0) {
+        if (cb.checked) window.proposalAppState.addons[label] = price;
+        else delete window.proposalAppState.addons[label];
+    } else {
+        if (cb.checked) window.proposalAppState.deductions[label] = price;
+        else delete window.proposalAppState.deductions[label];
+    }
+    
+    renderProposalChecklist(); // Force redraw to uncheck mutually exclusive items visually
+    if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+}
 
       function makePropModalDraggable() {
         const modal = document.getElementById('proposal-settings-modal');
@@ -1768,107 +1953,202 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         updateProposalCartUI();
       }
 
-      function updateProposalCartUI() {
-          const sorterList = document.getElementById('proposal-sorter-list');
-          if (!sorterList) return;
+window.cachedProposalText = "";
 
-          if (selectedProposalRows.length === 0) {
-              sorterList.innerHTML = `<div class="text-slate-500 text-center text-xs italic mt-6 flex flex-col items-center gap-2"><i data-lucide="shopping-cart" class="w-6 h-6 opacity-50"></i>Your selected systems will appear here.</div>`;
-              updateProposalTerminal();
-              if (typeof lucide !== 'undefined') lucide.createIcons();
-              return;
-          }
+function updateProposalCartUI() {
+    const sorterList = document.getElementById('proposal-sorter-list');
+    if (!sorterList) return;
 
-          let html = '';
-          selectedProposalRows.forEach((rowIndex, index) => {
-              const item = HVAC_DATABASE[rowIndex];
-              if (!item) return;
-              const capacity = String(item.capacity || item[2] || '').toUpperCase();
-              const sysType = String(item.systemType || item[3] || '').toUpperCase();
-              const brand = String(item.brand || item[4] || 'N/A').toUpperCase();
-              const series = String(item.seriesTier || item[5] || '').toUpperCase();
-              const mechStage = String(item.mechanicalStage || item[6] || '').toUpperCase();
-              const appStyle = String(item.applicationStyle || item[7] || '').toUpperCase();
-              const seer2 = String(item.seer2 || item[1] || '').toUpperCase();
-              const rawPriceStr = String(item.price || item[8] || '0').replace(/[^0-9.-]+/g, '');
-              const priceNum = Math.round(Number(rawPriceStr));
+    const sorterCountBadge = document.getElementById('sorter-count-badge');
+    if (sorterCountBadge) sorterCountBadge.innerText = selectedProposalRows.length;
 
-              const dataFontPx = propSettings && propSettings.dataFont ? propSettings.dataFont : 14;
-              const labelFontPx = propSettings && propSettings.labelFont ? propSettings.labelFont : 12;
+    if (selectedProposalRows.length === 0) {
+        sorterList.innerHTML = `<div class="text-slate-500 text-center text-xs italic mt-6 flex flex-col items-center gap-2"><i data-lucide="shopping-cart" class="w-6 h-6 opacity-50"></i>Your selected systems will appear here.</div>`;
+        window.cachedProposalText = "";
+        updateProposalTerminal();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        return;
+    }
 
-              html += `
-              <div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between bg-slate-900 border border-slate-700 rounded-lg p-3 shadow-md group cursor-grab hover:border-blue-500 transition-colors">
-                  <div class="flex items-start sm:items-center gap-3 w-full sm:w-auto flex-grow">
-                      <i data-lucide="grip-vertical" class="w-5 h-5 text-slate-500 shrink-0 mt-1 sm:mt-0"></i>
-                      <div class="flex-grow">
-                          <span class="text-slate-100 font-bold tracking-wide proposal-selection-text break-words whitespace-normal leading-snug block" style="font-size: ${labelFontPx}px;">${brand} ${series} ${seer2} SEER2 - ${capacity} ${sysType} ${mechStage} ${appStyle}</span>
-                      </div>
-                  </div>
-                  <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 shrink-0 sm:ml-auto border-t sm:border-t-0 border-slate-700/50 pt-2 sm:pt-0">
-                      <span class="proposal-price-text" style="font-size: ${dataFontPx}px;">$${priceNum.toLocaleString()}</span>
-                      <button onclick="removeSystemFromProposal(${index})" class="text-rose-400 hover:text-rose-300 transition-colors cursor-pointer shrink-0"><i data-lucide="x-circle" class="w-5 h-5"></i></button>
-                  </div>
-              </div>`;
-          });
-          sorterList.innerHTML = html;
-          updateProposalTerminal();
-          if (typeof lucide !== 'undefined') lucide.createIcons();
-      }
+    let html = '';
+    window.cachedProposalText = "We are pleased to offer you a quote to upgrade your HVAC system. We will remove the existing system and dispose of per EPA standards. We will install a new system and connect to existing wiring, copper, and ductwork.\n\n";
 
-      // === ZONE B: TERMINAL AUTO-STITCH ENGINE ===
-      function updateProposalTerminal() {
-        const terminal = document.getElementById('proposal-terminal');
-        if (!terminal) return;
+    let globalOptionalUpgrades = new Map();
 
-        if (selectedProposalRows.length === 0) {
-          terminal.value = "";
-          return;
+    selectedProposalRows.forEach((rowIndex, index) => {
+        const absIdx = window.systemScratchpads[rowIndex] ? window.systemScratchpads[rowIndex].absoluteIndex : rowIndex;
+        const item = HVAC_DATABASE[absIdx];
+        if (!item) return;
+
+        const brand = String(item.brand || 'N/A').toUpperCase();
+        const series = String(item.seriesTier || '').toUpperCase();
+        const capacity = String(item.capacity || '').toUpperCase();
+        const seer2 = String(item.seer2 || '').toUpperCase();
+        const ahri = String(item.ahri || '').toUpperCase();
+        const site = String(item.site || 'Standard');
+        const mechStage = String(item.mechanicalStage || '').toLowerCase();
+        const appStyle = String(item.applicationStyle || item.style || '').toUpperCase();
+        
+        const basePrice = Math.round(Number(String(item.price || '0').replace(/[^0-9.-]+/g, '')));
+        
+        const sp = window.systemScratchpads[rowIndex] || {
+            addons: window.proposalAppState.addons,
+            deductions: window.proposalAppState.deductions,
+            saltShield: window.proposalAppState.saltShield,
+            calcTotal: null
+        };
+
+        let customPrice = basePrice;
+        let stitchLines = [];
+        let optionalLines = [];
+
+        // Math: Deductions
+        Object.entries(sp.deductions).forEach(([name, val]) => {
+            customPrice += val; 
+            if (name.includes("Copper")) {
+                stitchLines.push(`■ Existing copper line set will be flushed and reused (Deduct $${Math.abs(val)})`);
+            } else {
+                stitchLines.push(`■ Existing ${name.toLowerCase().replace('keep existing ', '')} will remain in place (Deduct $${Math.abs(val)})`);
+            }
+        });
+
+        // Math: Add-ons & Site Override
+        Object.entries(sp.addons).forEach(([name, val]) => {
+            if (name === "Condo Install") {
+                customPrice += val;
+            } else if (name === "Crane Services") {
+                customPrice += val;
+                stitchLines.push(`■ Additional Installation Fee: ${name}: add $${val} to selection above`);
+            } else {
+                customPrice += val;
+                stitchLines.push(`■ System enhancement: ${name}: add $${val} to selection above`);
+            }
+        });
+
+        // Math: Global Optional Upgrades (Extracted once for the whole proposal)
+        if (window.proposalAppState.saltShield && window.proposalAppState.saltShield.length > 0) {
+            let shields = calculateSystemSaltShield(capacity, seer2);
+            window.proposalAppState.saltShield.forEach(shieldLabel => {
+                let price = shieldLabel.includes('Heresite') ? shields.here : shields.infi;
+                if (!globalOptionalUpgrades.has(shieldLabel)) globalOptionalUpgrades.set(shieldLabel, new Set());
+                globalOptionalUpgrades.get(shieldLabel).add(price);
+            });
+        }
+        if (window.proposalAppState.laborWarranty) {
+            let lPrice = 0;
+            if (window.proposalAppState.laborWarranty.includes('Standard AC')) lPrice = 1464;
+            else if (window.proposalAppState.laborWarranty.includes('Coastal AC')) lPrice = 1729;
+            else if (window.proposalAppState.laborWarranty.includes('Standard HP')) lPrice = 1837;
+            else if (window.proposalAppState.laborWarranty.includes('Coastal HP')) lPrice = 2167;
+            if (lPrice > 0) {
+                if (!globalOptionalUpgrades.has(window.proposalAppState.laborWarranty)) globalOptionalUpgrades.set(window.proposalAppState.laborWarranty, new Set());
+                globalOptionalUpgrades.get(window.proposalAppState.laborWarranty).add(lPrice);
+            }
         }
 
-        let text = "We are pleased to offer you a quote to upgrade your HVAC system. We will remove the existing system and dispose of per EPA standards. We will install a new system and connect to existing wiring, copper, and ductwork.\n\n";
-
-        selectedProposalRows.forEach((rowIndex, index) => {
-          const item = HVAC_DATABASE[rowIndex];
-          if (!item) return;
-          const optionNum = index + 1;
-          const brand = String(item.brand || '').trim();
-          const series = String(item.seriesTier || '').trim();
-          const stage = String(item.mechanicalStage || '').toLowerCase().replace('stage', 'stage ');
-          const type = String(item.applicationStyle || '').toLowerCase();
-          const capacity = String(item.capacity || '').trim();
-          const seer2 = String(item.seer2 || '').trim();
-          const ahri = String(item.ahri || '').trim();
-          const rawPriceStr = String(item.price || '0').replace(/[^0-9.-]+/g, '');
-          const priceVal = Math.round(Number(rawPriceStr)).toLocaleString();
-
-          let line = `\u25a0 Option ${optionNum}: ___ SEER2 ${seer2} ${brand} ${series} ${capacity} R-454B ${stage} ${type} system AHRI #: ${ahri} Investment: $${priceVal}`;
-          if (String(item.taxCreditable || '').toUpperCase().trim() === 'YES') {
-            line += " (Tax Creditable: YES)";
-          }
-          text += line + "\n";
-        });
-
-        text += "\n\u25a0 Platt\u2019s Air and Heat has a 1-year workmanship warranty.";
-        text += "\n\u25a0 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)";
-        text += "\n\u25a0 Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
-
-        const hasMainLineSingle = selectedProposalRows.some(i => {
-          const r = HVAC_DATABASE[i];
-          return r && String(r.brand||'').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier||'').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage||'').toUpperCase() === 'SINGLE STAGE';
-        });
-        const hasMainLineMulti = selectedProposalRows.some(i => {
-          const r = HVAC_DATABASE[i];
-          return r && String(r.brand||'').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier||'').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage||'').toUpperCase() !== 'SINGLE STAGE';
-        });
-
-        if (hasMainLineSingle) {
-          text += "\n\u25a0 Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.";
-        } else if (hasMainLineMulti) {
-          text += "\n\u25a0 Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.";
+        if (sp.travelFee > 0) {
+            customPrice += sp.travelFee;
+        }
+        if (sp.refrigerantFee > 0) {
+            customPrice += sp.refrigerantFee;
         }
 
-        terminal.value = text;
-      }
+        // Math: Smart Injector (Custom Lines)
+        if (window.proposalAppState.customLines) {
+            window.proposalAppState.customLines.forEach(line => {
+                if (line.category !== 'note') customPrice += line.price;
+                let prefix = "■ ";
+                if (line.initial) prefix += "___ ";
+                if (line.category === 'enhancement') prefix += "System enhancement: ";
+                if (line.category === 'fee') prefix += "Additional Installation Fee: ";
+                
+                let suffix = "";
+                if (line.category !== 'note' && line.price > 0) suffix = `: add $${line.price.toLocaleString()} to selection above`;
+                stitchLines.push(`${prefix}${line.text}${suffix}`);
+            });
+        }
+
+        // 3-Part Price Tally (Now Clickable)
+        let modifierTotal = customPrice - basePrice;
+        let modifierStr = modifierTotal === 0 ? "" : `<button onclick="openReceiptModal(${index})" class="${modifierTotal > 0 ? 'text-blue-400' : 'text-rose-400'} text-sm font-bold cursor-pointer hover:underline transition-colors" title="View Price Breakdown">${modifierTotal > 0 ? '+' : ''}$${modifierTotal.toLocaleString()}</button>`;
+        let baseStr = modifierTotal === 0 ? "" : `<span class="text-slate-400 text-sm line-through">$${basePrice.toLocaleString()}</span>`;
+
+        const activeSite = window.systemScratchpads[rowIndex] ? window.systemScratchpads[rowIndex].site : (window.systemScratchpads[absIdx] ? window.systemScratchpads[absIdx].site : (item.site || 'Standard'));
+        const siteTag = activeSite === 'Oceana' ? '<span class="text-blue-400 text-[10px] font-bold ml-1 tracking-widest">(OCEANA)</span>' : '';
+
+        let optionText = `${brand} ${series} ${capacity} (AHRI: ${ahri})${siteTag}`;
+        if (appStyle.toUpperCase().includes('COASTAL')) {
+            optionText += ` <span class="text-blue-400 font-bold">${appStyle.toUpperCase()}</span>`;
+        }
+
+        html += `
+        <div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-800 border border-slate-700 p-3 rounded flex items-center justify-between cursor-grab hover:border-blue-500 transition-colors shadow-sm mb-2">
+            <div class="flex items-center gap-3">
+                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-500 cursor-grab"></i>
+                <span class="text-white font-semibold tracking-wide text-xs">${optionText}</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 mr-2">
+                    ${baseStr}
+                    ${modifierStr}
+                    <span class="text-emerald-400 font-bold text-base">$${customPrice.toLocaleString()}</span>
+                </div>
+                <button onclick="removeSystemFromProposal(${index})" class="text-rose-400 hover:text-rose-300 transition-colors"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
+            </div>
+        </div>`;
+
+        // Auto-Stitch Text Append
+        window.cachedProposalText += `■ Option ${index + 1}: ___ SEER2 ${seer2} ${brand} ${series} ${capacity} R-454B ${mechStage} system AHRI #: ${ahri} Investment: $${customPrice.toLocaleString()}\n`;
+        if (stitchLines.length > 0) window.cachedProposalText += stitchLines.join('\n') + '\n';
+        window.cachedProposalText += '\n';
+    });
+
+    if (globalOptionalUpgrades.size > 0) {
+        window.cachedProposalText += `Optional System Upgrades:\n`;
+        globalOptionalUpgrades.forEach((prices, label) => {
+            let priceStr = Array.from(prices).map(p => `$${p.toLocaleString()}`).join(' / ');
+            window.cachedProposalText += `■ ___ Add ${label}: ${priceStr}\n`;
+        });
+        window.cachedProposalText += '\n';
+    }
+
+    sorterList.innerHTML = html;
+    updateProposalTerminal();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function updateProposalTerminal() {
+    const terminal = document.getElementById('proposal-terminal');
+    if (!terminal) return;
+    if (selectedProposalRows.length === 0) {
+        terminal.value = "";
+        return;
+    }
+    
+    let finalText = window.cachedProposalText;
+    
+    // Add Comfortmaker No-Hassle logic
+    const hasMainLineSingle = selectedProposalRows.some(i => {
+        const absIdx = window.systemScratchpads[i] ? window.systemScratchpads[i].absoluteIndex : i;
+        const r = HVAC_DATABASE[absIdx];
+        return r && String(r.brand||'').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier||'').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage||'').toUpperCase() === 'SINGLE STAGE';
+    });
+    const hasMainLineMulti = selectedProposalRows.some(i => {
+        const absIdx = window.systemScratchpads[i] ? window.systemScratchpads[i].absoluteIndex : i;
+        const r = HVAC_DATABASE[absIdx];
+        return r && String(r.brand||'').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier||'').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage||'').toUpperCase() !== 'SINGLE STAGE';
+    });
+
+    if (hasMainLineSingle) finalText += "■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.\n";
+    else if (hasMainLineMulti) finalText += "■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.\n";
+
+    // Add standard boilerplate
+    finalText += "■ Platt’s Air and Heat has a 1-year workmanship warranty.\n";
+    finalText += "■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n";
+    finalText += "■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
+
+    terminal.value = finalText;
+}
 
       // === ZONE B: NAVIGATION ENGINE ===
       function toggleDrawer() {
@@ -1879,16 +2159,37 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
           }
       }
 
-      function toggleViewSwap() {
-        const zoneA = document.getElementById('zone-a-database');
-        const zoneB = document.getElementById('zone-b-proposal');
-        if (zoneA && zoneB) {
-          zoneA.classList.toggle('hidden');
-          zoneB.classList.toggle('hidden');
-          window.scrollTo(0, 0);
-          updateProposalCartUI();
+function syncPageOneToPageTwo() {
+    document.querySelectorAll('#proposal-tab-content input[type="checkbox"]').forEach(cb => {
+        const label = cb.nextElementSibling.innerText.trim();
+        if (window.proposalAppState.addons[label] !== undefined || window.proposalAppState.deductions[label] !== undefined) {
+            cb.checked = true;
+        } else if (label.includes('Crane') && window.proposalAppState.addons['Crane Services'] !== undefined) {
+            cb.checked = true;
+        } else if (label.includes('Salt Shield') && window.proposalAppState.saltShield && window.proposalAppState.saltShield.includes(label)) {
+            cb.checked = true;
+        } else if (label.includes('Labor') && window.proposalAppState.laborWarranty && window.proposalAppState.laborWarranty === label) {
+            cb.checked = true;
+        } else if (label.includes('Floors') && window.proposalAppState.travelText && label.includes(window.proposalAppState.travelText)) {
+            cb.checked = true;
         }
-      }
+    });
+}
+
+function toggleViewSwap() {
+    const zoneA = document.getElementById('zone-a-database');
+    const zoneB = document.getElementById('zone-b-proposal');
+    if (zoneA && zoneB) {
+        zoneA.classList.toggle('hidden');
+        zoneB.classList.toggle('hidden');
+        window.scrollTo(0, 0);
+        if (!zoneB.classList.contains('hidden')) {
+            syncPageOneToPageTwo();
+            if (typeof updateChecklistCounters === 'function') updateChecklistCounters();
+        }
+        updateProposalCartUI();
+    }
+}
 
       function toggleThemeMode() {
         isLightTheme = !isLightTheme;
@@ -3608,17 +3909,15 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         const content = document.getElementById("systemDetailsContent");
         content.innerHTML = "";
         Object.entries(itemObj).forEach(([key, val]) => {
-          if (key !== "site") {
-            const niceKey = key.replace(/([A-Z])/g, ' $1').toUpperCase();
-            let displayVal = (val !== undefined && val !== null && val !== '') ? val : 'N/A';
-            if (typeof displayVal === 'string') {
-              displayVal = displayVal.toUpperCase();
-            }
-            if (!displayVal || String(displayVal).toLowerCase().includes("null") || String(displayVal).trim() === "") {
-              displayVal = "N/A";
-            }
-            content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">${niceKey}</span><span class="font-semibold text-sm text-slate-100 text-right w-1/2 break-words">${displayVal}</span></div>`;
+          const niceKey = key.replace(/([A-Z])/g, ' $1').toUpperCase();
+          let displayVal = (val !== undefined && val !== null && val !== '') ? val : 'N/A';
+          if (typeof displayVal === 'string') {
+            displayVal = displayVal.toUpperCase();
           }
+          if (!displayVal || String(displayVal).toLowerCase().includes("null") || String(displayVal).trim() === "") {
+            displayVal = "N/A";
+          }
+          content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">${niceKey}</span><span class="font-semibold text-sm text-slate-100 text-right w-1/2 break-words">${displayVal}</span></div>`;
         });
         document.getElementById("systemDetailsModalBackdrop").classList.remove("hidden");
         document.getElementById("systemDetailsModal").classList.remove("hidden");
@@ -3953,7 +4252,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
           const absoluteIndex = HVAC_DATABASE.indexOf(item);
 
           // TASK 3: Row Highlighting for Proposal Selection
-          const isRowSelected = selectedProposalRows.includes(absoluteIndex);
+          const isRowSelected = selectedProposalRows.some(id => (window.systemScratchpads[id] ? window.systemScratchpads[id].absoluteIndex : id) === absoluteIndex);
           // TASK 1: Mobile Row Stretch - w-full flex-grow
           rowEl.className = `flex items-stretch transition-all duration-200 w-full flex-grow ${
             isItemFiltered ? 'opacity-30' : ''
@@ -3977,7 +4276,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
              let cellBgClass = 'bg-slate-900 text-slate-100';
              let borderClasses = 'border-slate-500 hover:border-slate-400 hover:shadow-xs';
 
-             if (selectedProposalRows.includes(absoluteIndex)) {
+             if (isRowSelected) {
                cellBgClass = 'bg-blue-950 text-white select-proposal-highlight';
                // TASK 3: Remove overlapping zoom and ring effects
                borderClasses = 'border-blue-500 shadow-md z-20 transition-colors';
@@ -4051,8 +4350,10 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                   }
                 } else if (sub.mapping === "price") {
                   // TASK 2: Price Rounding to nearest whole dollar
+                  const isOceana = item.site === 'Oceana' || selectedProposalRows.some(id => window.systemScratchpads[id] && window.systemScratchpads[id].absoluteIndex === absoluteIndex && window.systemScratchpads[id].site === 'Oceana');
+                  const oceanaTag = isOceana ? `<span class="text-blue-400 text-[10px] font-bold ml-1 tracking-widest">(OCEANA)</span>` : '';
                   formattedValue = `
-                    <span class="text-slate-100 font-bold tracking-tight">$${Math.round(Number(displayValue)).toLocaleString()}</span>
+                    <span class="text-slate-100 font-bold tracking-tight">$${Math.round(Number(displayValue)).toLocaleString()}</span>${oceanaTag}
                   `;
                 } else if (sub.mapping === "taxCreditable") {
                   const isYes = String(displayValue || "").trim().toUpperCase() === "YES";
@@ -4091,6 +4392,13 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                   `;
                 } else if (sub.mapping === "ahri") {
                   formattedValue = `<span class="text-blue-400 font-bold underline cursor-pointer hover:text-blue-200">${displayValue}</span>`;
+                } else if (sub.mapping === "applicationStyle") {
+                  const isCoastal = String(displayValue || "").trim().toUpperCase().includes("COASTAL");
+                  if (isCoastal) {
+                    formattedValue = `<span class="text-blue-400 font-bold leading-tight text-center truncate max-w-full">${displayValue}</span>`;
+                  } else {
+                    formattedValue = `<span class="text-slate-100 font-medium leading-tight text-center truncate max-w-full">${displayValue}</span>`;
+                  }
                 } else if (sub.mapping === "unmapped" || displayValue === undefined) {
                   // Custom label layout
                   formattedValue = `<span class="text-slate-600 font-semibold uppercase font-mono" style="font-size: 0.85em;">${sub.label || 'Custom'}</span>`;
@@ -4184,7 +4492,14 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                   subCell.onclick = (e) => {
                     if (e.target.closest('.micro-indicator')) return;
                     e.stopPropagation();
-                    openPriceCalculator(subCell, item.brand, item.capacity, item.seer2, item.price);
+                    openPriceCalculator(subCell, item.brand, item.capacity, item.seer2, item.price, item.site, absoluteIndex, item.systemType);
+                  };
+                } else if (sub.mapping === "ahri") {
+                  // AHRI Click Interceptor: Open System Details instead of filtering
+                  subCell.onclick = (e) => {
+                    if (e.target.closest('.micro-indicator')) return;
+                    e.stopPropagation();
+                    if (typeof openSystemDetails === 'function') openSystemDetails(item);
                   };
                 } else {
                   // Clicking the cell: select for Inspector overrides, then filter
@@ -4199,10 +4514,6 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                     renderSidebarSelectors();
 
                     if (isItemFiltered) return;
-                    if (sub.mapping === "ahri") {
-                      openSystemDetails(item);
-                      return;
-                    }
                     if (sub.mapping !== "unmapped" && rawValue !== undefined) {
                       toggleFilter(sub.mapping, String(rawValue));
                     }
@@ -4575,75 +4886,773 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
       // ============================================================
       // ITEMIZED PRICE CALCULATOR ENGINE (v03.14)
       // ============================================================
-      let currentBasePrice = 0;
-      let currentTravelFee = 0;
+// === ZONE B: PROPOSAL MATH ENGINE & STATE ===
+window.systemScratchpads = {};
+window.proposalAppState = { 
+    deductions: {}, 
+    addons: {}, 
+    travelFee: 0, 
+    travelText: "", 
+    saltShield: [],
+    laborWarranty: null,
+    siteData: { name: "Standard", isCustom: false },
+    refrigerant: { feet: 0, fee: 0 },
+    customLines: [],
+    baseSite: "Standard"
+};
 
-      function openPriceCalculator(element, brand, capacity, seer, basePrice) {
-          currentBasePrice = parseFloat(String(basePrice).replace(/[^0-9.]/g, '')) || 0;
-          currentTravelFee = 0;
+window.toggleInjectorPrice = function() {
+    const cat = document.getElementById('inj-category').value;
+    const priceInp = document.getElementById('inj-price');
+    if (cat === 'note') { priceInp.classList.add('hidden'); priceInp.value = ''; }
+    else { priceInp.classList.remove('hidden'); }
+}
 
-          document.getElementById('calcSystemTitle').innerText = `${brand} - ${capacity}`;
-          document.getElementById('calcSystemSpecs').innerText = `Base Price: $${currentBasePrice.toLocaleString()}`;
+window.injectCustomLine = function() {
+    const cat = document.getElementById('inj-category').value;
+    const needsInit = document.getElementById('inj-initial').checked;
+    const price = Number(document.getElementById('inj-price').value) || 0;
+    const text = document.getElementById('inj-text').value.trim();
+    if (!text) return;
 
-          // Reset inputs
-          document.querySelectorAll('.calc-deduct').forEach(cb => cb.checked = false);
-          document.querySelectorAll('.calc-addon').forEach(cb => cb.checked = false);
-          document.querySelectorAll('.travel-btn').forEach(btn => btn.classList.remove('bg-blue-900', 'border-blue-500'));
+    window.proposalAppState.customLines.push({ category: cat, initial: needsInit, price: price, text: text });
+    document.getElementById('inj-text').value = '';
+    document.getElementById('inj-price').value = '';
+    
+    if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+    if (typeof updateChecklistCounters === 'function') updateChecklistCounters();
+}
 
-          // Simulate Dynamic Salt Shield Fetch (Placeholders — wired to API later)
-          let capStr = String(capacity || '');
-          let isLarge = capStr.includes('3') || capStr.includes('4') || capStr.includes('5');
-          let fakeHeresite = isLarge ? 809 : 769;
-          let fakeInfiniguard = isLarge ? 859 : 819;
+window.handleSiteChange = function(selectEl) {
+    if (!window.proposalAppState.siteData) window.proposalAppState.siteData = { name: 'Standard', isCustom: false };
 
-          document.getElementById('calcHeresitePrice').innerText = `+$${fakeHeresite}`;
-          document.getElementById('calcHeresiteCheck').value = fakeHeresite;
+    if (selectEl.value === 'Custom') {
+        const customName = prompt("Enter Custom Site Name:");
+        if (customName) {
+            window.proposalAppState.siteData = { name: customName, isCustom: true };
+            let opt = selectEl.querySelector('option[value="Custom"]');
+            opt.text = customName;
+        } else {
+            selectEl.value = 'Standard';
+            window.proposalAppState.siteData = { name: 'Standard', isCustom: false };
+        }
+    } else {
+        window.proposalAppState.siteData = { name: selectEl.value, isCustom: false };
+        let opt = selectEl.querySelector('option[value="Custom"]');
+        if (opt) opt.text = '+ Add Custom Site...';
+    }
 
-          document.getElementById('calcInfiniguardPrice').innerText = `+$${fakeInfiniguard}`;
-          document.getElementById('calcInfiniguardCheck').value = fakeInfiniguard;
+    window.proposalAppState.baseSite = window.proposalAppState.siteData.name;
+    const site = window.proposalAppState.baseSite;
 
-          updateCalculatorTotal();
+    const refLabel = document.getElementById('ref-input-label');
+    const refHelper = document.getElementById('ref-helper-text');
+    const smartInput = document.getElementById('ref-smart-input');
 
-          const modal = document.getElementById('priceCalculatorModal');
-          modal.classList.remove('hidden');
-          modal.classList.add('flex');
-          if (window.lucide) lucide.createIcons();
-      }
+    if (smartInput) {
+        smartInput.value = ""; 
+        window.proposalAppState.refrigerant = { feet: 0, fee: 0 };
+        window.proposalAppState.travelFee = 0;
+        window.proposalAppState.travelText = "";
+        document.querySelectorAll('.ref-total-display').forEach(el => el.innerText = "+$0");
 
-      function closePriceModal() {
-          const modal = document.getElementById('priceCalculatorModal');
-          modal.classList.add('hidden');
-          modal.classList.remove('flex');
-      }
+        const btnGrid = document.getElementById('ref-floor-grid');
+        if (btnGrid) btnGrid.innerHTML = '';
 
-      function setTravelFee(amount, btn) {
-          document.querySelectorAll('.travel-btn').forEach(b => b.classList.remove('bg-blue-900', 'border-blue-500'));
-          btn.classList.add('bg-blue-900', 'border-blue-500');
-          currentTravelFee = amount;
-          updateCalculatorTotal();
-      }
+        if (site === 'Oceana' || site === 'Paramount' || site === 'River Palm') {
+            let maxFloors = 11;
+            if (site === 'Paramount') maxFloors = 10;
+            if (site === 'River Palm') maxFloors = 6;
 
-      function updateCalculatorTotal() {
-          let total = currentBasePrice + currentTravelFee;
+            if(refLabel) refLabel.innerText = "Condo Floor Number";
+            if(refHelper) refHelper.innerText = `${site} (${maxFloors} Floors). Select floor to calculate travel drop.`;
+            smartInput.classList.add('hidden');
 
-          document.querySelectorAll('.calc-deduct').forEach(cb => {
-              if (cb.checked) total += parseFloat(cb.value); // Deduct if checked
-          });
+            if (btnGrid) {
+                btnGrid.classList.remove('hidden');
+                for (let i = 1; i <= maxFloors; i++) {
+                    btnGrid.innerHTML += `<button onclick="setCondoFloor(${i}, this)" class="floor-btn w-7 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[11px] font-bold rounded border border-slate-600 transition-colors">${i}</button>`;
+                }
+            }
+            smartInput.setAttribute('data-mode', 'condo');
+        } else {
+            if(refLabel) refLabel.innerText = "Custom Line-Set (Ft)";
+            if(refHelper) refHelper.innerText = "First 15' free. Type feet or use quick buttons.";
+            smartInput.classList.remove('hidden');
 
-          document.querySelectorAll('.calc-addon').forEach(cb => {
-              if (cb.checked) total += parseFloat(cb.value);
-          });
+            if (btnGrid) {
+                btnGrid.classList.remove('hidden');
+                btnGrid.innerHTML = `
+                    <div class="flex justify-end gap-1 w-full">
+                        <button onclick="setCustomLineSet(25)" class="w-9 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">25'</button>
+                        <button onclick="setCustomLineSet(50)" class="w-9 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">50'</button>
+                        <button onclick="setCustomLineSet(100)" class="w-10 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">100'</button>
+                    </div>
+                    <div class="flex justify-end gap-1 w-full mt-1">
+                        <button onclick="adjustCustomLineSet(-10)" class="w-8 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">-10</button>
+                        <button onclick="adjustCustomLineSet(-5)" class="w-7 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">-5</button>
+                        <button onclick="adjustCustomLineSet(5)" class="w-7 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">+5</button>
+                        <button onclick="adjustCustomLineSet(10)" class="w-8 h-7 bg-slate-700 hover:bg-blue-600 hover:border-blue-400 text-white text-[10px] font-bold rounded border border-slate-600 transition-colors">+10</button>
+                    </div>
+                `;
+            }
+            smartInput.setAttribute('data-mode', 'custom');
+        }
+    }
 
-          document.getElementById('calcRunningTotal').innerText = '$' + Math.round(total).toLocaleString();
-      }
+    applyDefaultModalState(site);
+    if (typeof autoSelectWarranty === 'function') autoSelectWarranty(site);
+    updateCalculatorTotal();
+};
 
-      // Live update on checkbox change
-      document.addEventListener('change', function(e) {
-          if (e.target.classList.contains('calc-deduct') || e.target.classList.contains('calc-addon')) {
-              updateCalculatorTotal();
-          }
-      });
+window.setCustomLineSet = function(ft) {
+    const smartInput = document.getElementById('ref-smart-input');
+    if (smartInput) {
+        smartInput.value = ft;
+        window.handleSmartRefrigerant(smartInput);
+    }
+};
+
+window.adjustCustomLineSet = function(amount) {
+    const smartInput = document.getElementById('ref-smart-input');
+    if (smartInput) {
+        let current = parseInt(smartInput.value) || 0;
+        let next = current + amount;
+        if (next < 0) next = 0; // Prevent negative feet
+        smartInput.value = next;
+        window.handleSmartRefrigerant(smartInput);
+    }
+};
+
+window.setCondoFloor = function(floorNum, btnElement) {
+    document.querySelectorAll('.floor-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'border-blue-400');
+        btn.classList.add('bg-slate-700', 'border-slate-600');
+    });
+    btnElement.classList.remove('bg-slate-700', 'border-slate-600');
+    btnElement.classList.add('bg-blue-600', 'border-blue-400');
+
+    const smartInput = document.getElementById('ref-smart-input');
+    if (smartInput) {
+        smartInput.value = floorNum;
+        window.handleSmartRefrigerant(smartInput);
+    }
+};
+
+window.handleSmartRefrigerant = function(inputEl) {
+    if (!window.proposalAppState.siteData) window.proposalAppState.siteData = { name: 'Standard', isCustom: false };
+
+    const mode = inputEl.getAttribute('data-mode') || 'custom';
+    const val = Number(inputEl.value) || 0;
+
+    if (mode === 'custom') {
+        window.proposalAppState.refrigerant = window.proposalAppState.refrigerant || {};
+        window.proposalAppState.refrigerant.fee = val > 15 ? Math.ceil((val - 15) / 25) * 120 : 0;
+        window.proposalAppState.refrigerant.feet = val;
+        window.proposalAppState.travelFee = 0;
+        window.proposalAppState.travelText = "";
+    } else {
+        let totalFloors = 11; // Default to Oceana
+        if (window.proposalAppState.siteData.name.includes('Paramount')) totalFloors = 10;
+        if (window.proposalAppState.siteData.name.includes('River Palm')) totalFloors = 6;
+
+        let travel = totalFloors - val;
+        let fee = 0;
+        if (val > 0) {
+            if (travel >= 1 && travel <= 3) fee = 232;
+            else if (travel >= 4 && travel <= 6) fee = 348;
+            else if (travel >= 7) fee = 464;
+        }
+        window.proposalAppState.travelFee = fee;
+        window.proposalAppState.travelText = val > 0 ? `${window.proposalAppState.siteData.name} ${val}th Floor` : "";
+        window.proposalAppState.refrigerant = window.proposalAppState.refrigerant || {};
+        window.proposalAppState.refrigerant.fee = 0;
+        window.proposalAppState.refrigerant.feet = 0;
+    }
+
+    let total = (window.proposalAppState.refrigerant.fee || 0) + (window.proposalAppState.travelFee || 0);
+    document.querySelectorAll('.ref-total-display').forEach(el => el.innerText = `+$${total.toLocaleString()}`);
+
+    if (typeof updateCalculatorTotal === 'function') updateCalculatorTotal();
+};
+window.calculateSystemSaltShield = function(capacity, seer) {
+    let capNum = parseFloat(String(capacity || '').replace(/[^0-9.]/g, '')) || 0;
+    let isLarge = capNum >= 3;
+
+    let seerNum = parseFloat(String(seer || '').replace(/[^0-9.]/g, '')) || 15;
+    if (seerNum >= 16 && seerNum < 17) seerNum = 17; // Apply 16 SEER bump rule
+
+    let here = 0; let infi = 0;
+
+    if (!isLarge) {
+        // 1.5 - 2.5 Ton
+        if (seerNum >= 20) { here = 819; infi = 869; }
+        else if (seerNum >= 18) { here = 799; infi = 849; }
+        else if (seerNum >= 17) { here = 769; infi = 819; }
+        else { here = 739; infi = 789; }
+    } else {
+        // 3 - 5 Ton
+        if (seerNum >= 20) { here = 829; infi = 879; }
+        else if (seerNum >= 18) { here = 809; infi = 859; }
+        else if (seerNum >= 17) { here = 779; infi = 829; }
+        else { here = 769; infi = 819; }
+    }
+
+    return { here: here, infi: infi };
+}
+
+function autoSelectWarranty(siteName) {
+    if (!currentSystemObj || !currentSystemObj.systemType) return;
+    const sysType = String(currentSystemObj.systemType).toUpperCase();
+    const isHP = sysType.includes('HEAT PUMP') || sysType.includes('HP');
+    const isAcSystem = !isHP;
+
+    let keyword = '';
+    if (siteName === 'Oceana') {
+        keyword = isHP ? 'Coastal HP' : 'Coastal AC';
+    } else if (siteName === 'Standard') {
+        keyword = isHP ? 'Standard HP' : 'Standard AC';
+    }
+
+    document.querySelectorAll('.warranty-row').forEach(row => {
+        const rowLabel = row.getAttribute('data-label') || '';
+        const rowIsHP = rowLabel.includes('HP');
+        const rowIsAC = rowLabel.includes('AC');
+
+        if ((isAcSystem && rowIsHP) || (isHP && rowIsAC)) {
+            row.classList.add('hidden');
+            row.classList.remove('flex');
+        } else {
+            row.classList.remove('hidden');
+            row.classList.add('flex');
+        }
+
+        if (keyword && rowLabel.includes(keyword)) {
+            row.classList.add('ring-2', 'ring-amber-400', 'shadow-[0_0_10px_rgba(251,191,36,0.4)]');
+        } else {
+            row.classList.remove('ring-2', 'ring-amber-400', 'shadow-[0_0_10px_rgba(251,191,36,0.4)]');
+        }
+    });
+}
+
+function openPriceCalculator(element, brand, capacity, seer, basePrice, site = "Standard", absoluteIndex = null, systemType = null) {
+    currentBasePrice = parseFloat(String(basePrice).replace(/[^0-9.]/g, '')) || 0;
+    currentSystemObj = { brand, capacity, seer2: seer, site, absoluteIndex, systemType };
+    window.proposalAppState.baseSite = site || 'Standard';
+
+    document.getElementById('calcSystemTitle').innerHTML = `${brand} - ${capacity} ${site === 'Oceana' ? '<span class="text-blue-400 text-[12px] font-bold ml-2 tracking-widest">(OCEANA)</span>' : ''}`;
+    document.getElementById('calcSystemSpecs').innerText = `Base Price: $${currentBasePrice.toLocaleString()}`;
+
+    let shields = calculateSystemSaltShield(capacity, seer);
+    
+    // Assign value to BOTH the commit checkbox and the preview radio
+    const commitHere = document.getElementById('commitHeresite');
+    const commitInfi = document.getElementById('commitInfiniguard');
+    const previewHere = document.getElementById('previewHeresite');
+    const previewInfi = document.getElementById('previewInfiniguard');
+
+    if (commitHere) commitHere.value = shields.here;
+    if (commitInfi) commitInfi.value = shields.infi;
+    if (previewHere) previewHere.value = shields.here;
+    if (previewInfi) previewInfi.value = shields.infi;
+
+    const hereLabel = document.getElementById('priceHeresitePreview');
+    if (hereLabel) hereLabel.innerText = `+$${shields.here}`;
+    const infiLabel = document.getElementById('priceInfiniguardPreview');
+    if (infiLabel) infiLabel.innerText = `+$${shields.infi}`;
+
+    const condoCb = document.getElementById('calcCondoCheck');
+    if (condoCb) {
+        if (site !== "Standard") {
+            condoCb.value = 0;
+            document.getElementById('calcCondoPrice').innerText = "(Included in Base Price)";
+            document.getElementById('calcCondoPrice').classList.replace('text-emerald-400', 'text-slate-400');
+            condoCb.checked = true;
+        } else {
+            condoCb.value = 225;
+            document.getElementById('calcCondoPrice').innerText = "+$225";
+            document.getElementById('calcCondoPrice').classList.replace('text-slate-400', 'text-emerald-400');
+        }
+    }
+
+    const priceModal = document.getElementById('priceCalculatorModal');
+    if (priceModal) {
+        let feetInp = priceModal.querySelector('.ref-feet-input');
+        if (feetInp) feetInp.value = (window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.feet) ? window.proposalAppState.refrigerant.feet : '';
+        
+        let floorInp = priceModal.querySelector('.oceana-floor-input');
+        if (floorInp) floorInp.value = (window.proposalAppState.travelText && window.proposalAppState.travelText.includes('Floor')) ? window.proposalAppState.travelText.replace(/[^0-9]/g, '') : '';
+        
+        let siteSel = priceModal.querySelector('.site-profile-select') || priceModal.querySelector('.site-dropdown');
+        if (siteSel) {
+            let siteVal = (site && site !== 'Standard') ? site : ((window.proposalAppState.siteData && window.proposalAppState.siteData.name) ? window.proposalAppState.siteData.name : 'Standard');
+            if (window.proposalAppState.siteData && window.proposalAppState.siteData.isCustom) {
+                let opt = siteSel.querySelector('option[value="Custom"]');
+                if (opt) {
+                    opt.text = siteVal;
+                    opt.selected = true;
+                }
+            } else {
+                siteSel.value = siteVal;
+            }
+        }
+        
+        let siteDiv = priceModal.querySelector('.site-profile-container');
+        if (siteDiv) {
+            if (window.proposalAppState.siteData && window.proposalAppState.siteData.isCustom) {
+                siteDiv.className = "mb-3 bg-slate-800/80 p-2.5 rounded border border-dashed border-amber-400 flex flex-col gap-1.5 shadow-sm site-profile-container";
+            } else {
+                siteDiv.className = "mb-3 bg-slate-800/80 p-2.5 rounded border border-slate-700/50 flex flex-col gap-1.5 shadow-sm site-profile-container";
+            }
+        }
+
+        let combinedRefFee = ((window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.fee) ? window.proposalAppState.refrigerant.fee : 0) + (window.proposalAppState.travelFee || 0);
+        let totalDisp = priceModal.querySelector('.ref-total-display');
+        if (totalDisp) totalDisp.innerText = `+ $${combinedRefFee.toLocaleString()}`;
+
+        priceModal.classList.remove('hidden');
+        priceModal.classList.add('flex');
+
+        if (siteSel) {
+            handleSiteChange(siteSel);
+        }
+    }
+
+    applyDefaultModalState(site);
+    autoSelectWarranty(site);
+    updateCalculatorTotal();
+}
+
+function applyDefaultModalState(site) {
+    document.querySelectorAll('.calc-addon').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.calc-deduct').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.calc-commit-opt').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.calc-preview-toggle').forEach(rb => rb.checked = false);
+
+    document.querySelectorAll('.calc-preview-toggle').forEach(rb => {
+        const label = rb.closest('label');
+        if (label) {
+            label.classList.remove('bg-blue-900/40', 'ring-1', 'ring-blue-500');
+        }
+    });
+
+    let condoCb = document.getElementById('calcCondoCheck');
+    let condoPriceLabel = document.getElementById('calcCondoPrice');
+    if (condoCb && condoPriceLabel) {
+        // Only zero out the fee if the NATIVE system from the database is Oceana
+        if (currentSystemObj && currentSystemObj.site === 'Oceana') {
+            condoCb.value = "0";
+            condoPriceLabel.innerText = "(Included in Base Price)";
+            condoPriceLabel.classList.replace('text-emerald-400', 'text-slate-400');
+        } else {
+            condoCb.value = "225";
+            condoPriceLabel.innerText = "+$225";
+            condoPriceLabel.classList.replace('text-slate-400', 'text-emerald-400');
+        }
+    }
+
+    if (site === 'Oceana' || (window.proposalAppState.siteData && window.proposalAppState.siteData.name === 'Oceana')) {
+        document.querySelectorAll('.calc-addon[value="900"]').forEach(cb => cb.checked = true);
+        if (condoCb) condoCb.checked = true;
+
+        // Only check commits. NEVER auto-check previews so math stays strictly manual and clean.
+        let hereCommit = document.getElementById('commitHeresite');
+        if (hereCommit) hereCommit.checked = true;
+        let infiCommit = document.getElementById('commitInfiniguard');
+        if (infiCommit) infiCommit.checked = true;
+    }
+}
+
+function resetModalScratchpad() {
+    if (!currentSystemObj) return;
+    if (currentSystemObj.absoluteIndex !== null) {
+        delete window.systemScratchpads[currentSystemObj.absoluteIndex];
+    }
+    const priceModal = document.getElementById('priceCalculatorModal');
+    if (priceModal) {
+        let siteSel = priceModal.querySelector('.site-profile-select') || priceModal.querySelector('.site-dropdown');
+        if (siteSel) {
+            siteSel.value = 'Standard';
+            handleSiteChange(siteSel);
+        }
+    }
+    applyDefaultModalState('Standard');
+    updateCalculatorTotal();
+    renderGrid();
+    showToast("🔄 Modal reset to base system defaults.");
+}
+
+function sendToProposal() {
+    if (!currentSystemObj) return;
+    const absIdx = currentSystemObj.absoluteIndex;
+    const cloneId = Date.now().toString();
+    
+    let calcAddons = {};
+    let calcDeductions = {};
+    let optionalUpgrades = [];
+    let total = currentBasePrice;
+
+    document.querySelectorAll('.calc-deduct').forEach(cb => {
+        const name = cb.nextElementSibling.innerText;
+        if (cb.checked) {
+            calcDeductions[name] = parseFloat(cb.value);
+            total += parseFloat(cb.value);
+        }
+    });
+
+    document.querySelectorAll('.calc-addon').forEach(cb => {
+        const name = cb.nextElementSibling.innerText;
+        if (cb.checked) {
+            calcAddons[name] = parseFloat(cb.value);
+            total += parseFloat(cb.value);
+        }
+    });
+
+    window.proposalAppState.saltShield = [];
+    window.proposalAppState.laborWarranty = null;
+    document.querySelectorAll('.calc-commit-opt').forEach(cb => {
+        if (cb.checked) {
+            const label = cb.getAttribute('data-label') || cb.nextElementSibling.innerText;
+            if (label.includes('Salt Shield')) window.proposalAppState.saltShield.push(label);
+            if (label.includes('Labor')) window.proposalAppState.laborWarranty = label;
+        }
+    });
+
+    total += (window.proposalAppState.travelFee || 0);
+    if (window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.fee > 0) {
+        total += window.proposalAppState.refrigerant.fee;
+    }
+
+    window.systemScratchpads[cloneId] = {
+        absoluteIndex: absIdx,
+        addons: calcAddons,
+        deductions: calcDeductions,
+        optionalUpgrades: optionalUpgrades,
+        site: currentSystemObj.site || 'Standard',
+        calcTotal: Math.round(total),
+        travelFee: window.proposalAppState.travelFee || 0,
+        travelText: window.proposalAppState.travelText || "",
+        refrigerantFee: window.proposalAppState.refrigerant ? window.proposalAppState.refrigerant.fee : 0,
+        refrigerantFeet: window.proposalAppState.refrigerant ? window.proposalAppState.refrigerant.feet : 0
+    };
+
+    selectedProposalRows.push(cloneId);
+
+    const badge = document.getElementById('cartCounterBadge');
+    if (badge) badge.innerText = selectedProposalRows.length;
+    
+    if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+    renderGrid();
+    closePriceModal();
+    showToast("🚀 System & Scope sent to Proposal!");
+}
+
+function masterNewQuote() {
+    selectedProposalRows = [];
+    window.systemScratchpads = {};
+    window.proposalAppState = { 
+        deductions: {}, 
+        addons: {}, 
+        travelFee: 0, 
+        travelText: "", 
+        saltShield: [],
+        laborWarranty: null,
+        siteData: { name: "Standard", isCustom: false },
+        refrigerant: { feet: 0, fee: 0 },
+        customLines: [],
+        baseSite: "Standard"
+    };
+    const badge = document.getElementById('cartCounterBadge');
+    if (badge) badge.innerText = 0;
+    if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+    renderGrid();
+    showToast("🧹 New Quote started - Cart and state cleared!");
+}
+
+function closePriceModal() {
+    const modal = document.getElementById('priceCalculatorModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// Global base variables tracker
+let currentBasePrice = 0;
+let currentSystemObj = null;
+
+function setTravelFee(fee, btn) {
+    document.querySelectorAll('.travel-btn').forEach(b => b.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-900/40'));
+    btn.classList.add('ring-2', 'ring-blue-500', 'bg-blue-900/40');
+    window.proposalAppState.travelFee = parseFloat(fee);
+    window.proposalAppState.travelText = btn.querySelector('span').innerText.split('\n')[0].trim();
+    updateCalculatorTotal();
+    if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+}
+
+window.handleSmartToggle = function(el) {
+    if (el.checked) {
+        document.querySelectorAll('.calc-preview-toggle[data-group="' + el.dataset.group + '"]').forEach(cb => {
+            if (cb !== el) cb.checked = false;
+        });
+    }
+    if (typeof updateCalculatorTotal === 'function') updateCalculatorTotal();
+};
+
+function updateCalculatorTotal() {
+    let coreTotal = currentBasePrice + window.proposalAppState.travelFee + ((window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.fee) ? window.proposalAppState.refrigerant.fee : 0);
+    
+    document.querySelectorAll('.calc-deduct').forEach(cb => {
+        const name = cb.nextElementSibling.innerText;
+        if (cb.checked) {
+            coreTotal += parseFloat(cb.value);
+            window.proposalAppState.deductions[name] = parseFloat(cb.value);
+        } else {
+            delete window.proposalAppState.deductions[name];
+        }
+    });
+
+    document.querySelectorAll('.calc-addon').forEach(cb => {
+        const name = cb.nextElementSibling.innerText;
+        if (cb.checked) {
+            coreTotal += parseFloat(cb.value);
+            window.proposalAppState.addons[name] = parseFloat(cb.value);
+        } else {
+            delete window.proposalAppState.addons[name];
+        }
+    });
+
+    let loadedTotal = coreTotal;
+
+    document.querySelectorAll('.calc-preview-toggle').forEach(radio => {
+        const label = radio.closest('label');
+        const val = parseFloat(radio.value) || 0;
+        if (radio.checked) {
+            loadedTotal += val;
+            if (label) {
+                label.classList.add('bg-blue-900/40', 'ring-1', 'ring-blue-500');
+            }
+        } else {
+            if (label) {
+                label.classList.remove('bg-blue-900/40', 'ring-1', 'ring-blue-500');
+            }
+        }
+        if (label) {
+            const priceDisp = label.querySelector('.preview-price-display');
+            if (priceDisp) {
+                priceDisp.innerText = `Total: $${Math.round(coreTotal + val).toLocaleString()} (+$${val.toLocaleString()})`;
+            }
+        }
+    });
+
+    document.getElementById('calcRunningTotal').innerText = '$' + Math.round(coreTotal).toLocaleString();
+    
+    const loadedTotalEl = document.getElementById('calcLoadedTotal');
+    if (loadedTotalEl) {
+        loadedTotalEl.innerText = '$' + Math.round(loadedTotal).toLocaleString();
+    }
+}
+
+// Live update on checkbox change
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('calc-deduct') || e.target.classList.contains('calc-addon') || e.target.classList.contains('calc-commit-opt') || e.target.classList.contains('calc-preview-toggle')) {
+        updateCalculatorTotal();
+    }
+});
+
+function openReceiptModal(index) {
+    const rowIndex = selectedProposalRows[index];
+    const absIdx = window.systemScratchpads[rowIndex] ? window.systemScratchpads[rowIndex].absoluteIndex : rowIndex;
+    const item = HVAC_DATABASE[absIdx];
+    if(!item) return;
+
+    const capacity = String(item.capacity || '').toUpperCase();
+    const seer2 = String(item.seer2 || '').toUpperCase();
+    const basePrice = Math.round(Number(String(item.price || '0').replace(/[^0-9.-]+/g, '')));
+    
+    const sp = window.systemScratchpads[rowIndex] || {
+        addons: window.proposalAppState.addons,
+        deductions: window.proposalAppState.deductions,
+        saltShield: window.proposalAppState.saltShield,
+        calcTotal: null
+    };
+
+    let total = basePrice;
+
+    let html = `<div class="flex justify-between items-center border-b border-slate-800 pb-2"><span class="text-slate-400 text-xs uppercase tracking-widest">Original Base Price</span><span class="text-white font-bold">$${basePrice.toLocaleString()}</span></div>`;
+
+    let feesHtml = '';
+    Object.entries(sp.addons).forEach(([name, val]) => {
+        if (name === "Condo Install" && item.site !== "Standard") {
+            feesHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">${name}</span><span class="text-slate-500">(Included)</span></div>`;
+        } else if (name !== "Crane Services" && !name.includes('Travel') && !name.includes('Salt Shield')) {
+            total += val;
+            feesHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">${name}</span><span class="text-emerald-400">+$${val}</span></div>`;
+        }
+    });
+    if (sp.addons["Crane Services"]) {
+        total += sp.addons["Crane Services"];
+        feesHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">Crane Services</span><span class="text-emerald-400">+$${sp.addons["Crane Services"]}</span></div>`;
+    }
+    if (window.proposalAppState.travelFee > 0) {
+        total += window.proposalAppState.travelFee;
+        feesHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">Refrigerant / ${window.proposalAppState.travelText}</span><span class="text-emerald-400">+$${window.proposalAppState.travelFee}</span></div>`;
+    }
+    if (feesHtml) html += `<div class="mt-3"><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Necessary Installation Fees</span>${feesHtml}</div>`;
+
+    let dedHtml = '';
+    Object.entries(sp.deductions).forEach(([name, val]) => {
+        total += val; 
+        dedHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">${name}</span><span class="text-rose-400">-$${Math.abs(val)}</span></div>`;
+    });
+    if (dedHtml) html += `<div class="mt-3"><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Customer Deductions</span>${dedHtml}</div>`;
+
+    let optHtml = '';
+    if (sp.optionalUpgrades) {
+        sp.optionalUpgrades.forEach(upg => {
+            optHtml += `<div class="flex justify-between text-xs py-1"><span class="text-slate-300">${upg.label}</span><span class="text-emerald-400">+$${upg.price.toLocaleString()}</span></div>`;
+        });
+    }
+    if (optHtml) html += `<div class="mt-3"><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Optional Upgrades</span>${optHtml}</div>`;
+
+    html += `<div class="mt-4 pt-3 border-t border-slate-700 flex justify-between items-end"><span class="text-slate-400 text-xs font-bold uppercase tracking-widest">Total System Investment</span><span class="text-2xl font-black text-white">$${total.toLocaleString()}</span></div>`;
+
+    document.getElementById('receiptTitle').innerText = `Price Breakdown: Option ${index + 1}`;
+    document.getElementById('receiptContent').innerHTML = html;
+    document.getElementById('sorter-breakdown-modal').classList.remove('hidden');
+    document.getElementById('sorter-breakdown-modal').classList.add('flex');
+}
+
+function closeReceiptModal() {
+    document.getElementById('sorter-breakdown-modal').classList.add('hidden');
+    document.getElementById('sorter-breakdown-modal').classList.remove('flex');
+}
+
+function openQuickSummaryModal() {
+    const content = document.getElementById('quick-summary-content');
+    if(!content) return;
+    
+    let outHtml = '', inHtml = '', warHtml = '';
+    
+    // Updated to accept and format the price value
+    const makeRow = (name, val, isDeduct=false) => `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${name}</span><span class="${isDeduct ? 'text-rose-400' : 'text-emerald-400'} text-[11px] font-bold tracking-wide">${isDeduct ? '-' : '+'}$${Math.abs(val).toLocaleString()}</span></div>`;
+
+    dummyEnhancements.outdoor.forEach(item => {
+        if (window.proposalAppState.addons[item.label] !== undefined) outHtml += makeRow(item.label, window.proposalAppState.addons[item.label]);
+        if (window.proposalAppState.deductions[item.label] !== undefined) outHtml += makeRow(item.label, window.proposalAppState.deductions[item.label], true);
+    });
+
+    if (window.proposalAppState.travelFee > 0) {
+        outHtml += makeRow(window.proposalAppState.travelText, window.proposalAppState.travelFee);
+    }
+    if (window.proposalAppState.refrigerant && window.proposalAppState.refrigerant.fee > 0) {
+        outHtml += makeRow(`Refrigerant Line Extension (${window.proposalAppState.refrigerant.feet} ft)`, window.proposalAppState.refrigerant.fee);
+    }
+    if (window.proposalAppState.customLines) {
+        window.proposalAppState.customLines.forEach(line => {
+            let row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${line.text}</span><span class="${line.price >= 0 ? 'text-emerald-400' : 'text-rose-400'} text-[11px] font-bold tracking-wide">${line.price >= 0 ? '+' : ''}$${Math.abs(line.price).toLocaleString()}</span></div>`;
+            if (line.category === 'note') {
+                row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${line.text}</span><span class="text-slate-500 text-[10px] font-bold">Note</span></div>`;
+            }
+            if (line.category === 'note' || line.category === 'enhancement' || line.category === 'fee') {
+                outHtml += row;
+            }
+        });
+    }
+
+    dummyEnhancements.indoor.forEach(item => {
+        if (window.proposalAppState.addons[item.label] !== undefined) inHtml += makeRow(item.label, window.proposalAppState.addons[item.label]);
+        if (window.proposalAppState.deductions[item.label] !== undefined) inHtml += makeRow(item.label, window.proposalAppState.deductions[item.label], true);
+    });
+
+    dummyEnhancements.warranty.forEach(item => {
+        if (window.proposalAppState.addons[item.label] !== undefined) warHtml += makeRow(item.label, window.proposalAppState.addons[item.label]);
+        if (window.proposalAppState.saltShield && item.label.includes(window.proposalAppState.saltShield)) {
+            let prices = new Set();
+            let sPriceDisplay = "Dynamic Pricing";
+
+            if (typeof selectedProposalRows !== 'undefined' && selectedProposalRows.length > 0) {
+                selectedProposalRows.forEach(rowIndex => {
+                    const absIdx = window.systemScratchpads[rowIndex] ? window.systemScratchpads[rowIndex].absoluteIndex : rowIndex;
+                    const sys = HVAC_DATABASE[absIdx];
+                    if (sys) {
+                        const sysCap = String(sys.capacity || '').toUpperCase();
+                        const sysSeer = String(sys.seer2 || '').toUpperCase();
+                        let shields = calculateSystemSaltShield(sysCap, sysSeer);
+                        let val = window.proposalAppState.saltShield.includes('Heresite') ? shields.here : shields.infi;
+                        prices.add(val);
+                    }
+                });
+
+                if (prices.size === 1) {
+                    sPriceDisplay = `+$${Array.from(prices).toLocaleString()}`;
+                } else if (prices.size > 1) {
+                    sPriceDisplay = Array.from(prices).map(v => `+$${v.toLocaleString()}`).join(' / ');
+                }
+            }
+            warHtml += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${window.proposalAppState.saltShield}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide">${sPriceDisplay}</span></div>`;
+        }
+    });
+    
+    let finalHtml = '';
+    
+    // Styled as physical Mini-Tabs matching the UI
+    if (outHtml) finalHtml += `
+    <div class="mb-4">
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-t-lg bg-blue-600 text-white shadow-sm border-t border-x border-blue-500 inline-block">Site / Outdoor</div>
+        <div class="bg-slate-800/50 border border-slate-700 rounded-b-lg rounded-tr-lg p-2 shadow-inner">${outHtml}</div>
+    </div>`;
+    
+    if (inHtml) finalHtml += `
+    <div class="mb-4">
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-t-lg bg-purple-600 text-white shadow-sm border-t border-x border-purple-500 inline-block">Indoor / IAQ</div>
+        <div class="bg-slate-800/50 border border-slate-700 rounded-b-lg rounded-tr-lg p-2 shadow-inner">${inHtml}</div>
+    </div>`;
+    
+    if (warHtml) finalHtml += `
+    <div class="mb-4">
+        <div class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-t-lg bg-amber-600 text-white shadow-sm border-t border-x border-amber-500 inline-block">Warranties & Protections</div>
+        <div class="bg-slate-800/50 border border-slate-700 rounded-b-lg rounded-tr-lg p-2 shadow-inner">${warHtml}</div>
+    </div>`;
+    
+    content.innerHTML = finalHtml === '' ? '<div class="text-slate-500 italic text-center py-6 text-xs">No items selected yet.</div>' : finalHtml;
+    
+    const modal = document.getElementById('quick-summary-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeQuickSummaryModal() {
+    const modal = document.getElementById('quick-summary-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
     </script>
+<!-- ITEMIZED RECEIPT MODAL (SORTER) -->
+<div id="sorter-breakdown-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-end sm:justify-center p-4">
+  <div class="bg-slate-900 w-full max-w-md rounded-xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div class="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-800/50">
+      <h3 class="text-white font-black text-lg tracking-tight leading-none" id="receiptTitle">Price Breakdown</h3>
+      <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <div class="p-4 overflow-y-auto flex-1 flex flex-col gap-4" id="receiptContent">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- QUICK SUMMARY MODAL -->
+<div id="quick-summary-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex-col items-center justify-start pt-32 px-4">
+  <div class="bg-slate-900 w-full max-w-sm rounded-xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col">
+    <div class="flex justify-between items-center p-3 border-b border-slate-800 bg-slate-800/50">
+      <h3 class="text-white font-bold text-xs tracking-widest uppercase">Current Scope Summary</h3>
+      <button onclick="closeQuickSummaryModal()" class="text-slate-400 hover:text-white transition-colors cursor-pointer"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div id="quick-summary-content" class="p-3 overflow-y-auto max-h-[40vh] flex flex-col gap-2">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</div>
+
 <!-- ITEMIZED PRICE MODAL -->
 <div id="priceCalculatorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-end sm:justify-center p-4">
   <div class="bg-slate-900 w-full max-w-md rounded-xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
@@ -4657,7 +5666,22 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
     </div>
 
     <!-- Scrolling Body -->
-    <div class="p-4 overflow-y-auto flex-1 flex flex-col gap-4">
+    <div class="p-4 max-h-[75vh] overflow-y-auto no-scrollbar pb-32 flex-1 min-h-0 flex flex-col gap-4 overscroll-contain">
+
+      <!-- Site Profile Dropdown -->
+      <div class="flex flex-col gap-2 mb-2">
+        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Site Profile</span>
+        <div class="bg-slate-800/80 p-2.5 rounded border border-slate-600 flex justify-between items-center shadow-md">
+          <span class="text-[11px] text-slate-300 font-bold flex items-center gap-1"><i data-lucide="building" class="w-3.5 h-3.5 text-blue-400"></i> Installation Site</span>
+          <select onchange="handleSiteChange(this)" class="site-dropdown site-profile-select bg-slate-900 text-xs text-white font-bold p-1.5 rounded border border-slate-500 focus:outline-none focus:border-blue-500 w-1/2">
+            <option value="Standard">Standard</option>
+            <option value="Oceana">Oceana</option>
+            <option value="Paramount">Paramount</option>
+            <option value="River Palm">River Palm</option>
+            <option value="Custom">+ Add Custom Site...</option>
+          </select>
+        </div>
+      </div>
 
       <!-- Deductions (UNCHECKED BY DEFAULT) -->
       <div class="flex flex-col gap-2">
@@ -4676,48 +5700,143 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         </label>
       </div>
 
-      <!-- Add-Ons -->
-      <div class="flex flex-col gap-2">
-        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Elective Enhancements</span>
+<!-- Installation Fees -->
+<div class="flex flex-col gap-2 mb-2">
+<span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Installation Fees</span>
         <label class="flex items-center justify-between bg-slate-800/50 p-2.5 rounded border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition">
-          <div class="flex items-center gap-2"><input type="checkbox" class="calc-addon rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500" value="900"><span class="text-xs font-semibold text-slate-300">Crane Services (Oceana)</span></div>
+          <div class="flex items-center gap-2"><input type="checkbox" id="calcCondoCheck" class="calc-addon rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500" value="225"><span class="text-xs font-semibold text-slate-300">Condo Install</span></div>
+          <span class="text-emerald-400 text-xs font-bold" id="calcCondoPrice">+$225</span>
+        </label>
+        <label class="flex items-center justify-between bg-slate-800/50 p-2.5 rounded border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition">
+          <div class="flex items-center gap-2"><input type="checkbox" class="calc-addon rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500" value="900"><span class="text-xs font-semibold text-slate-300">Crane Services</span></div>
           <span class="text-emerald-400 text-xs font-bold">+$900</span>
-        </label>
-        <label class="flex items-center justify-between bg-slate-800/50 p-2.5 rounded border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition">
-          <div class="flex items-center gap-2"><input type="checkbox" id="calcHeresiteCheck" class="calc-addon rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500" value="0"><span class="text-xs font-semibold text-slate-300">Salt Shield (Heresite)</span></div>
-          <span class="text-emerald-400 text-xs font-bold" id="calcHeresitePrice">--</span>
-        </label>
-        <label class="flex items-center justify-between bg-slate-800/50 p-2.5 rounded border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition">
-          <div class="flex items-center gap-2"><input type="checkbox" id="calcInfiniguardCheck" class="calc-addon rounded border-slate-600 bg-slate-700 text-emerald-500 focus:ring-emerald-500" value="0"><span class="text-xs font-semibold text-slate-300">Salt Shield (Infiniguard)</span></div>
-          <span class="text-emerald-400 text-xs font-bold" id="calcInfiniguardPrice">--</span>
         </label>
       </div>
 
-      <!-- Universal Travel / Refrigerant -->
-      <div class="flex flex-col gap-2">
-        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Refrigerant / Floors of Travel</span>
-        <div class="grid grid-cols-1 gap-1.5">
-          <button onclick="setTravelFee(232, this)" class="travel-btn flex justify-between p-2 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 transition text-xs font-semibold text-slate-300 cursor-pointer">
-            <span>Floors 8-10 <span class="text-[10px] text-slate-500 ml-1">(1-3 Floors Travel)</span></span><span class="text-emerald-400 font-bold">+$232</span>
-          </button>
-          <button onclick="setTravelFee(348, this)" class="travel-btn flex justify-between p-2 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 transition text-xs font-semibold text-slate-300 cursor-pointer">
-            <span>Floors 5-7 <span class="text-[10px] text-slate-500 ml-1">(4-6 Floors Travel)</span></span><span class="text-emerald-400 font-bold">+$348</span>
-          </button>
-          <button onclick="setTravelFee(464, this)" class="travel-btn flex justify-between p-2 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 transition text-xs font-semibold text-slate-300 cursor-pointer">
-            <span>Floors 2-4 <span class="text-[10px] text-slate-500 ml-1">(7-9 Floors Travel)</span></span><span class="text-emerald-400 font-bold">+$464</span>
-          </button>
+      <!-- Unified Warranties & Protections (Decoupled Zones) -->
+      <div class="flex flex-col gap-2 mb-2">
+        <div class="flex justify-between items-end border-b border-slate-700/50 pb-1">
+          <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Warranties & Protections</span>
+          <span class="text-[9px] text-blue-400 font-bold">Click Text to Preview | Checkbox to Commit</span>
+        </div>
+
+        <!-- Salt Shields -->
+        <div class="flex flex-col gap-1.5 mt-1">
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50" title="Check to add to proposal">
+              <input type="checkbox" id="commitHeresite" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="Salt Shield (Heresite)" value="0" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewShield" id="previewHeresite" class="sr-only calc-preview-toggle" value="0" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">Salt Shield (Heresite)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display" id="priceHeresitePreview">--</span>
+            </label>
+          </div>
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50" title="Check to add to proposal">
+              <input type="checkbox" id="commitInfiniguard" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="Salt Shield (Infiniguard)" value="0" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewShield" id="previewInfiniguard" class="sr-only calc-preview-toggle" value="0" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">Salt Shield (Infiniguard)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display" id="priceInfiniguardPreview">--</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Extended Labor -->
+        <div class="flex flex-col gap-1.5 mt-2">
+          <!-- Standard AC -->
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden warranty-row" data-label="Standard AC">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50">
+              <input type="checkbox" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="10-Year Labor Warranty (Standard AC)" value="1464" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewWarranty" class="sr-only calc-preview-toggle" value="1464" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">10-Year Labor (Standard AC)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display">+$1,464</span>
+            </label>
+          </div>
+          <!-- Coastal AC -->
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden warranty-row" data-label="Coastal AC">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50">
+              <input type="checkbox" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="10-Year Labor Warranty (Coastal AC)" value="1729" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewWarranty" class="sr-only calc-preview-toggle" value="1729" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">10-Year Labor (Coastal AC)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display">+$1,729</span>
+            </label>
+          </div>
+          <!-- Standard HP -->
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden warranty-row" data-label="Standard HP">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50">
+              <input type="checkbox" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="10-Year Labor Warranty (Standard HP)" value="1837" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewWarranty" class="sr-only calc-preview-toggle" value="1837" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">10-Year Labor (Standard HP)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display">+$1,837</span>
+            </label>
+          </div>
+          <!-- Coastal HP -->
+          <div class="flex items-stretch bg-slate-800/50 rounded border border-slate-700/50 overflow-hidden warranty-row" data-label="Coastal HP">
+            <div class="flex items-center px-3 border-r border-slate-700/50 bg-slate-900/50">
+              <input type="checkbox" class="calc-commit-opt rounded border-slate-600 bg-slate-700 text-blue-500 cursor-pointer" data-label="10-Year Labor Warranty (Coastal HP)" value="2167" onchange="updateCalculatorTotal()">
+            </div>
+            <label class="flex-1 flex items-center justify-between p-2.5 cursor-pointer hover:bg-slate-700 transition">
+              <input type="checkbox" data-group="previewWarranty" class="sr-only calc-preview-toggle" value="2167" onclick="handleSmartToggle(this)">
+              <span class="text-xs font-semibold text-slate-300">10-Year Labor (Coastal HP)</span>
+              <span class="text-emerald-400 text-xs font-bold preview-price-display">+$2,167</span>
+            </label>
+          </div>
         </div>
       </div>
+
+      <!-- Refrigerant Line-Set (Moved to Bottom, Closed by Default) -->
+      <details class="mb-2 mt-4 bg-slate-800 rounded-lg border border-slate-700 shadow-sm group">
+        <summary class="p-3 text-xs font-bold text-white uppercase tracking-widest cursor-pointer flex justify-between items-center select-none bg-slate-900/50 rounded-lg group-open:rounded-b-none transition-all">
+          <div class="flex items-center gap-2"><i data-lucide="waves" class="w-4 h-4 text-blue-400"></i> Refrigerant Line-Set</div>
+          <span class="text-emerald-400 font-black text-sm ref-total-display">+$0</span>
+        </summary>
+        <div class="p-3 flex flex-col gap-3 border-t border-slate-700 bg-slate-800/50 rounded-b-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span id="ref-input-label" class="text-xs text-blue-400 font-bold uppercase tracking-widest">Custom Line-Set (Ft)</span>
+              <span id="ref-helper-text" class="text-[10px] text-slate-400">First 15' free. $120/extra 25'.</span>
+            </div>
+            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+              <input type="number" id="ref-smart-input" oninput="handleSmartRefrigerant(this)" data-mode="custom" class="bg-slate-900 text-white font-black text-sm p-2 rounded border border-slate-600 w-20 text-center focus:border-blue-400 outline-none shadow-inner [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="0">
+              <div id="ref-floor-grid" class="flex-wrap gap-1.5 max-w-[140px] justify-end flex">
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      
 
     </div>
 
     <!-- Footer Total -->
     <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-between items-end">
-      <div class="flex flex-col">
-        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Running Total</span>
-        <span class="text-3xl font-black text-white" id="calcRunningTotal">$0</span>
+      <div class="flex flex-col gap-1 flex-1 pr-4">
+        <div class="flex items-center justify-between w-full">
+          <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Core Install</span>
+          <span class="text-xl font-bold text-white" id="calcRunningTotal">$0</span>
+        </div>
+        <div class="flex items-center justify-between w-full border-t border-slate-800 pt-1 mt-1">
+          <span class="text-[11px] text-emerald-500 font-black uppercase tracking-widest">Fully Loaded Preview</span>
+          <span class="text-2xl font-black text-emerald-400" id="calcLoadedTotal">$0</span>
+        </div>
       </div>
-      <button onclick="closePriceModal()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded shadow transition cursor-pointer">Done</button>
+      <div class="flex flex-col items-end gap-1.5 shrink-0">
+        <div class="flex items-center gap-2">
+          <button onclick="resetModalScratchpad()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs px-3.5 py-2 rounded border border-slate-700/50 shadow transition cursor-pointer">Reset to Base</button>
+          <button onclick="sendToProposal()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded shadow transition cursor-pointer">Send to Proposal</button>
+        </div>
+        <span class="text-[8px] font-normal text-blue-400">v03.73</span>
+      </div>
     </div>
   </div>
 </div>
