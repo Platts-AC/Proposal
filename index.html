@@ -1,4 +1,4 @@
-<!-- Retest Prototype v06.47 | Workflow Polish and Saved Note Presets -->
+<!-- Retest Prototype v06.48 | Proposal Routing and Protection Options -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
   <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v06.47</title>
+    <title>Changeout Lookup v06.48</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -330,7 +330,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
         </div>
         <h1 class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1 mt-1">Pricing Beta</h1>
         <div class="flex items-center gap-1.5 pl-1 mt-1">
-            <span id="navbarVerBadge" class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v06.47</span>
+            <span id="navbarVerBadge" class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-500/50 tracking-wider">v06.48</span>
             <span id="master-match-counter" class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
         </div>
     </div>
@@ -1006,7 +1006,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
                 <div id="page2-platts-fallback" class="hidden font-black tracking-wider text-white uppercase" style="font-size: 14.4px;">PLATT’S AIR & HEAT</div>
                 <div id="page2-builder-title" class="font-black tracking-widest uppercase text-emerald-500 leading-none mt-1" style="font-size: 12px;">PROPOSAL BUILDER</div>
                 <div class="flex items-center gap-2 mt-1 flex-wrap">
-                    <span id="page2-version-badge" class="bg-blue-900/40 border border-blue-500/50 text-blue-400 px-1.5 py-0.5 rounded text-[8px] tracking-widest uppercase font-bold leading-none">v06.47</span>
+                    <span id="page2-version-badge" class="bg-blue-900/40 border border-blue-500/50 text-blue-400 px-1.5 py-0.5 rounded text-[8px] tracking-widest uppercase font-bold leading-none">v06.48</span>
                     <div id="global-site-badge" class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap" onclick="openSiteSetupModal('badge')">
                         <span id="global-site-badge-text" class="text-[9px] font-bold text-blue-200 tracking-wider uppercase leading-none"></span>
                     </div>
@@ -1955,6 +1955,16 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             </label>
 
             <label class="flex items-center justify-between cursor-pointer text-xs font-semibold text-slate-300 hover:text-white">
+                Warranty & Protection Options
+                <input
+                    type="checkbox"
+                    id="term-copy-protection"
+                    onchange="toggleTerminalSection('protection', this.checked)"
+                    class="w-3.5 h-3.5 rounded bg-slate-900 border-slate-600 text-blue-500"
+                >
+            </label>
+
+            <label class="flex items-center justify-between cursor-pointer text-xs font-semibold text-slate-300 hover:text-white">
                 Warranty and Closing Text
                 <input
                     type="checkbox"
@@ -2051,6 +2061,77 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
 
         <div>
             <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                Proposal Item Routing
+            </div>
+
+            <div class="text-[9px] text-slate-500 mt-1 leading-relaxed">
+                Choose where optional Smart Scope items appear in the customer proposal. Routing changes proposal wording only and never changes pricing.
+            </div>
+        </div>
+
+        <div
+            id="terminal-item-routing-list"
+            class="space-y-2"
+        ></div>
+
+        <div class="pt-2 border-t border-slate-700 space-y-2">
+
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                Warranty / Protection Placement
+            </label>
+
+            <select
+                id="terminal-protection-placement"
+                onchange="setProtectionPlacement(this.value)"
+                class="w-full bg-slate-900 text-slate-300 border border-slate-700 rounded p-2 text-[10px] font-bold outline-none"
+            >
+                <option value="grouped">
+                    Grouped Separate Section
+                </option>
+
+                <option value="under-option">
+                    Under Applicable System Option
+                </option>
+            </select>
+
+        </div>
+
+        <div class="space-y-2">
+
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                Different Protection Prices
+            </label>
+
+            <select
+                id="terminal-protection-price-behavior"
+                onchange="setProtectionPriceBehavior(this.value)"
+                class="w-full bg-slate-900 text-slate-300 border border-slate-700 rounded p-2 text-[10px] font-bold outline-none"
+            >
+                <option value="ask">
+                    Ask When Prices Differ
+                </option>
+
+                <option value="calculated">
+                    Keep Calculated Prices Automatically
+                </option>
+            </select>
+
+            <button
+                type="button"
+                onclick="clearProtectionPriceOverrides()"
+                class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[9px] font-bold uppercase tracking-wider rounded px-2 py-2"
+            >
+                Clear Protection Display Price Overrides
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="space-y-3 pt-3 border-t border-slate-700">
+
+        <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 Default Proposal Wording
             </div>
 
@@ -2067,6 +2148,7 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
             <option value="customerHeading">Customer Information Heading</option>
             <option value="feesHeading">Necessary Fees Heading</option>
             <option value="optionalHeading">Optional Enhancements Heading</option>
+            <option value="protectionHeading">Warranty & Protection Options Heading</option>
             <option value="warrantyClosing">Warranty / Closing Text</option>
         </select>
 
@@ -2208,6 +2290,99 @@ body.light-theme #canvasGrid .select-proposal-highlight .text-slate-600:not(.pre
 
         </div>
     </div>
+<!-- Protection Price Resolution Modal -->
+<div
+    id="protection-price-resolution-modal"
+    class="hidden fixed inset-0 z-[95] bg-slate-950/80 backdrop-blur-sm flex-col items-center justify-center p-4"
+>
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-xl shadow-2xl overflow-hidden">
+
+        <div class="flex justify-between items-center px-4 py-3 border-b border-slate-800 bg-slate-950">
+            <div>
+                <h2 class="text-sm font-bold text-white uppercase tracking-wider">
+                    Protection Price Resolution
+                </h2>
+
+                <div
+                    id="protection-price-resolution-label"
+                    class="text-[10px] text-blue-400 font-bold mt-1"
+                ></div>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeProtectionPriceResolutionModal()"
+                class="text-slate-400 hover:text-white"
+            >
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="p-4 space-y-3">
+
+            <div
+                id="protection-price-resolution-summary"
+                class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-300 space-y-1"
+            ></div>
+
+            <div class="grid grid-cols-1 gap-2">
+
+                <button
+                    type="button"
+                    onclick="applyProtectionPriceResolution('calculated')"
+                    class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded px-3 py-2 text-xs font-bold"
+                >
+                    Keep Calculated Prices
+                </button>
+
+                <button
+                    type="button"
+                    onclick="applyProtectionPriceResolution('lowest')"
+                    class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded px-3 py-2 text-xs font-bold"
+                >
+                    Use Lowest Price for All
+                </button>
+
+                <button
+                    type="button"
+                    onclick="applyProtectionPriceResolution('highest')"
+                    class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded px-3 py-2 text-xs font-bold"
+                >
+                    Use Highest Price for All
+                </button>
+
+                <div class="flex gap-2">
+
+                    <input
+                        id="protection-price-custom-value"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="Custom single price"
+                        class="flex-1 bg-slate-950 border border-slate-700 rounded p-2 text-xs text-emerald-400"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="applyProtectionPriceResolution('custom')"
+                        class="bg-blue-600 hover:bg-blue-500 text-white rounded px-3 py-2 text-xs font-bold"
+                    >
+                        Use Custom
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="text-[9px] text-amber-400 leading-relaxed">
+                This changes proposal display wording only. It does not change system pricing.
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
 <!-- Focus Editor Modal (For Block Editing) -->
 <div id="focus-editor-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center p-4">
   <div class="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-xl shadow-2xl flex flex-col overflow-hidden">
@@ -3237,6 +3412,25 @@ function toggleProposalRow(rowIndex) {
       }
 
       // === ZONE B: CHECKLIST DATA & SETTINGS ENGINE ===
+window.DEFAULT_PROPOSAL_ITEM_ROUTING = {
+    'UV Coil Bulb System': 'optional',
+    'Whole House Sanitizer': 'optional',
+    '4-inch Merv 11 Filter Kit': 'optional',
+    'Condensate Pump': 'optional',
+    'Duct Sealing (Per Drop)': 'optional',
+    'Emerson Wi-Fi Thermostat': 'optional',
+    'Wi-Fi Thermostat Upgrade': 'optional',
+    'Overhead Copper Run': 'optional',
+    '100 ft Copper Line Set': 'optional',
+
+    'Salt Shield (Heresite)': 'protection',
+    'Salt Shield (Infiniguard)': 'protection',
+
+    '10-Year Labor Warranty (Standard AC)': 'protection',
+    '10-Year Labor Warranty (Coastal AC)': 'protection',
+    '10-Year Labor Warranty (Standard HP)': 'protection',
+    '10-Year Labor Warranty (Coastal HP)': 'protection'
+};
 const dummyEnhancements = {
     outdoor: [
         { label: 'Crane Services', price: 900 },
@@ -3314,6 +3508,7 @@ const dummyEnhancements = {
                   options: true,
                   fees: true,
                   optional: true,
+                  protection: true,
                   warranty: true
               },
               scopeOverrides: {
@@ -3321,6 +3516,12 @@ const dummyEnhancements = {
                   thermostat: 'auto',
                   pad: 'auto'
               },
+              itemRouting: {
+                  ...window.DEFAULT_PROPOSAL_ITEM_ROUTING
+              },
+              protectionPlacement: 'grouped',
+              protectionPriceBehavior: 'ask',
+              protectionPriceOverrides: {},
               templateOverrides: {},
               notePresets: []
           },
@@ -3374,6 +3575,7 @@ const dummyEnhancements = {
                       options: true,
                       fees: true,
                       optional: true,
+                      protection: true,
                       warranty: true,
                       ...(storedTerminalSettings.copySections || {})
                   },
@@ -3383,6 +3585,25 @@ const dummyEnhancements = {
                       thermostat: 'auto',
                       pad: 'auto',
                       ...(storedTerminalSettings.scopeOverrides || {})
+                  },
+              
+                  itemRouting: {
+                      ...window.DEFAULT_PROPOSAL_ITEM_ROUTING,
+                      ...(storedTerminalSettings.itemRouting || {})
+                  },
+              
+                  protectionPlacement:
+                      storedTerminalSettings.protectionPlacement === 'under-option'
+                          ? 'under-option'
+                          : 'grouped',
+              
+                  protectionPriceBehavior:
+                      storedTerminalSettings.protectionPriceBehavior === 'calculated'
+                          ? 'calculated'
+                          : 'ask',
+              
+                  protectionPriceOverrides: {
+                      ...(storedTerminalSettings.protectionPriceOverrides || {})
                   },
               
                   templateOverrides: {
@@ -4352,6 +4573,7 @@ function saveBareBones() {
                   options: true,
                   fees: true,
                   optional: true,
+                  protection: true,
                   warranty: true
               },
               scopeOverrides: {
@@ -4359,6 +4581,12 @@ function saveBareBones() {
                   thermostat: 'auto',
                   pad: 'auto'
               },
+              itemRouting: {
+                  ...window.DEFAULT_PROPOSAL_ITEM_ROUTING
+              },
+              protectionPlacement: 'grouped',
+              protectionPriceBehavior: 'ask',
+              protectionPriceOverrides: {},
               templateOverrides: {},
               notePresets: existingNotePresets
           };
@@ -4421,6 +4649,7 @@ function saveBareBones() {
               'options',
               'fees',
               'optional',
+              'protection',
               'warranty'
           ];
       
@@ -4476,6 +4705,37 @@ function saveBareBones() {
                   templateSelect.value || 'customerHeading'
               );
           }
+
+          const protectionPlacementSelect =
+              document.getElementById(
+                  'terminal-protection-placement'
+              );
+
+          if (protectionPlacementSelect) {
+              protectionPlacementSelect.value =
+                  propSettings.terminal.protectionPlacement === 'under-option'
+                      ? 'under-option'
+                      : 'grouped';
+          }
+
+          const protectionPriceBehaviorSelect =
+              document.getElementById(
+                  'terminal-protection-price-behavior'
+              );
+
+          if (protectionPriceBehaviorSelect) {
+              protectionPriceBehaviorSelect.value =
+                  propSettings.terminal.protectionPriceBehavior === 'calculated'
+                      ? 'calculated'
+                      : 'ask';
+          }
+
+          if (
+              typeof renderProposalItemRoutingSettings ===
+              'function'
+          ) {
+              renderProposalItemRoutingSettings();
+          }
       }
 
       function setTerminalScopeOverride(key, value) {
@@ -4525,6 +4785,9 @@ function saveBareBones() {
               optionalHeading:
                   'Optional System Enhancements:',
       
+              protectionHeading:
+                  'Warranty & Protection Options:',
+
               warrantyClosing:
                   '■ Platt’s Air and Heat has a 1-year workmanship warranty.\n' +
                   '■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n' +
@@ -4662,6 +4925,431 @@ function saveBareBones() {
           }
       }
 
+function getProposalItemRoute(label) {
+    if (!propSettings.terminal) {
+        return null;
+    }
+
+    const routing =
+        propSettings.terminal.itemRouting || {};
+
+    return (
+        routing[label] ||
+        window.DEFAULT_PROPOSAL_ITEM_ROUTING[label] ||
+        null
+    );
+}
+
+function setProposalItemRoute(label, route) {
+    if (
+        !['optional', 'protection', 'hidden'].includes(route)
+    ) {
+        return;
+    }
+
+    if (!propSettings.terminal.itemRouting) {
+        propSettings.terminal.itemRouting = {
+            ...window.DEFAULT_PROPOSAL_ITEM_ROUTING
+        };
+    }
+
+    propSettings.terminal.itemRouting[label] = route;
+
+    savePropSettings();
+
+    if (typeof updateProposalCartUI === 'function') {
+        updateProposalCartUI();
+    }
+
+    renderProposalItemRoutingSettings();
+}
+
+function renderProposalItemRoutingSettings() {
+    const container =
+        document.getElementById(
+            'terminal-item-routing-list'
+        );
+
+    if (!container) return;
+
+    const routing =
+        propSettings.terminal.itemRouting || {};
+
+    const labels =
+        Object.keys(
+            window.DEFAULT_PROPOSAL_ITEM_ROUTING
+        );
+
+    container.innerHTML =
+        labels.map(label => {
+            const route =
+                routing[label] ||
+                window.DEFAULT_PROPOSAL_ITEM_ROUTING[label];
+
+            const displayLabel =
+                label.replace(
+                    'Heresite',
+                    'HereShield'
+                );
+
+            return `
+                <div class="flex items-center justify-between gap-2 bg-slate-800 border border-slate-700 rounded-lg p-2">
+                    <span class="text-[10px] text-slate-300 font-semibold leading-tight pr-2">
+                        ${displayLabel}
+                    </span>
+
+                    <select
+                        onchange="setProposalItemRoute('${label}', this.value)"
+                        class="bg-slate-900 text-slate-300 border border-slate-700 rounded p-1.5 text-[9px] font-bold outline-none shrink-0"
+                    >
+                        <option value="optional" ${route === 'optional' ? 'selected' : ''}>
+                            Optional Enhancement
+                        </option>
+
+                        <option value="protection" ${route === 'protection' ? 'selected' : ''}>
+                            Warranty / Protection
+                        </option>
+
+                        <option value="hidden" ${route === 'hidden' ? 'selected' : ''}>
+                            Do Not Print
+                        </option>
+                    </select>
+                </div>
+            `;
+        }).join('');
+}
+
+function setProtectionPlacement(value) {
+    if (
+        !['grouped', 'under-option'].includes(value)
+    ) {
+        return;
+    }
+
+    propSettings.terminal.protectionPlacement =
+        value;
+
+    savePropSettings();
+
+    if (typeof updateProposalCartUI === 'function') {
+        updateProposalCartUI();
+    }
+}
+
+function setProtectionPriceBehavior(value) {
+    if (
+        !['ask', 'calculated'].includes(value)
+    ) {
+        return;
+    }
+
+    propSettings.terminal.protectionPriceBehavior =
+        value;
+
+    savePropSettings();
+
+    if (typeof updateProposalCartUI === 'function') {
+        updateProposalCartUI();
+    }
+}
+
+function clearProtectionPriceOverrides() {
+    propSettings.terminal.protectionPriceOverrides = {};
+
+    savePropSettings();
+
+    if (typeof updateProposalCartUI === 'function') {
+        updateProposalCartUI();
+    }
+
+    if (typeof showToast === 'function') {
+        showToast(
+            'Protection display price overrides cleared.'
+        );
+    }
+}
+
+function addProposalPlacement(
+    engine,
+    label,
+    price,
+    optionNumber
+) {
+    if (!engine[label]) {
+        engine[label] = {
+            priceGroups: new Map()
+        };
+    }
+
+    const numericPrice =
+        Number(price) || 0;
+
+    const group =
+        engine[label].priceGroups.get(
+            numericPrice
+        ) || [];
+
+    if (!group.includes(optionNumber)) {
+        group.push(optionNumber);
+    }
+
+    engine[label].priceGroups.set(
+        numericPrice,
+        group
+    );
+}
+
+function formatProposalOptionNumbers(options) {
+    const nums =
+        [...new Set(options)]
+            .sort((a, b) => a - b);
+
+    if (nums.length === 0) return '';
+
+    if (nums.length === 1) {
+        return `Option ${nums[0]}`;
+    }
+
+    if (nums.length === 2) {
+        return `Options ${nums[0]} and ${nums[1]}`;
+    }
+
+    return (
+        `Options ${nums.slice(0, -1).join(', ')}, and ` +
+        nums[nums.length - 1]
+    );
+}
+
+window.pendingProtectionPriceConflict = null;
+
+function getProtectionPriceOverride(label) {
+    const overrides =
+        propSettings.terminal
+            .protectionPriceOverrides || {};
+
+    return overrides[label] || null;
+}
+
+function getProtectionDisplayGroups(
+    label,
+    placement
+) {
+    const rawGroups =
+        Array.from(
+            placement.priceGroups.entries()
+        ).map(([price, options]) => ({
+            price: Number(price),
+            options: [...options]
+        }));
+
+    const override =
+        getProtectionPriceOverride(label);
+
+    if (
+        override &&
+        override.mode === 'single' &&
+        Number.isFinite(Number(override.price))
+    ) {
+        const allOptions =
+            rawGroups.flatMap(
+                group => group.options
+            );
+
+        return [{
+            price: Number(override.price),
+            options: [...new Set(allOptions)]
+        }];
+    }
+
+    return rawGroups;
+}
+
+function maybeOpenProtectionPriceConflict(
+    label,
+    placement
+) {
+    if (
+        propSettings.terminal.protectionPriceBehavior !==
+        'ask'
+    ) {
+        return;
+    }
+
+    if (
+        placement.priceGroups.size <= 1
+    ) {
+        return;
+    }
+
+    const overrides =
+        propSettings.terminal
+            .protectionPriceOverrides || {};
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            overrides,
+            label
+        )
+    ) {
+        return;
+    }
+
+    const modal =
+        document.getElementById(
+            'protection-price-resolution-modal'
+        );
+
+    if (
+        !modal ||
+        !modal.classList.contains('hidden')
+    ) {
+        return;
+    }
+
+    const groups =
+        Array.from(
+            placement.priceGroups.entries()
+        ).map(([price, options]) => ({
+            price: Number(price),
+            options: [...options]
+        }));
+
+    window.pendingProtectionPriceConflict = {
+        label,
+        groups
+    };
+
+    const title =
+        document.getElementById(
+            'protection-price-resolution-label'
+        );
+
+    const summary =
+        document.getElementById(
+            'protection-price-resolution-summary'
+        );
+
+    if (title) {
+        title.textContent =
+            label.replace(
+                'Heresite',
+                'HereShield'
+            );
+    }
+
+    if (summary) {
+        summary.innerHTML =
+            groups.map(group => {
+                return `
+                    <div class="flex justify-between gap-3">
+                        <span>
+                            ${formatProposalOptionNumbers(group.options)}
+                        </span>
+
+                        <span class="text-emerald-400 font-bold">
+                            $${group.price.toLocaleString()}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+function closeProtectionPriceResolutionModal() {
+    const modal =
+        document.getElementById(
+            'protection-price-resolution-modal'
+        );
+
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    window.pendingProtectionPriceConflict =
+        null;
+}
+
+function applyProtectionPriceResolution(mode) {
+    const conflict =
+        window.pendingProtectionPriceConflict;
+
+    if (!conflict) return;
+
+    const prices =
+        conflict.groups.map(
+            group => Number(group.price)
+        );
+
+    let override = null;
+
+    if (mode === 'calculated') {
+        override = {
+            mode: 'calculated'
+        };
+
+    } else if (mode === 'lowest') {
+        override = {
+            mode: 'single',
+            price: Math.min(...prices)
+        };
+
+    } else if (mode === 'highest') {
+        override = {
+            mode: 'single',
+            price: Math.max(...prices)
+        };
+
+    } else if (mode === 'custom') {
+        const input =
+            document.getElementById(
+                'protection-price-custom-value'
+            );
+
+        const value =
+            Number(input ? input.value : 0);
+
+        if (!(value >= 0)) {
+            return;
+        }
+
+        override = {
+            mode: 'single',
+            price: value
+        };
+
+    } else {
+        return;
+    }
+
+    if (
+        !propSettings.terminal
+            .protectionPriceOverrides
+    ) {
+        propSettings.terminal
+            .protectionPriceOverrides = {};
+    }
+
+    propSettings.terminal
+        .protectionPriceOverrides[
+            conflict.label
+        ] = override;
+
+    savePropSettings();
+
+    closeProtectionPriceResolutionModal();
+
+    if (typeof updateProposalCartUI === 'function') {
+        updateProposalCartUI();
+    }
+}
 function getTerminalNotePresets() {
     if (!propSettings.terminal) {
         propSettings.terminal = {};
@@ -5700,6 +6388,7 @@ function updateProposalCartUI() {
     window.proposalBlocks.push({ target: 'Intro', text: introText });
 
     let placementEngine = {}; // label -> { priceGroups: Map<price, Array<optIndex>> }
+    let protectionPlacementEngine = {}; // label -> { priceGroups: Map<price, Array<optIndex>> }
     let globalNecessaryFees = new Map();
 
     let universalCounts = {};
@@ -6060,6 +6749,7 @@ function updateProposalCartUI() {
         </div>`;
         
         let optionEnhancementLines = [];
+        let optionProtectionLines = [];
 
         const effectiveSaltShields = window.getEffectiveSaltShields(sp);
 
@@ -6079,13 +6769,30 @@ function updateProposalCartUI() {
                 
                 const displayLabel = label.replace('Heresite', 'HereShield');
 
+                const itemRoute =
+                    typeof getProposalItemRoute === 'function'
+                        ? getProposalItemRoute(label) || 'protection'
+                        : 'protection';
+
+                if (itemRoute === 'hidden') {
+                    return;
+                }
+
                 if (isTagged || (universalCounts[label] === 1 && selectedProposalRows.length > 1)) {
-                    optionEnhancementLines.push(`■ Option ${index + 1} System Enhancement: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                    if (itemRoute === 'protection') {
+                        optionProtectionLines.push(`■ Option ${index + 1} Protection Option: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                    } else {
+                        optionEnhancementLines.push(`■ Option ${index + 1} System Enhancement: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                    }
                 } else {
-                    if (!placementEngine[displayLabel]) placementEngine[displayLabel] = { priceGroups: new Map() };
-                    let group = placementEngine[displayLabel].priceGroups.get(sPrice) || [];
-                    group.push(index + 1);
-                    placementEngine[displayLabel].priceGroups.set(sPrice, group);
+                    const targetEngine =
+                        itemRoute === 'protection'
+                            ? protectionPlacementEngine
+                            : placementEngine;
+
+                    if (typeof addProposalPlacement === 'function') {
+                        addProposalPlacement(targetEngine, displayLabel, sPrice, index + 1);
+                    }
                 }
             });
         }
@@ -6108,13 +6815,30 @@ function updateProposalCartUI() {
 
                 if (warrantyItem) {
                     const wPrice = Number(warrantyItem.price);
+                    const itemRoute =
+                        typeof getProposalItemRoute === 'function'
+                            ? getProposalItemRoute(warrantyLabel) || 'protection'
+                            : 'protection';
+
+                    if (itemRoute === 'hidden') {
+                        return;
+                    }
+
                     if (isTagged || (universalCounts[warrantyLabel] === 1 && selectedProposalRows.length > 1)) {
-                        optionEnhancementLines.push(`■ Option ${index + 1} System Enhancement: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                        if (itemRoute === 'protection') {
+                            optionProtectionLines.push(`■ Option ${index + 1} Protection Option: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                        } else {
+                            optionEnhancementLines.push(`■ Option ${index + 1} System Enhancement: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                        }
                     } else {
-                        if (!placementEngine[warrantyLabel]) placementEngine[warrantyLabel] = { priceGroups: new Map() };
-                        let group = placementEngine[warrantyLabel].priceGroups.get(wPrice) || [];
-                        group.push(index + 1);
-                        placementEngine[warrantyLabel].priceGroups.set(wPrice, group);
+                        const targetEngine =
+                            itemRoute === 'protection'
+                                ? protectionPlacementEngine
+                                : placementEngine;
+
+                        if (typeof addProposalPlacement === 'function') {
+                            addProposalPlacement(targetEngine, warrantyLabel, wPrice, index + 1);
+                        }
                     }
                 }
             });
@@ -6136,6 +6860,12 @@ function updateProposalCartUI() {
         }
         if (stitchLines.length > 0) {
             window.proposalBlocks.push({ target: `Option ${index + 1} Addons`, text: stitchLines.join('\n') });
+        }
+        if (optionProtectionLines.length > 0) {
+            window.proposalBlocks.push({
+                target: `Option ${index + 1} Protection`,
+                text: optionProtectionLines.join('\n')
+            });
         }
     });
 
@@ -6200,6 +6930,89 @@ function updateProposalCartUI() {
             
             if (lines.length > 0) {
                 window.proposalBlocks.push({ target: 'Upgrades', text: upText + lines.join('\n') });
+            }
+        }
+    }
+
+    if (
+        propSettings.terminal.protectionPlacement !== 'under-option' &&
+        Object.keys(protectionPlacementEngine).length > 0
+    ) {
+        const protectionOverride =
+            window.proposalAppState.textOverrides &&
+            window.proposalAppState.textOverrides['Protection'];
+
+        const isProtectionManual =
+            window.proposalAppState.manualTextOverrides &&
+            window.proposalAppState.manualTextOverrides.Protection === true;
+
+        if (
+            typeof protectionOverride === 'string' &&
+            protectionOverride.trim() !== '' &&
+            isProtectionManual
+        ) {
+            window.proposalBlocks.push({
+                target: 'Protection',
+                text: protectionOverride
+            });
+        } else {
+            const protectionHeading =
+                typeof getTerminalTemplateValue === 'function'
+                    ? getTerminalTemplateValue('protectionHeading')
+                    : 'Warranty & Protection Options:';
+
+            let protText = `${protectionHeading}\n`;
+            let protLines = [];
+
+            Object.keys(protectionPlacementEngine).forEach(
+                label => {
+                    const groups =
+                        getProtectionDisplayGroups(
+                            label,
+                            protectionPlacementEngine[label]
+                        ).sort((a, b) => a.price - b.price);
+
+                    if (groups.length === 1) {
+                        const optGroup =
+                            groups[0].options.sort(
+                                (a, b) => a - b
+                            );
+
+                        const optStr =
+                            optGroup.length ===
+                            selectedProposalRows.length
+                                ? ''
+                                : ` for ${formatProposalOptionNumbers(optGroup)}`;
+
+                        protLines.push(
+                            `■ ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
+                        );
+                    } else if (groups.length > 1) {
+                        maybeOpenProtectionPriceConflict(
+                            label,
+                            protectionPlacementEngine[label]
+                        );
+
+                        const groupedStrs =
+                            groups.map(g => {
+                                const opts = g.options.sort(
+                                    (a, b) => a - b
+                                );
+                                return `${formatProposalOptionNumbers(opts)}: $${g.price.toLocaleString()}`;
+                            });
+
+                        protLines.push(
+                            `■ ___ Add ${label} for ${groupedStrs.join('; ')}`
+                        );
+                    }
+                }
+            );
+
+            if (protLines.length > 0) {
+                window.proposalBlocks.push({
+                    target: 'Protection',
+                    text: protText + protLines.join('\n')
+                });
             }
         }
     }
@@ -6332,6 +7145,8 @@ window.updateProposalTerminal = function() {
             sectionKey = 'fees';
         } else if (b.target === 'Upgrades') {
             sectionKey = 'optional';
+        } else if (b.target === 'Protection') {
+            sectionKey = 'protection';
         } else if (b.target === 'Boilerplate') {
             sectionKey = 'warranty';
         }
