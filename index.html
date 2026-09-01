@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.55 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.56 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.55</title>
+    <title>Changeout Lookup v07.56</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.55</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.56</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.55</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.56</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.55',
+                appVersion: 'v07.56',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.55_${stamp}.json`;
+                `platts_config_v07.56_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -14913,6 +14913,7 @@
                 const renderChip = (val) => {
                     const chip = document.createElement("div");
                     chip.className = "flex items-center gap-0.5 bg-blue-200/50 text-blue-800 border border-blue-300/50 rounded-[4px] px-2 py-0.5 shadow-xs overflow-hidden";
+                    const textSpan = document.createElement("span");
                     textSpan.className = "text-[11px] font-bold tracking-wide mt-px";
                     textSpan.textContent = val;
                     chip.appendChild(textSpan);
