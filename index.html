@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.54 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.55 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.54</title>
+    <title>Changeout Lookup v07.55</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.54</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.55</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.54</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.55</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.54',
+                appVersion: 'v07.55',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.54_${stamp}.json`;
+                `platts_config_v07.55_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -14181,7 +14181,7 @@
             });
 
             // Toggle visibility if Hide Filtered Rows is checked
-            const itemsToRender = appState.hideFiltered ? itemsToShow : rawItems;
+            // Delay itemsToRender definition until after sort and limit
 
             // Apply grid gaps
             canvas.style.gap = `${appState.rowGap}px`;
@@ -14198,10 +14198,9 @@
                 appState.isHeaderExpanded = e.target.open;
             });
 
+            const qualifyingItems = itemsToShow;
             const totalCount = rawItems.length;
-            const visibleCount = itemsToShow.length;
-
-            const qualifyingCount = itemsToShow.length;
+            const qualifyingCount = qualifyingItems.length;
 
             if (appState.resultSort) {
                 itemsToShow = [...itemsToShow].sort((a, b) => {
@@ -14223,6 +14222,9 @@
             // Override itemsToShow so visibility processing downstream uses slice
             itemsToShow = itemsToRenderFinal;
 
+            // Now that itemsToShow is final, bind itemsToRender
+            const itemsToRender = appState.hideFiltered ? itemsToShow : rawItems;
+
             // Create the System Counter Tab
             const summaryBar = document.createElement("summary");
             summaryBar.className = "flex justify-center items-center py-2 px-4 cursor-pointer select-none list-none text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-300 transition-colors bg-slate-950 border-b border-slate-800 [&::-webkit-details-marker]:hidden shadow-inner";
@@ -14231,9 +14233,13 @@
 
             const matchCounter = document.getElementById('master-match-counter');
             if (matchCounter) {
-                matchCounter.innerText = renderedCount < qualifyingCount
-                    ? `${renderedCount} of ${qualifyingCount}`
-                    : qualifyingCount;
+                if (appState.resultLimit) {
+                    matchCounter.innerText = `${renderedCount} of ${qualifyingCount}`;
+                } else {
+                    matchCounter.innerText = renderedCount < totalCount
+                        ? `${renderedCount} of ${totalCount}`
+                        : totalCount;
+                }
             }
 
             // Create the actual Header Row (Sticky handled by parent accordion)
@@ -14358,14 +14364,17 @@
             // 2. GENERATE DATA ROWS (ROWS 2+)
             // ----------------------------------------------------
             itemsToRender.forEach((item, rIndex) => {
-                const isItemFiltered = !itemsToShow.includes(item);
+                const failsFilter = !qualifyingItems.includes(item);
+                const failsLimit = !failsFilter && !itemsToShow.includes(item);
+                const isItemFiltered = failsFilter || failsLimit; // Keeping backward compatibility variable name
+
                 const rowEl = document.createElement("div");
                 const absoluteIndex = HVAC_DATABASE.indexOf(item);
 
                 // TASK 3: Row Highlighting for Proposal Selection
                 const isRowSelected = selectedProposalRows.some(id => (window.systemScratchpads[id] ? window.systemScratchpads[id].absoluteIndex : id) === absoluteIndex);
                 // TASK 1: Mobile Row Stretch - w-full flex-grow
-                rowEl.className = `flex items-stretch transition-all duration-200 w-full flex-grow ${isItemFiltered ? 'opacity-30' : ''
+                rowEl.className = `flex items-stretch transition-all duration-200 w-full flex-grow ${failsFilter ? 'opacity-30' : (failsLimit ? 'opacity-50 blur-[1px]' : '')
                     } ${isRowSelected ? 'ring-2 ring-blue-500 rounded-xl shadow-lg' : ''
                     }`;
                 if (isRowSelected) rowEl.style.background = 'rgba(59,130,246,0.07)';
@@ -14783,6 +14792,17 @@
         }
 
         function removeFilterValue(fieldName, val) {
+            if (fieldName === 'SYSSORT') {
+                appState.resultSort = null;
+                renderGrid();
+                return;
+            }
+            if (fieldName === 'SYSLIMIT') {
+                appState.resultLimit = null;
+                renderGrid();
+                return;
+            }
+
             let values = appState.activeFilters[fieldName];
             if (!Array.isArray(values)) {
                 if (values === val) {
@@ -14814,6 +14834,49 @@
             if (filterKeys.length === 0 && !appState.resultSort && !appState.resultLimit) {
                 container.classList.add("hidden");
                 return;
+            }
+
+            container.classList.remove("hidden");
+
+            if (appState.resultSort) {
+                const groupDiv = document.createElement("div");
+                groupDiv.className = "flex items-center gap-1.5 flex-wrap bg-purple-50 border border-purple-100 rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm";
+                const labelSpan = document.createElement("span");
+                labelSpan.className = "text-[11px] font-semibold text-purple-900/60 mr-1 ml-1 leading-none uppercase tracking-widest cursor-default";
+                labelSpan.textContent = "VIEW SORT:";
+                groupDiv.appendChild(labelSpan);
+
+                let label = appState.resultSort.direction === 'asc' ? 'Cheapest First' : 'Most Expensive First';
+                const chip = document.createElement("div");
+                chip.className = "flex items-center gap-1 bg-white border border-purple-200 text-purple-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-purple-50 transition-colors";
+                chip.innerHTML = `
+                    <span>${label}</span>
+                    <div class="hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn" onclick="removeFilterValue('SYSSORT', 'SYSSORT')">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </div>
+                `;
+                groupDiv.appendChild(chip);
+                pills.appendChild(groupDiv);
+            }
+
+            if (appState.resultLimit) {
+                const groupDiv = document.createElement("div");
+                groupDiv.className = "flex items-center gap-1.5 flex-wrap bg-emerald-50 border border-emerald-100 rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm";
+                const labelSpan = document.createElement("span");
+                labelSpan.className = "text-[11px] font-semibold text-emerald-900/60 mr-1 ml-1 leading-none uppercase tracking-widest cursor-default";
+                labelSpan.textContent = "VIEW LIMIT:";
+                groupDiv.appendChild(labelSpan);
+
+                const chip = document.createElement("div");
+                chip.className = "flex items-center gap-1 bg-white border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-emerald-50 transition-colors";
+                chip.innerHTML = `
+                    <span>Top ${appState.resultLimit}</span>
+                    <div class="hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn" onclick="removeFilterValue('SYSLIMIT', 'SYSLIMIT')">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </div>
+                `;
+                groupDiv.appendChild(chip);
+                pills.appendChild(groupDiv);
             }
 
             container.classList.remove("hidden");
@@ -15091,13 +15154,13 @@
                     }
                 };
 
-                if (text.includes("1.5 TON") || text.includes("ONE AND A HALF TON")) applyVal('capacity', '1.5 Ton');
-                else if (text.includes("2 TON") || text.includes("TWO TON")) applyVal('capacity', '2 Ton');
-                else if (text.includes("2.5 TON") || text.includes("TWO AND A HALF TON")) applyVal('capacity', '2.5 Ton');
-                else if (text.includes("3 TON") || text.includes("THREE TON")) applyVal('capacity', '3 Ton');
-                else if (text.includes("3.5 TON") || text.includes("THREE AND A HALF TON")) applyVal('capacity', '3.5 Ton');
-                else if (text.includes("4 TON") || text.includes("FOUR TON")) applyVal('capacity', '4 Ton');
-                else if (text.includes("5 TON") || text.includes("FIVE TON")) applyVal('capacity', '5 Ton');
+                if (text.match(/1\.5 TONS?|ONE AND A HALF TONS?/)) applyVal('capacity', '1.5 Ton');
+                else if (text.match(/2\.5 TONS?|TWO AND A HALF TONS?/)) applyVal('capacity', '2.5 Ton');
+                else if (text.match(/3\.5 TONS?|THREE AND A HALF TONS?/)) applyVal('capacity', '3.5 Ton');
+                else if (text.match(/2 TONS?|TWO TONS?/)) applyVal('capacity', '2 Ton');
+                else if (text.match(/3 TONS?|THREE TONS?/)) applyVal('capacity', '3 Ton');
+                else if (text.match(/4 TONS?|FOUR TONS?/)) applyVal('capacity', '4 Ton');
+                else if (text.match(/5 TONS?|FIVE TONS?/)) applyVal('capacity', '5 Ton');
 
                 if (text.includes("SINGLE STAGE") || text.includes("1 STAGE") || text.includes("ONE STAGE")) applyVal('mechanicalStage', 'SINGLE STAGE');
                 else if (text.includes("TWO STAGE") || text.includes("2 STAGE")) applyVal('mechanicalStage', '2 STAGE');
