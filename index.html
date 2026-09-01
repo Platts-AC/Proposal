@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.56 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.57 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.56</title>
+    <title>Changeout Lookup v07.57</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.56</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.57</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.56</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.57</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.56',
+                appVersion: 'v07.57',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.56_${stamp}.json`;
+                `platts_config_v07.57_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -14011,20 +14011,7 @@
         // HEADER FILTER MODAL CONTROLLER
         let activeFilterFieldName = null;
 
-        function launchHeaderFilterModal(colIndex, pillIndex, subIndex, event) {
-            event.stopPropagation();
-            const col = appState.columns[colIndex];
-            const pill = col.pills[pillIndex];
-            const sub = pill.subdivisions[subIndex];
-
-            const fieldName = sub.mapping;
-            if (fieldName === "unmapped") {
-                // Tell the user to map first, or open mapping tab of smartModal
-                launchSmartModal(colIndex, pillIndex, subIndex, event);
-                switchSmartModalTab("mapping");
-                return;
-            }
-
+        function openHeaderFilterModalForField(fieldName, event) {
             activeFilterFieldName = fieldName;
 
             const modal = document.getElementById("headerFilterModal");
@@ -14037,20 +14024,22 @@
                 window.initDraggableModal('headerFilterModal', 'headerFilterModalHeader');
             }
 
-            // Position elegantly below the clicked coordinates if not already dragged
             if (!modal.style.top || modal.style.left === '400px') {
                 const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
                 const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
                 if (vw < 640) {
-                    // Mobile-safe safe centering
                     modal.style.top = Math.max(20, Math.min(150, vh * 0.15)) + 'px';
                     modal.style.left = '50%';
                     modal.style.transform = 'translateX(-50%)';
                 } else {
-                    const clickX = event.clientX;
-                    const clickY = event.clientY;
-                    const modalWidth = 384; // max-w-sm
+                    let clickX = vw / 2;
+                    let clickY = 150;
+                    if (event && event.clientX) {
+                        clickX = event.clientX;
+                        clickY = event.clientY;
+                    }
+                    const modalWidth = 384; 
 
                     let targetLeft = clickX - (modalWidth / 2);
                     let targetTop = clickY + 15;
@@ -14066,8 +14055,23 @@
                 }
             }
 
-            // Populate unique values
             populateHeaderFilterList();
+        }
+
+        function launchHeaderFilterModal(colIndex, pillIndex, subIndex, event) {
+            event.stopPropagation();
+            const col = appState.columns[colIndex];
+            const pill = col.pills[pillIndex];
+            const sub = pill.subdivisions[subIndex];
+
+            const fieldName = sub.mapping;
+            if (fieldName === "unmapped") {
+                launchSmartModal(colIndex, pillIndex, subIndex, event);
+                switchSmartModalTab("mapping");
+                return;
+            }
+
+            openHeaderFilterModalForField(fieldName, event);
         }
 
         function populateHeaderFilterList() {
@@ -14824,6 +14828,109 @@
             renderGrid();
         }
 
+        let activeInlineMenu = null;
+
+        function closeInlineMenu() {
+            if (activeInlineMenu) {
+                activeInlineMenu.remove();
+                activeInlineMenu = null;
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (activeInlineMenu && !activeInlineMenu.contains(e.target)) {
+                closeInlineMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeInlineMenu();
+        });
+
+        function openSortInlineMenu(event) {
+            event.stopPropagation();
+            closeInlineMenu();
+            const menu = document.createElement('div');
+            menu.className = "absolute z-[999] bg-white border border-slate-200 rounded shadow-lg py-1 text-xs text-slate-700 w-40";
+            
+            const rect = event.currentTarget.getBoundingClientRect();
+            menu.style.top = `${rect.bottom + window.scrollY + 5}px`;
+            
+            const vw = window.innerWidth;
+            let targetLeft = rect.left + window.scrollX;
+            if (targetLeft + 160 > vw - 10) targetLeft = vw - 170;
+            menu.style.left = `${Math.max(10, targetLeft)}px`;
+
+            const options = [
+                { label: 'Cheapest First', val: 'asc' },
+                { label: 'Most Expensive First', val: 'desc' },
+                { label: 'Default / No Sort', val: 'default' }
+            ];
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left px-3 py-1.5 hover:bg-slate-100 transition-colors block font-semibold";
+                btn.textContent = opt.label;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (opt.val === 'default') {
+                        appState.resultSort = null;
+                    } else {
+                        appState.resultSort = { field: 'price', direction: opt.val };
+                    }
+                    saveAppState();
+                    renderGrid();
+                    closeInlineMenu();
+                };
+                menu.appendChild(btn);
+            });
+            document.body.appendChild(menu);
+            activeInlineMenu = menu;
+        }
+
+        function openLimitInlineMenu(event) {
+            event.stopPropagation();
+            closeInlineMenu();
+            const menu = document.createElement('div');
+            menu.className = "absolute z-[999] bg-white border border-slate-200 rounded shadow-lg py-1 text-xs text-slate-700 w-32";
+            
+            const rect = event.currentTarget.getBoundingClientRect();
+            menu.style.top = `${rect.bottom + window.scrollY + 5}px`;
+            
+            const vw = window.innerWidth;
+            let targetLeft = rect.left + window.scrollX;
+            if (targetLeft + 128 > vw - 10) targetLeft = vw - 138;
+            menu.style.left = `${Math.max(10, targetLeft)}px`;
+
+            const options = [
+                { label: 'Top 3', val: 3 },
+                { label: 'Top 5', val: 5 },
+                { label: 'Top 10', val: 10 },
+                { label: 'Top 15', val: 15 },
+                { label: 'All Results', val: 'default' }
+            ];
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left px-3 py-1.5 hover:bg-slate-100 transition-colors block font-semibold";
+                btn.textContent = opt.label;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (opt.val === 'default') {
+                        appState.resultLimit = null;
+                    } else {
+                        appState.resultLimit = opt.val;
+                    }
+                    saveAppState();
+                    renderGrid();
+                    closeInlineMenu();
+                };
+                menu.appendChild(btn);
+            });
+            document.body.appendChild(menu);
+            activeInlineMenu = menu;
+        }
+
         function updateFilterPillsUI() {
             const container = document.getElementById("filterPillsContainer");
             const pills = document.getElementById("filterPills");
@@ -14849,12 +14956,20 @@
                 let label = appState.resultSort.direction === 'asc' ? 'Cheapest First' : 'Most Expensive First';
                 const chip = document.createElement("div");
                 chip.className = "flex items-center gap-1 bg-white border border-purple-200 text-purple-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-purple-50 transition-colors";
-                chip.innerHTML = `
-                    <span>${label}</span>
-                    <div class="hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn" onclick="removeFilterValue('SYSSORT', 'SYSSORT')">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                    </div>
-                `;
+                
+                const valSpan = document.createElement("span");
+                valSpan.className = "cursor-pointer hover:text-purple-700 transition-colors";
+                valSpan.textContent = label;
+                valSpan.title = "Click to change sort order";
+                valSpan.onclick = openSortInlineMenu;
+
+                const rmBtn = document.createElement("div");
+                rmBtn.className = "hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn transition-colors";
+                rmBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+                rmBtn.onclick = (e) => { e.stopPropagation(); removeFilterValue('SYSSORT', 'SYSSORT'); };
+
+                chip.appendChild(valSpan);
+                chip.appendChild(rmBtn);
                 groupDiv.appendChild(chip);
                 pills.appendChild(groupDiv);
             }
@@ -14869,12 +14984,20 @@
 
                 const chip = document.createElement("div");
                 chip.className = "flex items-center gap-1 bg-white border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-emerald-50 transition-colors";
-                chip.innerHTML = `
-                    <span>Top ${appState.resultLimit}</span>
-                    <div class="hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn" onclick="removeFilterValue('SYSLIMIT', 'SYSLIMIT')">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                    </div>
-                `;
+                
+                const valSpan = document.createElement("span");
+                valSpan.className = "cursor-pointer hover:text-emerald-700 transition-colors";
+                valSpan.textContent = `Top ${appState.resultLimit}`;
+                valSpan.title = "Click to change limit";
+                valSpan.onclick = openLimitInlineMenu;
+
+                const rmBtn = document.createElement("div");
+                rmBtn.className = "hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn transition-colors";
+                rmBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+                rmBtn.onclick = (e) => { e.stopPropagation(); removeFilterValue('SYSLIMIT', 'SYSLIMIT'); };
+
+                chip.appendChild(valSpan);
+                chip.appendChild(rmBtn);
                 groupDiv.appendChild(chip);
                 pills.appendChild(groupDiv);
             }
@@ -14888,8 +15011,12 @@
                 groupDiv.className = "flex items-center gap-1.5 flex-wrap bg-blue-50 border border-blue-100 rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm";
 
                 const labelSpan = document.createElement("span");
-                labelSpan.className = "text-[11px] font-semibold text-blue-900/60 mr-1 ml-1 leading-none uppercase tracking-widest cursor-default";
-                labelSpan.textContent = (FIELD_DEFINITIONS[key] || key) + ":";
+                labelSpan.className = "text-[11px] font-semibold text-blue-900 mr-1 ml-1 leading-none uppercase tracking-widest cursor-pointer hover:text-blue-700 transition-colors flex items-center gap-0.5";
+                labelSpan.innerHTML = `${FIELD_DEFINITIONS[key] || key}: <i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>`;
+                labelSpan.title = "Click to edit filter options";
+                labelSpan.onclick = (e) => {
+                    openHeaderFilterModalForField(key, e);
+                };
                 groupDiv.appendChild(labelSpan);
 
                 const formatLabel = (val) => {
@@ -14921,7 +15048,7 @@
                     const rmBtn = document.createElement("div");
                     rmBtn.className = "hover:bg-blue-300/60 flex items-center justify-center cursor-pointer min-w-[24px] min-h-[24px] -my-0.5 -mr-2 ml-1 text-blue-500 hover:text-rose-500 transition-colors";
                     rmBtn.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i>';
-                    rmBtn.onclick = function () { removeFilterValue(key, val); };
+                    rmBtn.onclick = function (e) { e.stopPropagation(); removeFilterValue(key, val); };
                     chip.appendChild(rmBtn);
 
                     groupDiv.appendChild(chip);
