@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.57 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.58 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.57</title>
+    <title>Changeout Lookup v07.58</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.57</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.58</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.57</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.58</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.57',
+                appVersion: 'v07.58',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.57_${stamp}.json`;
+                `platts_config_v07.58_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -14039,7 +14039,7 @@
                         clickX = event.clientX;
                         clickY = event.clientY;
                     }
-                    const modalWidth = 384; 
+                    const modalWidth = 384;
 
                     let targetLeft = clickX - (modalWidth / 2);
                     let targetTop = clickY + 15;
@@ -14852,10 +14852,10 @@
             closeInlineMenu();
             const menu = document.createElement('div');
             menu.className = "absolute z-[999] bg-white border border-slate-200 rounded shadow-lg py-1 text-xs text-slate-700 w-40";
-            
+
             const rect = event.currentTarget.getBoundingClientRect();
             menu.style.top = `${rect.bottom + window.scrollY + 5}px`;
-            
+
             const vw = window.innerWidth;
             let targetLeft = rect.left + window.scrollX;
             if (targetLeft + 160 > vw - 10) targetLeft = vw - 170;
@@ -14893,10 +14893,10 @@
             closeInlineMenu();
             const menu = document.createElement('div');
             menu.className = "absolute z-[999] bg-white border border-slate-200 rounded shadow-lg py-1 text-xs text-slate-700 w-32";
-            
+
             const rect = event.currentTarget.getBoundingClientRect();
             menu.style.top = `${rect.bottom + window.scrollY + 5}px`;
-            
+
             const vw = window.innerWidth;
             let targetLeft = rect.left + window.scrollX;
             if (targetLeft + 128 > vw - 10) targetLeft = vw - 138;
@@ -14956,7 +14956,7 @@
                 let label = appState.resultSort.direction === 'asc' ? 'Cheapest First' : 'Most Expensive First';
                 const chip = document.createElement("div");
                 chip.className = "flex items-center gap-1 bg-white border border-purple-200 text-purple-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-purple-50 transition-colors";
-                
+
                 const valSpan = document.createElement("span");
                 valSpan.className = "cursor-pointer hover:text-purple-700 transition-colors";
                 valSpan.textContent = label;
@@ -14984,7 +14984,7 @@
 
                 const chip = document.createElement("div");
                 chip.className = "flex items-center gap-1 bg-white border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-emerald-50 transition-colors";
-                
+
                 const valSpan = document.createElement("span");
                 valSpan.className = "cursor-pointer hover:text-emerald-700 transition-colors";
                 valSpan.textContent = `Top ${appState.resultLimit}`;
@@ -18044,7 +18044,8 @@
                     const event = structuredEvents.find(e => e.message === rawMsg);
                     const msg = rawMsg.replace(/\d+\.\d+/g, match => Math.ceil(Number(match)));
 
-                    if (msg.includes("ðŸ†• NEW SYSTEM") || msg.includes("âœ… NEW SYSTEM")) return;
+                    if (event && event.type === "NEW_SYSTEM") return;
+                    if (!event && msg.includes("NEW SYSTEM")) return;
 
                     let bColor = "border-amber-500";
                     let tColor = "text-amber-300";
@@ -18054,7 +18055,7 @@
                     const nlArrowMatch = rawMsg.match(/\n\s*[â†³â®‘âž”]\s*(.*)/);
                     const nlArrowStr = nlArrowMatch ? nlArrowMatch[1] : '';
                     let titlePart = rawMsg.split('\n')[0].trim();
-                    let detailsPart = nlArrowStr ? nlArrowStr.replace(/->/g, 'âž”') : '';
+                    let detailsPart = nlArrowStr ? nlArrowStr.replace(/->/g, '→') : '';
 
                     if (event && event.changes && event.changes.length > 0) {
                         const formattedChanges = event.changes.map(ch => {
@@ -18062,11 +18063,11 @@
                             if (fieldStr === 'price') {
                                 const oldP = Number(String(ch.oldValue).replace(/[$,+]/g, ""));
                                 const newP = Number(String(ch.newValue).replace(/[$,+]/g, ""));
-                                const arrowDir = newP > oldP ? 'â†‘' : 'â†“';
-                                return `PRICE ${arrowDir}  ${window.formatAuditCurrency(oldP)} â†’ ${window.formatAuditCurrency(newP)}`;
+                                const arrowDir = newP > oldP ? '↑' : '↓';
+                                return `PRICE ${arrowDir}  ${window.formatAuditCurrency(oldP)} → ${window.formatAuditCurrency(newP)}`;
                             }
-                            if (fieldStr === 'ahri') return `AHRI: ${ch.oldValue} â†’ ${ch.newValue}`;
-                            return `${String(ch.label || ch.field).toUpperCase()}: ${ch.oldValue} â†’ ${ch.newValue}`;
+                            if (fieldStr === 'ahri') return `AHRI: ${ch.oldValue} → ${ch.newValue}`;
+                            return `${String(ch.label || ch.field).toUpperCase()}: ${ch.oldValue} → ${ch.newValue}`;
                         }).filter(Boolean);
                         if (formattedChanges.length > 0) detailsPart = formattedChanges.join(' | ');
                     }
@@ -18081,10 +18082,10 @@
                             if (hasPrice) {
                                 if (Number(hasPrice.newValue) > Number(hasPrice.oldValue)) {
                                     bColor = "border-rose-500"; tColor = "text-rose-400";
-                                    headerTitleParts.push(`<span class="bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/30 mr-1.5">PRICE â†‘</span>`);
+                                    headerTitleParts.push(`<span class="bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/30 mr-1.5">PRICE ↑</span>`);
                                 } else {
                                     bColor = "border-emerald-500"; tColor = "text-emerald-400";
-                                    headerTitleParts.push(`<span class="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 mr-1.5">PRICE â†“</span>`);
+                                    headerTitleParts.push(`<span class="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 mr-1.5">PRICE ↓</span>`);
                                 }
                             }
                             if (hasAhri) {
@@ -18155,7 +18156,7 @@
                             bColor = "border-emerald-500"; tColor = "text-emerald-300";
                             headerTitle = titlePart.replace(/ðŸš¨ (UPDATE|ENHANCEMENT) \| /, "");
 
-                            const priceMatch = detailsPart.match(/Price:\s*(\d+)\s*âž”\s*(\d+)/i) || detailsPart.match(/changed from \$(\d+) to \$(\d+)/i);
+                            const priceMatch = detailsPart.match(/Price:\s*(\d+)\s*→\s*(\d+)/i) || detailsPart.match(/changed from \$(\d+) to \$(\d+)/i) || detailsPart.match(/Price:\s*(\d+)\s*âž”\s*(\d+)/i);
                             if (priceMatch) {
                                 const oldPriceNum = Number(priceMatch[1]);
                                 const newPriceNum = Number(priceMatch[2]);
