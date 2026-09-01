@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.58 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.60.2 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.58</title>
+    <title>Changeout Lookup v07.60.2</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.58</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.60.2</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.58</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.60.2</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -3388,7 +3388,7 @@
                         if (newCount > 0 || updateCount > 0 || missingCount > 0) {
                             setTimeout(() => {
                                 if (typeof showToast === "function") {
-                                    showToast(`ðŸš¨ ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
+                                    showToast(`ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
                                 } else {
                                     alert(`ðŸš¨ ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
                                 }
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.58',
+                appVersion: 'v07.60.2',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.58_${stamp}.json`;
+                `platts_config_v07.60.2_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -14206,21 +14206,56 @@
             const totalCount = rawItems.length;
             const qualifyingCount = qualifyingItems.length;
 
+            let itemsToRenderFinal = itemsToShow;
             if (appState.resultSort) {
-                itemsToShow = [...itemsToShow].sort((a, b) => {
-                    const valA = a[appState.resultSort.field];
-                    const valB = b[appState.resultSort.field];
-                    const numA = parseFloat(String(valA).replace(/[^0-9.-]/g, ''));
-                    const numB = parseFloat(String(valB).replace(/[^0-9.-]/g, ''));
+                if (appState.resultSort.direction === 'both') {
+                    itemsToShow = [...itemsToShow].sort((a, b) => {
+                        const numA = parseFloat(String(a.price).replace(/[^0-9.-]/g, ''));
+                        const numB = parseFloat(String(b.price).replace(/[^0-9.-]/g, ''));
+                        const safeA = isNaN(numA) ? Infinity : numA;
+                        const safeB = isNaN(numB) ? Infinity : numB;
+                        return safeA - safeB;
+                    });
 
-                    const safeA = isNaN(numA) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numA;
-                    const safeB = isNaN(numB) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numB;
+                    if (appState.resultLimit) {
+                        const N = appState.resultLimit;
+                        const lowest = itemsToShow.slice(0, N);
+                        const highest = itemsToShow.slice(-N);
 
-                    return appState.resultSort.direction === 'asc' ? safeA - safeB : safeB - safeA;
-                });
+                        const uniqueMap = new Map();
+                        const getStableKey = (item) => item.sourceRow ?? [item.ahri, item.brand, item.capacity, item.systemType, item.applicationStyle, item.price].join('|');
+                        lowest.forEach(item => uniqueMap.set(getStableKey(item), item));
+                        highest.forEach(item => uniqueMap.set(getStableKey(item), item));
+
+                        itemsToRenderFinal = Array.from(uniqueMap.values());
+                        itemsToRenderFinal.sort((a, b) => {
+                            const numA = parseFloat(String(a.price).replace(/[^0-9.-]/g, ''));
+                            const numB = parseFloat(String(b.price).replace(/[^0-9.-]/g, ''));
+                            const safeA = isNaN(numA) ? Infinity : numA;
+                            const safeB = isNaN(numB) ? Infinity : numB;
+                            return safeA - safeB;
+                        });
+                    } else {
+                        itemsToRenderFinal = itemsToShow;
+                    }
+                } else {
+                    itemsToShow = [...itemsToShow].sort((a, b) => {
+                        const valA = a[appState.resultSort.field];
+                        const valB = b[appState.resultSort.field];
+                        const numA = parseFloat(String(valA).replace(/[^0-9.-]/g, ''));
+                        const numB = parseFloat(String(valB).replace(/[^0-9.-]/g, ''));
+
+                        const safeA = isNaN(numA) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numA;
+                        const safeB = isNaN(numB) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numB;
+
+                        return appState.resultSort.direction === 'asc' ? safeA - safeB : safeB - safeA;
+                    });
+                    itemsToRenderFinal = appState.resultLimit ? itemsToShow.slice(0, appState.resultLimit) : itemsToShow;
+                }
+            } else {
+                itemsToRenderFinal = appState.resultLimit ? itemsToShow.slice(0, appState.resultLimit) : itemsToShow;
             }
 
-            const itemsToRenderFinal = appState.resultLimit ? itemsToShow.slice(0, appState.resultLimit) : itemsToShow;
             const renderedCount = itemsToRenderFinal.length;
 
             // Override itemsToShow so visibility processing downstream uses slice
@@ -14228,6 +14263,34 @@
 
             // Now that itemsToShow is final, bind itemsToRender
             const itemsToRender = appState.hideFiltered ? itemsToShow : rawItems;
+
+            const existingWarning = document.getElementById("limited-view-warning");
+            if (existingWarning) existingWarning.remove();
+
+            if (appState.resultLimit !== null && qualifyingCount > renderedCount) {
+                const hiddenCount = qualifyingCount - renderedCount;
+                let warningTextHTML = `Showing <b>${renderedCount}</b> of <b>${qualifyingCount}</b> matching systems &mdash; <b>${hiddenCount}</b> additional matching systems are hidden`;
+
+                if (appState.resultSort && appState.resultSort.direction === 'both') {
+                    warningTextHTML = `Showing <b>${renderedCount}</b> matching systems using Both Ends &mdash; <b>${hiddenCount}</b> additional matching systems are hidden`;
+                }
+
+                const warningHTML = `
+                    <div id="limited-view-warning" class="mt-2 mb-2 w-full mx-auto max-w-[1400px] flex items-center justify-between bg-amber-500/10 border border-amber-500/40 rounded-lg p-2.5 shadow-sm text-amber-700">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="triangle-alert" class="w-5 h-5 text-amber-500"></i>
+                            <div class="flex flex-col">
+                                <span class="font-extrabold uppercase tracking-widest text-[10px] text-amber-600">LIMITED VIEW</span>
+                                <span class="text-xs">${warningTextHTML}</span>
+                            </div>
+                        </div>
+                        <button onclick="clearResultLimit()" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded transition-colors shadow-sm ml-2">
+                            Show All
+                        </button>
+                    </div>`;
+                canvas.insertAdjacentHTML('beforebegin', warningHTML);
+                if (window.lucide) window.lucide.createIcons();
+            }
 
             // Create the System Counter Tab
             const summaryBar = document.createElement("summary");
@@ -14837,6 +14900,23 @@
             }
         }
 
+        function clearResultLimit() {
+            appState.resultLimit = null;
+            saveAppState();
+            renderGrid();
+        }
+
+        function adjustResultLimit(delta) {
+            if (appState.resultLimit === null) {
+                if (delta > 0) appState.resultLimit = 1;
+            } else {
+                appState.resultLimit += delta;
+                if (appState.resultLimit < 1) appState.resultLimit = 1;
+            }
+            saveAppState();
+            renderGrid();
+        }
+
         document.addEventListener('click', (e) => {
             if (activeInlineMenu && !activeInlineMenu.contains(e.target)) {
                 closeInlineMenu();
@@ -14864,6 +14944,7 @@
             const options = [
                 { label: 'Cheapest First', val: 'asc' },
                 { label: 'Most Expensive First', val: 'desc' },
+                { label: 'Both Ends', val: 'both' },
                 { label: 'Default / No Sort', val: 'default' }
             ];
 
@@ -14902,13 +14983,15 @@
             if (targetLeft + 128 > vw - 10) targetLeft = vw - 138;
             menu.style.left = `${Math.max(10, targetLeft)}px`;
 
+            const isBoth = appState.resultSort && appState.resultSort.direction === 'both';
             const options = [
-                { label: 'Top 3', val: 3 },
-                { label: 'Top 5', val: 5 },
-                { label: 'Top 10', val: 10 },
-                { label: 'Top 15', val: 15 },
-                { label: 'All Results', val: 'default' }
+                { label: isBoth ? '1 Each' : 'Top 3', val: isBoth ? 1 : 3 },
+                { label: isBoth ? '2 Each' : 'Top 5', val: isBoth ? 2 : 5 },
+                { label: isBoth ? '3 Each' : 'Top 10', val: isBoth ? 3 : 10 },
+                { label: isBoth ? '5 Each' : 'Top 15', val: isBoth ? 5 : 15 },
+                { label: isBoth ? '10 Each' : 'All Results', val: isBoth ? 10 : 'default' }
             ];
+            if (isBoth) options.push({ label: 'All Results', val: 'default' });
 
             options.forEach(opt => {
                 const btn = document.createElement('button');
@@ -14938,69 +15021,107 @@
 
             const filterKeys = Object.keys(appState.activeFilters || {});
 
-            if (filterKeys.length === 0 && !appState.resultSort && !appState.resultLimit) {
-                container.classList.add("hidden");
-                return;
-            }
-
             container.classList.remove("hidden");
 
+            // --- VIEW SORT CONTROLS ---
+            const sortDiv = document.createElement("div");
+            let sBg = appState.resultSort ? "bg-purple-50 border-purple-100" : "bg-slate-50 border-slate-200 opacity-80 mix-blend-luminosity";
+            let sLabelTx = appState.resultSort ? "text-purple-900/60" : "text-slate-500";
+
+            sortDiv.className = `flex items-center gap-1.5 flex-wrap ${sBg} border rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm`;
+
+            const sortLabelSpan = document.createElement("span");
+            sortLabelSpan.className = `text-[11px] font-semibold ${sLabelTx} mr-1 ml-1 leading-none uppercase tracking-widest cursor-default`;
+            sortLabelSpan.textContent = "VIEW SORT:";
+            sortDiv.appendChild(sortLabelSpan);
+
+            const sortChip = document.createElement("div");
+            let sortChipBg = appState.resultSort ? "bg-white border-purple-200 text-purple-900 hover:bg-purple-50 group/chip" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50";
+
+            sortChip.className = `flex items-center gap-1 border px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap transition-colors ${sortChipBg}`;
+
+            let sortLabelText = 'Default';
             if (appState.resultSort) {
-                const groupDiv = document.createElement("div");
-                groupDiv.className = "flex items-center gap-1.5 flex-wrap bg-purple-50 border border-purple-100 rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm";
-                const labelSpan = document.createElement("span");
-                labelSpan.className = "text-[11px] font-semibold text-purple-900/60 mr-1 ml-1 leading-none uppercase tracking-widest cursor-default";
-                labelSpan.textContent = "VIEW SORT:";
-                groupDiv.appendChild(labelSpan);
-
-                let label = appState.resultSort.direction === 'asc' ? 'Cheapest First' : 'Most Expensive First';
-                const chip = document.createElement("div");
-                chip.className = "flex items-center gap-1 bg-white border border-purple-200 text-purple-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-purple-50 transition-colors";
-
-                const valSpan = document.createElement("span");
-                valSpan.className = "cursor-pointer hover:text-purple-700 transition-colors";
-                valSpan.textContent = label;
-                valSpan.title = "Click to change sort order";
-                valSpan.onclick = openSortInlineMenu;
-
-                const rmBtn = document.createElement("div");
-                rmBtn.className = "hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn transition-colors";
-                rmBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
-                rmBtn.onclick = (e) => { e.stopPropagation(); removeFilterValue('SYSSORT', 'SYSSORT'); };
-
-                chip.appendChild(valSpan);
-                chip.appendChild(rmBtn);
-                groupDiv.appendChild(chip);
-                pills.appendChild(groupDiv);
+                if (appState.resultSort.direction === 'asc') sortLabelText = 'Cheapest First';
+                else if (appState.resultSort.direction === 'desc') sortLabelText = 'Most Expensive First';
+                else if (appState.resultSort.direction === 'both') sortLabelText = 'Both Ends';
+                else sortLabelText = 'Most Expensive First';
             }
+
+            const sortValSpan = document.createElement("span");
+            sortValSpan.className = "cursor-pointer transition-colors";
+            if (appState.resultSort) sortValSpan.classList.add("hover:text-purple-700");
+            sortValSpan.textContent = sortLabelText;
+            sortValSpan.title = "Click to change sort order";
+            sortValSpan.onclick = openSortInlineMenu;
+
+            sortChip.appendChild(sortValSpan);
+
+            if (appState.resultSort) {
+                const sRmBtn = document.createElement("div");
+                sRmBtn.className = "hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn transition-colors ml-0.5";
+                sRmBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
+                sRmBtn.onclick = (e) => { e.stopPropagation(); appState.resultSort = null; saveAppState(); renderGrid(); };
+                sortChip.appendChild(sRmBtn);
+            }
+
+            sortDiv.appendChild(sortChip);
+            pills.appendChild(sortDiv);
+
+            // --- VIEW LIMIT CONTROLS ---
+            const limDiv = document.createElement("div");
+            let lBg = appState.resultLimit ? "bg-emerald-50 border-emerald-100" : "bg-slate-50 border-slate-200 opacity-80 mix-blend-luminosity";
+            let lLabelTx = appState.resultLimit ? "text-emerald-900/60" : "text-slate-500";
+
+            limDiv.className = `flex items-center gap-1.5 flex-wrap ${lBg} border rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm`;
+            const lLabelSpan = document.createElement("span");
+            lLabelSpan.className = `text-[11px] font-semibold ${lLabelTx} mr-1 ml-1 leading-none uppercase tracking-widest cursor-default`;
+            lLabelSpan.textContent = "VIEW LIMIT:";
+            limDiv.appendChild(lLabelSpan);
 
             if (appState.resultLimit) {
-                const groupDiv = document.createElement("div");
-                groupDiv.className = "flex items-center gap-1.5 flex-wrap bg-emerald-50 border border-emerald-100 rounded-lg p-1 pr-1.5 min-h-[32px] shadow-sm";
-                const labelSpan = document.createElement("span");
-                labelSpan.className = "text-[11px] font-semibold text-emerald-900/60 mr-1 ml-1 leading-none uppercase tracking-widest cursor-default";
-                labelSpan.textContent = "VIEW LIMIT:";
-                groupDiv.appendChild(labelSpan);
+                const stepMinBtn = document.createElement("div");
+                stepMinBtn.className = "flex items-center justify-center w-5 h-5 bg-white border border-emerald-200 rounded text-emerald-600 hover:bg-emerald-100 cursor-pointer shadow-[0_1px_1px_rgba(0,0,0,0.05)] select-none text-xs font-black";
+                stepMinBtn.innerHTML = "&minus;";
+                stepMinBtn.title = "Decrease limit";
+                stepMinBtn.onclick = (e) => { e.stopPropagation(); adjustResultLimit(-1); };
+                limDiv.appendChild(stepMinBtn);
 
-                const chip = document.createElement("div");
-                chip.className = "flex items-center gap-1 bg-white border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap group/chip hover:bg-emerald-50 transition-colors";
+                const lChip = document.createElement("div");
+                lChip.className = "flex items-center gap-1 bg-white border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap hover:bg-emerald-50 transition-colors";
 
-                const valSpan = document.createElement("span");
-                valSpan.className = "cursor-pointer hover:text-emerald-700 transition-colors";
-                valSpan.textContent = `Top ${appState.resultLimit}`;
-                valSpan.title = "Click to change limit";
-                valSpan.onclick = openLimitInlineMenu;
+                const lValSpan = document.createElement("span");
+                lValSpan.className = "cursor-pointer hover:text-emerald-700 transition-colors";
+                lValSpan.textContent = (appState.resultSort && appState.resultSort.direction === 'both') ? `${appState.resultLimit} EACH` : `Top ${appState.resultLimit}`;
+                lValSpan.title = "Click to change limit";
+                lValSpan.onclick = openLimitInlineMenu;
 
-                const rmBtn = document.createElement("div");
-                rmBtn.className = "hover:bg-red-100 hover:text-red-600 rounded-full p-0.5 cursor-pointer text-slate-400 sub-control-btn transition-colors";
-                rmBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
-                rmBtn.onclick = (e) => { e.stopPropagation(); removeFilterValue('SYSLIMIT', 'SYSLIMIT'); };
+                lChip.appendChild(lValSpan);
+                limDiv.appendChild(lChip);
 
-                chip.appendChild(valSpan);
-                chip.appendChild(rmBtn);
-                groupDiv.appendChild(chip);
-                pills.appendChild(groupDiv);
+                const stepPlusBtn = document.createElement("div");
+                stepPlusBtn.className = "flex items-center justify-center w-5 h-5 bg-white border border-emerald-200 rounded text-emerald-600 hover:bg-emerald-100 cursor-pointer shadow-[0_1px_1px_rgba(0,0,0,0.05)] select-none text-xs font-black";
+                stepPlusBtn.innerHTML = "+";
+                stepPlusBtn.title = "Increase limit";
+                stepPlusBtn.onclick = (e) => { e.stopPropagation(); adjustResultLimit(1); };
+                limDiv.appendChild(stepPlusBtn);
+
+                const lRmBtn = document.createElement("div");
+                lRmBtn.className = "flex items-center justify-center w-5 h-5 ml-0.5 hover:bg-red-100 hover:text-red-600 border border-transparent rounded text-slate-400 cursor-pointer transition-colors group/x";
+                lRmBtn.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i>';
+                lRmBtn.onclick = (e) => { e.stopPropagation(); clearResultLimit(); };
+                limDiv.appendChild(lRmBtn);
+            } else {
+                const lChip = document.createElement("div");
+                lChip.className = "flex items-center gap-1 bg-white border border-slate-200 text-slate-500 px-1.5 py-0.5 rounded shadow-sm text-xs font-semibold whitespace-nowrap hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer group/chip";
+                const lValSpan = document.createElement("span");
+                lValSpan.textContent = "All Results";
+                lChip.appendChild(lValSpan);
+                lChip.title = "Click to set limit";
+                lChip.onclick = openLimitInlineMenu;
+                limDiv.appendChild(lChip);
             }
+            pills.appendChild(limDiv);
 
             container.classList.remove("hidden");
 
@@ -15234,8 +15355,10 @@
                 let countStr = '';
                 let m1 = text.match(/(?:SHOW|TOP|SHOW ME)\s+(?:MAXIMUM\s+)?([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)/);
                 if (m1) countStr = m1[1];
-                let m2 = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)\s+(?:CHEAPEST|MOST EXPENSIVE|HIGHEST PRICED)/);
+                let m2 = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)\s+(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE|MOST EXPENSIVE|HIGHEST PRICE|HIGHEST PRICED)/);
                 if (m2) countStr = m2[1];
+                let mDual = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN).*(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE).*AND/);
+                if (mDual) countStr = mDual[1];
 
                 if (countStr) {
                     let count = parseInt(countStr);
@@ -15243,6 +15366,8 @@
                         count = WORD_TO_NUM[countStr];
                     }
                     if (count > 0 && count <= 50) intents.limit = count;
+                } else if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/)) {
+                    intents.limit = 1;
                 }
             }
         }
@@ -15250,6 +15375,8 @@
         function parseVoiceSortIntent(text, intents) {
             if (text.match(/CLEAR SORT|CLEAR SORTING|CLEAR EVERYTHING/)) {
                 intents.sort = null;
+            } else if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/) || text.match(/(?:[0-9]+|ONE|TWO|THREE).*(?:CHEAPEST|LOWEST).*AND.*(?:[0-9]+|ONE|TWO|THREE).*(?:MOST EXPENSIVE|HIGHEST)/)) {
+                intents.sort = { field: 'price', direction: 'both' };
             } else {
                 if (text.match(/CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE/)) {
                     intents.sort = { field: 'price', direction: 'asc' };
