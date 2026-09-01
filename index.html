@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.51 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.53 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.51</title>
+    <title>Changeout Lookup v07.53</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -460,14 +460,14 @@
                     class="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105"
                     onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
                 <div class="hidden text-xs md:text-sm font-black tracking-wider text-white">
-                    PLATT’S AIR & HEAT
+                    PLATTâ€™S AIR & HEAT
                 </div>
                 <h1
                     class="text-sm md:text-base font-black font-display tracking-tight text-white leading-none pl-1 mt-1">
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.51</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.53</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1218,7 +1218,7 @@
 
                     <!-- Save Row -->
                     <div class="flex gap-2">
-                        <input id="profileNameInput" type="text" placeholder="Profile name…"
+                        <input id="profileNameInput" type="text" placeholder="Profile nameâ€¦"
                             class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
                         <button onclick="saveLayoutProfile()"
                             class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg cursor-pointer transition-colors">
@@ -1230,7 +1230,7 @@
                     <div class="flex gap-2">
                         <select id="profileSelectDropdown"
                             class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer">
-                            <option value="">Select Profile…</option>
+                            <option value="">Select Profileâ€¦</option>
                         </select>
                         <button onclick="loadLayoutProfile()"
                             class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
@@ -1242,7 +1242,7 @@
                 <!-- Fullscreen App Mode -->
                 <button onclick="toggleFullScreen()"
                     class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white border border-slate-500 rounded py-2 px-4 flex justify-between items-center transition-colors text-xs font-bold tracking-wide">
-                    <span>⛶ Toggle App Fullscreen</span>
+                    <span>â›¶ Toggle App Fullscreen</span>
                     <span class="text-[10px] text-slate-400 font-normal">Hides address bar</span>
                 </button>
             </section>
@@ -1307,7 +1307,7 @@
                                     style="height: 36px;">
                                 <div id="page2-platts-fallback"
                                     class="hidden font-black tracking-wider text-white uppercase"
-                                    style="font-size: 14.4px;">PLATT’S AIR & HEAT</div>
+                                    style="font-size: 14.4px;">PLATTâ€™S AIR & HEAT</div>
                                 <div id="page2-builder-title"
                                     class="font-black tracking-widest uppercase text-emerald-500 leading-none mt-1"
                                     style="font-size: 12px;">PROPOSAL BUILDER</div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.51</span>
+                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.53</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1712,7 +1712,7 @@
                         class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex items-center gap-4 ml-auto">
                         <button
                             class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10"
-                            onclick="event.preventDefault(); copyProposalText();">📋 Copy Text</button>
+                            onclick="event.preventDefault(); copyProposalText();">ðŸ“‹ Copy Text</button>
                         <button onclick="event.preventDefault(); openTerminalSettings()"
                             class="text-slate-500 hover:text-emerald-400 transition-colors z-10 relative"
                             title="Proposal Output Settings">
@@ -1861,7 +1861,7 @@
                 <div id="page2-header-selected-cell-context"
                     class="flex-shrink-0 bg-blue-900/30 border border-blue-800 rounded-lg p-2 mb-3">
                     <div class="text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1">SELECTED CELL</div>
-                    <div class="text-xs text-white font-bold" id="page2-header-context-location">C1 · S1 · 1 | Empty /
+                    <div class="text-xs text-white font-bold" id="page2-header-context-location">C1 Â· S1 Â· 1 | Empty /
                         Spacer</div>
                 </div>
                 <div class="flex flex-shrink-0 gap-1 border-b border-slate-700 pb-2 mb-3">
@@ -1991,7 +1991,7 @@
                     class="flex-shrink-0 bg-blue-900/30 border border-blue-800 rounded-lg p-2 mb-3">
                     <div id="dispatch-context-label"
                         class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">SELECTED CELL</div>
-                    <div class="text-xs text-white font-bold" id="dispatch-context-location">C1 · S1 · 1 | Empty /
+                    <div class="text-xs text-white font-bold" id="dispatch-context-location">C1 Â· S1 Â· 1 | Empty /
                         Spacer</div>
                     <div class="text-[10px] text-blue-200 mt-0.5 hidden" id="dispatch-context-mapping">Mapped: Empty /
                         Spacer</div>
@@ -3332,15 +3332,15 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 px-6 mt-12 text-center text-xs text-slate-400 hidden">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <p>© 2026 HVAC Matrix Layout Builder. All rights reserved.</p>
+            <p>Â© 2026 HVAC Matrix Layout Builder. All rights reserved.</p>
             <p class="font-mono">Schema Compliance: 20-Column HVAC Matrix Specification</p>
         </div>
     </footer>
 
     <!-- LIVE DATA & APP LOGIC -->
     <script>
-        // ── LIVE DATA BRIDGE ─────────────────────────────────────────────────
-        // Global database array — populated via fetch() on window load
+        // â”€â”€ LIVE DATA BRIDGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // Global database array â€” populated via fetch() on window load
         let HVAC_DATABASE = [];
 
         const API_URL = "https://script.google.com/macros/s/AKfycbwVpGwCMAct5xFhADHIbgEIpp-Klb1cjRKLbx1fgBUsv39ZA59mmaxh-fCmFBEkrGM/exec";
@@ -3388,9 +3388,9 @@
                         if (newCount > 0 || updateCount > 0 || missingCount > 0) {
                             setTimeout(() => {
                                 if (typeof showToast === "function") {
-                                    showToast(`🚨 ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
+                                    showToast(`ðŸš¨ ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
                                 } else {
-                                    alert(`🚨 ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
+                                    alert(`ðŸš¨ ALERT: ${newCount} New, ${updateCount} Updated, ${missingCount} Missing`);
                                 }
                             }, 1500);
                         }
@@ -3400,7 +3400,7 @@
                 })
                 .catch(error => console.error("Failed to fetch live data:", error));
         });
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         // Intentional placeholder: HVAC_MOCK_DATABASE removed in v01.02.
 
@@ -3463,8 +3463,8 @@
 
                 if (active.profileId === 'oceana') {
                     if (active.equipmentFloor) {
-                        if (pMode === 'full') t = `OCEANA · FLOOR ${active.equipmentFloor}`;
-                        else if (pMode === 'compact') t = `OCEANA · FLR ${active.equipmentFloor}`;
+                        if (pMode === 'full') t = `OCEANA Â· FLOOR ${active.equipmentFloor}`;
+                        else if (pMode === 'compact') t = `OCEANA Â· FLR ${active.equipmentFloor}`;
                         else if (pMode === 'floor') t = `FLR ${active.equipmentFloor}`;
                         else if (pMode === 'number') t = `${active.equipmentFloor}`;
                     } else {
@@ -4598,7 +4598,7 @@
                 parts.push('Proposal: Hidden');
             }
 
-            return parts.join(' • ');
+            return parts.join(' â€¢ ');
         };
 
         window.refreshSmartScopeItemConfigModal = function () {
@@ -5909,7 +5909,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.51',
+                appVersion: 'v07.53',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6063,7 +6063,7 @@
             if (typeof showToast === 'function') {
                 showToast(
                     window.plattsDiffModeEnabled
-                        ? `Diff Mode ON · ${count} Page 2 header override${count === 1 ? '' : 's'}`
+                        ? `Diff Mode ON Â· ${count} Page 2 header override${count === 1 ? '' : 's'}`
                         : 'Diff Mode OFF'
                 );
             }
@@ -6103,7 +6103,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.51_${stamp}.json`;
+                `platts_config_v07.53_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -6370,14 +6370,14 @@
                         value="customer-optional"
                         ${globalPricingTreatment === 'customer-optional' ? 'selected' : ''}
                     >
-                        💲 Customer Optional
+                        ðŸ’² Customer Optional
                     </option>
 
                     <option
                         value="included-in-system-price"
                         ${globalPricingTreatment === 'included-in-system-price' ? 'selected' : ''}
                     >
-                        📦 Include in System Price
+                        ðŸ“¦ Include in System Price
                     </option>
                 </select>
             `;
@@ -9160,9 +9160,9 @@
                     'Warranty & Protection:',
 
                 warrantyClosing:
-                    '■ Platt’s Air and Heat has a 1-year workmanship warranty.\n' +
-                    '■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n' +
-                    '■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)'
+                    'â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\n' +
+                    'â–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n' +
+                    'â–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)'
             };
 
             return templates[key] || '';
@@ -10406,7 +10406,7 @@
                         containerClass += " opacity-50 border-slate-600 bg-slate-800 text-slate-400 hover:opacity-75";
                     }
 
-                    let displayLabel = state === 'profile' ? `<span class="mr-0.5">✓</span>${label}` : label;
+                    let displayLabel = state === 'profile' ? `<span class="mr-0.5">âœ“</span>${label}` : label;
 
                     return `
             <div class="${containerClass}" title="${tooltip}" onclick="event.preventDefault(); event.stopPropagation(); ${clickHandler}" data-sorter-badge="${badgeKey}">
@@ -10426,7 +10426,7 @@
                     craneAmtStr = `+$${window.proposalAppState.addons['Crane Services']}`;
                 }
                 let craneTooltip = craneReq ? "Required by active site profile" : (craneManual ? "Crane Services" : "Crane Services");
-                badgeHtml += createBadge('🏗️', 'CRANE', craneAmtStr, craneState, craneTooltip, "toggleFastAction('Crane Services')", 'crane');
+                badgeHtml += createBadge('ðŸ—ï¸', 'CRANE', craneAmtStr, craneState, craneTooltip, "toggleFastAction('Crane Services')", 'crane');
 
                 // 2. Condo
                 let condoState = 'inactive';
@@ -10474,7 +10474,7 @@
                     if (posAmts.length === 1) condoAmtStr = `+$${posAmts[0]}`;
                     else if (posAmts.length > 1) condoAmtStr = `VARIES`;
                 }
-                badgeHtml += createBadge('🏢', 'CONDO', condoAmtStr, condoState, condoTooltip, "toggleFastAction('Condo Install')", 'condo');
+                badgeHtml += createBadge('ðŸ¢', 'CONDO', condoAmtStr, condoState, condoTooltip, "toggleFastAction('Condo Install')", 'condo');
 
                 // 3. Attic
                 let atticManual = window.proposalAppState.addons?.['Attic Installation'] !== undefined;
@@ -10501,7 +10501,7 @@
                     if (posAmts.length === 1) atticAmtStr = `+$${posAmts[0]}`;
                     else if (posAmts.length > 1) atticAmtStr = `VARIES`;
                 }
-                badgeHtml += createBadge('🪜', 'ATTIC', atticAmtStr, atticState, "Attic Installation", "toggleFastAction('Attic')", 'attic');
+                badgeHtml += createBadge('ðŸªœ', 'ATTIC', atticAmtStr, atticState, "Attic Installation", "toggleFastAction('Attic')", 'attic');
 
                 // 4. ARC
                 let arcManual = window.proposalAppState.refrigerant?.fee > 0;
@@ -10537,7 +10537,7 @@
                 if (arcManual && arcOceana) arcTooltip = "Additional Refrigerant Charges included";
                 else if (arcOceana) arcTooltip = "Oceana Additional Refrigerant Charge included";
 
-                badgeHtml += createBadge('❄️', 'ARC', arcAmtStr, arcState, arcTooltip, "toggleFastAction('Refrigerant')", 'arc');
+                badgeHtml += createBadge('â„ï¸', 'ARC', arcAmtStr, arcState, arcTooltip, "toggleFastAction('Refrigerant')", 'arc');
 
                 badgeContainer.innerHTML = badgeHtml;
             }
@@ -11061,20 +11061,20 @@
                 let addedIcons = new Set();
 
                 // 1. Authoritative Site Profile Checks
-                if (typeof getActiveCraneState === 'function' && getActiveCraneState().active && !addedIcons.has('🏗️')) {
-                    emojiCluster.push('🏗️'); addedIcons.add('🏗️');
+                if (typeof getActiveCraneState === 'function' && getActiveCraneState().active && !addedIcons.has('ðŸ—ï¸')) {
+                    emojiCluster.push('ðŸ—ï¸'); addedIcons.add('ðŸ—ï¸');
                 }
-                if (sp.condo && sp.condo.required && !addedIcons.has('🏢')) {
-                    emojiCluster.push('🏢'); addedIcons.add('🏢');
+                if (sp.condo && sp.condo.required && !addedIcons.has('ðŸ¢')) {
+                    emojiCluster.push('ðŸ¢'); addedIcons.add('ðŸ¢');
                 }
 
                 // 2. Manual / Legacy Addon Checks
                 if (sp.addons) {
                     Object.keys(sp.addons).forEach(name => {
                         let nm = name.toLowerCase();
-                        if (nm.includes('crane') && !addedIcons.has('🏗️')) { emojiCluster.push('🏗️'); addedIcons.add('🏗️'); }
-                        if (nm.includes('condo') && !addedIcons.has('🏢')) { emojiCluster.push('🏢'); addedIcons.add('🏢'); }
-                        if (nm.includes('attic') && !addedIcons.has('🪜')) { emojiCluster.push('🪜'); addedIcons.add('🪜'); }
+                        if (nm.includes('crane') && !addedIcons.has('ðŸ—ï¸')) { emojiCluster.push('ðŸ—ï¸'); addedIcons.add('ðŸ—ï¸'); }
+                        if (nm.includes('condo') && !addedIcons.has('ðŸ¢')) { emojiCluster.push('ðŸ¢'); addedIcons.add('ðŸ¢'); }
+                        if (nm.includes('attic') && !addedIcons.has('ðŸªœ')) { emojiCluster.push('ðŸªœ'); addedIcons.add('ðŸªœ'); }
                     });
                 }
                 let activeSaltShield = false;
@@ -11099,13 +11099,13 @@
                     if (hasManualRefrig && hasOceanaRefrig) tooltip = "Additional Refrigerant Charges";
                     else if (hasOceanaRefrig) tooltip = "Oceana Additional Refrigerant Charge";
 
-                    emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">❄️</span></span>`);
+                    emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">â„ï¸</span></span>`);
                     addedIcons.add('arc');
                 }
 
                 let isCoastalMatch = sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0;
                 if (isCoastalMatch && !addedIcons.has('wave')) {
-                    emojiCluster.push('<span title="Coastal Match">🌊</span>');
+                    emojiCluster.push('<span title="Coastal Match">ðŸŒŠ</span>');
                     addedIcons.add('wave');
                 }
 
@@ -11195,7 +11195,7 @@
                         }
                         else if (spread.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
                         else if (spread.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
-                        else if (spread.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">—</span>`;
+                        else if (spread.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">â€”</span>`;
 
                         spreadsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${spread.weight} 1 0%; font-size: ${spread.fontSize}px;">${content}</div>`;
                     });
@@ -11297,7 +11297,7 @@
 
                                 if (isTagged) {
                                     optionEnhancementLines.push(
-                                        `    ▪ Optional Enhancement for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    â–ª Optional Enhancement for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
                                 } else if (
                                     typeof addProposalPlacement ===
@@ -11318,7 +11318,7 @@
                                 if (isTagged) {
 
                                     optionProtectionLines.push(
-                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    â–ª Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11326,7 +11326,7 @@
                                 ) {
 
                                     optionProtectionLines.push(
-                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    â–ª Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11378,9 +11378,9 @@
 
                         if (isTagged) {
                             if (itemRoute === 'protection') {
-                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionProtectionLines.push(`    â–ª Warranty / Protection for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             } else {
-                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionEnhancementLines.push(`    â–ª Optional Enhancement for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             }
                         } else {
                             const targetEngine =
@@ -11424,9 +11424,9 @@
 
                             if (isTagged) {
                                 if (itemRoute === 'protection') {
-                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionProtectionLines.push(`    â–ª Warranty / Protection for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 } else {
-                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionEnhancementLines.push(`    â–ª Optional Enhancement for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 }
                             } else {
                                 const targetEngine =
@@ -11517,7 +11517,7 @@
                 if (mechStage === 'single stage' || mechStage === '1 stage') proposalStage = 'single-stage';
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
-                let rawOptText = `■ System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${ahri}`;
+                let rawOptText = `â–  System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${ahri}`;
                 let optText = rawOptText.replace(/\s+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
                 window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${otdFinalPrice.toLocaleString()}` });
@@ -11525,14 +11525,14 @@
                 if (coastalPackageLines.length > 0) {
                     window.proposalBlocks.push({
                         target: `Option ${index + 1} Coastal Package`,
-                        text: `    ▪ ${coastalPackageLines.join(', ')}`
+                        text: `    â–ª ${coastalPackageLines.join(', ')}`
                     });
                 }
 
                 if (uniqueIncludedScopeItems.length > 0) {
                     window.proposalBlocks.push({
                         target: `Option ${index + 1} Included Installation Scope`,
-                        text: `    ▪ Additional Installation Scope: ${uniqueIncludedScopeItems.join(', ')}`
+                        text: `    â–ª Additional Installation Scope: ${uniqueIncludedScopeItems.join(', ')}`
                     });
                 }
 
@@ -11570,7 +11570,7 @@
                     let feesText = `${feesHeading}\n`;
                     let lines = [];
                     globalNecessaryFees.forEach((val, name) => {
-                        lines.push(`■ ___ ${name}: add $${val.toLocaleString()}`);
+                        lines.push(`â–  ___ ${name}: add $${val.toLocaleString()}`);
                     });
                     window.proposalBlocks.push({ target: 'Fees', text: feesText + lines.join('\n') });
                 }
@@ -11598,14 +11598,14 @@
                         if (sortedPrices.length === 1) {
                             let optGroup = pEngine.priceGroups.get(sortedPrices[0]).sort((a, b) => a - b);
                             let optStr = optGroup.length === selectedProposalRows.length ? '' : ` for ${formatProposalOptionNumbers(optGroup)}`;
-                            lines.push(`■ ___ Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
+                            lines.push(`â–  ___ Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
                         } else if (sortedPrices.length > 1) {
                             let groupedStrs = [];
                             sortedPrices.forEach(p => {
                                 let opts = pEngine.priceGroups.get(p).sort((a, b) => a - b);
                                 groupedStrs.push(`${formatProposalOptionNumbers(opts)}: $${p.toLocaleString()}`);
                             });
-                            lines.push(`■ ___ Add ${label} for ${groupedStrs.join('; ')}`);
+                            lines.push(`â–  ___ Add ${label} for ${groupedStrs.join('; ')}`);
                         }
                     });
 
@@ -11666,7 +11666,7 @@
                                         : ` for ${formatProposalOptionNumbers(optGroup)}`;
 
                                 protLines.push(
-                                    `■ ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
+                                    `â–  ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
                                 );
                             } else if (groups.length > 1) {
                                 maybeOpenProtectionPriceConflict(
@@ -11683,7 +11683,7 @@
                                     });
 
                                 protLines.push(
-                                    `■ ___ Add ${label} for ${groupedStrs.join('; ')}`
+                                    `â–  ___ Add ${label} for ${groupedStrs.join('; ')}`
                                 );
                             }
                         }
@@ -11740,16 +11740,16 @@
                     return r && String(r.brand || '').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier || '').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage || '').toUpperCase() !== 'SINGLE STAGE';
                 });
 
-                if (hasMainLineSingle) bpLines.push("■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.");
-                else if (hasMainLineMulti) bpLines.push("■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.");
+                if (hasMainLineSingle) bpLines.push("â–  Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.");
+                else if (hasMainLineMulti) bpLines.push("â–  Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.");
 
                 const warrantyClosing =
                     typeof getTerminalTemplateValue === 'function'
                         ? getTerminalTemplateValue('warrantyClosing')
                         : (
-                            "■ Platt’s Air and Heat has a 1-year workmanship warranty.\n" +
-                            "■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n" +
-                            "■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)"
+                            "â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\n" +
+                            "â–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n" +
+                            "â–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)"
                         );
 
                 warrantyClosing
@@ -11951,7 +11951,7 @@
             if (cat === 'spacer') {
                 finalString = text;
             } else {
-                finalString = "■ ";
+                finalString = "â–  ";
                 if (needsInit) finalString += "___ ";
                 if (cat === 'enhancement') finalString += "System enhancement: ";
                 if (cat === 'fee') finalString += "Additional Installation Fee: ";
@@ -12067,8 +12067,8 @@
                 try {
                     const successful = document.execCommand('copy');
                     if (successful) {
-                        if (typeof showToast === 'function') showToast("📋 Proposal copied to clipboard!");
-                        else alert("📋 Proposal copied to clipboard!");
+                        if (typeof showToast === 'function') showToast("ðŸ“‹ Proposal copied to clipboard!");
+                        else alert("ðŸ“‹ Proposal copied to clipboard!");
                     } else {
                         alert("Copy blocked by browser. Please select and copy manually.");
                     }
@@ -12083,8 +12083,8 @@
             // 2. The Modern Engine (Requires HTTPS)
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(window.pureCopyText).then(() => {
-                    if (typeof showToast === 'function') showToast("📋 Proposal copied to clipboard!");
-                    else alert("📋 Proposal copied to clipboard!");
+                    if (typeof showToast === 'function') showToast("ðŸ“‹ Proposal copied to clipboard!");
+                    else alert("ðŸ“‹ Proposal copied to clipboard!");
                 }).catch(err => {
                     // If the modern method fails (like on strict mobile Safari), instantly trigger fallback
                     executeClassicCopy();
@@ -12593,7 +12593,7 @@
             currentSubIndex: null
         };
 
-        // ── PAGE 1 FLOATING SETTINGS CONTROLS ─────────────────────────────
+        // â”€â”€ PAGE 1 FLOATING SETTINGS CONTROLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function openSettingsDrawer() {
             const drawer = document.getElementById("settingsDrawer");
             if (!drawer) return;
@@ -12640,7 +12640,7 @@
                 "h-[42dvh]"
             );
         };
-        // ──────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         // INIT LOAD WORKFLOW
         window.addEventListener("DOMContentLoaded", () => {
@@ -13965,7 +13965,7 @@
                         } else if (fUpper.includes("MISSING")) {
                             bColor = "border-slate-500"; tColor = "text-slate-400"; bgBox = "bg-slate-800/50";
                         } else if (fUpper.includes("PRICE:")) {
-                            const pMatch = fUpper.match(/PRICE:\s*(\d+(?:\.\d+)?)\s*➔\s*(\d+(?:\.\d+)?)/);
+                            const pMatch = fUpper.match(/PRICE:\s*(\d+(?:\.\d+)?)\s*âž”\s*(\d+(?:\.\d+)?)/);
                             if (pMatch && Number(pMatch[1]) < Number(pMatch[2])) {
                                 bColor = "border-emerald-500"; tColor = "text-emerald-300"; bgBox = "bg-emerald-900/30";
                             }
@@ -13978,7 +13978,7 @@
                         flagBanner = `
                   <div class="mb-3 p-3 border-l-4 ${bColor} ${bgBox} rounded shadow-sm flex flex-col gap-1.5">
                     <div class="font-bold ${tColor} text-[10px] tracking-widest uppercase">System Audit Flag</div>
-                    <div class="${tColor} text-xs font-mono font-semibold break-words">${cleanDisplayVal.replace(/->/g, '➔')}</div>
+                    <div class="${tColor} text-xs font-mono font-semibold break-words">${cleanDisplayVal.replace(/->/g, 'âž”')}</div>
                   </div>`;
                     }
                     return; // Skip adding flag to the bottom of the list
@@ -14194,13 +14194,27 @@
             const totalCount = rawItems.length;
             const visibleCount = itemsToShow.length;
 
-            // Create the Accordion Wrapper
-            const headerDetails = document.createElement("details");
-            headerDetails.className = "sticky top-0 z-30 w-full bg-slate-900 shadow-md group";
-            headerDetails.open = appState.isHeaderExpanded;
-            headerDetails.addEventListener('toggle', (e) => {
-                appState.isHeaderExpanded = e.target.open;
-            });
+            const qualifyingCount = itemsToShow.length;
+
+            if (appState.resultSort) {
+                itemsToShow = [...itemsToShow].sort((a, b) => {
+                    const valA = a[appState.resultSort.field];
+                    const valB = b[appState.resultSort.field];
+                    const numA = parseFloat(String(valA).replace(/[^0-9.-]/g, ''));
+                    const numB = parseFloat(String(valB).replace(/[^0-9.-]/g, ''));
+
+                    const safeA = isNaN(numA) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numA;
+                    const safeB = isNaN(numB) ? (appState.resultSort.direction === 'asc' ? Infinity : -Infinity) : numB;
+
+                    return appState.resultSort.direction === 'asc' ? safeA - safeB : safeB - safeA;
+                });
+            }
+
+            const itemsToRenderFinal = appState.resultLimit ? itemsToShow.slice(0, appState.resultLimit) : itemsToShow;
+            const renderedCount = itemsToRenderFinal.length;
+
+            // Override itemsToShow so visibility processing downstream uses slice
+            itemsToShow = itemsToRenderFinal;
 
             // Create the System Counter Tab
             const summaryBar = document.createElement("summary");
@@ -14210,7 +14224,9 @@
 
             const matchCounter = document.getElementById('master-match-counter');
             if (matchCounter) {
-                matchCounter.innerText = visibleCount;
+                matchCounter.innerText = renderedCount < qualifyingCount
+                    ? `${renderedCount} of ${qualifyingCount}`
+                    : qualifyingCount;
             }
 
             // Create the actual Header Row (Sticky handled by parent accordion)
@@ -14218,7 +14234,7 @@
             headerRow.className = "flex items-stretch select-none bg-slate-900 pt-3 pb-2 w-full flex-grow border-b border-slate-700/50";
             headerRow.style.gap = `${appState.colGap}px`;
 
-            // [v01.02] Left row label column removed — full-width layout
+            // [v01.02] Left row label column removed â€” full-width layout
 
             // Header cells
             for (let c = 0; c < appState.colCount; c++) {
@@ -14348,7 +14364,7 @@
                 if (isRowSelected) rowEl.style.background = 'rgba(59,130,246,0.07)';
                 rowEl.style.gap = `${appState.colGap}px`;
 
-                // [v01.03] Left row badge col removed — full-width layout
+                // [v01.03] Left row badge col removed â€” full-width layout
 
                 // Render each column cell matching the Pills/Subdivisions matrix structure!
                 for (let c = 0; c < appState.colCount; c++) {
@@ -14458,7 +14474,7 @@
                                     } else if (flagVal.includes("MISSING")) {
                                         priceColorClass = "text-slate-500 line-through";
                                     } else if (flagVal.includes("PRICE:")) {
-                                        const priceMatch = flagVal.match(/PRICE:\s*(\d+(?:\.\d+)?)\s*➔\s*(\d+(?:\.\d+)?)/);
+                                        const priceMatch = flagVal.match(/PRICE:\s*(\d+(?:\.\d+)?)\s*âž”\s*(\d+(?:\.\d+)?)/);
                                         if (priceMatch) {
                                             const oldP = Number(priceMatch[1]);
                                             const newP = Number(priceMatch[2]);
@@ -14754,6 +14770,8 @@
 
         function clearAllFilters() {
             appState.activeFilters = {};
+            appState.resultSort = null;
+            appState.resultLimit = null;
             renderGrid();
         }
 
@@ -14784,8 +14802,9 @@
             const pills = document.getElementById("filterPills");
             pills.innerHTML = "";
 
-            const filterKeys = Object.keys(appState.activeFilters);
-            if (filterKeys.length === 0) {
+            const filterKeys = Object.keys(appState.activeFilters || {});
+
+            if (filterKeys.length === 0 && !appState.resultSort && !appState.resultLimit) {
                 container.classList.add("hidden");
                 return;
             }
@@ -14803,11 +14822,27 @@
                 labelSpan.textContent = (FIELD_DEFINITIONS[key] || key) + ":";
                 groupDiv.appendChild(labelSpan);
 
+                const formatLabel = (val) => {
+                    const strVal = String(val);
+                    if (strVal.startsWith('<') || strVal.startsWith('>')) {
+                        const op = strVal.charAt(0);
+                        const num = strVal.substring(1);
+                        let prefix = op === '<' ? 'Under' : 'Over';
+                        if (op === '>' && (key === 'seer2' || key === 'seer')) prefix = 'At least';
+                        let suffix = '';
+                        if (key === 'width' || key === 'height') suffix = ' in';
+                        let formattedNum = num;
+                        if (key === 'price' && !isNaN(Number(num))) {
+                            formattedNum = '$' + Number(num).toLocaleString();
+                        }
+                        return `${prefix} ${formattedNum}${suffix}`;
+                    }
+                    return val;
+                };
+
                 const renderChip = (val) => {
                     const chip = document.createElement("div");
                     chip.className = "flex items-center gap-0.5 bg-blue-200/50 text-blue-800 border border-blue-300/50 rounded-[4px] px-2 py-0.5 shadow-xs overflow-hidden";
-
-                    const textSpan = document.createElement("span");
                     textSpan.className = "text-[11px] font-bold tracking-wide mt-px";
                     textSpan.textContent = val;
                     chip.appendChild(textSpan);
@@ -14912,7 +14947,7 @@
             exportCodeBtn.addEventListener("click", () => toggleCodeModal(true));
         }
 
-        // ── TOAST NOTIFICATIONS ──────────────────────────────────────────────
+        // â”€â”€ TOAST NOTIFICATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function showToast(message) {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -14927,18 +14962,20 @@
             }, 3000);
         }
 
-        // ── PROFILE MANAGER ───────────────────────────────────────────────────
+        // â”€â”€ PROFILE MANAGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function saveLayoutProfile() {
             const name = document.getElementById('profileNameInput').value.trim();
             if (!name) return;
             let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
             const stateToSave = JSON.parse(JSON.stringify(appState));
-            stateToSave.activeFilters = {}; // Do not save filters into a layout profile
+            delete stateToSave.activeFilters;
+            delete stateToSave.resultSort;
+            delete stateToSave.resultLimit;
             profiles[name] = stateToSave;
             localStorage.setItem('changeout_profiles_v1', JSON.stringify(profiles));
             refreshProfileDropdown();
             document.getElementById('profileNameInput').value = '';
-            showToast('💾 Profile saved: ' + name);
+            showToast('ðŸ’¾ Profile saved: ' + name);
         }
 
         function loadLayoutProfile() {
@@ -14946,13 +14983,22 @@
             if (!name) return;
             let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
             if (profiles[name]) {
+                const preservedFilters = appState.activeFilters || {};
+                const preservedSort = appState.resultSort || null;
+                const preservedLimit = appState.resultLimit || null;
+
                 appState = profiles[name];
+
+                appState.activeFilters = preservedFilters;
+                appState.resultSort = preservedSort;
+                appState.resultLimit = preservedLimit;
+
                 sanitizeAppState();
                 saveAppState();
                 renderGrid();
                 updatePrefLayoutUI();
                 updateDensityUI();
-                showToast('📂 Loaded profile: ' + name);
+                showToast('ðŸ“‚ Loaded profile: ' + name);
             }
         }
 
@@ -14960,18 +15006,180 @@
             const dropdown = document.getElementById('profileSelectDropdown');
             if (!dropdown) return;
             let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
-            dropdown.innerHTML = '<option value="">Select Profile…</option>';
+            dropdown.innerHTML = '<option value="">Select Profileâ€¦</option>';
             Object.keys(profiles).forEach(key => {
                 dropdown.innerHTML += `<option value="${key}">${key}</option>`;
             });
         }
         window.addEventListener('load', refreshProfileDropdown);
 
-        // ── VOICE COMMAND ENGINE ──────────────────────────────────────────────
+        function normalizeVoiceTranscript(text) {
+            return text.toUpperCase()
+                .replace(/WITH UNDER/g, "WIDTH UNDER")
+                .replace(/WITH LESS/g, "WIDTH LESS")
+                .replace(/WITH OVER/g, "WIDTH OVER")
+                .replace(/WITH MAX/g, "WIDTH MAX")
+                .replace(/WITH MIN/g, "WIDTH MIN")
+                .replace(/WITH (?=\d)/g, "WIDTH ")
+                .replace(/,/g, "");
+        }
+
+        const WORD_TO_NUM = {
+            "ONE": 1, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5, "SIX": 6,
+            "SEVEN": 7, "EIGHT": 8, "NINE": 9, "TEN": 10
+        };
+
+        function parseVoiceLimitIntent(text, intents) {
+            if (text.match(/CLEAR LIMIT|SHOW ALL|CLEAR EVERYTHING/)) {
+                intents.limit = null;
+            } else {
+                let countStr = '';
+                let m1 = text.match(/(?:SHOW|TOP|SHOW ME)\s+(?:MAXIMUM\s+)?([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)/);
+                if (m1) countStr = m1[1];
+                let m2 = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)\s+(?:CHEAPEST|MOST EXPENSIVE|HIGHEST PRICED)/);
+                if (m2) countStr = m2[1];
+
+                if (countStr) {
+                    let count = parseInt(countStr);
+                    if (isNaN(count) && WORD_TO_NUM[countStr]) {
+                        count = WORD_TO_NUM[countStr];
+                    }
+                    if (count > 0 && count <= 50) intents.limit = count;
+                }
+            }
+        }
+
+        function parseVoiceSortIntent(text, intents) {
+            if (text.match(/CLEAR SORT|CLEAR SORTING|CLEAR EVERYTHING/)) {
+                intents.sort = null;
+            } else {
+                if (text.match(/CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE/)) {
+                    intents.sort = { field: 'price', direction: 'asc' };
+                } else if (text.match(/MOST EXPENSIVE|HIGHEST PRICE|HIGHEST PRICED/)) {
+                    intents.sort = { field: 'price', direction: 'desc' };
+                }
+            }
+        }
+
+        function parseVoiceFilterIntents(text, intents) {
+            let active = { ...(appState.activeFilters || {}) };
+
+            if (text.match(/CLEAR EVERYTHING|CLEAR FILTERS/)) {
+                active = {};
+            } else {
+                if (text.match(/CLEAR WIDTH|REMOVE WIDTH/)) delete active.width;
+                if (text.match(/CLEAR HEIGHT/)) delete active.height;
+                if (text.match(/CLEAR STAGE/)) delete active.mechanicalStage;
+                if (text.match(/CLEAR CAPACITY/)) delete active.capacity;
+                if (text.match(/CLEAR BRAND/)) delete active.brand;
+                if (text.match(/CLEAR SYSTEM TYPE/)) delete active.systemType;
+                if (text.match(/CLEAR APPLICATION STYLE/)) delete active.applicationStyle;
+
+                const isAdditive = text.match(/ALSO |ADD /);
+                const applyVal = (key, val) => {
+                    if (isAdditive && active[key]) {
+                        if (!active[key].includes(val)) active[key].push(val);
+                    } else {
+                        active[key] = [val];
+                    }
+                };
+
+                if (text.includes("1.5 TON") || text.includes("ONE AND A HALF TON")) applyVal('capacity', '1.5 Ton');
+                else if (text.includes("2 TON") || text.includes("TWO TON")) applyVal('capacity', '2 Ton');
+                else if (text.includes("2.5 TON") || text.includes("TWO AND A HALF TON")) applyVal('capacity', '2.5 Ton');
+                else if (text.includes("3 TON") || text.includes("THREE TON")) applyVal('capacity', '3 Ton');
+                else if (text.includes("3.5 TON") || text.includes("THREE AND A HALF TON")) applyVal('capacity', '3.5 Ton');
+                else if (text.includes("4 TON") || text.includes("FOUR TON")) applyVal('capacity', '4 Ton');
+                else if (text.includes("5 TON") || text.includes("FIVE TON")) applyVal('capacity', '5 Ton');
+
+                if (text.includes("SINGLE STAGE") || text.includes("1 STAGE") || text.includes("ONE STAGE")) applyVal('mechanicalStage', 'SINGLE STAGE');
+                else if (text.includes("TWO STAGE") || text.includes("2 STAGE")) applyVal('mechanicalStage', '2 STAGE');
+                else if (text.includes("VARIABLE")) applyVal('mechanicalStage', 'VARIABLE SPEED');
+
+                if (text.includes("STRAIGHT COOL") || text.includes("AIR CONDITIONER") || text.includes("AC ")) applyVal('systemType', 'STRAIGHT COOL');
+                else if (text.includes("HEAT PUMP")) applyVal('systemType', 'HEAT PUMP');
+                else if (text.includes("FURNACE") || text.includes("GAS")) applyVal('systemType', 'Gas Furnace');
+
+                if (text.includes("CARRIER")) applyVal('brand', 'CARRIER');
+                if (text.includes("COMFORTMAKER") || text.includes("C-MAKER")) applyVal('brand', 'COMFORTMAKER');
+                if (text.includes("RUUD")) applyVal('brand', 'RUUD');
+                if (text.includes("DURASTAR")) applyVal('brand', 'DURASTAR');
+
+                if (text.includes("ANY COASTAL") || text.includes("ALL COASTAL")) {
+                    if (!isAdditive || !active['applicationStyle']) active['applicationStyle'] = [];
+                    if (!active['applicationStyle'].includes('COASTAL')) active['applicationStyle'].push('COASTAL');
+                    if (!active['applicationStyle'].includes('APARTMENT COASTAL')) active['applicationStyle'].push('APARTMENT COASTAL');
+                } else if (text.includes("APARTMENT COASTAL")) applyVal('applicationStyle', 'APARTMENT COASTAL');
+                else if (text.includes("COASTAL")) applyVal('applicationStyle', 'COASTAL');
+                else if (text.includes("STANDARD")) applyVal('applicationStyle', 'STANDARD');
+
+                const tryExtract = (speech, field, regexLess, regexMore) => {
+                    for (let r of regexLess) {
+                        let m = speech.match(r);
+                        if (m) { applyVal(field, '<' + m[1]); return true; }
+                    }
+                    for (let r of regexMore) {
+                        let m = speech.match(r);
+                        if (m) { applyVal(field, '>' + m[1]); return true; }
+                    }
+                    return false;
+                };
+
+                let wLess = [
+                    /WIDTH.*?UNDER\s*(\d+(?:\.\d+)?)/, /WIDTH.*?LESS\s*(\d+(?:\.\d+)?)/, /WIDTH.*?MAX\s*(\d+(?:\.\d+)?)/, /WIDTH.*?BELOW\s*(\d+(?:\.\d+)?)/,
+                    /(?:UNDER|LESS(?: THAN)?|BELOW|NO MORE THAN|MAX(?:IMUM)?|NARROWER(?: THAN)?|SKINNIER(?: THAN)?)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*WIDE|INCHES)/,
+                    /(?:UNDER|LESS(?: THAN)?|BELOW|NO MORE THAN|MAX(?:IMUM)?|NARROWER(?: THAN)?|SKINNIER(?: THAN)?)\s*(\d+(?:\.\d+)?)\s+WIDE/
+                ];
+                let wMore = [
+                    /WIDTH.*?OVER\s*(\d+(?:\.\d+)?)/, /WIDTH.*?GREATER\s*(\d+(?:\.\d+)?)/, /WIDTH.*?AT\s+LEAST\s*(\d+(?:\.\d+)?)/, /WIDTH.*?MIN\s*(\d+(?:\.\d+)?)/,
+                    /(?:OVER|GREATER(?: THAN)?|MORE(?: THAN)?|AT LEAST|MIN(?:IMUM)?)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*WIDE|INCHES)/,
+                    /(?:OVER|GREATER(?: THAN)?|MORE(?: THAN)?|AT LEAST|MIN(?:IMUM)?)\s*(\d+(?:\.\d+)?)\s+WIDE/
+                ];
+                tryExtract(text, 'width', wLess, wMore);
+
+                let hLess = [
+                    /HEIGHT.*?UNDER\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?LESS\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?BELOW\s*(\d+(?:\.\d+)?)/,
+                    /(?:UNDER|LESS(?: THAN)?|NO MORE THAN|SHORTER(?: THAN)?)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*TALL|INCHES)/,
+                    /(?:UNDER|LESS(?: THAN)?|NO MORE THAN|SHORTER(?: THAN)?)\s*(\d+(?:\.\d+)?)\s+TALL/
+                ];
+                let hMore = [
+                    /HEIGHT.*?OVER\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?GREATER\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?AT\s+LEAST\s*(\d+(?:\.\d+)?)/,
+                    /(?:OVER|GREATER(?: THAN)?|TALLER(?: THAN)?|AT LEAST)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*TALL|INCHES)/,
+                    /(?:OVER|GREATER(?: THAN)?|TALLER(?: THAN)?|AT LEAST)\s*(\d+(?:\.\d+)?)\s+TALL/
+                ];
+                tryExtract(text, 'height', hLess, hMore);
+
+                let pLess = [
+                    /PRICE.*?UNDER\s*(\d+(?:\.\d+)?)/, /PRICE.*?LESS THAN\s*(\d+(?:\.\d+)?)/,
+                    /PRICE\s+(?:UNDER|LESS THAN|BELOW|MAX)\s+(\d+(?:\.\d+)?)/,
+                    /(?:UNDER|LESS THAN|BELOW|MAX)\s+(\d+(?:\.\d+)?)\s*DOLLARS/
+                ];
+                let pMore = [
+                    /PRICE.*?OVER\s*(\d+(?:\.\d+)?)/, /PRICE.*?GREATER THAN\s*(\d+(?:\.\d+)?)/, /PRICE.*?AT LEAST\s*(\d+(?:\.\d+)?)/,
+                    /PRICE\s+(?:OVER|GREATER THAN|AT LEAST|MIN)\s+(\d+(?:\.\d+)?)/,
+                    /(?:OVER|GREATER THAN|AT LEAST|MIN)\s+(\d+(?:\.\d+)?)\s*DOLLARS/
+                ];
+                tryExtract(text, 'price', pLess, pMore);
+
+                let sLess = [/SEER.*?UNDER\s*(\d+(?:\.\d+)?)/];
+                let sMore = [/SEER.*?OVER\s*(\d+(?:\.\d+)?)/, /SEER.*?AT\s+LEAST\s*(\d+(?:\.\d+)?)/];
+                tryExtract(text, 'seer2', sLess, sMore);
+            }
+            intents.filters = active;
+        }
+
+        function applyVoiceIntents(intents) {
+            if (intents.filters !== undefined) appState.activeFilters = intents.filters;
+            if (intents.sort !== undefined) appState.resultSort = intents.sort;
+            if (intents.limit !== undefined) appState.resultLimit = intents.limit;
+            renderGrid();
+        }
+
+        // â”€â”€ VOICE COMMAND ENGINE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function activateVoiceCommand() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                showToast("⚠️ Voice command not supported in this browser.");
+                showToast("âš ï¸ Voice command not supported in this browser.");
                 return;
             }
             const recognition = new SpeechRecognition();
@@ -14988,99 +15196,25 @@
             recognition.start();
 
             recognition.onresult = function (event) {
-                let speechResult = event.results[0][0].transcript.toUpperCase();
+                let speechResult = normalizeVoiceTranscript(event.results[0][0].transcript);
 
-                // Homophone Auto-Correct & Comma Eraser Interceptor
-                speechResult = speechResult.replace(/WITH UNDER/g, "WIDTH UNDER")
-                    .replace(/WITH LESS/g, "WIDTH LESS")
-                    .replace(/WITH OVER/g, "WIDTH OVER")
-                    .replace(/WITH MAX/g, "WIDTH MAX")
-                    .replace(/WITH MIN/g, "WIDTH MIN")
-                    .replace(/WITH (?=\d)/g, "WIDTH ") // Catch Exact Matches (e.g., "With 21")
-                    .replace(/,/g, ""); // Kill the Comma Trap
+                let intents = {};
+                parseVoiceSortIntent(speechResult, intents);
+                parseVoiceLimitIntent(speechResult, intents);
+                parseVoiceFilterIntents(speechResult, intents);
 
-                // Capacity
-                if (speechResult.includes("1.5 TON") || speechResult.includes("ONE AND A HALF TON")) toggleFilter('capacity', '1.5 Ton');
-                if (speechResult.includes("2 TON") || speechResult.includes("TWO TON")) toggleFilter('capacity', '2 Ton');
-                if (speechResult.includes("2.5 TON") || speechResult.includes("TWO AND A HALF TON")) toggleFilter('capacity', '2.5 Ton');
-                if (speechResult.includes("3 TON") || speechResult.includes("THREE TON")) toggleFilter('capacity', '3 Ton');
-                if (speechResult.includes("3.5 TON") || speechResult.includes("THREE AND A HALF TON")) toggleFilter('capacity', '3.5 Ton');
-                if (speechResult.includes("4 TON") || speechResult.includes("FOUR TON")) toggleFilter('capacity', '4 Ton');
-                if (speechResult.includes("5 TON") || speechResult.includes("FIVE TON")) toggleFilter('capacity', '5 Ton');
-
-                // System Type
-                if (speechResult.includes("STRAIGHT COOL") || speechResult.includes("AIR CONDITIONER") || speechResult.includes("AC")) toggleFilter('systemType', 'STRAIGHT COOL');
-                if (speechResult.includes("HEAT PUMP")) toggleFilter('systemType', 'HEAT PUMP');
-                if (speechResult.includes("FURNACE") || speechResult.includes("GAS")) toggleFilter('systemType', 'Gas Furnace');
-
-                // Mechanical Stage
-                if (speechResult.includes("SINGLE STAGE") || speechResult.includes("1 STAGE") || speechResult.includes("ONE STAGE")) toggleFilter('mechanicalStage', 'SINGLE STAGE');
-                if (speechResult.includes("TWO STAGE") || speechResult.includes("2 STAGE")) toggleFilter('mechanicalStage', '2 STAGE');
-                if (speechResult.includes("VARIABLE")) toggleFilter('mechanicalStage', 'VARIABLE SPEED');
-
-                // Application / Style / Site (Substring & Toggle Safety Logic)
-                if (speechResult.includes("ANY COASTAL") || speechResult.includes("ALL COASTAL")) {
-                    const activeStyles = appState.activeFilters['applicationStyle'] || [];
-                    if (!activeStyles.includes('COASTAL')) toggleFilter('applicationStyle', 'COASTAL');
-                    if (!activeStyles.includes('APARTMENT COASTAL')) toggleFilter('applicationStyle', 'APARTMENT COASTAL');
-                }
-                // Substring / Longest Match First Routing
-                else if (speechResult.includes("APARTMENT COASTAL")) {
-                    toggleFilter('applicationStyle', 'APARTMENT COASTAL');
-                }
-                else if (speechResult.includes("COASTAL")) {
-                    toggleFilter('applicationStyle', 'COASTAL');
-                }
-                else if (speechResult.includes("STANDARD")) {
-                    toggleFilter('applicationStyle', 'STANDARD');
-                }
-
-                if (speechResult.includes("OCEANA")) toggleFilter('site', 'Oceana');
-
-                // Brands
-                if (speechResult.includes("CARRIER")) toggleFilter('brand', 'CARRIER');
-                if (speechResult.includes("COMFORTMAKER") || speechResult.includes("C-MAKER")) toggleFilter('brand', 'COMFORTMAKER');
-                if (speechResult.includes("RUUD")) toggleFilter('brand', 'RUUD');
-
-                // Omnidirectional Math & Exact Match Engine
-                const parseMetric = (speech, metricWord, key) => {
-                    if (!speech.includes(metricWord)) return;
-
-                    // Fix Zero Trap: Use \\d+ to successfully capture numbers with zeros
-                    const regex = new RegExp(metricWord + ".*?(\\d+(?:\\.\\d+)?)");
-                    const match = speech.match(regex);
-
-                    if (match) {
-                        const val = match[1];
-                        const lessKeywords = ["UNDER", "LESS", "MAX", "BELOW"];
-                        const greaterKeywords = ["OVER", "GREATER", "MIN", "AT LEAST"];
-
-                        let operator = ""; // Defaults to Exact Match
-
-                        // Check the context phrase around the metric for directional keywords
-                        const phraseStart = Math.max(0, speech.indexOf(metricWord) - 25);
-                        const phrase = speech.substring(phraseStart, speech.indexOf(val) + val.length);
-
-                        if (lessKeywords.some(kw => phrase.includes(kw))) operator = "<";
-                        else if (greaterKeywords.some(kw => phrase.includes(kw))) operator = ">";
-
-                        // Apply the filter. (e.g., '<9000', '>16', or exactly '53.5')
-                        appState.activeFilters[key] = [operator + val];
-                        renderGrid();
-                    }
-                };
-
-                parseMetric(speechResult, "PRICE", "price");
-                parseMetric(speechResult, "HEIGHT", "height");
-                parseMetric(speechResult, "WIDTH", "width");
-                parseMetric(speechResult, "SEER", "seer2");
-                parseMetric(speechResult, "CAPACITY", "capacity");
-
-                showToast('🎙️ Heard: ' + event.results[0][0].transcript);
+                applyVoiceIntents(intents);
+                showToast('ðŸŽ™ï¸ Heard: ' + event.results[0][0].transcript);
             };
 
             recognition.onerror = function (event) {
-                showToast('⚠️ Voice error: ' + event.error);
+                if (event.error === 'service-not-allowed') {
+                    showToast('âš ï¸ Speech Recognition is disabled for this browser. On iPhone: Settings â†’ Apps â†’ Chrome â†’ Speech Recognition.', 5000);
+                } else if (event.error === 'not-allowed') {
+                    showToast('âš ï¸ Microphone or speech permission is blocked for this browser.', 5000);
+                } else {
+                    showToast('âš ï¸ Voice error: ' + event.error);
+                }
             };
 
             recognition.onend = function () {
@@ -15227,7 +15361,7 @@
             if (mode === 'edit') {
                 populateEditDropdown();
                 document.getElementById('inj-text').value = '';
-                document.getElementById('inj-revert-btn').innerText = '↺ Revert';
+                document.getElementById('inj-revert-btn').innerText = 'â†º Revert';
                 document.getElementById('inj-revert-btn').className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition shadow-sm';
                 document.getElementById('inj-category').classList.remove('hidden');
                 if (document.getElementById('inj-initial')) document.getElementById('inj-initial').closest('label').classList.remove('hidden');
@@ -15265,14 +15399,14 @@
 
                 document.getElementById('inj-line-display').innerText = `Line: ${inj.line}`;
                 window.targetInjectionLine = inj.line;
-                revertBtn.innerText = '🗑️ Delete';
+                revertBtn.innerText = 'ðŸ—‘ï¸ Delete';
                 revertBtn.className = 'bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition shadow-sm';
                 return;
             }
 
             // Standard text override mode
             addControls.classList.add('hidden');
-            revertBtn.innerText = '↺ Revert';
+            revertBtn.innerText = 'â†º Revert';
             revertBtn.className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition shadow-sm';
 
             if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[target]) {
@@ -15284,10 +15418,10 @@
             let foundText = "";
 
             if (target === 'Intro') foundText = "We are pleased to offer you a quote to upgrade your HVAC system. We will remove the existing system and dispose of per EPA standards. We will install a new system and connect to existing wiring, copper, and ductwork.";
-            else if (target === 'Boilerplate') foundText = "■ Platt’s Air and Heat has a 1-year workmanship warranty.\n■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
+            else if (target === 'Boilerplate') foundText = "â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\nâ–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\nâ–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
             else if (target.includes('Option')) {
                 for (let line of lines) {
-                    if (line.includes(`■ ${target}:`)) { foundText = line; break; }
+                    if (line.includes(`â–  ${target}:`)) { foundText = line; break; }
                 }
                 let splitIndex = foundText.indexOf(' Investment: $');
                 if (splitIndex !== -1) foundText = foundText.substring(0, splitIndex);
@@ -15305,7 +15439,7 @@
                 const needsInit = document.getElementById('inj-initial').checked;
                 const price = Number(document.getElementById('inj-price').value) || 0;
 
-                let finalString = "■ ";
+                let finalString = "â–  ";
                 if (needsInit) finalString += "___ ";
                 if (cat === 'enhancement') finalString += "System enhancement: ";
                 if (cat === 'fee') finalString += "Additional Installation Fee: ";
@@ -15779,7 +15913,7 @@
             applyDefaultModalState('Standard');
             updateCalculatorTotal();
             renderGrid();
-            showToast("🔄 Modal reset to base system defaults.");
+            showToast("ðŸ”„ Modal reset to base system defaults.");
         }
 
         function sendToProposal() {
@@ -15844,7 +15978,7 @@
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
             renderGrid();
             closePriceModal();
-            showToast("🚀 System & Scope sent to Proposal!");
+            showToast("ðŸš€ System & Scope sent to Proposal!");
         }
 
         function masterNewQuote() {
@@ -15897,7 +16031,7 @@
 
             refreshSiteDependentUI();
             renderGrid();
-            showToast("🧹 New Quote started - Cart and state cleared!");
+            showToast("ðŸ§¹ New Quote started - Cart and state cleared!");
         }
 
         function closePriceModal() {
@@ -16123,10 +16257,10 @@
 
                 let confirmHtml = `
         <div class="bg-blue-900/30 border border-blue-500 rounded p-4 text-center">
-            <h4 class="text-blue-400 font-bold mb-2">🌊 Coastal Equivalent Found</h4>
+            <h4 class="text-blue-400 font-bold mb-2">ðŸŒŠ Coastal Equivalent Found</h4>
             <div class="flex justify-between text-sm mb-1 text-slate-300"><span>Standard Base:</span> <span class="font-bold line-through">$${Math.round(Number(currentPrice)).toLocaleString()}</span></div>
             <div class="flex justify-between text-lg mb-4 text-white font-black"><span>Coastal Base:</span> <span>$${Math.round(Number(matchPriceStr)).toLocaleString()}</span></div>
-            <div class="text-xs text-emerald-400 mb-4 font-bold tracking-widest">📦 INFINIGUARD INCLUDED IN COASTAL PRICE</div>
+            <div class="text-xs text-emerald-400 mb-4 font-bold tracking-widest">ðŸ“¦ INFINIGUARD INCLUDED IN COASTAL PRICE</div>
             <div class="flex gap-2 justify-center">
                 <button onclick="confirmCoastalMatch(${index}, ${Math.round(Number(matchPriceStr))})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors">Approve & Swap</button>
                 <button onclick="openReceiptModal(${index})" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded text-sm transition-colors">Cancel</button>
@@ -16146,7 +16280,7 @@
             if (!sp.infusedItems.includes('Salt Shield (Infiniguard)')) {
                 sp.infusedItems.push('Salt Shield (Infiniguard)');
             }
-            if (typeof showToast === 'function') showToast("🌊 Coastal Match Applied!");
+            if (typeof showToast === 'function') showToast("ðŸŒŠ Coastal Match Applied!");
             updateProposalCartUI();
             openReceiptModal(index);
         };
@@ -16544,7 +16678,7 @@
             </div>`;
 
             if (resolution.source === 'manual') {
-                rawBaseHtml += `<div class="text-[10px] text-rose-400 font-bold text-right">⚠ MANUAL RAW BASE OVERRIDE</div>`;
+                rawBaseHtml += `<div class="text-[10px] text-rose-400 font-bold text-right">âš  MANUAL RAW BASE OVERRIDE</div>`;
             }
             if (resolution.auditDelta !== undefined && !isNaN(resolution.auditDelta)) {
                 const sign = resolution.auditDelta > 0 ? '+' : '';
@@ -16563,41 +16697,41 @@
 
             if (sp.condo && sp.condo.required) {
                 if (sp.condo.includedInBase) {
-                    stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Included">🏢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">INCLUDED</span></div>`;
-                    breakdownHtml += `<div class="flex justify-between text-emerald-400/80 mb-1"><span>🏢 Condo Install</span><span>Included in Base Price</span></div>`;
+                    stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Included">ðŸ¢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">INCLUDED</span></div>`;
+                    breakdownHtml += `<div class="flex justify-between text-emerald-400/80 mb-1"><span>ðŸ¢ Condo Install</span><span>Included in Base Price</span></div>`;
                 } else {
                     let val = Number(sp.condo.charge) || 0;
-                    stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Baked In">🏢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
-                    breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>🏢 Condo Install</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
+                    stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Baked In">ðŸ¢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
+                    breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>ðŸ¢ Condo Install</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
                 }
             } else if (isCondo) {
                 let val = 0;
                 Object.entries(sp.addons).forEach(([n, v]) => { if (n.toLowerCase().includes('condo')) val = v; });
-                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Baked In">🏢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>🏢 Condo Install</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
+                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Condo Install Baked In">ðŸ¢</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
+                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>ðŸ¢ Condo Install</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
             }
 
             if (sp.siteFloorAllowance && sp.siteFloorAllowance.amount > 0 && sp.siteFloorAllowance.bakedIn) {
-                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Oceana Additional Refrigerant Charge Baked In">❄️</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.siteFloorAllowance.amount.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>❄️ Oceana Additional Refrigerant Charge</span><span>+$${sp.siteFloorAllowance.amount.toLocaleString()} (Baked In)</span></div>`;
+                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Oceana Additional Refrigerant Charge Baked In">â„ï¸</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.siteFloorAllowance.amount.toLocaleString()}</span></div>`;
+                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>â„ï¸ Oceana Additional Refrigerant Charge</span><span>+$${sp.siteFloorAllowance.amount.toLocaleString()} (Baked In)</span></div>`;
             }
 
             if (isAttic) {
                 let val = 0;
                 Object.entries(sp.addons).forEach(([n, v]) => { if (n.toLowerCase().includes('attic')) val = v; });
                 if (sp.travelText && sp.travelText.toLowerCase().includes('attic')) val = sp.travelFee;
-                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Attic Fee Baked In">🪜</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>🪜 Attic Installation</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
+                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Attic Fee Baked In">ðŸªœ</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${val.toLocaleString()}</span></div>`;
+                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>ðŸªœ Attic Installation</span><span>+$${val.toLocaleString()} (Baked In)</span></div>`;
             }
 
             if (isRefrig) {
-                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Refrigerant Extension Baked In">❄️</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.refrigerantFee.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>❄️ Additional Refrigerant Charge</span><span>+$${sp.refrigerantFee.toLocaleString()} (Baked In)</span></div>`;
+                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Refrigerant Extension Baked In">â„ï¸</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.refrigerantFee.toLocaleString()}</span></div>`;
+                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>â„ï¸ Additional Refrigerant Charge</span><span>+$${sp.refrigerantFee.toLocaleString()} (Baked In)</span></div>`;
             }
             if (sp.coastalMatch && sp.coastalPriceOverride > 0) {
                 let coastalDiff = sp.coastalPriceOverride - rawBasePrice;
-                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Coastal Match Baked In">🌊</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${coastalDiff.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-emerald-400/80 mb-1"><span>🌊 Coastal Match</span><span>+$${coastalDiff.toLocaleString()} (Baked In)</span></div>`;
+                stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Coastal Match Baked In">ðŸŒŠ</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${coastalDiff.toLocaleString()}</span></div>`;
+                breakdownHtml += `<div class="flex justify-between text-emerald-400/80 mb-1"><span>ðŸŒŠ Coastal Match</span><span>+$${coastalDiff.toLocaleString()} (Baked In)</span></div>`;
             }
 
             Object.entries(bakedEnhancementAddons).forEach(([name, val]) => {
@@ -16690,9 +16824,9 @@
                 } else {
                     controlsHtml = `
                 <select class="text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold" onchange="updateOverrideState(${index}, '${name}', this.value)">
-                   <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>🌎 Universal</option>
-                   <option value="tagged" ${isTagged ? 'selected' : ''}>🏷️ Tagged</option>
-                   <option value="removed" ${isRemoved ? 'selected' : ''}>❌ Removed</option>
+                   <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>ðŸŒŽ Universal</option>
+                   <option value="tagged" ${isTagged ? 'selected' : ''}>ðŸ·ï¸ Tagged</option>
+                   <option value="removed" ${isRemoved ? 'selected' : ''}>âŒ Removed</option>
                 </select>`;
                 }
 
@@ -16834,19 +16968,19 @@
                         value="use-global"
                         ${localPricingTreatment === 'use-global' ? 'selected' : ''}
                     >
-                        🌎 Use Smart Scope Default — ${globalPricingLabel}
+                        ðŸŒŽ Use Smart Scope Default â€” ${globalPricingLabel}
                     </option>
                     <option
                         value="customer-optional"
                         ${localPricingTreatment === 'customer-optional' ? 'selected' : ''}
                     >
-                        Override — Customer Optional
+                        Override â€” Customer Optional
                     </option>
                     <option
                         value="included-in-system-price"
                         ${localPricingTreatment === 'included-in-system-price' ? 'selected' : ''}
                     >
-                        Override — Baked In
+                        Override â€” Baked In
                     </option>
                 </select>
             `;
@@ -16867,9 +17001,9 @@
                     class="w-full min-w-0 text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold"
                     onchange="updateOverrideState(${index}, '${name}', this.value)"
                 >
-                   <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>🌎 Universal</option>
-                   <option value="tagged" ${isTagged ? 'selected' : ''}>🏷️ Tagged</option>
-                   <option value="removed" ${isRemoved ? 'selected' : ''}>❌ Removed</option>
+                   <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>ðŸŒŽ Universal</option>
+                   <option value="tagged" ${isTagged ? 'selected' : ''}>ðŸ·ï¸ Tagged</option>
+                   <option value="removed" ${isRemoved ? 'selected' : ''}>âŒ Removed</option>
                 </select>
             `;
                 }
@@ -17002,7 +17136,7 @@
             }
             let isCoastalMatch = sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0;
             if (isCoastalMatch) {
-                modalBadges.push('<span title="Coastal Match">🌊</span>');
+                modalBadges.push('<span title="Coastal Match">ðŸŒŠ</span>');
             }
             let activeLaborWarranties = false;
             if (window.getEffectiveLaborWarranties(sp).length > 0) {
@@ -17346,7 +17480,7 @@
                         if (msg.includes("MISSING SYSTEM")) state.isMissing = true;
 
                         const r = String(rawMsg || "");
-                        const priceMatch = r.match(/Price:\s*\$?(\d+(?:\.\d+)?)\s*(?:➔|->|→)\s*\$?(\d+(?:\.\d+)?)/i) ||
+                        const priceMatch = r.match(/Price:\s*\$?(\d+(?:\.\d+)?)\s*(?:âž”|->|â†’)\s*\$?(\d+(?:\.\d+)?)/i) ||
                             r.match(/changed from \$?(\d+(?:\.\d+)?)\s*to\s*\$?(\d+(?:\.\d+)?)/i);
                         if (priceMatch) {
                             state.priceChanged = true;
@@ -17355,10 +17489,10 @@
                             state.priceDelta = state.newPrice - state.oldPrice;
                         }
 
-                        if (r.match(/AHRI:\s*([^\s➔]+)\s*(?:➔|->|→)\s*([^\s]+)/i)) state.ahriChanged = true;
-                        if (r.match(/SEER2:\s*([^\s➔]+)\s*(?:➔|->|→)\s*([^\s]+)/i)) state.seer2Changed = true;
+                        if (r.match(/AHRI:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i)) state.ahriChanged = true;
+                        if (r.match(/SEER2:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i)) state.seer2Changed = true;
 
-                        const btuMatch = r.match(/BTU:\s*([^\s➔]+)\s*(?:➔|->|→)\s*([^\s]+)/i);
+                        const btuMatch = r.match(/BTU:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i);
                         if (btuMatch) {
                             if (r.toUpperCase().includes("COOLING BTU")) state.coolingBtuChanged = true;
                             else if (r.toUpperCase().includes("HEATING BTU")) state.heatingBtuChanged = true;
@@ -17389,7 +17523,7 @@
             const text = String(item.flag).trim();
 
             const priceMatch = text.match(
-                /\bPRICE\s*:\s*([$]?[\d,]+(?:\.\d+)?)\s*(?:->|➔|→)\s*([$]?[\d,]+(?:\.\d+)?)/i
+                /\bPRICE\s*:\s*([$]?[\d,]+(?:\.\d+)?)\s*(?:->|âž”|â†’)\s*([$]?[\d,]+(?:\.\d+)?)/i
             );
 
             if (!priceMatch) {
@@ -17712,17 +17846,17 @@
                     const event = structuredEvents.find(e => e.message === rawMsg);
                     const msg = rawMsg.replace(/\d+\.\d+/g, match => Math.ceil(Number(match)));
 
-                    if (msg.includes("🆕 NEW SYSTEM") || msg.includes("✅ NEW SYSTEM")) return;
+                    if (msg.includes("ðŸ†• NEW SYSTEM") || msg.includes("âœ… NEW SYSTEM")) return;
 
                     let bColor = "border-amber-500";
                     let tColor = "text-amber-300";
                     let headerTitle = "";
                     let priceHtml = "";
 
-                    const nlArrowMatch = rawMsg.match(/\n\s*[↳⮑➔]\s*(.*)/);
+                    const nlArrowMatch = rawMsg.match(/\n\s*[â†³â®‘âž”]\s*(.*)/);
                     const nlArrowStr = nlArrowMatch ? nlArrowMatch[1] : '';
                     let titlePart = rawMsg.split('\n')[0].trim();
-                    let detailsPart = nlArrowStr ? nlArrowStr.replace(/->/g, '➔') : '';
+                    let detailsPart = nlArrowStr ? nlArrowStr.replace(/->/g, 'âž”') : '';
 
                     if (event && event.changes && event.changes.length > 0) {
                         const formattedChanges = event.changes.map(ch => {
@@ -17730,11 +17864,11 @@
                             if (fieldStr === 'price') {
                                 const oldP = Number(String(ch.oldValue).replace(/[$,+]/g, ""));
                                 const newP = Number(String(ch.newValue).replace(/[$,+]/g, ""));
-                                const arrowDir = newP > oldP ? '↑' : '↓';
-                                return `PRICE ${arrowDir}  ${window.formatAuditCurrency(oldP)} → ${window.formatAuditCurrency(newP)}`;
+                                const arrowDir = newP > oldP ? 'â†‘' : 'â†“';
+                                return `PRICE ${arrowDir}  ${window.formatAuditCurrency(oldP)} â†’ ${window.formatAuditCurrency(newP)}`;
                             }
-                            if (fieldStr === 'ahri') return `AHRI: ${ch.oldValue} → ${ch.newValue}`;
-                            return `${String(ch.label || ch.field).toUpperCase()}: ${ch.oldValue} → ${ch.newValue}`;
+                            if (fieldStr === 'ahri') return `AHRI: ${ch.oldValue} â†’ ${ch.newValue}`;
+                            return `${String(ch.label || ch.field).toUpperCase()}: ${ch.oldValue} â†’ ${ch.newValue}`;
                         }).filter(Boolean);
                         if (formattedChanges.length > 0) detailsPart = formattedChanges.join(' | ');
                     }
@@ -17749,10 +17883,10 @@
                             if (hasPrice) {
                                 if (Number(hasPrice.newValue) > Number(hasPrice.oldValue)) {
                                     bColor = "border-rose-500"; tColor = "text-rose-400";
-                                    headerTitleParts.push(`<span class="bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/30 mr-1.5">PRICE ↑</span>`);
+                                    headerTitleParts.push(`<span class="bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/30 mr-1.5">PRICE â†‘</span>`);
                                 } else {
                                     bColor = "border-emerald-500"; tColor = "text-emerald-400";
-                                    headerTitleParts.push(`<span class="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 mr-1.5">PRICE ↓</span>`);
+                                    headerTitleParts.push(`<span class="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 mr-1.5">PRICE â†“</span>`);
                                 }
                             }
                             if (hasAhri) {
@@ -17762,7 +17896,7 @@
                                 headerTitleParts.push(`<span class="bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30 mr-1.5">AHRI</span>`);
                             }
 
-                            headerTitle = headerTitleParts.join("") + titlePart.replace(/🚨 (UPDATE|ENHANCEMENT) \| /, "");
+                            headerTitle = headerTitleParts.join("") + titlePart.replace(/ðŸš¨ (UPDATE|ENHANCEMENT) \| /, "");
                         } else if (event.type === "ENHANCEMENT") {
                             bColor = "border-cyan-500"; tColor = "text-cyan-400";
 
@@ -17783,16 +17917,16 @@
                                 titlePart = enhancementName;
                                 detailsPart = enhancementName;
                             } else {
-                                displayTitle = titlePart.replace(/🚨 (UPDATE|ENHANCEMENT) \| /, "");
+                                displayTitle = titlePart.replace(/ðŸš¨ (UPDATE|ENHANCEMENT) \| /, "");
                             }
 
                             headerTitle = `<span class="bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 mr-1.5">ENHANCEMENT</span>` + displayTitle;
                         } else if (event.type === "FORMAT_CONFLICT") {
                             bColor = "border-orange-500"; tColor = "text-orange-400";
-                            headerTitle = `<span class="bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded border border-orange-500/30 mr-1.5">FORMAT</span>` + titlePart.replace("⚠️ FORMAT CONFLICT | ", "");
+                            headerTitle = `<span class="bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded border border-orange-500/30 mr-1.5">FORMAT</span>` + titlePart.replace("âš ï¸ FORMAT CONFLICT | ", "");
                         } else if (event.type === "MISSING_SYSTEM") {
                             bColor = "border-slate-500"; tColor = "text-slate-400";
-                            headerTitle = `<span class="bg-slate-500/20 text-slate-300 px-1.5 py-0.5 rounded border border-slate-500/30 mr-1.5">MISSING</span>` + titlePart.replace("❌ MISSING SYSTEM | ", "");
+                            headerTitle = `<span class="bg-slate-500/20 text-slate-300 px-1.5 py-0.5 rounded border border-slate-500/30 mr-1.5">MISSING</span>` + titlePart.replace("âŒ MISSING SYSTEM | ", "");
                             titlePart = "MISSING IN MASTER";
                             detailsPart = "MISSING IN MASTER";
                         }
@@ -17814,16 +17948,16 @@
                              </div>`;
                         }
                     } else {
-                        if (msg.includes("❌ MISSING SYSTEM")) {
+                        if (msg.includes("âŒ MISSING SYSTEM")) {
                             bColor = "border-slate-500"; tColor = "text-slate-400";
-                            headerTitle = titlePart.replace("❌ MISSING SYSTEM | ", "");
+                            headerTitle = titlePart.replace("âŒ MISSING SYSTEM | ", "");
                             titlePart = "MISSING IN MASTER";
                             detailsPart = "MISSING IN MASTER";
-                        } else if (msg.includes("🚨 UPDATE") || msg.includes("🚨 ENHANCEMENT")) {
+                        } else if (msg.includes("ðŸš¨ UPDATE") || msg.includes("ðŸš¨ ENHANCEMENT")) {
                             bColor = "border-emerald-500"; tColor = "text-emerald-300";
-                            headerTitle = titlePart.replace(/🚨 (UPDATE|ENHANCEMENT) \| /, "");
+                            headerTitle = titlePart.replace(/ðŸš¨ (UPDATE|ENHANCEMENT) \| /, "");
 
-                            const priceMatch = detailsPart.match(/Price:\s*(\d+)\s*➔\s*(\d+)/i) || detailsPart.match(/changed from \$(\d+) to \$(\d+)/i);
+                            const priceMatch = detailsPart.match(/Price:\s*(\d+)\s*âž”\s*(\d+)/i) || detailsPart.match(/changed from \$(\d+) to \$(\d+)/i);
                             if (priceMatch) {
                                 const oldPriceNum = Number(priceMatch[1]);
                                 const newPriceNum = Number(priceMatch[2]);
@@ -17846,9 +17980,9 @@
                                     </div>
                                 </div>`;
                             }
-                        } else if (msg.includes("⚠️ FORMAT CONFLICT")) {
+                        } else if (msg.includes("âš ï¸ FORMAT CONFLICT")) {
                             bColor = "border-amber-500"; tColor = "text-amber-300";
-                            headerTitle = titlePart.replace("⚠️ FORMAT CONFLICT | ", "");
+                            headerTitle = titlePart.replace("âš ï¸ FORMAT CONFLICT | ", "");
                         }
                     }
 
@@ -17972,7 +18106,7 @@
                     const typeLabel = file.type || 'Image';
 
                     meta.textContent =
-                        `${sourceLabel} • ${typeLabel} • ${sizeKb.toLocaleString()} KB`;
+                        `${sourceLabel} â€¢ ${typeLabel} â€¢ ${sizeKb.toLocaleString()} KB`;
                 }
 
                 if (status) {
@@ -18369,7 +18503,7 @@
             if (!summary) return;
 
             if (job.customerName && job.address) {
-                summary.textContent = `${job.customerName} • Entered`;
+                summary.textContent = `${job.customerName} â€¢ Entered`;
                 summary.className = 'text-[9px] text-emerald-400 font-bold tracking-wider uppercase';
             } else if (job.customerName || job.address || job.phone || job.email) {
                 summary.textContent = 'Partially Entered';
@@ -18898,7 +19032,7 @@
 
 
     <script id="dispatch-prototype-js">
-        // ── DISPATCH HEADER PROTOTYPE ───────────────────────────────────────────────
+        // â”€â”€ DISPATCH HEADER PROTOTYPE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         window.activeDispatchTab = 'layout';
         window.dispatchSelectedContainer = 0;
@@ -20434,7 +20568,7 @@
                   </div>
                   ` : ''}
               `;
-                html += window.renderDispatchSettingsSection('layout', 'splits', 'Splits in Selected Stack', splitsHtml, `C${window.dispatchSelectedContainer + 1} · S${window.dispatchSelectedStack + 1}`);
+                html += window.renderDispatchSettingsSection('layout', 'splits', 'Splits in Selected Stack', splitsHtml, `C${window.dispatchSelectedContainer + 1} Â· S${window.dispatchSelectedStack + 1}`);
             }
             else if (window.activeDispatchTab === 'mapping') {
                 const sp = layout.containers[window.dispatchSelectedContainer].stacks[window.dispatchSelectedStack].splits[window.dispatchSelectedSplit];
@@ -20459,7 +20593,7 @@
                       Mappings are reusable. Icon, Title, Status, and Settings Gear may be assigned to multiple cells at the same time.
                   </div>
               `;
-                html += window.renderDispatchSettingsSection('mapping', 'assignment', 'Mapping Assignment', assignHtml, `C${window.dispatchSelectedContainer + 1} · S${window.dispatchSelectedStack + 1} · ${window.dispatchSelectedSplit + 1}`);
+                html += window.renderDispatchSettingsSection('mapping', 'assignment', 'Mapping Assignment', assignHtml, `C${window.dispatchSelectedContainer + 1} Â· S${window.dispatchSelectedStack + 1} Â· ${window.dispatchSelectedSplit + 1}`);
 
                 if (sp.mapping === 'custom-text') {
                     const safeVal = window.escapeDispatchHtml(sp.customText || '');
@@ -21080,7 +21214,7 @@
                     mapLabel = regItem ? `Mapped: ${regItem.label}` : 'Mapped: External Control';
                 }
             }
-            cCtx.textContent = `C${cIdx + 1} · S${stIdx + 1} · ${spIdx + 1}  |  ${mapLabel}`;
+            cCtx.textContent = `C${cIdx + 1} Â· S${stIdx + 1} Â· ${spIdx + 1}  |  ${mapLabel}`;
         };
 
         window.modDispatchWeight = function (level, delta) {
@@ -21223,7 +21357,7 @@
                         html += `<div data-dispatch-container="${cIdx}" data-dispatch-stack="${stIdx}" data-dispatch-split="${spIdx}"${onClick} style="${spFlexStyle}${editStyleSp} display: flex; align-items: ${vAlign}; justify-content: ${hAlign}; padding: ${p.cellPadding}px; position: relative; overflow: ${sp.overflowMode === 'visible' ? 'visible' : 'hidden'}; min-width: 0; min-height: 0;">`;
 
                         if (isEditMode) {
-                            html += `<div style="position: absolute; top: 0; left: 0; font-size: 7px; color: #94a3b8; background: rgba(15, 23, 42, 0.8); padding: 1px 2px; pointer-events: none; z-index: 10;">C${cIdx + 1}·S${stIdx + 1}·${spIdx + 1}</div>`;
+                            html += `<div style="position: absolute; top: 0; left: 0; font-size: 7px; color: #94a3b8; background: rgba(15, 23, 42, 0.8); padding: 1px 2px; pointer-events: none; z-index: 10;">C${cIdx + 1}Â·S${stIdx + 1}Â·${spIdx + 1}</div>`;
                         }
 
                         let content = '';
