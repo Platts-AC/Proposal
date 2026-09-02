@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.60.2 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.60.6 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.60.2</title>
+    <title>Changeout Lookup v07.60.6</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.60.2</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.60.6</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1315,7 +1315,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode Â· Shift+Double-click: Export Configuration">v07.60.2</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.60.6</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -3345,8 +3345,11 @@
 
         const API_URL = "https://script.google.com/macros/s/AKfycbwVpGwCMAct5xFhADHIbgEIpp-Klb1cjRKLbx1fgBUsv39ZA59mmaxh-fCmFBEkrGM/exec";
 
-        window.addEventListener('load', () => {
+        document.addEventListener("DOMContentLoaded", () => {
             loadAppState();
+        });
+
+        window.addEventListener('load', () => {
             applyForceDesktopUI();
             applyThemeUI();
             fetch(API_URL)
@@ -5909,7 +5912,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.60.2',
+                appVersion: 'v07.60.6',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6103,7 +6106,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.60.2_${stamp}.json`;
+                `platts_config_v07.60.6_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12173,6 +12176,8 @@
             lucide.createIcons();
         }
 
+        let appStateHydrated = false;
+
         let appState = {
             siteTagFont: 10,
             siteTagPos: 'inline-right',
@@ -12440,6 +12445,7 @@
         }
 
         function saveAppState() {
+            if (!appStateHydrated) return;
             localStorage.setItem('changeout_state_v1', JSON.stringify(appState));
         }
 
@@ -12569,6 +12575,8 @@
             } catch (e) {
                 console.error("Failed to load appState from localStorage:", e);
                 sanitizeAppState();
+            } finally {
+                appStateHydrated = true;
             }
         }
 
@@ -12867,7 +12875,7 @@
         function updateColLabelPosition(val) {
             const col = appState.columns[appState.selectedColIndex];
             col.labelPosition = val;
-            renderGrid();
+            saveAppState(); renderGrid();
         }
 
         function updateSubLabelPosition(val) {
@@ -12875,7 +12883,7 @@
             const pill = col.pills[appState.activePillIndex];
             const sub = pill.subdivisions[appState.activeSubIndex];
             sub.labelPosition = val;
-            renderGrid();
+            saveAppState(); renderGrid();
 
             if (dragContext.currentColIndex === appState.selectedColIndex &&
                 dragContext.currentPillIndex === appState.activePillIndex &&
@@ -12899,6 +12907,7 @@
                 if (subLabelPosSelect) subLabelPosSelect.value = val;
             }
 
+            saveAppState();
             renderGrid();
             updateSmartModalFields();
         }
@@ -12907,7 +12916,7 @@
         function setColTheme(themeName) {
             appState.columns[appState.selectedColIndex].theme = themeName;
             selectColumnForInspector(appState.selectedColIndex);
-            renderGrid();
+            saveAppState(); renderGrid();
         }
 
         function updateColOffset(val) {
@@ -12950,6 +12959,7 @@
                 appState.activePillIndex = col.pills.length - 1;
                 appState.activeSubIndex = 0;
                 updateInspectorPanelUI();
+                saveAppState();
                 renderGrid();
             }
         }
@@ -12959,7 +12969,7 @@
             const col = appState.columns[appState.selectedColIndex];
             col.pills[appState.activePillIndex].heightWeight = floatVal;
             document.getElementById("valPillHeightWeight").textContent = floatVal.toFixed(1);
-            renderGrid();
+            saveAppState(); renderGrid();
         }
 
         function changeSubdivisionCount(step) {
@@ -12981,6 +12991,7 @@
                 }
                 appState.activeSubIndex = pill.subdivisions.length - 1;
                 updateInspectorPanelUI();
+                saveAppState();
                 renderGrid();
             }
         }
@@ -13001,6 +13012,7 @@
                 document.getElementById("inputCustomLabel").value = "CUSTOM LABEL";
             }
 
+            saveAppState();
             renderGrid();
             if (dragContext.currentColIndex === appState.selectedColIndex &&
                 dragContext.currentPillIndex === appState.activePillIndex &&
@@ -13014,7 +13026,7 @@
             const pill = col.pills[appState.activePillIndex];
             const sub = pill.subdivisions[appState.activeSubIndex];
             sub.label = val;
-            renderGrid();
+            saveAppState(); renderGrid();
 
             if (dragContext.currentColIndex === appState.selectedColIndex &&
                 dragContext.currentPillIndex === appState.activePillIndex &&
@@ -13031,6 +13043,7 @@
 
             sub.flexWeight = floatVal;
             document.getElementById("valFlexWeight").textContent = floatVal.toFixed(1);
+            saveAppState();
             renderGrid();
 
             if (dragContext.currentColIndex === appState.selectedColIndex &&
@@ -13061,6 +13074,7 @@
             }
 
             updateInspectorPanelUI();
+            saveAppState();
             renderGrid();
 
             if (dragContext.currentColIndex === appState.selectedColIndex &&
@@ -13114,16 +13128,16 @@
         function updateUniversalWidth(val) {
             appState.universalWidth = parseInt(val);
             document.getElementById("valCellWidth").textContent = `${val}px`;
-            renderGrid();
             saveAppState();
+            renderGrid();
             updateSmartModalFields();
         }
 
         function updateUniversalHeight(val) {
             appState.universalHeight = parseInt(val);
             document.getElementById("valCellHeight").textContent = `${val}px`;
-            renderGrid();
             saveAppState();
+            renderGrid();
         }
 
         function updateColGap(val) {
@@ -13141,8 +13155,8 @@
                 });
             }
 
-            renderGrid();
             saveAppState();
+            renderGrid();
         }
 
         function stepColGap(step) {
@@ -13154,8 +13168,8 @@
         function updateRowGap(val) {
             appState.rowGap = parseInt(val);
             document.getElementById("valRowGap").textContent = `${val}px`;
-            renderGrid();
             saveAppState();
+            renderGrid();
         }
 
         // Cols & Rows count modifications
@@ -13167,8 +13181,8 @@
                 const topCounter = document.getElementById('topColCount');
                 if (topCounter) topCounter.textContent = nextCols + ' Cols';
                 renderSidebarSelectors();
-                renderGrid();
                 saveAppState();
+                renderGrid();
             }
         }
 
@@ -13194,6 +13208,7 @@
             document.getElementById("colGapValueInline").textContent = "6px";
             document.getElementById("valRowGap").textContent = "14px";
 
+            saveAppState();
             renderGrid();
         }
 
@@ -13434,8 +13449,8 @@
         function adjustColWidth(colIndex, step) {
             const col = appState.columns[colIndex];
             col.offset = Math.max(-400, Math.min(250, col.offset + step));
-            renderGrid();
             saveAppState();
+            renderGrid();
         }
 
         function adjustIndicatorStripHeight(step) {
@@ -13467,6 +13482,7 @@
                 updateInspectorPanelUI();
             }
 
+            saveAppState();
             renderGrid();
             updateSmartModalFields();
         }
@@ -13516,7 +13532,7 @@
             const pill = appState.columns[dragContext.currentColIndex].pills[dragContext.currentPillIndex];
             const sub = pill.subdivisions[dragContext.currentSubIndex];
             sub.flexWeight = Math.max(0.1, Math.round((sub.flexWeight + step) * 10) / 10);
-            renderGrid();
+            saveAppState(); renderGrid();
             updateSmartModalFields();
         }
 
@@ -13525,7 +13541,7 @@
             const pill = appState.columns[dragContext.currentColIndex].pills[dragContext.currentPillIndex];
             pill.heightWeight = Math.max(0.1, Math.round((pill.heightWeight + step) * 10) / 10);
             document.getElementById("modalHeightWeightVal").textContent = pill.heightWeight.toFixed(1);
-            renderGrid();
+            saveAppState(); renderGrid();
             updateSmartModalFields();
         }
 
@@ -13597,6 +13613,7 @@
                 }
 
                 updateInspectorPanelUI();
+                saveAppState();
                 renderGrid();
                 updateSmartModalFields();
             }
@@ -13641,6 +13658,7 @@
                 }
 
                 updateInspectorPanelUI();
+                saveAppState();
                 renderGrid();
                 updateSmartModalFields();
             }
@@ -13897,6 +13915,7 @@
                 document.getElementById("inputCustomLabel").value = val;
             }
 
+            saveAppState();
             renderGrid();
         }
 
@@ -15197,7 +15216,6 @@
             });
 
             lucide.createIcons();
-            saveAppState();
         }
 
         // EXPORT & STATE BLUEPRINT BUILDER
