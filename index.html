@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.61.2 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.61.3 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.61.2</title>
+    <title>Changeout Lookup v07.61.3</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.61.2</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.61.3</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1321,7 +1321,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.61.2</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.61.3</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5918,7 +5918,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.61.2',
+                appVersion: 'v07.61.3',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6112,7 +6112,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.61.2_${stamp}.json`;
+                `platts_config_v07.61.3_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -15364,6 +15364,15 @@
                 .replace(/WITH MAX/g, "WIDTH MAX")
                 .replace(/WITH MIN/g, "WIDTH MIN")
                 .replace(/WITH (?=\d)/g, "WIDTH ")
+                .replace(/REMOVE 5:10/g, "REMOVE 5 TON")
+                .replace(/REMOVE 5-10/g, "REMOVE 5 TON")
+                .replace(/SHOW 5:10/g, "SHOW 5 TON")
+                .replace(/SHOW 5-10/g, "SHOW 5 TON")
+                .replace(/FILTER 5:10/g, "FILTER 5 TON")
+                .replace(/FILTER 5-10/g, "FILTER 5 TON")
+                .replace(/^5:10$/g, "5 TON")
+                .replace(/^5-10$/g, "5 TON")
+                .replace(/CLEARVIEW/g, "CLEAR VIEW")
                 .replace(/,/g, "");
         }
 
@@ -15372,7 +15381,7 @@
             "SEVEN": 7, "EIGHT": 8, "NINE": 9, "TEN": 10
         };
 
-﻿        function parseVoiceLimitIntent(text, intents) {
+        function parseVoiceLimitIntent(text, intents) {
             let countStr = '';
             let m1 = text.match(/(?:SHOW|TOP|SHOW ME)\s+(?:MAXIMUM\s+)?([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)/);
             if (m1) countStr = m1[1];
@@ -15414,7 +15423,7 @@
         function parseVoiceFilterIntents(text, intents, isRemove) {
             let active = { ...(appState.activeFilters || {}) };
             let filterChanged = false;
-            
+
             const processRemoval = (key, val, friendlyName) => {
                 if (active[key] && active[key].includes(val)) {
                     active[key] = active[key].filter(v => v !== val);
@@ -15423,7 +15432,7 @@
                     filterChanged = true;
                 }
             };
-            
+
             const processSet = (key, val, friendlyName) => {
                 active[key] = [val];
                 intents.actionLog.applied.push(friendlyName);
@@ -15437,13 +15446,13 @@
                     processSet(key, val, friendlyName);
                 }
             };
-            
+
             const applyMultiVal = (key, vals, friendlyName) => {
                 if (isRemove) {
                     let removedAny = false;
                     if (active[key]) {
                         vals.forEach(v => {
-                            if(active[key].includes(v)) {
+                            if (active[key].includes(v)) {
                                 active[key] = active[key].filter(existing => existing !== v);
                                 removedAny = true;
                             }
@@ -15496,7 +15505,7 @@
             } else if (text.includes("APARTMENT COASTAL")) applyVal('applicationStyle', 'APARTMENT COASTAL', 'Apartment Coastal');
             else if (text.includes("COASTAL")) applyVal('applicationStyle', 'COASTAL', 'Coastal');
             else if (text.includes("STANDARD")) applyVal('applicationStyle', 'STANDARD', 'Standard');
-            
+
             if (text.includes("OCEANA")) applyVal('site', 'Oceana', 'Oceana');
 
             if (!isRemove) {
@@ -15559,6 +15568,7 @@
 
         function applyVoiceIntents(intents) {
             let changed = false;
+            let renderDurationMs = 0;
             if (intents.filters !== undefined) {
                 appState.activeFilters = intents.filters;
                 changed = true;
@@ -15573,16 +15583,19 @@
             }
             if (changed) {
                 saveAppState();
+                const renderStart = performance.now();
                 renderGrid();
+                renderDurationMs = performance.now() - renderStart;
             }
+            return renderDurationMs;
         }
-        
+
         function showVoiceConfirmation(rawTranscript, actionLog, duration = 5000) {
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
             toast.className = 'bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl border border-slate-700 transition-all duration-500 transform -translate-y-full opacity-0';
-            
+
             const heardP = document.createElement('div');
             heardP.style.marginBottom = '2px';
             const hb = document.createElement('strong');
@@ -15590,7 +15603,7 @@
             heardP.appendChild(hb);
             heardP.appendChild(document.createTextNode(rawTranscript));
             toast.appendChild(heardP);
-            
+
             if (actionLog.applied.length > 0) {
                 const p = document.createElement('div');
                 const b = document.createElement('strong');
@@ -15623,7 +15636,7 @@
                 p.appendChild(document.createTextNode(actionLog.view.join(' · ')));
                 toast.appendChild(p);
             }
-            
+
             if (actionLog.applied.length === 0 && actionLog.removed.length === 0 && actionLog.cleared.length === 0 && actionLog.view.length === 0) {
                 const p = document.createElement('div');
                 const b = document.createElement('strong');
@@ -15632,7 +15645,7 @@
                 p.appendChild(document.createTextNode('No recognized command'));
                 toast.appendChild(p);
             }
-            
+
             container.appendChild(toast);
             setTimeout(() => { toast.classList.remove('-translate-y-full', 'opacity-0'); }, 10);
             setTimeout(() => {
@@ -15659,9 +15672,13 @@
                 voiceBtn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
             }
 
+            const voiceStartTime = performance.now();
             recognition.start();
 
             recognition.onresult = function (event) {
+                const recognitionLatencyMs = performance.now() - voiceStartTime;
+                const parseStart = performance.now();
+
                 const rawTranscript = event.results[0][0].transcript;
                 let speechResult = normalizeVoiceTranscript(rawTranscript);
 
@@ -15673,7 +15690,7 @@
                         view: []
                     }
                 };
-                
+
                 // Mode checks
                 if (speechResult.match(/CLEAR ALL/)) {
                     intents.filters = {};
@@ -15702,7 +15719,7 @@
                     intents.actionLog.cleared.push('All (Filters & View)');
                 } else {
                     let isRemove = speechResult.startsWith("REMOVE") || speechResult.startsWith("CLEAR") || speechResult.startsWith("TAKE OFF");
-                    
+
                     if (!isRemove) {
                         parseVoiceSortIntent(speechResult, intents);
                         parseVoiceLimitIntent(speechResult, intents);
@@ -15710,8 +15727,12 @@
                     parseVoiceFilterIntents(speechResult, intents, isRemove);
                 }
 
-                applyVoiceIntents(intents);
+                const parseDurationMs = performance.now() - parseStart;
+                const renderDurationMs = applyVoiceIntents(intents);
+
                 showVoiceConfirmation(rawTranscript, intents.actionLog);
+
+                console.debug(`[Voice Timing]\nRecognition: ${recognitionLatencyMs.toFixed(1)} ms\nParse: ${parseDurationMs.toFixed(1)} ms\nRender: ${renderDurationMs.toFixed(1)} ms\nTotal after recognition: ${(parseDurationMs + renderDurationMs).toFixed(1)} ms`);
             };
 
             recognition.onerror = function (event) {
@@ -21943,15 +21964,19 @@
 
 
     <!-- VOICE COMMAND HELP MODAL -->
-    <div id="voice-help-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center pt-10 sm:pt-20 pb-10 px-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden max-h-[85vh]">
+    <div id="voice-help-modal"
+        class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center pt-10 sm:pt-20 pb-10 px-4">
+        <div
+            class="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden max-h-[85vh]">
             <!-- Header -->
-            <div class="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800/80 sticky top-0 shrink-0">
+            <div
+                class="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800/80 sticky top-0 shrink-0">
                 <div class="flex items-center gap-3">
                     <i data-lucide="mic" class="w-5 h-5 text-indigo-400"></i>
                     <h2 class="text-lg font-bold text-slate-100">Voice Commands</h2>
                 </div>
-                <button onclick="closeVoiceHelpModal()" class="text-slate-400 hover:text-white transition-colors cursor-pointer p-1">
+                <button onclick="closeVoiceHelpModal()"
+                    class="text-slate-400 hover:text-white transition-colors cursor-pointer p-1">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -21960,7 +21985,8 @@
                 <!-- SET -->
                 <div class="border border-slate-700 rounded-lg p-3 bg-slate-900/50">
                     <h3 class="text-indigo-400 font-bold mb-2 uppercase text-[10px] tracking-wider">SET / FILTER</h3>
-                    <p class="text-slate-400 mb-2 leading-relaxed">Speaking a recognized value SETS that category. Repeating it keeps it selected.</p>
+                    <p class="text-slate-400 mb-2 leading-relaxed">Speaking a recognized value SETS that category.
+                        Repeating it keeps it selected.</p>
                     <div class="grid grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
                         <div class="bg-slate-800 px-2 py-1 rounded">"four ton"</div>
                         <div class="bg-slate-800 px-2 py-1 rounded">"five ton straight cool"</div>
@@ -21972,11 +21998,12 @@
                         <div class="bg-slate-800 px-2 py-1 rounded">"price under 9000"</div>
                     </div>
                 </div>
-                
+
                 <!-- REMOVE -->
                 <div class="border border-slate-700 rounded-lg p-3 bg-slate-900/50">
                     <h3 class="text-rose-400 font-bold mb-2 uppercase text-[10px] tracking-wider">REMOVE</h3>
-                    <p class="text-slate-400 mb-2 leading-relaxed">REMOVE subtracts only the named values. Multiple values may be removed in one command.</p>
+                    <p class="text-slate-400 mb-2 leading-relaxed">REMOVE subtracts only the named values. Multiple
+                        values may be removed in one command.</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
                         <div class="bg-slate-800 px-2 py-1 rounded">"remove four ton"</div>
                         <div class="bg-slate-800 px-2 py-1 rounded">"remove coastal"</div>
@@ -21984,21 +22011,29 @@
                         <div class="bg-slate-800 px-2 py-1 rounded">"remove price"</div>
                     </div>
                 </div>
-                
+
                 <!-- CLEAR -->
                 <div class="border border-emerald-900/50 rounded-lg p-3 bg-slate-900/50">
                     <h3 class="text-emerald-400 font-bold mb-2 uppercase text-[10px] tracking-wider">CLEAR</h3>
                     <p class="text-slate-400 mb-2 leading-relaxed">Clears selections completely.</p>
                     <div class="space-y-1.5 text-slate-300">
-                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear filters"</span> <span class="text-slate-400 text-xs text-left">Clears search filters only</span></div>
-                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear view"</span> <span class="text-slate-400 text-xs text-left">Clears sort + Top-N/Both Ends</span></div>
-                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear all"</span> <span class="text-slate-400 text-xs text-left">Clears filters + view concurrently</span></div>
+                        <div class="flex items-center gap-2"><span
+                                class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear filters"</span>
+                            <span class="text-slate-400 text-xs text-left">Clears search filters only</span></div>
+                        <div class="flex items-center gap-2"><span
+                                class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear view"</span>
+                            <span class="text-slate-400 text-xs text-left">Clears sort + Top-N/Both Ends</span></div>
+                        <div class="flex items-center gap-2"><span
+                                class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear all"</span>
+                            <span class="text-slate-400 text-xs text-left">Clears filters + view concurrently</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- RESULTS VIEW & MIXED -->
                 <div class="border border-amber-900/50 rounded-lg p-3 bg-slate-900/50">
-                    <h3 class="text-amber-400 font-bold mb-2 uppercase text-[10px] tracking-wider">RESULT VIEW & COMBINED</h3>
+                    <h3 class="text-amber-400 font-bold mb-2 uppercase text-[10px] tracking-wider">RESULT VIEW &
+                        COMBINED</h3>
                     <p class="text-slate-400 mb-2 leading-relaxed">Limit or sort the results.</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
                         <div class="bg-slate-800 px-2 py-1 rounded">"three cheapest"</div>
@@ -22006,17 +22041,19 @@
                         <div class="bg-slate-800 px-2 py-1 rounded">"five most expensive"</div>
                         <div class="bg-slate-800 px-2 py-1 rounded">"three cheapest and three most expensive"</div>
                         <div class="bg-slate-800 px-2 py-1 rounded text-amber-300 font-bold">"show both ends"</div>
-                        <div class="bg-slate-800 px-2 py-1 rounded text-indigo-300 font-bold">"three cheapest four ton"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded text-indigo-300 font-bold">"three cheapest four ton"
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Footer -->
             <div class="p-3 border-t border-slate-700 bg-slate-900 flex justify-end">
-                <button onclick="closeVoiceHelpModal()" class="px-4 py-1.5 focus:outline-none bg-slate-700 hover:bg-slate-600 text-white rounded text-xs font-bold transition-colors">Close</button>
+                <button onclick="closeVoiceHelpModal()"
+                    class="px-4 py-1.5 focus:outline-none bg-slate-700 hover:bg-slate-600 text-white rounded text-xs font-bold transition-colors">Close</button>
             </div>
         </div>
     </div>
-    
+
     <script>
         function openVoiceHelpModal() {
             const modal = document.getElementById('voice-help-modal');
