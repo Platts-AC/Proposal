@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.60.6 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.61.2 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.60.6</title>
+    <title>Changeout Lookup v07.61.2</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,14 +467,14 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.60.6</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.61.2</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
             </div>
 
             <!-- Zone 2: Middle Toolbar (Deterministic Responsive Grid) -->
-            <div class="grid grid-cols-3 sm:flex sm:flex-row items-center gap-1.5 shrink-0 mt-1 sm:mt-0">
+            <div class="grid grid-cols-4 sm:flex sm:flex-row items-center gap-1.5 shrink-0 mt-1 sm:mt-0">
                 <!-- Audit Bell Button -->
                 <button id="audit-bell-btn" onclick="openAuditModal()"
                     class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm relative"
@@ -488,6 +488,12 @@
                     class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
                     title="Voice Search">
                     <i data-lucide="mic" class="w-4 h-4"></i>
+                </button>
+                <!-- Voice Help Button -->
+                <button id="voice-help-btn" onclick="openVoiceHelpModal()"
+                    class="flex items-center justify-center w-8 h-8 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
+                    title="Voice Command Help">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
                 </button>
                 <!-- New Quote Button -->
                 <button id="btnNewQuote" onclick="masterNewQuote()"
@@ -1315,7 +1321,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.60.6</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.61.2</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5912,7 +5918,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.60.6',
+                appVersion: 'v07.61.2',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6106,7 +6112,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.60.6_${stamp}.json`;
+                `platts_config_v07.61.2_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -15366,104 +15372,142 @@
             "SEVEN": 7, "EIGHT": 8, "NINE": 9, "TEN": 10
         };
 
-        function parseVoiceLimitIntent(text, intents) {
-            if (text.match(/CLEAR LIMIT|SHOW ALL|CLEAR EVERYTHING/)) {
-                intents.limit = null;
-            } else {
-                let countStr = '';
-                let m1 = text.match(/(?:SHOW|TOP|SHOW ME)\s+(?:MAXIMUM\s+)?([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)/);
-                if (m1) countStr = m1[1];
-                let m2 = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)\s+(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE|MOST EXPENSIVE|HIGHEST PRICE|HIGHEST PRICED)/);
-                if (m2) countStr = m2[1];
-                let mDual = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN).*(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE).*AND/);
-                if (mDual) countStr = mDual[1];
+﻿        function parseVoiceLimitIntent(text, intents) {
+            let countStr = '';
+            let m1 = text.match(/(?:SHOW|TOP|SHOW ME)\s+(?:MAXIMUM\s+)?([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)/);
+            if (m1) countStr = m1[1];
+            let m2 = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN)\s+(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE|MOST EXPENSIVE|HIGHEST PRICE|HIGHEST PRICED)/);
+            if (m2) countStr = m2[1];
+            let mDual = text.match(/([0-9]+|ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN).*(?:CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE).*AND/);
+            if (mDual) countStr = mDual[1];
 
-                if (countStr) {
-                    let count = parseInt(countStr);
-                    if (isNaN(count) && WORD_TO_NUM[countStr]) {
-                        count = WORD_TO_NUM[countStr];
-                    }
-                    if (count > 0 && count <= 50) intents.limit = count;
-                } else if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/)) {
-                    intents.limit = 1;
+            if (countStr) {
+                let count = parseInt(countStr);
+                if (isNaN(count) && WORD_TO_NUM[countStr]) {
+                    count = WORD_TO_NUM[countStr];
                 }
+                if (count > 0 && count <= 50) {
+                    intents.limit = count;
+                    intents.actionLog.view.push('Top ' + count);
+                }
+            } else if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/)) {
+                intents.limit = 1;
+                if (!intents.actionLog.view.includes('Both Ends')) intents.actionLog.view.push('Both Ends');
             }
         }
 
         function parseVoiceSortIntent(text, intents) {
-            if (text.match(/CLEAR SORT|CLEAR SORTING|CLEAR EVERYTHING/)) {
-                intents.sort = null;
-            } else if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/) || text.match(/(?:[0-9]+|ONE|TWO|THREE).*(?:CHEAPEST|LOWEST).*AND.*(?:[0-9]+|ONE|TWO|THREE).*(?:MOST EXPENSIVE|HIGHEST)/)) {
+            if (text.match(/CHEAPEST AND MOST EXPENSIVE|LOWEST AND HIGHEST|(?:SHOW )?BOTH ENDS/) || text.match(/(?:[0-9]+|ONE|TWO|THREE).*(?:CHEAPEST|LOWEST).*AND.*(?:[0-9]+|ONE|TWO|THREE).*(?:MOST EXPENSIVE|HIGHEST)/)) {
                 intents.sort = { field: 'price', direction: 'both' };
+                if (!intents.actionLog.view.includes('Both Ends')) intents.actionLog.view.push('Both Ends');
             } else {
                 if (text.match(/CHEAPEST|LOWEST PRICE|LOWEST PRICED|LEAST EXPENSIVE/)) {
                     intents.sort = { field: 'price', direction: 'asc' };
+                    intents.actionLog.view.push('Cheapest First');
                 } else if (text.match(/MOST EXPENSIVE|HIGHEST PRICE|HIGHEST PRICED/)) {
                     intents.sort = { field: 'price', direction: 'desc' };
+                    intents.actionLog.view.push('Most Expensive First');
                 }
             }
         }
 
-        function parseVoiceFilterIntents(text, intents) {
+        function parseVoiceFilterIntents(text, intents, isRemove) {
             let active = { ...(appState.activeFilters || {}) };
+            let filterChanged = false;
+            
+            const processRemoval = (key, val, friendlyName) => {
+                if (active[key] && active[key].includes(val)) {
+                    active[key] = active[key].filter(v => v !== val);
+                    intents.actionLog.removed.push(friendlyName);
+                    if (active[key].length === 0) delete active[key];
+                    filterChanged = true;
+                }
+            };
+            
+            const processSet = (key, val, friendlyName) => {
+                active[key] = [val];
+                intents.actionLog.applied.push(friendlyName);
+                filterChanged = true;
+            };
 
-            if (text.match(/CLEAR EVERYTHING|CLEAR FILTERS/)) {
-                active = {};
-            } else {
-                if (text.match(/CLEAR WIDTH|REMOVE WIDTH/)) delete active.width;
-                if (text.match(/CLEAR HEIGHT/)) delete active.height;
-                if (text.match(/CLEAR STAGE/)) delete active.mechanicalStage;
-                if (text.match(/CLEAR CAPACITY/)) delete active.capacity;
-                if (text.match(/CLEAR BRAND/)) delete active.brand;
-                if (text.match(/CLEAR SYSTEM TYPE/)) delete active.systemType;
-                if (text.match(/CLEAR APPLICATION STYLE/)) delete active.applicationStyle;
-
-                const isAdditive = text.match(/ALSO |ADD /);
-                const applyVal = (key, val) => {
-                    if (isAdditive && active[key]) {
-                        if (!active[key].includes(val)) active[key].push(val);
-                    } else {
-                        active[key] = [val];
+            const applyVal = (key, val, friendlyName) => {
+                if (isRemove) {
+                    processRemoval(key, val, friendlyName);
+                } else {
+                    processSet(key, val, friendlyName);
+                }
+            };
+            
+            const applyMultiVal = (key, vals, friendlyName) => {
+                if (isRemove) {
+                    let removedAny = false;
+                    if (active[key]) {
+                        vals.forEach(v => {
+                            if(active[key].includes(v)) {
+                                active[key] = active[key].filter(existing => existing !== v);
+                                removedAny = true;
+                            }
+                        });
+                        if (active[key].length === 0) delete active[key];
                     }
-                };
+                    if (removedAny) { intents.actionLog.removed.push(friendlyName); filterChanged = true; }
+                } else {
+                    active[key] = [...vals];
+                    intents.actionLog.applied.push(friendlyName);
+                    filterChanged = true;
+                }
+            };
 
-                if (text.match(/1\.5 TONS?|ONE AND A HALF TONS?/)) applyVal('capacity', '1.5 Ton');
-                else if (text.match(/2\.5 TONS?|TWO AND A HALF TONS?/)) applyVal('capacity', '2.5 Ton');
-                else if (text.match(/3\.5 TONS?|THREE AND A HALF TONS?/)) applyVal('capacity', '3.5 Ton');
-                else if (text.match(/2 TONS?|TWO TONS?/)) applyVal('capacity', '2 Ton');
-                else if (text.match(/3 TONS?|THREE TONS?/)) applyVal('capacity', '3 Ton');
-                else if (text.match(/4 TONS?|FOUR TONS?/)) applyVal('capacity', '4 Ton');
-                else if (text.match(/5 TONS?|FIVE TONS?/)) applyVal('capacity', '5 Ton');
+            if (isRemove) {
+                if (text.match(/WIDTH/) && active.width) { delete active.width; intents.actionLog.removed.push('Width'); filterChanged = true; }
+                if (text.match(/HEIGHT/) && active.height) { delete active.height; intents.actionLog.removed.push('Height'); filterChanged = true; }
+                if (text.match(/PRICE/) && active.price) { delete active.price; intents.actionLog.removed.push('Price'); filterChanged = true; }
+                if (text.match(/SEER/) && active.seer2) { delete active.seer2; intents.actionLog.removed.push('SEER'); filterChanged = true; }
+                if (text.match(/STAGE/) && active.mechanicalStage) { delete active.mechanicalStage; intents.actionLog.removed.push('Stage'); filterChanged = true; }
+                if (text.match(/CAPACITY/) && active.capacity) { delete active.capacity; intents.actionLog.removed.push('Capacity'); filterChanged = true; }
+                if (text.match(/BRAND/) && active.brand) { delete active.brand; intents.actionLog.removed.push('Brand'); filterChanged = true; }
+                if (text.match(/SYSTEM TYPE/) && active.systemType) { delete active.systemType; intents.actionLog.removed.push('System Type'); filterChanged = true; }
+                if (text.match(/APPLICATION STYLE/) && active.applicationStyle) { delete active.applicationStyle; intents.actionLog.removed.push('Application Style'); filterChanged = true; }
+            }
 
-                if (text.includes("SINGLE STAGE") || text.includes("1 STAGE") || text.includes("ONE STAGE")) applyVal('mechanicalStage', 'SINGLE STAGE');
-                else if (text.includes("TWO STAGE") || text.includes("2 STAGE")) applyVal('mechanicalStage', '2 STAGE');
-                else if (text.includes("VARIABLE")) applyVal('mechanicalStage', 'VARIABLE SPEED');
+            if (text.match(/1\.5 TONS?|ONE AND A HALF TONS?/)) applyVal('capacity', '1.5 Ton', '1.5 Ton');
+            else if (text.match(/2\.5 TONS?|TWO AND A HALF TONS?/)) applyVal('capacity', '2.5 Ton', '2.5 Ton');
+            else if (text.match(/3\.5 TONS?|THREE AND A HALF TONS?/)) applyVal('capacity', '3.5 Ton', '3.5 Ton');
+            else if (text.match(/2 TONS?|TWO TONS?/)) applyVal('capacity', '2 Ton', '2 Ton');
+            else if (text.match(/3 TONS?|THREE TONS?/)) applyVal('capacity', '3 Ton', '3 Ton');
+            else if (text.match(/4 TONS?|FOUR TONS?/)) applyVal('capacity', '4 Ton', '4 Ton');
+            else if (text.match(/5 TONS?|FIVE TONS?/)) applyVal('capacity', '5 Ton', '5 Ton');
 
-                if (text.includes("STRAIGHT COOL") || text.includes("AIR CONDITIONER") || text.includes("AC ")) applyVal('systemType', 'STRAIGHT COOL');
-                else if (text.includes("HEAT PUMP")) applyVal('systemType', 'HEAT PUMP');
-                else if (text.includes("FURNACE") || text.includes("GAS")) applyVal('systemType', 'Gas Furnace');
+            if (text.includes("SINGLE STAGE") || text.includes("1 STAGE") || text.includes("ONE STAGE")) applyVal('mechanicalStage', 'SINGLE STAGE', 'Single Stage');
+            else if (text.includes("TWO STAGE") || text.includes("2 STAGE")) applyVal('mechanicalStage', '2 STAGE', '2 Stage');
+            else if (text.includes("VARIABLE")) applyVal('mechanicalStage', 'VARIABLE SPEED', 'Variable Speed');
 
-                if (text.includes("CARRIER")) applyVal('brand', 'CARRIER');
-                if (text.includes("COMFORTMAKER") || text.includes("C-MAKER")) applyVal('brand', 'COMFORTMAKER');
-                if (text.includes("RUUD")) applyVal('brand', 'RUUD');
-                if (text.includes("DURASTAR")) applyVal('brand', 'DURASTAR');
+            if (text.includes("STRAIGHT COOL") || text.includes("AIR CONDITIONER") || text.includes("AC ")) applyVal('systemType', 'STRAIGHT COOL', 'Straight Cool');
+            else if (text.includes("HEAT PUMP")) applyVal('systemType', 'HEAT PUMP', 'Heat Pump');
+            else if (text.includes("FURNACE") || text.includes("GAS")) applyVal('systemType', 'Gas Furnace', 'Gas Furnace');
 
-                if (text.includes("ANY COASTAL") || text.includes("ALL COASTAL")) {
-                    if (!isAdditive || !active['applicationStyle']) active['applicationStyle'] = [];
-                    if (!active['applicationStyle'].includes('COASTAL')) active['applicationStyle'].push('COASTAL');
-                    if (!active['applicationStyle'].includes('APARTMENT COASTAL')) active['applicationStyle'].push('APARTMENT COASTAL');
-                } else if (text.includes("APARTMENT COASTAL")) applyVal('applicationStyle', 'APARTMENT COASTAL');
-                else if (text.includes("COASTAL")) applyVal('applicationStyle', 'COASTAL');
-                else if (text.includes("STANDARD")) applyVal('applicationStyle', 'STANDARD');
+            if (text.includes("CARRIER")) applyVal('brand', 'CARRIER', 'Carrier');
+            if (text.includes("COMFORTMAKER") || text.includes("C-MAKER")) applyVal('brand', 'COMFORTMAKER', 'Comfortmaker');
+            if (text.includes("RUUD")) applyVal('brand', 'RUUD', 'Ruud');
+            if (text.includes("DURASTAR")) applyVal('brand', 'DURASTAR', 'DuraStar');
 
-                const tryExtract = (speech, field, regexLess, regexMore) => {
+            if (text.includes("ANY COASTAL") || text.includes("ALL COASTAL")) {
+                applyMultiVal('applicationStyle', ['COASTAL', 'APARTMENT COASTAL'], 'Any Coastal');
+            } else if (text.includes("APARTMENT COASTAL")) applyVal('applicationStyle', 'APARTMENT COASTAL', 'Apartment Coastal');
+            else if (text.includes("COASTAL")) applyVal('applicationStyle', 'COASTAL', 'Coastal');
+            else if (text.includes("STANDARD")) applyVal('applicationStyle', 'STANDARD', 'Standard');
+            
+            if (text.includes("OCEANA")) applyVal('site', 'Oceana', 'Oceana');
+
+            if (!isRemove) {
+                const tryExtract = (speech, field, regexLess, regexMore, friendlyField) => {
                     for (let r of regexLess) {
                         let m = speech.match(r);
-                        if (m) { applyVal(field, '<' + m[1]); return true; }
+                        if (m) { applyVal(field, '<' + m[1], friendlyField + ' < ' + m[1]); return true; }
                     }
                     for (let r of regexMore) {
                         let m = speech.match(r);
-                        if (m) { applyVal(field, '>' + m[1]); return true; }
+                        if (m) { applyVal(field, '>' + m[1], friendlyField + ' > ' + m[1]); return true; }
                     }
                     return false;
                 };
@@ -15478,7 +15522,7 @@
                     /(?:OVER|GREATER(?: THAN)?|MORE(?: THAN)?|AT LEAST|MIN(?:IMUM)?)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*WIDE|INCHES)/,
                     /(?:OVER|GREATER(?: THAN)?|MORE(?: THAN)?|AT LEAST|MIN(?:IMUM)?)\s*(\d+(?:\.\d+)?)\s+WIDE/
                 ];
-                tryExtract(text, 'width', wLess, wMore);
+                tryExtract(text, 'width', wLess, wMore, 'Width');
 
                 let hLess = [
                     /HEIGHT.*?UNDER\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?LESS\s*(\d+(?:\.\d+)?)/, /HEIGHT.*?BELOW\s*(\d+(?:\.\d+)?)/,
@@ -15490,7 +15534,7 @@
                     /(?:OVER|GREATER(?: THAN)?|TALLER(?: THAN)?|AT LEAST)\s*(\d+(?:\.\d+)?)\s*(?:INCHES\s*TALL|INCHES)/,
                     /(?:OVER|GREATER(?: THAN)?|TALLER(?: THAN)?|AT LEAST)\s*(\d+(?:\.\d+)?)\s+TALL/
                 ];
-                tryExtract(text, 'height', hLess, hMore);
+                tryExtract(text, 'height', hLess, hMore, 'Height');
 
                 let pLess = [
                     /PRICE.*?UNDER\s*(\d+(?:\.\d+)?)/, /PRICE.*?LESS THAN\s*(\d+(?:\.\d+)?)/,
@@ -15502,27 +15546,106 @@
                     /PRICE\s+(?:OVER|GREATER THAN|AT LEAST|MIN)\s+(\d+(?:\.\d+)?)/,
                     /(?:OVER|GREATER THAN|AT LEAST|MIN)\s+(\d+(?:\.\d+)?)\s*DOLLARS/
                 ];
-                tryExtract(text, 'price', pLess, pMore);
+                tryExtract(text, 'price', pLess, pMore, 'Price');
 
                 let sLess = [/SEER.*?UNDER\s*(\d+(?:\.\d+)?)/];
                 let sMore = [/SEER.*?OVER\s*(\d+(?:\.\d+)?)/, /SEER.*?AT\s+LEAST\s*(\d+(?:\.\d+)?)/];
-                tryExtract(text, 'seer2', sLess, sMore);
+                tryExtract(text, 'seer2', sLess, sMore, 'SEER');
             }
-            intents.filters = active;
+            if (filterChanged) {
+                intents.filters = active;
+            }
         }
 
         function applyVoiceIntents(intents) {
-            if (intents.filters !== undefined) appState.activeFilters = intents.filters;
-            if (intents.sort !== undefined) appState.resultSort = intents.sort;
-            if (intents.limit !== undefined) appState.resultLimit = intents.limit;
-            renderGrid();
+            let changed = false;
+            if (intents.filters !== undefined) {
+                appState.activeFilters = intents.filters;
+                changed = true;
+            }
+            if (intents.sort !== undefined) {
+                appState.resultSort = intents.sort;
+                changed = true;
+            }
+            if (intents.limit !== undefined) {
+                appState.resultLimit = intents.limit;
+                changed = true;
+            }
+            if (changed) {
+                saveAppState();
+                renderGrid();
+            }
+        }
+        
+        function showVoiceConfirmation(rawTranscript, actionLog, duration = 5000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl border border-slate-700 transition-all duration-500 transform -translate-y-full opacity-0';
+            
+            const heardP = document.createElement('div');
+            heardP.style.marginBottom = '2px';
+            const hb = document.createElement('strong');
+            hb.textContent = 'Heard: ';
+            heardP.appendChild(hb);
+            heardP.appendChild(document.createTextNode(rawTranscript));
+            toast.appendChild(heardP);
+            
+            if (actionLog.applied.length > 0) {
+                const p = document.createElement('div');
+                const b = document.createElement('strong');
+                b.textContent = 'Applied: ';
+                p.appendChild(b);
+                p.appendChild(document.createTextNode(actionLog.applied.join(' · ')));
+                toast.appendChild(p);
+            }
+            if (actionLog.removed.length > 0) {
+                const p = document.createElement('div');
+                const b = document.createElement('strong');
+                b.textContent = 'Removed: ';
+                p.appendChild(b);
+                p.appendChild(document.createTextNode(actionLog.removed.join(' · ')));
+                toast.appendChild(p);
+            }
+            if (actionLog.cleared.length > 0) {
+                const p = document.createElement('div');
+                const b = document.createElement('strong');
+                b.textContent = 'Cleared: ';
+                p.appendChild(b);
+                p.appendChild(document.createTextNode(actionLog.cleared.join(' · ')));
+                toast.appendChild(p);
+            }
+            if (actionLog.view.length > 0) {
+                const p = document.createElement('div');
+                const b = document.createElement('strong');
+                b.textContent = 'View: ';
+                p.appendChild(b);
+                p.appendChild(document.createTextNode(actionLog.view.join(' · ')));
+                toast.appendChild(p);
+            }
+            
+            if (actionLog.applied.length === 0 && actionLog.removed.length === 0 && actionLog.cleared.length === 0 && actionLog.view.length === 0) {
+                const p = document.createElement('div');
+                const b = document.createElement('strong');
+                b.textContent = 'Applied: ';
+                p.appendChild(b);
+                p.appendChild(document.createTextNode('No recognized command'));
+                toast.appendChild(p);
+            }
+            
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('-translate-y-full', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('-translate-y-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, duration);
         }
 
-        // â”€â”€ VOICE COMMAND ENGINE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ─── VOICE COMMAND ENGINE ──────────────────────────────────────────
         function activateVoiceCommand() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                showToast("âš ï¸ Voice command not supported in this browser.");
+                showToast("⚠️ Voice command not supported in this browser.");
                 return;
             }
             const recognition = new SpeechRecognition();
@@ -15539,24 +15662,65 @@
             recognition.start();
 
             recognition.onresult = function (event) {
-                let speechResult = normalizeVoiceTranscript(event.results[0][0].transcript);
+                const rawTranscript = event.results[0][0].transcript;
+                let speechResult = normalizeVoiceTranscript(rawTranscript);
 
-                let intents = {};
-                parseVoiceSortIntent(speechResult, intents);
-                parseVoiceLimitIntent(speechResult, intents);
-                parseVoiceFilterIntents(speechResult, intents);
+                let intents = {
+                    actionLog: {
+                        applied: [],
+                        removed: [],
+                        cleared: [],
+                        view: []
+                    }
+                };
+                
+                // Mode checks
+                if (speechResult.match(/CLEAR ALL/)) {
+                    intents.filters = {};
+                    intents.sort = null;
+                    intents.limit = null;
+                    intents.actionLog.cleared.push('All (Filters & View)');
+                } else if (speechResult.match(/CLEAR FILTERS/)) {
+                    intents.filters = {};
+                    intents.actionLog.cleared.push('Filters');
+                } else if (speechResult.match(/CLEAR VIEW/)) {
+                    intents.sort = null;
+                    intents.limit = null;
+                    intents.actionLog.cleared.push('Result View');
+                } else if (speechResult.match(/SHOW ALL/) || speechResult.match(/CLEAR LIMIT/)) {
+                    intents.limit = null;
+                    intents.actionLog.cleared.push('Result Limit');
+                    // Existing grammar preservation from v07.61.2
+                } else if (speechResult.match(/CLEAR SORT|CLEAR SORTING/)) {
+                    intents.sort = null;
+                    intents.actionLog.cleared.push('Result Sorting');
+                    // Existing grammar preservation from v07.61.2
+                } else if (speechResult.match(/CLEAR EVERYTHING/)) {
+                    intents.filters = {};
+                    intents.sort = null;
+                    intents.limit = null;
+                    intents.actionLog.cleared.push('All (Filters & View)');
+                } else {
+                    let isRemove = speechResult.startsWith("REMOVE") || speechResult.startsWith("CLEAR") || speechResult.startsWith("TAKE OFF");
+                    
+                    if (!isRemove) {
+                        parseVoiceSortIntent(speechResult, intents);
+                        parseVoiceLimitIntent(speechResult, intents);
+                    }
+                    parseVoiceFilterIntents(speechResult, intents, isRemove);
+                }
 
                 applyVoiceIntents(intents);
-                showToast('ðŸŽ™ï¸ Heard: ' + event.results[0][0].transcript);
+                showVoiceConfirmation(rawTranscript, intents.actionLog);
             };
 
             recognition.onerror = function (event) {
                 if (event.error === 'service-not-allowed') {
-                    showToast('âš ï¸ Speech Recognition is disabled for this browser. On iPhone: Settings â†’ Apps â†’ Chrome â†’ Speech Recognition.', 5000);
+                    showToast('⚠️ Speech Recognition is disabled for this browser. On iPhone: Settings → Apps → Chrome → Speech Recognition.');
                 } else if (event.error === 'not-allowed') {
-                    showToast('âš ï¸ Microphone or speech permission is blocked for this browser.', 5000);
+                    showToast('⚠️ Microphone or speech permission is blocked for this browser.');
                 } else {
-                    showToast('âš ï¸ Voice error: ' + event.error);
+                    showToast('⚠️ Voice error: ' + event.error);
                 }
             };
 
@@ -15567,6 +15731,7 @@
                 }
             };
         }
+
 
         // Refresh Lucide icons to pick up any dynamically injected icons
         if (window.lucide) lucide.createIcons();
@@ -21775,6 +21940,93 @@
         });
     </script>
 
+
+
+    <!-- VOICE COMMAND HELP MODAL -->
+    <div id="voice-help-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center pt-10 sm:pt-20 pb-10 px-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden max-h-[85vh]">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800/80 sticky top-0 shrink-0">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="mic" class="w-5 h-5 text-indigo-400"></i>
+                    <h2 class="text-lg font-bold text-slate-100">Voice Commands</h2>
+                </div>
+                <button onclick="closeVoiceHelpModal()" class="text-slate-400 hover:text-white transition-colors cursor-pointer p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Body -->
+            <div class="p-4 overflow-y-auto custom-scrollbar text-xs space-y-4">
+                <!-- SET -->
+                <div class="border border-slate-700 rounded-lg p-3 bg-slate-900/50">
+                    <h3 class="text-indigo-400 font-bold mb-2 uppercase text-[10px] tracking-wider">SET / FILTER</h3>
+                    <p class="text-slate-400 mb-2 leading-relaxed">Speaking a recognized value SETS that category. Repeating it keeps it selected.</p>
+                    <div class="grid grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
+                        <div class="bg-slate-800 px-2 py-1 rounded">"four ton"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"five ton straight cool"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"four ton two stage"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"heat pump"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"coastal"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"apartment coastal"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"any coastal"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"price under 9000"</div>
+                    </div>
+                </div>
+                
+                <!-- REMOVE -->
+                <div class="border border-slate-700 rounded-lg p-3 bg-slate-900/50">
+                    <h3 class="text-rose-400 font-bold mb-2 uppercase text-[10px] tracking-wider">REMOVE</h3>
+                    <p class="text-slate-400 mb-2 leading-relaxed">REMOVE subtracts only the named values. Multiple values may be removed in one command.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
+                        <div class="bg-slate-800 px-2 py-1 rounded">"remove four ton"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"remove coastal"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"remove four ton coastal straight cool"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"remove price"</div>
+                    </div>
+                </div>
+                
+                <!-- CLEAR -->
+                <div class="border border-emerald-900/50 rounded-lg p-3 bg-slate-900/50">
+                    <h3 class="text-emerald-400 font-bold mb-2 uppercase text-[10px] tracking-wider">CLEAR</h3>
+                    <p class="text-slate-400 mb-2 leading-relaxed">Clears selections completely.</p>
+                    <div class="space-y-1.5 text-slate-300">
+                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear filters"</span> <span class="text-slate-400 text-xs text-left">Clears search filters only</span></div>
+                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear view"</span> <span class="text-slate-400 text-xs text-left">Clears sort + Top-N/Both Ends</span></div>
+                        <div class="flex items-center gap-2"><span class="bg-slate-800 px-2 py-1 rounded font-mono text-[10px] w-24">"clear all"</span> <span class="text-slate-400 text-xs text-left">Clears filters + view concurrently</span></div>
+                    </div>
+                </div>
+
+                <!-- RESULTS VIEW & MIXED -->
+                <div class="border border-amber-900/50 rounded-lg p-3 bg-slate-900/50">
+                    <h3 class="text-amber-400 font-bold mb-2 uppercase text-[10px] tracking-wider">RESULT VIEW & COMBINED</h3>
+                    <p class="text-slate-400 mb-2 leading-relaxed">Limit or sort the results.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono text-[10px]">
+                        <div class="bg-slate-800 px-2 py-1 rounded">"three cheapest"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"cheapest first"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"five most expensive"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded">"three cheapest and three most expensive"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded text-amber-300 font-bold">"show both ends"</div>
+                        <div class="bg-slate-800 px-2 py-1 rounded text-indigo-300 font-bold">"three cheapest four ton"</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="p-3 border-t border-slate-700 bg-slate-900 flex justify-end">
+                <button onclick="closeVoiceHelpModal()" class="px-4 py-1.5 focus:outline-none bg-slate-700 hover:bg-slate-600 text-white rounded text-xs font-bold transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openVoiceHelpModal() {
+            const modal = document.getElementById('voice-help-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        function closeVoiceHelpModal() {
+            const modal = document.getElementById('voice-help-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+    </script>
 </body>
 
 </html>
