@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.61.3 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v07.61.5 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.61.3</title>
+    <title>Changeout Lookup v07.61.5</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.61.3</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.61.5</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1321,7 +1321,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.61.3</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.61.5</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1718,7 +1718,7 @@
                         class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex items-center gap-4 ml-auto">
                         <button
                             class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10"
-                            onclick="event.preventDefault(); copyProposalText();">ðŸ“‹ Copy Text</button>
+                            onclick="event.preventDefault(); copyProposalText();"><i data-lucide="copy" class="w-3.5 h-3.5 inline-block mr-1"></i> Copy Text</button>
                         <button onclick="event.preventDefault(); openTerminalSettings()"
                             class="text-slate-500 hover:text-emerald-400 transition-colors z-10 relative"
                             title="Proposal Output Settings">
@@ -5918,7 +5918,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.61.3',
+                appVersion: 'v07.61.5',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6112,7 +6112,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.61.3_${stamp}.json`;
+                `platts_config_v07.61.5_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -10435,7 +10435,7 @@
                     craneAmtStr = `+$${window.proposalAppState.addons['Crane Services']}`;
                 }
                 let craneTooltip = craneReq ? "Required by active site profile" : (craneManual ? "Crane Services" : "Crane Services");
-                badgeHtml += createBadge('ðŸ—ï¸', 'CRANE', craneAmtStr, craneState, craneTooltip, "toggleFastAction('Crane Services')", 'crane');
+                badgeHtml += createBadge('🏗️', 'CRANE', craneAmtStr, craneState, craneTooltip, "toggleFastAction('Crane Services')", 'crane');
 
                 // 2. Condo
                 let condoState = 'inactive';
@@ -10483,7 +10483,7 @@
                     if (posAmts.length === 1) condoAmtStr = `+$${posAmts[0]}`;
                     else if (posAmts.length > 1) condoAmtStr = `VARIES`;
                 }
-                badgeHtml += createBadge('ðŸ¢', 'CONDO', condoAmtStr, condoState, condoTooltip, "toggleFastAction('Condo Install')", 'condo');
+                badgeHtml += createBadge('🏢', 'CONDO', condoAmtStr, condoState, condoTooltip, "toggleFastAction('Condo Install')", 'condo');
 
                 // 3. Attic
                 let atticManual = window.proposalAppState.addons?.['Attic Installation'] !== undefined;
@@ -10510,7 +10510,7 @@
                     if (posAmts.length === 1) atticAmtStr = `+$${posAmts[0]}`;
                     else if (posAmts.length > 1) atticAmtStr = `VARIES`;
                 }
-                badgeHtml += createBadge('ðŸªœ', 'ATTIC', atticAmtStr, atticState, "Attic Installation", "toggleFastAction('Attic')", 'attic');
+                badgeHtml += createBadge('🪜', 'ATTIC', atticAmtStr, atticState, "Attic Installation", "toggleFastAction('Attic')", 'attic');
 
                 // 4. ARC
                 let arcManual = window.proposalAppState.refrigerant?.fee > 0;
@@ -10546,7 +10546,7 @@
                 if (arcManual && arcOceana) arcTooltip = "Additional Refrigerant Charges included";
                 else if (arcOceana) arcTooltip = "Oceana Additional Refrigerant Charge included";
 
-                badgeHtml += createBadge('â„ï¸', 'ARC', arcAmtStr, arcState, arcTooltip, "toggleFastAction('Refrigerant')", 'arc');
+                badgeHtml += createBadge('❄️', 'ARC', arcAmtStr, arcState, arcTooltip, "toggleFastAction('Refrigerant')", 'arc');
 
                 badgeContainer.innerHTML = badgeHtml;
             }
@@ -11070,20 +11070,20 @@
                 let addedIcons = new Set();
 
                 // 1. Authoritative Site Profile Checks
-                if (typeof getActiveCraneState === 'function' && getActiveCraneState().active && !addedIcons.has('ðŸ—ï¸')) {
-                    emojiCluster.push('ðŸ—ï¸'); addedIcons.add('ðŸ—ï¸');
+                if (typeof getActiveCraneState === 'function' && getActiveCraneState().active && !addedIcons.has('🏗️')) {
+                    emojiCluster.push('🏗️'); addedIcons.add('🏗️');
                 }
-                if (sp.condo && sp.condo.required && !addedIcons.has('ðŸ¢')) {
-                    emojiCluster.push('ðŸ¢'); addedIcons.add('ðŸ¢');
+                if (sp.condo && sp.condo.required && !addedIcons.has('🏢')) {
+                    emojiCluster.push('🏢'); addedIcons.add('🏢');
                 }
 
                 // 2. Manual / Legacy Addon Checks
                 if (sp.addons) {
                     Object.keys(sp.addons).forEach(name => {
                         let nm = name.toLowerCase();
-                        if (nm.includes('crane') && !addedIcons.has('ðŸ—ï¸')) { emojiCluster.push('ðŸ—ï¸'); addedIcons.add('ðŸ—ï¸'); }
-                        if (nm.includes('condo') && !addedIcons.has('ðŸ¢')) { emojiCluster.push('ðŸ¢'); addedIcons.add('ðŸ¢'); }
-                        if (nm.includes('attic') && !addedIcons.has('ðŸªœ')) { emojiCluster.push('ðŸªœ'); addedIcons.add('ðŸªœ'); }
+                        if (nm.includes('crane') && !addedIcons.has('🏗️')) { emojiCluster.push('🏗️'); addedIcons.add('🏗️'); }
+                        if (nm.includes('condo') && !addedIcons.has('🏢')) { emojiCluster.push('🏢'); addedIcons.add('🏢'); }
+                        if (nm.includes('attic') && !addedIcons.has('🪜')) { emojiCluster.push('🪜'); addedIcons.add('🪜'); }
                     });
                 }
                 let activeSaltShield = false;
@@ -11108,13 +11108,13 @@
                     if (hasManualRefrig && hasOceanaRefrig) tooltip = "Additional Refrigerant Charges";
                     else if (hasOceanaRefrig) tooltip = "Oceana Additional Refrigerant Charge";
 
-                    emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">â„ï¸</span></span>`);
+                    emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">❄️</span></span>`);
                     addedIcons.add('arc');
                 }
 
                 let isCoastalMatch = sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0;
                 if (isCoastalMatch && !addedIcons.has('wave')) {
-                    emojiCluster.push('<span title="Coastal Match">ðŸŒŠ</span>');
+                    emojiCluster.push('<span title="Coastal Match">🌊</span>');
                     addedIcons.add('wave');
                 }
 
@@ -17665,7 +17665,7 @@
             }
             let isCoastalMatch = sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0;
             if (isCoastalMatch) {
-                modalBadges.push('<span title="Coastal Match">ðŸŒŠ</span>');
+                modalBadges.push('<span title="Coastal Match">🌊</span>');
             }
             let activeLaborWarranties = false;
             if (window.getEffectiveLaborWarranties(sp).length > 0) {
