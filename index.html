@@ -1,4 +1,4 @@
-<!-- Retest Prototype v07.62.1 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v08.02.2 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v07.62.1</title>
+    <title>Changeout Lookup v08.02.2</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v07.62.1</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.02.2</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1224,7 +1224,7 @@
 
                     <!-- Save Row -->
                     <div class="flex gap-2">
-                        <input id="profileNameInput" type="text" placeholder="Profile nameâ€¦"
+                        <input id="profileNameInput" type="text" placeholder="Profile name..."
                             class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-400" />
                         <button onclick="saveLayoutProfile()"
                             class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg cursor-pointer transition-colors">
@@ -1236,7 +1236,7 @@
                     <div class="flex gap-2">
                         <select id="profileSelectDropdown"
                             class="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer">
-                            <option value="">Select Profileâ€¦</option>
+                            <option value="">Select Profile...</option>
                         </select>
                         <button onclick="loadLayoutProfile()"
                             class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
@@ -1314,7 +1314,7 @@
                                     style="height: 36px;">
                                 <div id="page2-platts-fallback"
                                     class="hidden font-black tracking-wider text-white uppercase"
-                                    style="font-size: 14.4px;">PLATTâ€™S AIR & HEAT</div>
+                                    style="font-size: 14.4px;">PLATT'S AIR & HEAT</div>
                                 <div id="page2-builder-title"
                                     class="font-black tracking-widest uppercase text-emerald-500 leading-none mt-1"
                                     style="font-size: 12px;">PROPOSAL BUILDER</div>
@@ -1322,7 +1322,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v07.62.1</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.02.2</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1669,6 +1669,10 @@
                         <button onclick="switchProposalTab('warranty')" id="prop-tab-btn-warranty"
                             class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Warranties
                             & Protections</button>
+                        <button onclick="switchProposalTab('installation')" id="prop-tab-btn-installation"
+                            class="px-4 py-2 text-[11px] font-bold uppercase rounded-t-lg bg-slate-800 text-slate-400 hover:text-slate-200 border-t border-x border-slate-700 hover:bg-slate-750 transition-colors whitespace-nowrap">Installation
+                            / Proposal <span id="prop-tab-inst-count"
+                                class="ml-1 text-[9px] font-black tracking-widest px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-300">0</span></button>
                     </div>
                     <!-- Content -->
                     <div id="proposal-tab-content" class="p-3 pb-12 flex flex-col gap-2 bg-slate-800">
@@ -2257,66 +2261,19 @@
                         </div>
                     </div>
 
-                    <div class="space-y-2">
-
-                        <div
-                            class="flex items-center justify-between gap-3 bg-slate-800 border border-slate-700 rounded-lg p-2">
-                            <div>
-                                <div class="text-xs font-semibold text-slate-300">
-                                    Copper Line Set
-                                </div>
-                                <div class="text-[9px] text-slate-500">
-                                    New or reuse existing copper
-                                </div>
-                            </div>
-
-                            <select id="terminal-scope-copper" onchange="setTerminalScopeOverride('copper', this.value)"
-                                class="bg-slate-900 text-slate-300 border border-slate-700 rounded p-1.5 text-[10px] font-bold outline-none">
-                                <option value="auto">Auto</option>
-                                <option value="new">New</option>
-                                <option value="existing">Reuse Existing</option>
-                            </select>
+                    <div class="bg-blue-900/40 border border-blue-500/50 rounded-lg p-3 text-center">
+                        <div class="text-[10px] font-bold text-blue-300 uppercase tracking-widest mb-1">
+                            Moved to Smart Scope
                         </div>
-
-                        <div
-                            class="flex items-center justify-between gap-3 bg-slate-800 border border-slate-700 rounded-lg p-2">
-                            <div>
-                                <div class="text-xs font-semibold text-slate-300">
-                                    Thermostat
-                                </div>
-                                <div class="text-[9px] text-slate-500">
-                                    New or reuse existing thermostat
-                                </div>
-                            </div>
-
-                            <select id="terminal-scope-thermostat"
-                                onchange="setTerminalScopeOverride('thermostat', this.value)"
-                                class="bg-slate-900 text-slate-300 border border-slate-700 rounded p-1.5 text-[10px] font-bold outline-none">
-                                <option value="auto">Auto</option>
-                                <option value="new">New</option>
-                                <option value="existing">Reuse Existing</option>
-                            </select>
+                        <div class="text-[9px] text-blue-200/80 leading-relaxed max-w-sm mx-auto">
+                            Installation Scope Wording is now configured directly on the <span
+                                class="font-bold text-white">Installation / Proposal</span> tab in the Smart Scope
+                            Interface.
                         </div>
-
-                        <div
-                            class="flex items-center justify-between gap-3 bg-slate-800 border border-slate-700 rounded-lg p-2">
-                            <div>
-                                <div class="text-xs font-semibold text-slate-300">
-                                    Hurricane Pad
-                                </div>
-                                <div class="text-[9px] text-slate-500">
-                                    New or reuse existing pad
-                                </div>
-                            </div>
-
-                            <select id="terminal-scope-pad" onchange="setTerminalScopeOverride('pad', this.value)"
-                                class="bg-slate-900 text-slate-300 border border-slate-700 rounded p-1.5 text-[10px] font-bold outline-none">
-                                <option value="auto">Auto</option>
-                                <option value="new">New</option>
-                                <option value="existing">Reuse Existing</option>
-                            </select>
-                        </div>
-
+                        <button type="button" onclick="window.openInstallationProposalScope()"
+                            class="mt-3 bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-bold uppercase tracking-wider rounded px-3 py-1.5 transition-colors shadow-sm">
+                            Open Smart Scope
+                        </button>
                     </div>
                 </div>
 
@@ -4609,7 +4566,7 @@
                 parts.push('Proposal: Hidden');
             }
 
-            return parts.join(' â€¢ ');
+            return parts.join(' • ');
         };
 
         window.refreshSmartScopeItemConfigModal = function () {
@@ -5242,11 +5199,13 @@
                     protection: true,
                     warranty: true
                 },
-                scopeOverrides: {
-                    copper: 'auto',
-                    thermostat: 'auto',
-                    pad: 'auto'
-                },
+                scopeOverrides: (function () {
+                    const r = {};
+                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
+                        r[k] = { state: 'default', source: 'default' };
+                    });
+                    return r;
+                })(),
                 pricingTreatmentDefaults: {},
                 itemRouting: {
                     ...window.DEFAULT_PROPOSAL_ITEM_ROUTING
@@ -5266,6 +5225,42 @@
                 if (propSettings && Object.prototype.hasOwnProperty.call(propSettings, 'bareBones')) {
                     delete propSettings.bareBones;
                 }
+
+                if (propSettings.terminal && propSettings.terminal.scopeOverrides) {
+                    const scopeKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+                    const allowedStates = {
+                        ductwork: ['default', 'existing', 'new', 'modify', 'notIncluded'],
+                        copper: ['default', 'existing', 'new', 'notIncluded'],
+                        drain: ['default', 'existing', 'new', 'notIncluded'],
+                        highVoltage: ['default', 'existing', 'new', 'notIncluded'],
+                        thermostat: ['default', 'existing', 'new', 'notIncluded'],
+                        pad: ['default', 'existing', 'new', 'notIncluded'],
+                        platformTop: ['default', 'replace', 'existing', 'notIncluded'],
+                        floatSwitch: ['default', 'install', 'notIncluded'],
+                        auxFloatSwitch: ['default', 'install', 'notIncluded'],
+                        disconnect: ['default', 'existing', 'new', 'notIncluded'],
+                        whip: ['default', 'existing', 'new', 'notIncluded'],
+                        ductTransitions: ['default', 'modify', 'new', 'notIncluded']
+                    };
+                    scopeKeys.forEach(k => {
+                        let val = propSettings.terminal.scopeOverrides[k];
+                        if (typeof val === 'string') {
+                            if (val === 'auto') val = { state: 'default', source: 'default' };
+                            else if (val === 'new') val = { state: 'new', source: 'manual' };
+                            else if (val === 'existing') val = { state: 'existing', source: 'manual' };
+                            else val = { state: 'default', source: 'default' };
+                        } else if (typeof val === 'object' && val !== null) {
+                            if (!allowedStates[k]) return;
+                            if (!allowedStates[k].includes(val.state)) val.state = 'default';
+                            if (val.state === 'default') val.source = 'default';
+                            else if (val.source !== 'manual') val.source = 'manual';
+                        } else {
+                            val = { state: 'default', source: 'default' };
+                        }
+                        propSettings.terminal.scopeOverrides[k] = val;
+                    });
+                }
+
                 propSettings.page2Header = {
                     ...window.DEFAULT_PAGE2_HEADER_SETTINGS,
                     ...(propSettings.page2Header || {})
@@ -5370,12 +5365,24 @@
                         ...(storedTerminalSettings.copySections || {})
                     },
 
-                    scopeOverrides: {
-                        copper: 'auto',
-                        thermostat: 'auto',
-                        pad: 'auto',
-                        ...(storedTerminalSettings.scopeOverrides || {})
-                    },
+                    scopeOverrides: (function () {
+                        const oldOvr = storedTerminalSettings.scopeOverrides || {};
+                        const nOvr = {};
+                        const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+                        keys.forEach(k => {
+                            let val = oldOvr[k];
+                            // Migrate Legacy values backward compat
+                            if (typeof val === 'string') {
+                                if (val === 'auto') val = 'default';
+                                nOvr[k] = { state: val, source: 'manual' };
+                            } else if (val && typeof val === 'object' && val.state !== undefined) {
+                                nOvr[k] = val;
+                            } else {
+                                nOvr[k] = { state: 'default', source: 'default' };
+                            }
+                        });
+                        return nOvr;
+                    })(),
 
                     pricingTreatmentDefaults: {
                         ...(storedTerminalSettings.pricingTreatmentDefaults || {})
@@ -5920,7 +5927,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v07.62.1',
+                appVersion: 'v08.02.2',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6114,7 +6121,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v07.62.1_${stamp}.json`;
+                `platts_config_v08.02.2_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -6182,7 +6189,7 @@
 
         function switchProposalTab(tab) {
             activePropTab = tab;
-            ['outdoor', 'indoor', 'warranty'].forEach(t => {
+            ['outdoor', 'indoor', 'warranty', 'installation'].forEach(t => {
                 const btn = document.getElementById('prop-tab-btn-' + t);
                 if (btn) {
                     btn.className = (t === tab)
@@ -6196,6 +6203,12 @@
         function renderProposalChecklist() {
             const container = document.getElementById('proposal-tab-content');
             if (!container) return;
+
+            if (activePropTab === 'installation') {
+                renderInstallationScopeTab(container);
+                return;
+            }
+
             let items = JSON.parse(JSON.stringify(dummyEnhancements[activePropTab] || []));
 
             let html = '';
@@ -6381,14 +6394,14 @@
                         value="customer-optional"
                         ${globalPricingTreatment === 'customer-optional' ? 'selected' : ''}
                     >
-                        ðŸ’² Customer Optional
+                        Customer Optional
                     </option>
 
                     <option
                         value="included-in-system-price"
                         ${globalPricingTreatment === 'included-in-system-price' ? 'selected' : ''}
                     >
-                        ðŸ“¦ Include in System Price
+                        Include in System Price
                     </option>
                 </select>
             `;
@@ -6574,7 +6587,152 @@
             }
         }
 
+        function getInstallationScopeActiveCount() {
+            if (!propSettings || !propSettings.terminal || !propSettings.terminal.scopeOverrides) return 0;
+            let count = 0;
+            Object.keys(propSettings.terminal.scopeOverrides).forEach(key => {
+                if (propSettings.terminal.scopeOverrides[key].state !== 'default') count++;
+            });
+            return count;
+        }
+
+        function lazyRefreshCountBadge() {
+            const b = document.getElementById('prop-tab-inst-count');
+            if (b) {
+                const c = getInstallationScopeActiveCount();
+                b.innerText = c;
+                if (c > 0) {
+                    b.classList.remove('bg-slate-700', 'text-slate-300');
+                    b.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    b.classList.remove('bg-blue-600', 'text-white');
+                    b.classList.add('bg-slate-700', 'text-slate-300');
+                }
+            }
+        }
+
+        function renderInstallationScopeTab(container) {
+            let html = '<div class="flex flex-col gap-2">';
+
+            const scopeDefs = [
+                { key: 'ductwork', icon: 'wind', name: 'Ductwork', help: 'Proposal wording for duct connection', states: ['default', 'existing', 'new', 'modify', 'notIncluded'] },
+                { key: 'copper', icon: 'cable', name: 'Copper / Refrigerant Line Set', help: 'Proposal wording for refrigerant piping', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'drain', icon: 'droplets', name: 'Drain Line', help: 'Proposal wording for primary drain line', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'highVoltage', icon: 'zap', name: 'High-Voltage Wiring', help: 'Proposal wording for high-voltage wiring', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'thermostat', icon: 'thermometer', name: 'Thermostat', help: 'Proposal wording for thermostat', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'pad', icon: 'box', name: 'Hurricane Pad', help: 'Proposal wording for equipment pad', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'platformTop', icon: 'layout-template', name: 'Platform Top', help: 'Proposal wording for platform top', states: ['default', 'replace', 'existing', 'notIncluded'] },
+                { key: 'floatSwitch', icon: 'toggle-left', name: 'Primary Float Switch', help: 'Proposal wording for float switch', states: ['default', 'install', 'notIncluded'] },
+                { key: 'auxFloatSwitch', icon: 'toggle-right', name: 'Auxiliary Float Switch', help: 'Proposal wording for aux float switch', states: ['default', 'install', 'notIncluded'] },
+                { key: 'disconnect', icon: 'power', name: 'Disconnect', help: 'Proposal wording for safety disconnect', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'whip', icon: 'plug-2', name: 'Electrical Whip', help: 'Proposal wording for high-voltage whip', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'ductTransitions', icon: 'milestone', name: 'Duct Transitions / Modifications', help: 'Proposal wording for duct connections', states: ['default', 'modify', 'new', 'notIncluded'] }
+            ];
+
+            const stateLabels = {
+                'default': 'Default (Silent)',
+                'existing': 'Reuse Existing',
+                'new': 'New',
+                'modify': 'Modify',
+                'replace': 'Replace',
+                'install': 'Install',
+                'notIncluded': 'Not Included'
+            };
+
+            scopeDefs.forEach(def => {
+                const currentState = typeof window.getInstallationScopeState === 'function' ? window.getInstallationScopeState(def.key) : 'default';
+                let optionsHtml = '';
+                def.states.forEach(st => {
+                    const sel = st === currentState ? 'selected' : '';
+                    optionsHtml += `<option value="${st}" ${sel}>${stateLabels[st] || st}</option>`;
+                });
+
+                let rowClasses = "flex items-center justify-between gap-3 bg-slate-900 border border-slate-700/50 hover:border-slate-600 transition-colors rounded-lg p-2.5";
+                let selectClasses = "w-full bg-slate-950 text-slate-300 border border-slate-700 rounded px-2 py-1.5 text-xs font-semibold focus:outline-none focus:border-blue-500 transition-colors cursor-pointer";
+
+                if (currentState === 'notIncluded') {
+                    rowClasses = "flex items-center justify-between gap-3 bg-rose-950/30 border border-rose-500/60 transition-colors rounded-lg p-2.5";
+                    selectClasses = "w-full bg-rose-950 text-rose-100 border border-rose-500 rounded px-2 py-1.5 text-xs font-semibold focus:outline-none focus:border-rose-400 transition-colors cursor-pointer";
+                } else if (currentState !== 'default') {
+                    rowClasses = "flex items-center justify-between gap-3 bg-blue-950/40 border border-blue-500/70 transition-colors rounded-lg p-2.5";
+                    selectClasses = "w-full bg-blue-950 text-blue-100 border border-blue-500 rounded px-2 py-1.5 text-xs font-semibold focus:outline-none focus:border-blue-400 transition-colors cursor-pointer";
+                }
+
+                html += `
+                <div class="${rowClasses}">
+                    <div class="flex items-center gap-3 w-1/2 min-w-0">
+                        <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center shrink-0 border border-slate-700">
+                            <i data-lucide="${def.icon}" class="w-3.5 h-3.5 text-slate-400"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0 flex-1">
+                            <span class="text-xs font-bold text-slate-200 tracking-wide truncate" title="${def.name}">${def.name}</span>
+                            <span class="text-[9px] text-slate-500 uppercase tracking-widest truncate" title="${def.help}">${def.help}</span>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 w-1/2 max-w-[180px]">
+                        <select
+                            class="${selectClasses}"
+                            onchange="handleInstallationTabMutation('${def.key}', this.value)"
+                        >
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            lazyRefreshCountBadge();
+        }
+
+        window.handleInstallationTabMutation = function (key, value) {
+            if (typeof setTerminalScopeOverride === 'function') {
+                setTerminalScopeOverride(key, value);
+            }
+
+            if (
+                typeof activePropTab !== 'undefined' &&
+                activePropTab === 'installation' &&
+                typeof renderProposalChecklist === 'function'
+            ) {
+                renderProposalChecklist();
+            } else if (typeof lazyRefreshCountBadge === 'function') {
+                lazyRefreshCountBadge();
+            }
+        };
+
+        window.openInstallationProposalScope = function () {
+            const settingsModal = document.getElementById('proposal-settings-modal');
+
+            if (
+                settingsModal &&
+                settingsModal.style.display !== 'none' &&
+                settingsModal.style.display !== ''
+            ) {
+                if (typeof toggleProposalSettings === 'function') {
+                    toggleProposalSettings();
+                }
+            }
+
+            const checklistContainer = document.getElementById('proposal-checklist-container');
+            if (checklistContainer && checklistContainer.tagName.toLowerCase() === 'details') {
+                checklistContainer.open = true;
+            }
+
+            if (typeof switchProposalTab === 'function') {
+                switchProposalTab('installation');
+            }
+
+            if (checklistContainer) {
+                checklistContainer.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        };
+
         window.updateChecklistCounters = function () {
+            if (typeof lazyRefreshCountBadge === 'function') lazyRefreshCountBadge();
             let outCount = 0, inCount = 0, warCount = 0;
 
             dummyEnhancements.outdoor.forEach(item => {
@@ -8957,11 +9115,13 @@
                     protection: true,
                     warranty: true
                 },
-                scopeOverrides: {
-                    copper: 'auto',
-                    thermostat: 'auto',
-                    pad: 'auto'
-                },
+                scopeOverrides: (function () {
+                    const r = {};
+                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
+                        r[k] = { state: 'default', source: 'default' };
+                    });
+                    return r;
+                })(),
                 pricingTreatmentDefaults: existingPricingTreatmentDefaults,
                 itemRouting: {
                     ...window.DEFAULT_PROPOSAL_ITEM_ROUTING
@@ -8974,11 +9134,10 @@
             };
 
             savePropSettings();
+            applyTerminalSettings();
 
             if (typeof updateProposalTerminal === 'function') {
                 updateProposalTerminal();
-            } else {
-                applyTerminalSettings();
             }
 
             if (typeof showToast === 'function') {
@@ -9047,33 +9206,11 @@
                 }
             });
 
-            const scopeOverrides =
-                propSettings.terminal.scopeOverrides || {
-                    copper: 'auto',
-                    thermostat: 'auto',
-                    pad: 'auto'
-                };
-
-            const copperScope =
-                document.getElementById('terminal-scope-copper');
-
-            const thermostatScope =
-                document.getElementById('terminal-scope-thermostat');
-
-            const padScope =
-                document.getElementById('terminal-scope-pad');
-
-            if (copperScope) {
-                copperScope.value = scopeOverrides.copper || 'auto';
-            }
-
-            if (thermostatScope) {
-                thermostatScope.value = scopeOverrides.thermostat || 'auto';
-            }
-
-            if (padScope) {
-                padScope.value = scopeOverrides.pad || 'auto';
-            }
+            const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+            keys.forEach(k => {
+                const el = document.getElementById('terminal-scope-' + k);
+                if (el) el.value = typeof getInstallationScopeState === 'function' ? getInstallationScopeState(k) : 'default';
+            });
 
             const templateSelect =
                 document.getElementById('terminal-template-select');
@@ -9120,32 +9257,47 @@
             }
         }
 
-        function setTerminalScopeOverride(key, value) {
+        function getInstallationScopeState(key) {
+            if (!propSettings.terminal || !propSettings.terminal.scopeOverrides || !propSettings.terminal.scopeOverrides[key]) {
+                return 'default';
+            }
+            return propSettings.terminal.scopeOverrides[key].state || 'default';
+        }
+
+        function setInstallationScopeState(key, state, source = 'manual') {
             if (!propSettings.terminal) return;
-
             if (!propSettings.terminal.scopeOverrides) {
-                propSettings.terminal.scopeOverrides = {
-                    copper: 'auto',
-                    thermostat: 'auto',
-                    pad: 'auto'
-                };
+                propSettings.terminal.scopeOverrides = {};
             }
 
-            if (
-                !['copper', 'thermostat', 'pad'].includes(key)
-            ) {
-                return;
-            }
+            const allowedStates = {
+                ductwork: ['default', 'existing', 'new', 'modify', 'notIncluded'],
+                copper: ['default', 'existing', 'new', 'notIncluded'],
+                drain: ['default', 'existing', 'new', 'notIncluded'],
+                highVoltage: ['default', 'existing', 'new', 'notIncluded'],
+                thermostat: ['default', 'existing', 'new', 'notIncluded'],
+                pad: ['default', 'existing', 'new', 'notIncluded'],
+                platformTop: ['default', 'replace', 'existing', 'notIncluded'],
+                floatSwitch: ['default', 'install', 'notIncluded'],
+                auxFloatSwitch: ['default', 'install', 'notIncluded'],
+                disconnect: ['default', 'existing', 'new', 'notIncluded'],
+                whip: ['default', 'existing', 'new', 'notIncluded'],
+                ductTransitions: ['default', 'modify', 'new', 'notIncluded']
+            };
 
-            if (
-                !['auto', 'new', 'existing'].includes(value)
-            ) {
-                return;
-            }
+            if (!allowedStates[key]) return;
+            if (!allowedStates[key].includes(state)) state = 'default';
+            if (state === 'default') source = 'default';
+            else if (source !== 'manual') source = 'manual';
 
-            propSettings.terminal.scopeOverrides[key] = value;
-
+            propSettings.terminal.scopeOverrides[key] = { state: state, source: source };
             savePropSettings();
+        }
+
+        function setTerminalScopeOverride(key, value) {
+            const validKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+            if (!validKeys.includes(key)) return;
+            setInstallationScopeState(key, value, 'manual');
 
             if (typeof updateProposalCartUI === 'function') {
                 updateProposalCartUI();
@@ -9171,9 +9323,9 @@
                     'Warranty & Protection:',
 
                 warrantyClosing:
-                    'â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\n' +
-                    'â–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n' +
-                    'â–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)'
+                    '■ Platt\'s Air and Heat has a 1-year workmanship warranty.\n' +
+                    '■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n' +
+                    '■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)'
             };
 
             return templates[key] || '';
@@ -10565,139 +10717,145 @@
             window.proposalBlocks = [];
             if (!window.proposalAppState.textOverrides) window.proposalAppState.textOverrides = {};
 
-            // --- The Preamble Brain (Conditional Assembler) ---
+            // --- The Wording Controller (Sentence Composer) ---
             let isCondenserOnly = window.proposalAppState.addons['Condenser Only Swap'] || window.proposalAppState.deductions['Condenser Only Swap'];
             let isAHOnly = window.proposalAppState.addons['Air Handler Only Swap'] || window.proposalAppState.deductions['Air Handler Only Swap'];
 
-            let firstSystemSpecs = "HVAC equipment";
+            let firstSystemSpecs = "HVAC system";
             let newSystemSpecs = "system";
+
+            if (isCondenserOnly) { firstSystemSpecs = "condenser"; newSystemSpecs = "condenser"; }
+            else if (isAHOnly) { firstSystemSpecs = "air handler"; newSystemSpecs = "air handler"; }
 
             let existingItems = [];
             let newItems = [];
+            let pluralNewItems = [];
+            let modItems = [];
+            let replaceItems = [];
+            let notIncludedItems = [];
             let universalScopeLabels = [];
 
-            const scopeOverrides =
-                (
-                    propSettings.terminal &&
-                    propSettings.terminal.scopeOverrides
-                ) || {
-                    copper: 'auto',
-                    thermostat: 'auto',
-                    pad: 'auto'
-                };
+            // Grammar dictionary mapping explicit states to full phrases
+            const PhraseMap = {
+                ductwork: { existing: 'ductwork', new: 'indoor ductwork', modify: 'necessary ductwork modifications' },
+                copper: { existing: 'copper line set', new: 'copper line set' },
+                drain: { existing: 'drain line', new: 'drain line' },
+                highVoltage: { existing: 'high-voltage wiring', new: 'high-voltage wiring' },
+                thermostat: { existing: 'thermostat', new: 'thermostat' },
+                pad: { existing: 'hurricane pad', new: 'hurricane pad' },
+                platformTop: { existing: 'platform top', replace: 'the platform top' },
+                floatSwitch: { install: 'primary float switch' },
+                auxFloatSwitch: { install: 'auxiliary float switch' },
+                ductTransitions: { modify: 'necessary duct transitions/modifications', new: 'duct transitions/modifications' }
+            };
 
-            // Normalized Smart Scope definitions describe these decisions,
-            // while legacy deductions remain the runtime compatibility state.
-            const copperDeductionActive =
-                !!window.proposalAppState.deductions['No Copper'];
+            const BaseNounMap = {
+                ductwork: 'indoor ductwork',
+                copper: 'copper line set',
+                drain: 'primary drain line',
+                highVoltage: 'high-voltage wiring',
+                thermostat: 'thermostat',
+                pad: 'hurricane pad',
+                platformTop: 'platform top',
+                floatSwitch: 'primary float switch',
+                auxFloatSwitch: 'auxiliary float switch',
+                disconnect: 'disconnect',
+                whip: 'electrical whip',
+                ductTransitions: 'duct transitions/modifications'
+            };
 
-            const thermostatDeductionActive =
-                !!window.proposalAppState.deductions['No Thermostat'];
+            const scopeStates = {};
+            Object.keys(BaseNounMap).forEach(key => {
+                scopeStates[key] = typeof getInstallationScopeState === 'function' ? getInstallationScopeState(key) : 'default';
+            });
 
-            const padDeductionActive =
-                !!window.proposalAppState.deductions['No Pad'];
+            // Disconnect/Whip explicit handling (merge with Smart Scope allowences)
+            const disconnectScope = typeof window.ensureIncludedAllowanceState === 'function' ? window.ensureIncludedAllowanceState('Non-Fused Disconnect Box') : { selected: false };
+            const whipScope = typeof window.ensureIncludedAllowanceState === 'function' ? window.ensureIncludedAllowanceState('Electrical Whip (High Voltage)') : { selected: false };
 
-            let hasCopper =
-                scopeOverrides.copper === 'new'
-                    ? true
-                    : scopeOverrides.copper === 'existing'
-                        ? false
-                        : !copperDeductionActive;
-
-            let hasStat =
-                scopeOverrides.thermostat === 'new'
-                    ? true
-                    : scopeOverrides.thermostat === 'existing'
-                        ? false
-                        : !thermostatDeductionActive;
-
-            let hasPad =
-                scopeOverrides.pad === 'new'
-                    ? true
-                    : scopeOverrides.pad === 'existing'
-                        ? false
-                        : !padDeductionActive;
-
-            // The "Two Buckets" Sorter (Inside-Out Flow)
-            if (isCondenserOnly) {
-                firstSystemSpecs = "condenser";
-                newSystemSpecs = "condenser";
-                existingItems.push("high-voltage wiring");
-
-                if (hasCopper) newItems.push("copper line set"); else existingItems.push("copper line set");
-                newItems.push("filter dryer");
-                if (hasPad) newItems.push("hurricane pad");
-
-            } else if (isAHOnly) {
-                firstSystemSpecs = "air handler";
-                newSystemSpecs = "air handler";
-                existingItems.push("ductwork", "high-voltage wiring");
-
-                if (hasStat) newItems.push("thermostat"); else existingItems.push("thermostat");
-                if (hasCopper) { newItems.push("copper line set", "drain line"); } else { existingItems.push("copper line set", "drain line"); }
-                newItems.push("float switch", "filter dryer");
-
-            } else {
-                // Full System Defaults
-                existingItems.push("ductwork", "high-voltage wiring");
-
-                if (hasStat) newItems.push("thermostat"); else existingItems.push("thermostat");
-                if (hasCopper) { newItems.push("copper line set", "drain line"); } else { existingItems.push("copper line set", "drain line"); }
-                newItems.push("float switch");
-                if (hasPad) newItems.push("hurricane pad");
-            }
-
-            // Add electrical & physical enhancements (Outside Items)
             let includedScopeEndNotes = [];
             let includedScopeSeparateNotes = [];
 
-            const disconnectScope = window.ensureIncludedAllowanceState('Non-Fused Disconnect Box');
-            const whipScope = window.ensureIncludedAllowanceState('Electrical Whip (High Voltage)');
+            const processSmartScopeItem = (scopeRes, defaultNoun, manualState) => {
+                let baseNoun = defaultNoun;
+                let isPlural = false;
 
-            if (disconnectScope.selected) {
-                let discWord = 'disconnect';
-                if (disconnectScope.disconnectType === 'non-fused') discWord = 'disconnect';
-                else if (disconnectScope.disconnectType === 'fused') discWord = 'fused disconnect';
-                else if (disconnectScope.disconnectType === 'breaker') discWord = 'breaker disconnect';
+                if (scopeRes.selected) {
+                    if (defaultNoun === 'disconnect') {
+                        if (scopeRes.disconnectType === 'non-fused') baseNoun = 'disconnect';
+                        else if (scopeRes.disconnectType === 'fused') baseNoun = 'fused disconnect';
+                        else if (scopeRes.disconnectType === 'breaker') baseNoun = 'breaker disconnect';
 
-                let fullWording = discWord;
-                if (disconnectScope.location === 'condenser') fullWording = `outdoor ${discWord}`;
-                else if (disconnectScope.location === 'air-handler') fullWording = `air-handler ${discWord}`;
-                else if (disconnectScope.location === 'both') fullWording = `indoor and outdoor ${discWord}s`;
+                        if (scopeRes.location === 'condenser') baseNoun = `outdoor ${baseNoun}`;
+                        else if (scopeRes.location === 'air-handler') baseNoun = `air-handler ${baseNoun}`;
+                        else if (scopeRes.location === 'both') { baseNoun = `indoor and outdoor ${baseNoun}s`; isPlural = true; }
+                    } else if (defaultNoun === 'electrical whip') {
+                        if (scopeRes.location === 'condenser') baseNoun = `outdoor ${baseNoun}`;
+                        else if (scopeRes.location === 'air-handler') baseNoun = `air-handler ${baseNoun}`;
+                        else if (scopeRes.location === 'both') { baseNoun = `indoor and outdoor ${baseNoun}s`; isPlural = true; }
+                    }
 
-                newItems.push(fullWording);
-
-                if (disconnectScope.customNote) {
-                    if (disconnectScope.scopePlacement === 'inline') {
-                        newItems[newItems.length - 1] += ` ${disconnectScope.customNote}`;
-                    } else if (disconnectScope.scopePlacement === 'end') {
-                        includedScopeEndNotes.push(disconnectScope.customNote);
-                    } else if (disconnectScope.scopePlacement === 'separate') {
-                        includedScopeSeparateNotes.push(disconnectScope.customNote);
+                    if (scopeRes.customNote) {
+                        if (scopeRes.scopePlacement === 'inline' && manualState === 'default') {
+                            baseNoun += ` ${scopeRes.customNote}`;
+                        } else if (scopeRes.scopePlacement === 'end') {
+                            includedScopeEndNotes.push(scopeRes.customNote);
+                        } else if (scopeRes.scopePlacement === 'separate') {
+                            includedScopeSeparateNotes.push(scopeRes.customNote);
+                        }
                     }
                 }
+                BaseNounMap[defaultNoun === 'disconnect' ? 'disconnect' : 'whip'] = baseNoun;
+                return {
+                    existing: `${baseNoun}`,
+                    new: `${baseNoun}`,
+                    isPlural: isPlural
+                };
+            };
+
+            PhraseMap.disconnect = processSmartScopeItem(disconnectScope, 'disconnect', scopeStates.disconnect);
+            PhraseMap.whip = processSmartScopeItem(whipScope, 'electrical whip', scopeStates.whip);
+
+            // Equipment-Mode Applicability Filtering
+            let activeKeys = Object.keys(scopeStates);
+            if (isAHOnly) {
+                activeKeys = activeKeys.filter(k => !['pad'].includes(k));
+            } else if (isCondenserOnly) {
+                activeKeys = activeKeys.filter(k => !['platformTop', 'ductwork', 'ductTransitions'].includes(k));
             }
 
-            if (whipScope.selected) {
-                let whipWording = 'electrical whip';
-                if (whipScope.location === 'condenser') whipWording = `outdoor electrical whip`;
-                else if (whipScope.location === 'air-handler') whipWording = `air-handler electrical whip`;
-                else if (whipScope.location === 'both') whipWording = `indoor and outdoor electrical whips`;
+            // Route standard components via grammatical PhraseMap
+            activeKeys.forEach(key => {
+                const st = scopeStates[key];
+                if (st === 'default') return;
 
-                newItems.push(whipWording);
-
-                if (whipScope.customNote) {
-                    if (whipScope.scopePlacement === 'inline') {
-                        newItems[newItems.length - 1] += ` ${whipScope.customNote}`;
-                    } else if (whipScope.scopePlacement === 'end') {
-                        includedScopeEndNotes.push(whipScope.customNote);
-                    } else if (whipScope.scopePlacement === 'separate') {
-                        includedScopeSeparateNotes.push(whipScope.customNote);
-                    }
+                if (st === 'notIncluded') {
+                    notIncludedItems.push(BaseNounMap[key] || key);
+                    return;
                 }
+
+                const phrases = PhraseMap[key];
+                if (!phrases || !phrases[st]) return;
+
+                const phrase = phrases[st];
+                if (st === 'existing') existingItems.push(phrase);
+                else if (st === 'new' || st === 'install') {
+                    if (phrases.isPlural) pluralNewItems.push(`new ${phrase}`);
+                    else newItems.push(phrase);
+                }
+                else if (st === 'modify') modItems.push(phrase);
+                else if (st === 'replace') replaceItems.push(phrase);
+            });
+
+            // Smart Scope Auto-Push (if manual is silent but smart scope active)
+            if (activeKeys.includes('disconnect') && scopeStates.disconnect === 'default' && disconnectScope.selected) {
+                if (PhraseMap.disconnect.isPlural) pluralNewItems.push(`new ${PhraseMap.disconnect.new}`);
+                else newItems.push(PhraseMap.disconnect.new);
             }
-
-
+            if (activeKeys.includes('whip') && scopeStates.whip === 'default' && whipScope.selected) {
+                if (PhraseMap.whip.isPlural) pluralNewItems.push(`new ${PhraseMap.whip.new}`);
+                else newItems.push(PhraseMap.whip.new);
+            }
 
             // Collect universal installation-scope items
             if (typeof selectedProposalRows !== 'undefined' && selectedProposalRows.length > 0) {
@@ -10730,11 +10888,18 @@
 
                     if (isUniversal) {
                         universalScopeLabels.push(label);
-                        let displayLabel = typeof window.getSmartScopeProposalLabel === 'function'
-                            ? window.getSmartScopeProposalLabel(label)
-                            : label;
+                        let displayLabel = typeof window.getSmartScopeProposalLabel === 'function' ? window.getSmartScopeProposalLabel(label) : label;
                         if (displayLabel.trim().toLowerCase() === 'ground rod') displayLabel = 'ground rod';
-                        newItems.push(displayLabel);
+
+                        // Semantic Deduplication Check
+                        let skip = false;
+                        if (displayLabel.toLowerCase().includes('disconnect') && (scopeStates.disconnect !== 'default' || disconnectScope.selected)) skip = true;
+                        if (displayLabel.toLowerCase().includes('whip') && (scopeStates.whip !== 'default' || whipScope.selected)) skip = true;
+
+                        if (!skip) {
+                            if (displayLabel.endsWith('s')) pluralNewItems.push(`new ${displayLabel}`);
+                            else newItems.push(displayLabel);
+                        }
                     }
                 });
             }
@@ -10742,16 +10907,70 @@
             // Grammar Formatter
             const formatList = (arr) => {
                 if (arr.length === 0) return "";
-                if (arr.length === 1) return arr;
+                if (arr.length === 1) return arr[0];
                 if (arr.length === 2) return arr.join(" and ");
                 return arr.slice(0, -1).join(", ") + ", and " + arr[arr.length - 1];
             };
 
             let introText = `We are pleased to offer you a quote to upgrade your ${firstSystemSpecs}. `;
             introText += "We will remove the existing equipment and dispose of it per EPA standards. ";
-            introText += `We will install the new ${newSystemSpecs} and connect to the existing ${formatList(existingItems)}. `;
-            if (newItems.length > 0) {
-                introText += `We will install a new ${formatList(newItems)} at the time of installation.`;
+
+            let hasManualComponents = existingItems.length > 0 || newItems.length > 0 || pluralNewItems.length > 0 || modItems.length > 0 || replaceItems.length > 0;
+
+            if (!hasManualComponents) {
+                introText += `We will install the new ${newSystemSpecs} and complete the standard connections required for installation.`;
+            } else {
+                let equipmentNoun = "equipment";
+                let locationNoun = "locations";
+
+                if (isCondenserOnly) {
+                    equipmentNoun = "condenser";
+                    locationNoun = "location";
+                } else if (isAHOnly) {
+                    equipmentNoun = "air handler";
+                    locationNoun = "location";
+                }
+
+                if (existingItems.length > 0) {
+                    introText += `We will install the new ${equipmentNoun} in the existing ${locationNoun} and connect it to the existing ${formatList(existingItems)}.`;
+                } else {
+                    introText += `We will install the new ${equipmentNoun} in the existing ${locationNoun}.`;
+                }
+
+                let workChunks = [];
+                if (newItems.length > 0 || pluralNewItems.length > 0) {
+                    let installPhrases = [];
+                    if (newItems.length > 0) installPhrases.push(`a new ${formatList(newItems)}`);
+                    if (pluralNewItems.length > 0) installPhrases.push(`${formatList(pluralNewItems)}`);
+
+                    let mergedInstall = "";
+                    if (installPhrases.length === 2 && newItems.length > 1) {
+                        mergedInstall = installPhrases.join(", and ");
+                    } else if (installPhrases.length === 2) {
+                        mergedInstall = installPhrases.join(" and ");
+                    } else {
+                        mergedInstall = installPhrases[0];
+                    }
+                    workChunks.push(`install ${mergedInstall}`);
+                }
+                if (replaceItems.length > 0) {
+                    workChunks.push(`replace ${formatList(replaceItems)}`);
+                }
+                if (modItems.length > 0) {
+                    workChunks.push(`make ${formatList(modItems)}`);
+                }
+
+                if (workChunks.length > 0) {
+                    let finalWorkStr = formatList(workChunks);
+                    if (workChunks.length === 2 && workChunks[0].includes(' and ')) {
+                        finalWorkStr = workChunks.join(', and ');
+                    }
+                    introText += ` We will also ${finalWorkStr}.`;
+                }
+            }
+
+            if (notIncludedItems.length > 0) {
+                introText += ` Replacement of the existing ${formatList(notIncludedItems)} is not included.`;
             }
 
             if (includedScopeEndNotes.length > 0) {
@@ -10760,6 +10979,8 @@
             if (includedScopeSeparateNotes.length > 0) {
                 introText += '\n\n' + includedScopeSeparateNotes.join('\n');
             }
+
+            introText = introText.trim();
 
             // Respect user's manual focus editor overrides
             if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides['Intro']) {
@@ -11206,7 +11427,7 @@
                         }
                         else if (spread.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
                         else if (spread.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
-                        else if (spread.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">â€”</span>`;
+                        else if (spread.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
 
                         spreadsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${spread.weight} 1 0%; font-size: ${spread.fontSize}px;">${content}</div>`;
                     });
@@ -11308,7 +11529,7 @@
 
                                 if (isTagged) {
                                     optionEnhancementLines.push(
-                                        `    â–ª Optional Enhancement for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Optional Enhancement for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
                                 } else if (
                                     typeof addProposalPlacement ===
@@ -11329,7 +11550,7 @@
                                 if (isTagged) {
 
                                     optionProtectionLines.push(
-                                        `    â–ª Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11337,7 +11558,7 @@
                                 ) {
 
                                     optionProtectionLines.push(
-                                        `    â–ª Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11389,9 +11610,9 @@
 
                         if (isTagged) {
                             if (itemRoute === 'protection') {
-                                optionProtectionLines.push(`    â–ª Warranty / Protection for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             } else {
-                                optionEnhancementLines.push(`    â–ª Optional Enhancement for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             }
                         } else {
                             const targetEngine =
@@ -11435,9 +11656,9 @@
 
                             if (isTagged) {
                                 if (itemRoute === 'protection') {
-                                    optionProtectionLines.push(`    â–ª Warranty / Protection for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 } else {
-                                    optionEnhancementLines.push(`    â–ª Optional Enhancement for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 }
                             } else {
                                 const targetEngine =
@@ -11528,7 +11749,7 @@
                 if (mechStage === 'single stage' || mechStage === '1 stage') proposalStage = 'single-stage';
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
-                let rawOptText = `- System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${ahri}`;
+                let rawOptText = `■ System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${ahri}`;
                 let optText = rawOptText.replace(/\s+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
                 window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${otdFinalPrice.toLocaleString()}` });
@@ -11536,14 +11757,14 @@
                 if (coastalPackageLines.length > 0) {
                     window.proposalBlocks.push({
                         target: `Option ${index + 1} Coastal Package`,
-                        text: `    â–ª ${coastalPackageLines.join(', ')}`
+                        text: `    ■ ${coastalPackageLines.join(', ')}`
                     });
                 }
 
                 if (uniqueIncludedScopeItems.length > 0) {
                     window.proposalBlocks.push({
                         target: `Option ${index + 1} Included Installation Scope`,
-                        text: `    â–ª Additional Installation Scope: ${uniqueIncludedScopeItems.join(', ')}`
+                        text: `    ■ Additional Installation Scope: ${uniqueIncludedScopeItems.join(', ')}`
                     });
                 }
 
@@ -11581,7 +11802,7 @@
                     let feesText = `${feesHeading}\n`;
                     let lines = [];
                     globalNecessaryFees.forEach((val, name) => {
-                        lines.push(`â–  ___ ${name}: add $${val.toLocaleString()}`);
+                        lines.push(`■ ___ ${name}: add $${val.toLocaleString()}`);
                     });
                     window.proposalBlocks.push({ target: 'Fees', text: feesText + lines.join('\n') });
                 }
@@ -11609,14 +11830,14 @@
                         if (sortedPrices.length === 1) {
                             let optGroup = pEngine.priceGroups.get(sortedPrices[0]).sort((a, b) => a - b);
                             let optStr = optGroup.length === selectedProposalRows.length ? '' : ` for ${formatProposalOptionNumbers(optGroup)}`;
-                            lines.push(`â–  ___ Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
+                            lines.push(`■ ___ Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
                         } else if (sortedPrices.length > 1) {
                             let groupedStrs = [];
                             sortedPrices.forEach(p => {
                                 let opts = pEngine.priceGroups.get(p).sort((a, b) => a - b);
                                 groupedStrs.push(`${formatProposalOptionNumbers(opts)}: $${p.toLocaleString()}`);
                             });
-                            lines.push(`â–  ___ Add ${label} for ${groupedStrs.join('; ')}`);
+                            lines.push(`■ ___ Add ${label} for ${groupedStrs.join('; ')}`);
                         }
                     });
 
@@ -11677,7 +11898,7 @@
                                         : ` for ${formatProposalOptionNumbers(optGroup)}`;
 
                                 protLines.push(
-                                    `â–  ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
+                                    `■ ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
                                 );
                             } else if (groups.length > 1) {
                                 maybeOpenProtectionPriceConflict(
@@ -11694,7 +11915,7 @@
                                     });
 
                                 protLines.push(
-                                    `â–  ___ Add ${label} for ${groupedStrs.join('; ')}`
+                                    `■ ___ Add ${label} for ${groupedStrs.join('; ')}`
                                 );
                             }
                         }
@@ -11751,16 +11972,16 @@
                     return r && String(r.brand || '').toUpperCase() === 'COMFORTMAKER' && String(r.seriesTier || '').toUpperCase() === 'MAIN LINE' && String(r.mechanicalStage || '').toUpperCase() !== 'SINGLE STAGE';
                 });
 
-                if (hasMainLineSingle) bpLines.push("â–  Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.");
-                else if (hasMainLineMulti) bpLines.push("â–  Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.");
+                if (hasMainLineSingle) bpLines.push("■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 5 years and the air handler for 5 years.");
+                else if (hasMainLineMulti) bpLines.push("■ Your Comfortmaker Mainline System also comes with a No-Hassle unit swap that covers the condenser for 10 years and the air handler for 5 years.");
 
                 const warrantyClosing =
                     typeof getTerminalTemplateValue === 'function'
                         ? getTerminalTemplateValue('warrantyClosing')
                         : (
-                            "â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\n" +
-                            "â–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n" +
-                            "â–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)"
+                            "■ Platt's Air and Heat has a 1-year workmanship warranty.\n" +
+                            "■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n" +
+                            "■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)"
                         );
 
                 warrantyClosing
@@ -11962,7 +12183,7 @@
             if (cat === 'spacer') {
                 finalString = text;
             } else {
-                finalString = "â–  ";
+                finalString = "- ";
                 if (needsInit) finalString += "___ ";
                 if (cat === 'enhancement') finalString += "System enhancement: ";
                 if (cat === 'fee') finalString += "Additional Installation Fee: ";
@@ -12076,6 +12297,7 @@
                 tempTextArea.focus();
                 tempTextArea.select();
                 try {
+                    const successful = document.execCommand('copy');
                     if (successful) {
                         if (typeof showToast === 'function') showToast("📋 Proposal copied to clipboard!");
                         else alert("📋 Proposal copied to clipboard!");
@@ -15891,7 +16113,7 @@
             if (mode === 'edit') {
                 populateEditDropdown();
                 document.getElementById('inj-text').value = '';
-                document.getElementById('inj-revert-btn').innerText = 'â†º Revert';
+                document.getElementById('inj-revert-btn').innerText = 'Revert';
                 document.getElementById('inj-revert-btn').className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition shadow-sm';
                 document.getElementById('inj-category').classList.remove('hidden');
                 if (document.getElementById('inj-initial')) document.getElementById('inj-initial').closest('label').classList.remove('hidden');
@@ -15947,10 +16169,10 @@
             let foundText = "";
 
             if (target === 'Intro') foundText = "We are pleased to offer you a quote to upgrade your HVAC system. We will remove the existing system and dispose of per EPA standards. We will install a new system and connect to existing wiring, copper, and ductwork.";
-            else if (target === 'Boilerplate') foundText = "â–  Plattâ€™s Air and Heat has a 1-year workmanship warranty.\nâ–  10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\nâ–  Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
+            else if (target === 'Boilerplate') foundText = "■ Platt's Air and Heat has a 1-year workmanship warranty.\n■ 10 year manufacturer parts warranty on new equipment after new system is registered online by homeowner within 90 days of installation. (Follow links on plattsairandheat.com. Products/Product Registration)\n■ Financing option through FTL (Follow links on plattsairandheat.com. Financing)";
             else if (target.includes('Option')) {
                 for (let line of lines) {
-                    if (line.includes(`â–  ${target}:`)) { foundText = line; break; }
+                    if (line.includes(`■ ${target}:`)) { foundText = line; break; }
                 }
                 let splitIndex = foundText.indexOf(' Investment: $');
                 if (splitIndex !== -1) foundText = foundText.substring(0, splitIndex);
@@ -15968,7 +16190,7 @@
                 const needsInit = document.getElementById('inj-initial').checked;
                 const price = Number(document.getElementById('inj-price').value) || 0;
 
-                let finalString = "â–  ";
+                let finalString = "- ";
                 if (needsInit) finalString += "___ ";
                 if (cat === 'enhancement') finalString += "System enhancement: ";
                 if (cat === 'fee') finalString += "Additional Installation Fee: ";
@@ -16809,7 +17031,7 @@
             if (!sp.infusedItems.includes('Salt Shield (Infiniguard)')) {
                 sp.infusedItems.push('Salt Shield (Infiniguard)');
             }
-            if (typeof showToast === 'function') showToast("ðŸŒŠ Coastal Match Applied!");
+            if (typeof showToast === 'function') showToast("Coastal Match Applied!");
             updateProposalCartUI();
             openReceiptModal(index);
         };
@@ -18509,9 +18731,9 @@
                                     </div>
                                 </div>`;
                             }
-                        } else if (msg.includes("âš ï¸ FORMAT CONFLICT")) {
+                        } else if (msg.includes("âš ï¸  FORMAT CONFLICT")) {
                             bColor = "border-amber-500"; tColor = "text-amber-300";
-                            headerTitle = titlePart.replace("âš ï¸ FORMAT CONFLICT | ", "");
+                            headerTitle = titlePart.replace("âš ï¸  FORMAT CONFLICT | ", "");
                         }
                     }
 
@@ -18635,7 +18857,7 @@
                     const typeLabel = file.type || 'Image';
 
                     meta.textContent =
-                        `${sourceLabel} â€¢ ${typeLabel} â€¢ ${sizeKb.toLocaleString()} KB`;
+                        `${sourceLabel} • ${typeLabel} • ${sizeKb.toLocaleString()} KB`;
                 }
 
                 if (status) {
@@ -19032,7 +19254,7 @@
             if (!summary) return;
 
             if (job.customerName && job.address) {
-                summary.textContent = `${job.customerName} â€¢ Entered`;
+                summary.textContent = `${job.customerName} • Entered`;
                 summary.className = 'text-[9px] text-emerald-400 font-bold tracking-wider uppercase';
             } else if (job.customerName || job.address || job.phone || job.email) {
                 summary.textContent = 'Partially Entered';
