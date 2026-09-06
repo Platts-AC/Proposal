@@ -1,4 +1,4 @@
-<!-- Retest Prototype v08.02.2 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v08.03.3 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v08.02.2</title>
+    <title>Changeout Lookup v08.03.3</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.02.2</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.03.3</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -560,6 +560,20 @@
                         </div>
                     </div>
                     <span class="text-xs font-medium text-slate-300">Hide Filtered</span>
+                </label>
+                <!-- Coastal Diff -->
+                <label for="chkShowCoastalDiff" class="flex items-center gap-1.5 cursor-pointer select-none ml-2">
+                    <div class="relative">
+                        <input type="checkbox" id="chkShowCoastalDiff" onchange="toggleCoastalDiff(this.checked)"
+                            class="sr-only peer">
+                        <div
+                            class="w-9 h-5 bg-slate-700 peer-focus:ring-2 peer-focus:ring-blue-500/40 rounded-full peer peer-checked:bg-blue-600 transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4">
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-slate-300">Show Coastal Price Difference</span>
                 </label>
                 <!-- Fast Column Stepper -->
                 <div class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2 py-1 rounded-lg ml-1">
@@ -1239,9 +1253,23 @@
                             <option value="">Select Profile...</option>
                         </select>
                         <button onclick="loadLayoutProfile()"
-                            class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                            class="flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors max-w-[80px] w-[80px]">
                             <i data-lucide="folder-open" class="w-3 h-3"></i> Load
                         </button>
+                    </div>
+
+                    <!-- Export/Import Row -->
+                    <div class="flex gap-2 pt-1 border-t border-slate-100">
+                        <button onclick="exportLayoutProfile()"
+                            class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i> Export
+                        </button>
+                        <button onclick="document.getElementById('importProfileInput').click()"
+                            class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i> Import
+                        </button>
+                        <input type="file" id="importProfileInput" accept=".json,application/json" class="hidden"
+                            onchange="importLayoutProfile(event)">
                     </div>
                 </div>
 
@@ -1322,7 +1350,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.02.2</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.03.3</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5927,7 +5955,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v08.02.2',
+                appVersion: 'v08.03.3',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6121,7 +6149,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v08.02.2_${stamp}.json`;
+                `platts_config_v08.03.3_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12678,9 +12706,9 @@
             localStorage.setItem('changeout_state_v1', JSON.stringify(appState));
         }
 
-        function sanitizeAppState() {
-            if (!appState.columns) return;
-            appState.columns.forEach(col => {
+        function sanitizeAppState(stateObj = appState) {
+            if (!stateObj.columns) return;
+            stateObj.columns.forEach(col => {
                 if (!col.labelPosition) col.labelPosition = "stacked-top";
                 if (col.pills) {
                     col.pills.forEach(pill => {
@@ -12718,6 +12746,12 @@
                     });
                 }
             });
+        }
+
+        function syncCoastalDiffToggleFromState() {
+            const checkbox = document.getElementById('chkShowCoastalDiff');
+            if (!checkbox) return;
+            checkbox.checked = appState.showCoastalDiff === undefined ? true : !!appState.showCoastalDiff;
         }
 
         function loadAppState() {
@@ -12772,6 +12806,7 @@
                         }
                     });
                     sanitizeAppState();
+                    syncCoastalDiffToggleFromState();
                     // Sync values to UI inputs
                     const widthVal = document.getElementById("valCellWidth");
                     if (widthVal) widthVal.textContent = `${appState.universalWidth}px`;
@@ -12800,6 +12835,7 @@
                     selectColumnForInspector(appState.selectedColIndex || 0);
                 } else {
                     sanitizeAppState();
+                    syncCoastalDiffToggleFromState();
                 }
             } catch (e) {
                 console.error("Failed to load appState from localStorage:", e);
@@ -14173,12 +14209,15 @@
 
                 const kLower = String(key).toLowerCase();
                 if ((kLower.includes("price") || kLower.includes("increase") || kLower.includes("decrease")) && displayVal !== "N/A") {
-                    const numVal = Number(String(displayVal).replace(/[$,+]/g, ""));
+                    let numVal = Number(String(displayVal).replace(/[$,+]/g, ""));
                     if (Number.isFinite(numVal)) {
-                        if (kLower.includes("increase") || kLower.includes("decrease")) {
-                            displayVal = (typeof window.formatAuditDelta === 'function') ? window.formatAuditDelta(numVal) : "$" + Math.round(numVal).toLocaleString("en-US");
+                        if (kLower === "price" && typeof window.getSystemBasePriceResolution === 'function') {
+                            const res = window.getSystemBasePriceResolution(itemObj, null);
+                            displayVal = "$" + res.databasePrice.toLocaleString("en-US");
+                        } else if (kLower.includes("increase") || kLower.includes("decrease")) {
+                            displayVal = (typeof window.formatAuditDelta === 'function') ? window.formatAuditDelta(numVal) : "$" + Math.ceil(numVal).toLocaleString("en-US");
                         } else {
-                            displayVal = (typeof window.formatAuditCurrency === 'function') ? window.formatAuditCurrency(numVal) : "$" + Math.round(numVal).toLocaleString("en-US");
+                            displayVal = (typeof window.formatAuditCurrency === 'function') ? window.formatAuditCurrency(numVal) : "$" + Math.ceil(numVal).toLocaleString("en-US");
                         }
                     }
                 }
@@ -14823,10 +14862,26 @@
                                 else if (appState.siteTagPos === 'stacked-top') stContainerClass = "flex flex-col items-center justify-center gap-0.5";
                                 else if (appState.siteTagPos === 'stacked-bottom') stContainerClass = "flex flex-col-reverse items-center justify-center gap-0.5";
 
+                                // Coastal Pricing Differential
+                                const isStandard = String(item.site || 'Standard').trim().toUpperCase() === 'STANDARD';
+                                let coastalDiffHtml = '';
+
+                                if (isStandard && (appState.showCoastalDiff === undefined || appState.showCoastalDiff)) {
+                                    const cEq = window.findCoastalEquivalentLight(item);
+                                    if (cEq) {
+                                        const stdBase = window.getSystemBasePriceResolution(item, null).databasePrice;
+                                        const cstlBase = window.getSystemBasePriceResolution(cEq, null).databasePrice;
+                                        const delta = cstlBase - stdBase;
+                                        let diffStr = delta > 0 ? `Coastal +$${delta.toLocaleString("en-US")}` : (delta < 0 ? `Coastal -$${Math.abs(delta).toLocaleString("en-US")}` : `Coastal Same Price`);
+                                        coastalDiffHtml = `<div class="mt-1.5 flex items-center justify-center shrink-0 w-full px-1"><span class="border border-blue-500/60 bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded-full font-bold tracking-wide" style="font-size: 0.65em;">${diffStr}</span></div>`;
+                                    }
+                                }
+
                                 formattedValue = `
-              <div class="${stContainerClass} w-full">
+              <div class="${stContainerClass} w-full flex flex-col pt-0.5">
                 ${oceanaTagHtml}
-                <span class="${priceColorClass} font-bold tracking-tight shrink-0 leading-none">$${Math.ceil(Number(displayValue)).toLocaleString()}</span>
+                <div class="flex items-center justify-center"><span class="${priceColorClass} font-bold tracking-tight shrink-0 leading-none" style="font-size: 1.15em;">$${Math.ceil(Number(displayValue)).toLocaleString()}</span></div>
+                ${coastalDiffHtml}
               </div>
               `;
                             } else if (sub.mapping === "taxCreditable") {
@@ -15578,6 +15633,130 @@
             });
         }
         window.addEventListener('load', refreshProfileDropdown);
+
+        window.exportLayoutProfile = function () {
+            const name = document.getElementById('profileSelectDropdown').value;
+            if (!name) {
+                if (typeof showToast === 'function') showToast('âš ï¸ Select a profile to export.');
+                return;
+            }
+            let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
+            if (!profiles[name]) return;
+
+            const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const safeName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+            const payload = {
+                format: 'platts-layout-profile',
+                schemaVersion: 1,
+                appVersion: 'v08.03.3',
+                profileName: name,
+                exportedAt: new Date().toISOString(),
+                layoutState: profiles[name]
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", `platts_layout_${safeName}_v08.03.3_${stamp}.json`);
+            document.body.appendChild(dl);
+            dl.click();
+            dl.remove();
+            if (typeof showToast === 'function') showToast('ðŸ“¤ Exported profile: ' + name);
+        };
+
+        window.importLayoutProfile = function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.format !== 'platts-layout-profile' || parsed.schemaVersion !== 1 || !parsed.layoutState || typeof parsed.layoutState !== 'object' || Array.isArray(parsed.layoutState)) {
+                        if (typeof showToast === 'function') showToast('âŒ Invalid layout profile format.');
+                        return;
+                    }
+
+                    const pName = parsed.profileName || 'Imported Profile';
+                    let profiles = JSON.parse(localStorage.getItem('changeout_profiles_v1') || '{}');
+
+                    if (profiles[pName]) {
+                        if (!confirm(`Profile '${pName}' already exists. Replace it?`)) {
+                            event.target.value = '';
+                            return;
+                        }
+                    }
+
+                    let clonedState = JSON.parse(JSON.stringify(parsed.layoutState));
+                    sanitizeAppState(clonedState);
+                    delete clonedState.activeFilters;
+                    delete clonedState.resultSort;
+                    delete clonedState.resultLimit;
+                    delete clonedState.savedSelectedSystems;
+                    delete clonedState.scratchpads;
+                    delete clonedState.projectDetails;
+                    delete clonedState.page2State;
+                    delete clonedState.smartScopeState;
+                    delete clonedState.customerData;
+                    delete clonedState.proposalData;
+
+                    profiles[pName] = clonedState;
+                    localStorage.setItem('changeout_profiles_v1', JSON.stringify(profiles));
+
+                    refreshProfileDropdown();
+                    document.getElementById('profileSelectDropdown').value = pName;
+
+                    if (typeof showToast === 'function') showToast('ðŸ“¥ Imported profile: ' + pName);
+                } catch (err) {
+                    if (typeof showToast === 'function') showToast('âŒ Failed to parse JSON.');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        };
+
+        window.toggleCoastalDiff = function (val) {
+            appState.showCoastalDiff = val;
+            if (typeof saveAppState === 'function') saveAppState();
+            if (typeof renderGrid === 'function') renderGrid();
+        };
+
+        const _coastalEqCache = new Map();
+        window.findCoastalEquivalentLight = function (currentItem) {
+            if (_coastalEqCache.has(currentItem)) return _coastalEqCache.get(currentItem);
+            const currentAhri = String(currentItem.ahri || '').trim().toUpperCase();
+            const currentSite = String(currentItem.site || 'Standard').trim().toUpperCase();
+            const currentCapacity = String(currentItem.capacity || currentItem[1] || '').trim().toUpperCase();
+            const currentSystemType = String(currentItem.systemType || currentItem.type || '').trim().toUpperCase();
+            const currentMechStage = String(currentItem.mechanicalStage || currentItem.stage || '').trim().toUpperCase();
+            const currentBrand = String(currentItem.brand || '').trim().toUpperCase();
+            const currentSeriesTier = String(currentItem.seriesTier || '').trim().toUpperCase();
+
+            // Safety check to avoid pointless comparison when the item itself is coastal
+            if (String(currentItem.applicationStyle || currentItem.style || '').toUpperCase().includes('COASTAL')) {
+                _coastalEqCache.set(currentItem, null);
+                return null;
+            }
+
+            const matches = HVAC_DATABASE.filter(item => {
+                if (item === currentItem) return false;
+                if (String(item.ahri || '').trim().toUpperCase() !== currentAhri) return false;
+                if (String(item.site || 'Standard').trim().toUpperCase() !== currentSite) return false;
+                if (String(item.capacity || item[1] || '').trim().toUpperCase() !== currentCapacity) return false;
+                if (String(item.systemType || item.type || '').trim().toUpperCase() !== currentSystemType) return false;
+                if (String(item.mechanicalStage || item.stage || '').trim().toUpperCase() !== currentMechStage) return false;
+                if (String(item.brand || '').trim().toUpperCase() !== currentBrand) return false;
+                if (String(item.seriesTier || '').trim().toUpperCase() !== currentSeriesTier) return false;
+                if (!String(item.applicationStyle || item.style || '').toUpperCase().includes('COASTAL')) return false;
+                const p = String(item.price || '0').replace(/[^0-9.-]+/g, '');
+                if (!p || Number(p) <= 0) return false;
+                return true;
+            });
+            const res = matches.length === 1 ? matches[0] : null;
+            _coastalEqCache.set(currentItem, res);
+            return res;
+        };
 
         function normalizeVoiceTranscript(text) {
             return text.toUpperCase()
@@ -17005,15 +17184,20 @@
             if (match) {
                 const currentPrice = String(currentItem.price || '0').replace(/[^0-9.-]+/g, '');
                 const matchPriceStr = String(match.price || '0').replace(/[^0-9.-]+/g, '');
+                const cDbBase = window.getSystemBasePriceResolution(match, null).databasePrice;
+                const sDbBase = window.getSystemBasePriceResolution(currentItem, null).databasePrice;
+                const delta = cDbBase - sDbBase;
+                const diffStr = delta > 0 ? `+$${delta.toLocaleString("en-US")}` : (delta < 0 ? `-$${Math.abs(delta).toLocaleString("en-US")}` : `Same Price`);
 
                 let confirmHtml = `
         <div class="bg-blue-900/30 border border-blue-500 rounded p-4 text-center">
             <h4 class="text-blue-400 font-bold mb-2">🌊 Coastal Equivalent Found</h4>
-            <div class="flex justify-between text-sm mb-1 text-slate-300"><span>Standard Base:</span> <span class="font-bold line-through">$${Math.round(Number(currentPrice)).toLocaleString()}</span></div>
-            <div class="flex justify-between text-lg mb-4 text-white font-black"><span>Coastal Base:</span> <span>$${Math.round(Number(matchPriceStr)).toLocaleString()}</span></div>
-            <div class="text-xs text-emerald-400 mb-4 font-bold tracking-widest">📦 INFINIGUARD INCLUDED IN COASTAL PRICE</div>
+            <div class="flex justify-between text-sm mb-1 text-slate-300"><span>Standard Base:</span> <span class="font-bold line-through">$${sDbBase.toLocaleString("en-US")}</span></div>
+            <div class="flex justify-between text-lg mb-1 text-white font-black"><span>Coastal Base:</span> <span>$${cDbBase.toLocaleString("en-US")}</span></div>
+            <div class="flex justify-between text-xs mb-4 text-emerald-300 font-bold border-b border-blue-500/30 pb-3"><span>Difference:</span> <span>${diffStr}</span></div>
+            <div class="text-[10px] text-emerald-400 mb-4 font-bold tracking-widest leading-relaxed">📦 INFINIGUARD INCLUDED IN COASTAL PRICE</div>
             <div class="flex gap-2 justify-center">
-                <button onclick="confirmCoastalMatch(${index}, ${Math.round(Number(matchPriceStr))})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors">Approve & Swap</button>
+                <button onclick="confirmCoastalMatch(${index}, ${cDbBase})" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors">Approve & Swap</button>
                 <button onclick="openReceiptModal(${index})" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded text-sm transition-colors">Cancel</button>
             </div>
         </div>`;
