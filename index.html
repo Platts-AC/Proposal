@@ -1,4 +1,4 @@
-<!-- Retest Prototype v08.04.2 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v08.05.8 | Enhancement Audit Display Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v08.04.2</title>
+    <title>Changeout Lookup v08.05.8</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,18 @@
         }
     </script>
     <style>
+        body:not(.light-theme) #coastalBadgeScaleValue {
+            color: #e2e8f0 !important;
+            background: #0f172a !important;
+            border-color: #475569 !important;
+        }
+
+        body.light-theme #coastalBadgeScaleValue {
+            color: #0f172a !important;
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
         /* Micro-indicator animation and custom drag classes */
         .micro-indicator {
             transition: background-color 0.15s ease-in-out, height 0.15s ease-in-out;
@@ -467,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.04.2</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.05.8</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1217,6 +1229,25 @@
                     </div>
                 </div>
 
+                <!-- Coastal Badge Size Layout Option -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-500">COASTAL PRICE DIFFERENCE BADGE SIZE</label>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Adjust the display scale for Coastal price comparisons.
+                    </p>
+                    <div class="flex items-center justify-between bg-slate-100 p-2 rounded-lg border border-slate-200">
+                        <button onclick="changeCoastalBadgeScale(-0.05)"
+                            class="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 hover:text-slate-800 shadow-sm cursor-pointer transition-colors">
+                            <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <span id="coastalBadgeScaleValue"
+                            class="text-xs font-mono font-bold text-slate-700 w-12 text-center">0.55x</span>
+                        <button onclick="changeCoastalBadgeScale(0.05)"
+                            class="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 hover:text-slate-800 shadow-sm cursor-pointer transition-colors">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- About HVAC Database info -->
                 <div class="bg-blue-50/50 rounded-lg border border-blue-100 p-3.5 space-y-2 text-xs text-blue-700">
                     <div class="flex items-center gap-1.5 font-bold">
@@ -1378,7 +1409,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.04.2</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.05.8</span>
                                     <div id="global-site-badge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -5983,7 +6014,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v08.04.2',
+                appVersion: 'v08.05.8',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6177,7 +6208,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v08.04.2_${stamp}.json`;
+                `platts_config_v08.05.8_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12858,6 +12889,14 @@
                     const stPosVal = document.getElementById("master-sitetag-pos-val");
                     if (stPosVal) stPosVal.value = appState.siteTagPos || 'inline-right';
 
+                    const coastalScaleEl = document.getElementById("coastalBadgeScaleValue");
+                    if (coastalScaleEl) {
+                        let scale = Number(appState.coastalDiffBadgeScale) || 0.55;
+                        if (scale < 0.25) scale = 0.25;
+                        if (scale > 0.80) scale = 0.80;
+                        coastalScaleEl.textContent = scale.toFixed(2) + 'x';
+                    }
+
                     updatePrefLayoutUI();
                     updateDensityUI();
                     selectColumnForInspector(appState.selectedColIndex || 0);
@@ -13560,6 +13599,17 @@
             renderGrid();
         }
 
+        window.changeCoastalBadgeScale = function (delta) {
+            let scale = Number(appState.coastalDiffBadgeScale) || 0.55;
+            scale += delta;
+            if (scale < 0.25) scale = 0.25;
+            if (scale > 0.80) scale = 0.80;
+            appState.coastalDiffBadgeScale = scale.toFixed(2);
+            document.getElementById('coastalBadgeScaleValue').textContent = appState.coastalDiffBadgeScale + 'x';
+            if (typeof saveAppState === 'function') saveAppState();
+            if (typeof renderGrid === 'function') renderGrid();
+        };
+
         function updateDensityUI() {
             const isCozy = appState.uiDensity === "cozy";
             if (isCozy) {
@@ -14219,11 +14269,160 @@
             dragContext.currentSubIndex = null;
         }
 
-        function openSystemDetails(itemObj) {
+        function openSystemDetails(itemObj, suppliedAuditState) {
             const content = document.getElementById("systemDetailsContent");
             content.innerHTML = "";
 
             let flagBanner = "";
+            let auditBlock = "";
+
+            const auditState = suppliedAuditState || (typeof window.getCurrentAuditStateForItem === 'function' ? window.getCurrentAuditStateForItem(itemObj) : null);
+
+            let compactAuditHtml = '';
+            if (auditState && auditState.found) {
+                let badgeClass = "border-sky-500 bg-sky-900/30 text-sky-400";
+                if (auditState.isNew) badgeClass = "border-fuchsia-500 bg-fuchsia-900/30 text-fuchsia-400";
+                else if (auditState.isMissing) badgeClass = "border-slate-500 bg-slate-800 text-slate-400";
+                else if (auditState.priceChanged) {
+                    let dNum = (typeof auditState.priceDelta === 'number') ? auditState.priceDelta : (typeof auditState.oldPrice === 'number' && typeof auditState.newPrice === 'number' ? auditState.newPrice - auditState.oldPrice : 0);
+                    badgeClass = dNum > 0 ? "border-rose-500 bg-rose-900/30 text-rose-400" : "border-emerald-500 bg-emerald-900/30 text-emerald-400";
+                }
+
+                let changesList = '';
+                if (auditState.isNew) changesList += `<div>&bull; NEW SYSTEM CATALOGED</div>`;
+                if (auditState.isMissing) changesList += `<div>&bull; MISSING IN MASTER</div>`;
+                if (auditState.ahriChanged) changesList += `<div>&bull; AHRI: <span class="text-slate-400">${auditState.oldAhri}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newAhri}</span></div>`;
+                if (auditState.priceChanged) {
+                    let pOld = window.formatAuditCurrency ? window.formatAuditCurrency(auditState.oldPrice) : '$' + auditState.oldPrice;
+                    let pNew = window.formatAuditCurrency ? window.formatAuditCurrency(auditState.newPrice) : '$' + auditState.newPrice;
+                    let pDelta = "";
+                    let deltaNum = (typeof auditState.priceDelta === 'number') ? auditState.priceDelta : (typeof auditState.oldPrice === 'number' && typeof auditState.newPrice === 'number' ? auditState.newPrice - auditState.oldPrice : 0);
+                    if (deltaNum !== 0) {
+                        let dStr = window.formatAuditDelta ? window.formatAuditDelta(deltaNum) : deltaNum;
+                        let dClr = deltaNum > 0 ? "text-rose-400" : "text-emerald-400";
+                        pDelta = ` (<span class="${dClr} font-bold">${dStr}</span>)`;
+                    }
+                    changesList += `<div>&bull; Price: <span class="text-slate-400">${pOld}</span> &rarr; <span class="font-bold text-blue-300">${pNew}</span>${pDelta}</div>`;
+                }
+                if (auditState.seer2Changed) changesList += `<div>&bull; SEER2: <span class="text-slate-400">${auditState.oldSeer2}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newSeer2}</span></div>`;
+                if (auditState.coolingBtuChanged) changesList += `<div>&bull; Cooling BTU: <span class="text-slate-400">${auditState.oldCoolingBtu}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newCoolingBtu}</span></div>`;
+                if (auditState.heatingBtuChanged) changesList += `<div>&bull; Heating BTU: <span class="text-slate-400">${auditState.oldHeatingBtu}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newHeatingBtu}</span></div>`;
+
+                if (auditState.messages && auditState.messages.length > 0) {
+                    changesList += `<div class="text-cyan-300 mt-1">${auditState.messages.join("<br/>")}</div>`;
+                }
+
+                if (changesList !== '') {
+                    compactAuditHtml = `
+                    <div class="mb-4 bg-slate-900 border ${badgeClass} rounded p-3 text-left shadow-sm">
+                        <div class="text-amber-400 font-bold mb-2 uppercase tracking-wide text-[10px]">AUDIT CHANGES</div>
+                        <div class="text-xs text-slate-300 flex flex-col gap-1">
+                            ${changesList}
+                        </div>
+                    </div>
+                    `;
+                }
+            }
+
+            if (auditState && auditState.found) {
+                let badgeClass = "border-sky-500 bg-sky-900/30 text-sky-400";
+                if (auditState.isNew) badgeClass = "border-fuchsia-500 bg-fuchsia-900/30 text-fuchsia-400";
+                else if (auditState.isMissing) badgeClass = "border-slate-500 bg-slate-800 text-slate-400";
+                else if (auditState.priceChanged) {
+                    badgeClass = auditState.priceDelta > 0 ? "border-rose-500 bg-rose-900/30 text-rose-400" : "border-emerald-500 bg-emerald-900/30 text-emerald-400";
+                }
+
+                let auditRows = '';
+                if (auditState.isNew) {
+                    auditRows += `<div class="mb-2 text-fuchsia-300 text-[10px] font-mono font-semibold bg-fuchsia-900/30 p-1.5 rounded border border-fuchsia-900/30 text-center uppercase">NEW SYSTEM CATALOGED IN MASTER</div>`;
+                } else if (auditState.isMissing) {
+                    auditRows += `<div class="mb-2 text-slate-300 text-[10px] font-mono font-semibold bg-slate-800 p-1.5 rounded border border-slate-700 text-center uppercase">MISSING IN MASTER</div>`;
+                }
+
+                if (auditState.ahriChanged && auditState.oldAhri && auditState.oldAhri !== auditState.newAhri) {
+                    auditRows += `
+                    <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
+                        <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">AHRI CHANGED</div>
+                        <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
+                            <span class="line-through opacity-75">${auditState.oldAhri}</span>
+                            &rarr;
+                            <span class="text-amber-400 font-bold">${auditState.newAhri || itemObj.ahri}</span>
+                        </div>
+                    </div>`;
+                }
+
+                if (auditState.priceChanged) {
+                    let dStr = window.formatAuditDelta ? window.formatAuditDelta(auditState.priceDelta) : auditState.priceDelta;
+                    let arrDir = auditState.priceDelta > 0 ? "Increase" : "Decrease";
+                    let dClr = auditState.priceDelta > 0 ? "text-rose-400" : "text-emerald-400";
+                    auditRows += `
+                    <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
+                        <div class="grid grid-cols-2 gap-2 text-[10px] font-mono text-left">
+                            <div class="flex flex-col"><span class="text-slate-500 uppercase text-[9px] font-bold tracking-widest">Previous Price</span> <span class="text-slate-300">${window.formatAuditCurrency ? window.formatAuditCurrency(auditState.oldPrice) : '$' + auditState.oldPrice}</span></div>
+                            <div class="flex flex-col"><span class="text-slate-500 uppercase text-[9px] font-bold tracking-widest">Updated Price</span> <span class="text-blue-300">${window.formatAuditCurrency ? window.formatAuditCurrency(auditState.newPrice) : '$' + auditState.newPrice}</span></div>
+                            <div class="col-span-2 flex justify-between border-t border-slate-700/50 pt-1 mt-1">
+                                <span class="text-slate-500 uppercase text-[9px] font-bold tracking-widest">${arrDir}</span>
+                                <span class="${dClr} font-bold">${dStr}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                if (auditState.seer2Changed && auditState.oldSeer2 && auditState.oldSeer2 !== auditState.newSeer2) {
+                    auditRows += `
+                    <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
+                        <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">SEER2 CHANGED</div>
+                        <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
+                            <span class="line-through opacity-75">${auditState.oldSeer2}</span>
+                            &rarr;
+                            <span class="text-amber-400 font-bold">${auditState.newSeer2}</span>
+                        </div>
+                    </div>`;
+                }
+
+                if (auditState.coolingBtuChanged && auditState.oldCoolingBtu && auditState.oldCoolingBtu !== auditState.newCoolingBtu) {
+                    auditRows += `
+                    <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
+                        <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">COOLING BTU CHANGED</div>
+                        <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
+                            <span class="line-through opacity-75">${auditState.oldCoolingBtu}</span>
+                            &rarr;
+                            <span class="text-amber-400 font-bold">${auditState.newCoolingBtu}</span>
+                        </div>
+                    </div>`;
+                }
+
+                if (auditState.heatingBtuChanged && auditState.oldHeatingBtu && auditState.oldHeatingBtu !== auditState.newHeatingBtu) {
+                    auditRows += `
+                    <div class="bg-slate-900/40 p-2 rounded border border-slate-700/50">
+                        <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">HEATING BTU CHANGED</div>
+                        <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
+                            <span class="line-through opacity-75">${auditState.oldHeatingBtu}</span>
+                            &rarr;
+                            <span class="text-amber-400 font-bold">${auditState.newHeatingBtu}</span>
+                        </div>
+                    </div>`;
+                }
+
+                if (!auditState.isNew && !auditState.isMissing && !auditState.priceChanged && !auditState.ahriChanged && !auditState.seer2Changed && !auditState.coolingBtuChanged && !auditState.heatingBtuChanged && auditState.messages.length > 0) {
+                    auditRows += `
+                     <div class="bg-slate-900/40 p-2 rounded border border-slate-700/50 text-[10px] font-mono text-cyan-300">
+                         ${auditState.messages.join("<br/>")}
+                     </div>`;
+                }
+
+                auditBlock = `
+                <div class="mb-4 mx-4 mt-3 flex flex-col overflow-hidden rounded shadow-sm border ${badgeClass}">
+                    <div class="w-full text-[10px] font-bold uppercase tracking-widest bg-black/20 p-2 border-b border-black/10 flex items-center gap-2">
+                        <i data-lucide="bell" class="w-3 h-3"></i>
+                        CURRENT AUDIT / CHANGE DETAILS
+                    </div>
+                    <div class="p-3 bg-black/10 flex flex-col w-full text-left">
+                        ${auditRows}
+                    </div>
+                </div>
+                `;
+            }
 
             Object.entries(itemObj).forEach(([key, val]) => {
                 const niceKey = key.replace(/([A-Z])/g, ' $1').toUpperCase();
@@ -14302,9 +14501,18 @@
                 content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">${niceKey}</span><span class="font-semibold text-[13px] sm:text-sm ${valColorClass} text-right shrink-0 max-w-[65%] break-words" style="overflow-wrap: anywhere;">${displayVal}</span></div>`;
             });
 
-            // Prepend Flag Banner to the top if it exists
+            let prependHtml = '';
+            if (compactAuditHtml) {
+                prependHtml += compactAuditHtml;
+            }
+            if (auditBlock) {
+                prependHtml += auditBlock;
+            }
             if (flagBanner) {
-                content.innerHTML = flagBanner + content.innerHTML;
+                prependHtml += flagBanner;
+            }
+            if (prependHtml) {
+                content.innerHTML = prependHtml + content.innerHTML;
             }
 
             document.getElementById("systemDetailsModalBackdrop").classList.remove("hidden");
@@ -14315,6 +14523,7 @@
                 window.initDraggableModal('system-details-panel', 'system-details-header');
             }
 
+            content.scrollTop = 0;
             lucide.createIcons();
         }
 
@@ -14891,7 +15100,7 @@
                                 else if (appState.siteTagPos === 'stacked-bottom') stContainerClass = "flex flex-col-reverse items-center justify-center gap-0.5";
 
                                 // Coastal Pricing Differential
-                                const isStandard = String(item.site || 'Standard').trim().toUpperCase() === 'STANDARD';
+                                const isStandard = String(item.applicationStyle || item.style || '').trim().toUpperCase() === 'STANDARD';
                                 let coastalDiffHtml = '';
 
                                 if (isStandard && (appState.showCoastalDiff === undefined || appState.showCoastalDiff)) {
@@ -14901,7 +15110,12 @@
                                         const cstlBase = window.getSystemBasePriceResolution(cEq, null).databasePrice;
                                         const delta = cstlBase - stdBase;
                                         let diffStr = delta > 0 ? `Coastal +$${delta.toLocaleString("en-US")}` : (delta < 0 ? `Coastal -$${Math.abs(delta).toLocaleString("en-US")}` : `Coastal Same Price`);
-                                        coastalDiffHtml = `<div class="mt-1.5 flex items-center justify-center shrink-0 w-full px-1"><span class="border border-blue-500/60 bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded-full font-bold tracking-wide" style="font-size: 0.65em;">${diffStr}</span></div>`;
+                                        let badgeScale = Number(appState.coastalDiffBadgeScale);
+                                        if (!Number.isFinite(badgeScale)) {
+                                            badgeScale = 0.55;
+                                        }
+                                        badgeScale = Math.max(0.25, Math.min(0.80, badgeScale));
+                                        coastalDiffHtml = `<div class="mt-1 flex items-center justify-center shrink-0 w-full px-1"><span class="border border-blue-500/60 bg-blue-900/30 text-blue-300 px-1.5 py-[1px] rounded-full font-bold tracking-wide" style="font-size: ${badgeScale}em;">${diffStr}</span></div>`;
                                     }
                                 }
 
@@ -15095,7 +15309,10 @@
                                 subCell.onclick = (e) => {
                                     if (e.target.closest('.micro-indicator')) return;
                                     e.stopPropagation();
-                                    if (typeof openSystemDetails === 'function') openSystemDetails(item);
+                                    if (typeof openSystemDetails === 'function') {
+                                        const auditState = typeof window.getCurrentAuditStateForItem === 'function' ? window.getCurrentAuditStateForItem(item) : null;
+                                        openSystemDetails(item, auditState);
+                                    }
                                 };
                             } else {
                                 // Clicking the cell: select for Inspector overrides, then filter
@@ -15789,7 +16006,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v08.04.2',
+                appVersion: 'v08.05.8',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -15798,7 +16015,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v08.04.2_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v08.05.8_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -15817,7 +16034,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v08.04.2',
+                appVersion: 'v08.05.8',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -15826,7 +16043,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v08.04.2_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v08.05.8_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -18525,14 +18742,95 @@
             modal.classList.remove('flex');
         }
 
+        window.applyRowFlagToAuditState = function (item, state) {
+            if (!item || !item.flag) return state;
+            const r = String(item.flag).trim();
+            if (!r) return state;
+
+            const msgUpper = r.toUpperCase();
+            let matched = false;
+
+            const priceMatch = r.match(/\bPrice:\s*([$]?[\d,]+(?:\.\d+)?)\s*(?:âž”|->|â†’)\s*([$]?[\d,]+(?:\.\d+)?)/i) ||
+                r.match(/changed from\s*([$]?[\d,]+(?:\.\d+)?)\s*to\s*([$]?[\d,]+(?:\.\d+)?)/i);
+            if (priceMatch) {
+                state.priceChanged = true;
+                state.oldPrice = Number(priceMatch[1].replace(/[^0-9.-]+/g, ''));
+                state.newPrice = Number(priceMatch[2].replace(/[^0-9.-]+/g, ''));
+                state.priceDelta = state.newPrice - state.oldPrice;
+                matched = true;
+            }
+
+            const ahriMatch = r.match(/AHRI:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i);
+            if (ahriMatch) {
+                state.ahriChanged = true;
+                state.oldAhri = ahriMatch[1];
+                state.newAhri = ahriMatch[2];
+                matched = true;
+            }
+
+            const seer2Match = r.match(/SEER2:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i);
+            if (seer2Match) {
+                state.seer2Changed = true;
+                state.oldSeer2 = seer2Match[1];
+                state.newSeer2 = seer2Match[2];
+                matched = true;
+            }
+
+            const btuMatch = r.match(/BTU:\s*([^\sâž”]+)\s*(?:âž”|->|â†’)\s*([^\s]+)/i);
+            if (btuMatch) {
+                matched = true;
+                if (msgUpper.includes("COOLING BTU")) {
+                    state.coolingBtuChanged = true;
+                    state.oldCoolingBtu = btuMatch[1];
+                    state.newCoolingBtu = btuMatch[2];
+                }
+                else if (msgUpper.includes("HEATING BTU")) {
+                    state.heatingBtuChanged = true;
+                    state.oldHeatingBtu = btuMatch[1];
+                    state.newHeatingBtu = btuMatch[2];
+                }
+                else {
+                    state.coolingBtuChanged = true;
+                    state.heatingBtuChanged = true;
+                    state.oldCoolingBtu = btuMatch[1];
+                    state.newCoolingBtu = btuMatch[2];
+                    state.oldHeatingBtu = btuMatch[1];
+                    state.newHeatingBtu = btuMatch[2];
+                }
+            }
+
+            if (msgUpper.includes("NEW SYSTEM")) {
+                state.isNew = true;
+                matched = true;
+            }
+            if (msgUpper.includes("MISSING SYSTEM")) {
+                state.isMissing = true;
+                matched = true;
+            }
+
+            if (matched) {
+                state.found = true;
+                if (!state.messages.includes(r)) {
+                    state.messages.push(r);
+                }
+            }
+
+            return state;
+        };
+
         window.getCurrentAuditStateForItem = function (item) {
             const state = {
                 found: false,
                 isNew: false,
                 isMissing: false,
                 priceChanged: false, oldPrice: null, newPrice: null, priceDelta: null,
-                ahriChanged: false, seer2Changed: false, coolingBtuChanged: false, heatingBtuChanged: false,
-                messages: []
+                ahriChanged: false, oldAhri: null, newAhri: null,
+                seer2Changed: false, oldSeer2: null, newSeer2: null,
+                coolingBtuChanged: false, oldCoolingBtu: null, newCoolingBtu: null,
+                heatingBtuChanged: false, oldHeatingBtu: null, newHeatingBtu: null,
+                messages: [],
+                debugStructuredEventsPresent: false,
+                debugStructuredEventMatched: false
             };
             if (!window.HVAC_ALERTS) return state;
 
@@ -18547,6 +18845,7 @@
 
             // --- 1. STRUCTURED EVENTS MATCHING ---
             const hasStructuredEventsPayload = Array.isArray(window.HVAC_ALERTS?.events);
+            state.debugStructuredEventsPresent = hasStructuredEventsPayload;
             const auditEvents = hasStructuredEventsPayload ? window.HVAC_ALERTS.events : [];
             let matchedStructuredEvent = false;
 
@@ -18576,6 +18875,7 @@
                     if (isMatch) {
                         state.found = true;
                         matchedStructuredEvent = true;
+                        state.debugStructuredEventMatched = true;
                         if (event.message) state.messages.push(event.message);
 
                         if (event.type === "UPDATE" || event.type === "FORMAT_CONFLICT") {
@@ -18588,12 +18888,20 @@
                                         state.priceDelta = state.newPrice - state.oldPrice;
                                     } else if (change.field === "ahri") {
                                         state.ahriChanged = true;
+                                        state.oldAhri = change.oldValue;
+                                        state.newAhri = change.newValue;
                                     } else if (change.field === "seer2") {
                                         state.seer2Changed = true;
+                                        state.oldSeer2 = change.oldValue;
+                                        state.newSeer2 = change.newValue;
                                     } else if (change.field === "coolingBtu") {
                                         state.coolingBtuChanged = true;
+                                        state.oldCoolingBtu = change.oldValue;
+                                        state.newCoolingBtu = change.newValue;
                                     } else if (change.field === "heatingBtu") {
                                         state.heatingBtuChanged = true;
+                                        state.oldHeatingBtu = change.oldValue;
+                                        state.newHeatingBtu = change.newValue;
                                     }
                                 });
                             }
@@ -18607,7 +18915,10 @@
             }
 
             if (hasStructuredEventsPayload) {
-                return state;
+                if (matchedStructuredEvent) {
+                    return state;
+                }
+                return window.applyRowFlagToAuditState(item, state);
             }
 
             // --- 2. LEGACY STRING MATCHING (FALLBACK ONLY) ---
