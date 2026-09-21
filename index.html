@@ -1,4 +1,4 @@
-<!-- Retest Prototype v08.05.8 | Enhancement Audit Display Normalization -->
+<!-- Retest Prototype v08.07.11 | Version Identifier Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v08.05.8</title>
+    <title>Changeout Lookup v08.07.11</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.05.8</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.07.11</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -535,6 +535,8 @@
 
             <!-- Zone 3: Right Cart Column -->
             <div class="flex items-center justify-end shrink-0 ml-1 sm:ml-4 mt-1 sm:mt-0">
+                <div id="page1-site-control" onclick="openSiteSetupModal('page1');"
+                    class="mr-3 cursor-pointer shrink-0 hidden md:block"></div>
                 <button id="cartButton" onclick="toggleViewSwap()"
                     class="relative flex items-center justify-center bg-blue-600 hover:bg-blue-500 transition border border-blue-500 rounded-lg shadow-md shrink-0 cursor-pointer text-white"
                     style="width: 44px; height: 44px;" title="View Proposal Cart">
@@ -1409,8 +1411,8 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.05.8</span>
-                                    <div id="global-site-badge"
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.07.11</span>
+                                    <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
                                         <span id="global-site-badge-text"
@@ -1622,8 +1624,8 @@
                                 </div>
 
                                 <div class="text-[9px] text-slate-500 mt-0.5">
-                                    Paste five lines in this order: Date, Name, Address, Phone, Email. Labeled lines are
-                                    also accepted.
+                                    Paste customer info in almost any order. Date, name, address, phone and email are
+                                    detected automatically. Labeled lines are also accepted.
                                 </div>
                             </div>
 
@@ -1807,7 +1809,22 @@
                         <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i> Final Proposal Output
                     </span>
                     <div
-                        class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex items-center gap-4 ml-auto">
+                        class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex flex-wrap items-center gap-4 ml-auto">
+                        <!-- PROPOSAL EXPORT CONTROLS -->
+                        <div class="flex items-center gap-2 border-r border-slate-700 pr-4">
+                            <span id="proposal-export-status" class="hidden text-emerald-400 normal-case whitespace-nowrap text-xs font-normal"></span>
+                            <div id="proposal-links-container" class="hidden flex gap-2">
+                                <a id="proposal-doc-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-blue-700 hover:bg-blue-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center" title="Open Google Doc"><i data-lucide="file-text" class="w-3.5 h-3.5 mr-1"></i> Doc</a>
+                                <a id="proposal-pdf-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-rose-700 hover:bg-rose-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center" title="Open PDF"><i data-lucide="file" class="w-3.5 h-3.5 mr-1"></i> PDF</a>
+                            </div>
+                            <select id="proposal-destination-folder" class="bg-slate-800 text-white text-[10px] font-bold uppercase tracking-wider border border-slate-600 rounded p-1.5 w-48 truncate" onchange="window.saveProposalDestinationPref()">
+                                <option value="">Loading folders...</option>
+                            </select>
+                            <button id="btn-create-proposal" type="button" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10 whitespace-nowrap" onclick="event.preventDefault(); window.createProposalExportFromRetest();">
+                                Create Proposal
+                            </button>
+                        </div>
+
                         <button
                             class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10"
                             onclick="event.preventDefault(); copyProposalText();"><i data-lucide="copy"
@@ -1956,60 +1973,27 @@
             class="p-4 flex-1 min-h-0 max-h-full flex flex-col gap-4 overflow-y-auto overscroll-contain"
             style="touch-action: pan-y;">
 
-            <div id="page2-settings-panel" class="hidden flex flex-col min-h-0 h-[65vh] max-h-[600px] bg-slate-800">
-                <div id="page2-header-selected-cell-context"
+
+            <div id="shared-grid-settings-panel"
+                class="hidden flex flex-col min-h-0 h-[65vh] max-h-[600px] bg-slate-800">
+                <div id="shared-grid-context-wrapper"
                     class="flex-shrink-0 bg-blue-900/30 border border-blue-800 rounded-lg p-2 mb-3">
-                    <div class="text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1">SELECTED CELL</div>
-                    <div class="text-xs text-white font-bold" id="page2-header-context-location">C1 · S1 · 1 | Empty /
-                        Spacer</div>
-                </div>
-                <div class="flex flex-shrink-0 gap-1 border-b border-slate-700 pb-2 mb-3">
-                    <button onclick="window.switchPage2HeaderSettingsTab('layout')" id="page2-header-tab-layout"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors bg-blue-600 text-white shadow-sm">Layout</button>
-                    <button onclick="window.switchPage2HeaderSettingsTab('mapping')" id="page2-header-tab-mapping"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700">Mapping</button>
-                    <button onclick="window.switchPage2HeaderSettingsTab('alignfont')" id="page2-header-tab-alignfont"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700">Align
-                        & Font</button>
+                    <div class="text-[9px] text-blue-400 font-bold uppercase tracking-widest mb-1">SELECTED LOCATION
+                    </div>
+                    <div class="text-xs text-white font-bold" id="shared-grid-context-location">Container 1 · Stack 1 ·
+                        Split 1</div>
                 </div>
 
                 <div class="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 custom-scrollbar"
-                    id="page2-header-settings-content">
+                    id="shared-grid-settings-content">
                     <!-- Dynamic rendering by JS -->
                 </div>
 
                 <div class="mt-4 border-t border-slate-700 pt-3 flex-shrink-0">
-                    <button onclick="window.resetPage2HeaderLayout()"
+                    <button onclick="if(window.resetSharedGrid) window.resetSharedGrid();"
                         class="w-full bg-slate-900 hover:bg-rose-900/40 text-slate-400 hover:text-rose-400 py-2 rounded text-[10px] font-bold uppercase tracking-widest border border-slate-700 transition-colors">
-                        Reset Page 2 Header
+                        Reset Layout Defaults
                     </button>
-                </div>
-
-                <!-- Width Mode & Stepper -->
-                <div class="space-y-2 mt-4">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dashboard
-                        Width</label>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="setPropWidth('compact')" id="btn-prop-width-compact"
-                            class="flex-1 min-w-[60px] bg-slate-800 hover:bg-slate-700 text-slate-300 py-1.5 rounded text-xs font-bold transition-colors cursor-pointer">Compact</button>
-                        <button onclick="setPropWidth('standard')" id="btn-prop-width-standard"
-                            class="flex-1 min-w-[60px] bg-slate-800 hover:bg-slate-700 text-slate-300 py-1.5 rounded text-xs font-bold transition-colors cursor-pointer">Standard</button>
-                        <button onclick="setPropWidth('wide')" id="btn-prop-width-wide"
-                            class="flex-1 min-w-[60px] bg-blue-600 text-white py-1.5 rounded text-xs font-bold transition-colors cursor-pointer">Wide</button>
-                        <button onclick="setPropWidth('full')" id="btn-prop-width-full"
-                            class="flex-1 min-w-[60px] bg-slate-800 hover:bg-slate-700 text-slate-300 py-1.5 rounded text-xs font-bold transition-colors cursor-pointer">Full</button>
-                        <button onclick="setPropWidth('fixed')" id="btn-prop-width-fixed"
-                            class="flex-1 min-w-[60px] bg-slate-800 hover:bg-slate-700 text-slate-300 py-1.5 rounded text-xs font-bold transition-colors cursor-pointer">Fixed</button>
-                    </div>
-                    <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-lg p-1.5 mt-2 opacity-50 pointer-events-none transition-opacity"
-                        id="prop-width-stepper-container">
-                        <button onclick="adjustPropWidthVal(-50)"
-                            class="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded text-white font-bold cursor-pointer">-</button>
-                        <div id="prop-width-val" class="flex-grow text-center text-xs font-mono text-slate-200">1200px
-                        </div>
-                        <button onclick="adjustPropWidthVal(50)"
-                            class="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded text-white font-bold cursor-pointer">+</button>
-                    </div>
                 </div>
             </div>
 
@@ -2097,15 +2081,12 @@
                 </div>
                 <div id="dispatch-settings-tab-strip"
                     class="flex flex-shrink-0 gap-1 border-b border-slate-700 pb-2 mb-3">
-                    <button onclick="window.switchDispatchSettingsTab('layout')" id="dispatch-tab-layout"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors bg-blue-600 text-white shadow-sm">Layout</button>
-                    <button onclick="window.switchDispatchSettingsTab('mapping')" id="dispatch-tab-mapping"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700">Mapping</button>
-                    <button onclick="window.switchDispatchSettingsTab('alignfont')" id="dispatch-tab-alignfont"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700">Align
-                        & Font</button>
+                    <button onclick="window.openPage2Settings('dispatch-grid-redirect')"
+                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700 bg-slate-900 border border-slate-600">Open
+                        Grid Editor</button>
                     <button onclick="window.switchDispatchSettingsTab('body')" id="dispatch-tab-body"
-                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors text-slate-400 hover:text-white hover:bg-slate-700">Body</button>
+                        class="flex-1 py-1.5 px-2 text-[10px] font-bold uppercase tracking-wider rounded transition-colors bg-blue-600 text-white shadow-sm">Body
+                        Configuration</button>
                 </div>
 
                 <div class="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 custom-scrollbar"
@@ -3399,6 +3380,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             loadAppState();
+            if (typeof renderPage1SiteControl === 'function') renderPage1SiteControl();
         });
 
         window.addEventListener('load', () => {
@@ -3434,6 +3416,7 @@
                         window.HVAC_ALERTS = result.alerts || null;
                         renderGrid();
                         processAuditFlags();
+                        if (typeof refreshSiteDependentUI === 'function') refreshSiteDependentUI();
 
                         // TOAST NOTIFICATION TRIGGER
                         let newCount = window.HVAC_ALERTS ? (window.HVAC_ALERTS.newCount || 0) : 0;
@@ -3494,42 +3477,29 @@
             const badge = document.getElementById('global-site-badge');
             const badgeText = document.getElementById('global-site-badge-text');
             if (!badge || !badgeText) return;
-
+            const badges = document.querySelectorAll('#global-site-badge, [data-page2-site-badge="true"]');
+            if (!badges || badges.length === 0) return;
             const active = ensureActiveSiteState();
-            const pMode = window.propSettings?.page2Header?.siteBadgeMode || 'compact';
 
-            if (!active.confirmed || active.name === 'Standard') {
-                if (pMode === 'compact') {
-                    badgeText.innerText = 'STANDARD';
+            badges.forEach(badge => {
+                const badgeText = badge.tagName.toLowerCase() === 'div' && badge.innerHTML.includes('<i')
+                    ? badge
+                    : badge.querySelector('span') || badge;
+
+                if (!active || !active.confirmed || active.profileId === 'standard') {
+                    badge.classList.add('hidden');
+                    badge.setAttribute('aria-hidden', 'true');
                 } else {
-                    badgeText.innerText = 'SITE: STANDARD';
-                }
-                badge.classList.remove('bg-blue-900/50', 'border-blue-400');
-                badge.classList.add('bg-slate-800/50', 'border-slate-600');
-                badge.classList.add('hidden');
-                badge.style.display = '';
-            } else {
-                badge.classList.remove('hidden');
-                badge.classList.remove('bg-slate-800/50', 'border-slate-600');
-                badge.classList.add('bg-blue-900/50', 'border-blue-400');
-                badge.style.display = 'flex';
+                    badge.classList.remove('hidden');
+                    badge.setAttribute('aria-hidden', 'false');
 
-                let t = active.name.toUpperCase();
-
-                if (active.profileId === 'oceana') {
-                    if (active.equipmentFloor) {
-                        if (pMode === 'full') t = `OCEANA · FLOOR ${active.equipmentFloor}`;
-                        else if (pMode === 'compact') t = `OCEANA · FLR ${active.equipmentFloor}`;
-                        else if (pMode === 'floor') t = `FLR ${active.equipmentFloor}`;
-                        else if (pMode === 'number') t = `${active.equipmentFloor}`;
-                    } else {
-                        t = 'OCEANA';
+                    let t = active.name.toUpperCase();
+                    if (active.profileId === 'oceana' && active.equipmentFloor) {
+                        t += ` · FLR ${active.equipmentFloor}`;
                     }
-                } else {
-                    t = `SITE: ${active.name.toUpperCase()}`;
+                    badgeText.innerText = t;
                 }
-                badgeText.innerText = t;
-            }
+            });
         }
 
         // --- AUTHORITATIVE UI STATE HELPERS ---
@@ -3610,9 +3580,125 @@
             return window.proposalAppState.activeSite;
         }
 
+        function isMeaningfulSiteProfileActive() {
+            const active = ensureActiveSiteState();
+            return active && active.confirmed && (active.profileId || active.isCustom);
+        }
+
+        function forceResetToStandardSite() {
+            const active = ensureActiveSiteState();
+            active.profileId = null;
+            active.name = 'Standard';
+            active.isCustom = false;
+            active.equipmentFloor = null;
+            active.condenserFloor = null;
+            active.verticalTravel = 0;
+            active.floorAllowance = 0;
+            active.condoRequired = false;
+            if (active.craneSource === 'profile-required') {
+                active.craneFee = 0;
+                active.craneSource = 'none';
+            }
+            active.confirmed = false;
+
+            closeSiteSetupModal();
+
+            if (typeof selectedProposalRows !== 'undefined' && selectedProposalRows.length > 0) {
+                applyActiveSiteToSelectedOptions();
+            }
+            refreshSiteDependentUI();
+        }
+
+        function showSafeProfileWarning(messageText, confirmCallback, cancelCallback, confirmBtnText = 'Confirm') {
+            const warningModalHtml = `
+            <div id="site-clear-warning-overlay" class="fixed inset-0 bg-black/75 z-[9999] flex items-center justify-center p-4 backdrop-blur-sm">
+                <div class="bg-slate-900 border border-slate-700 shadow-2xl rounded-xl max-w-sm w-full font-sans overflow-hidden fade-in relative">
+                    <div class="p-4 border-b border-slate-700 bg-rose-900/20">
+                        <div class="flex items-center gap-2 text-rose-400">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            <h3 class="font-black tracking-widest uppercase text-sm leading-none m-0">Protection Warning</h3>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-sm text-slate-300 font-medium mb-5 leading-snug">
+                            ${messageText}
+                        </p>
+                        <div class="flex gap-3 justify-end mt-4">
+                            <button id="site-warn-cancel-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded text-xs font-bold uppercase transition-colors">
+                                Cancel
+                            </button>
+                            <button id="site-warn-confirm-btn" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded text-xs font-bold uppercase shadow-[0_0_10px_rgba(225,29,72,0.3)] transition-colors">
+                                ${confirmBtnText}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            const existing = document.getElementById('site-clear-warning-overlay');
+            if (existing) existing.remove();
+
+            document.body.insertAdjacentHTML('beforeend', warningModalHtml);
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+
+            const overlay = document.getElementById('site-clear-warning-overlay');
+
+            document.getElementById('site-warn-cancel-btn').onclick = () => {
+                overlay.remove();
+                if (cancelCallback) cancelCallback();
+            };
+
+            document.getElementById('site-warn-confirm-btn').onclick = () => {
+                overlay.remove();
+                if (confirmCallback) confirmCallback();
+            };
+        }
+
+        function promptClearSiteProfileSafe() {
+            closeSiteSetupModal();
+            if (typeof selectedProposalRows !== 'undefined' && selectedProposalRows.length > 0) {
+                showSafeProfileWarning('Clearing this site profile removes site-derived settings from all selected options (floor-based allowance, crane fees, etc).', () => {
+                    forceResetToStandardSite();
+                }, () => {
+                    // Canceled
+                }, 'Clear Profile & Recalculate');
+            } else {
+                forceResetToStandardSite();
+            }
+        }
+
+        function executeProtectedSystemRemoval(rowIndex, removalActionCallback) {
+            if (selectedProposalRows.length === 1 && isMeaningfulSiteProfileActive()) {
+                showSafeProfileWarning('Removing the last selected system will also clear the current site/condo profile, including floor, refrigerant allowance, crane, and condo settings.', () => {
+                    removalActionCallback();
+                    forceResetToStandardSite();
+                }, null, 'Remove & Clear Profile');
+            } else {
+                removalActionCallback();
+            }
+        }
+
+        function renderPage1SiteControl() {
+            const btn = document.getElementById('page1-site-control');
+            if (!btn) return;
+            const active = ensureActiveSiteState();
+            if (isMeaningfulSiteProfileActive()) {
+                let txt = active.name.toUpperCase();
+                if (active.profileId === 'oceana' && active.equipmentFloor) {
+                    txt += ` &middot; FLR ${active.equipmentFloor}`;
+                }
+                btn.innerHTML = `<span class="bg-cyan-900/40 border border-cyan-500 text-cyan-300 text-[10px] font-extrabold px-2 flex items-center justify-center h-[26px] rounded shadow-[0_0_6px_rgba(6,182,212,0.2)] tracking-widest cursor-pointer whitespace-nowrap transition-colors hover:bg-cyan-800/50">${txt}</span>`;
+            } else {
+                btn.innerHTML = `<span class="bg-slate-800 text-slate-400 hover:text-slate-200 text-[10px] border border-slate-700 hover:border-slate-500 font-extrabold px-2 flex items-center justify-center h-[26px] rounded shadow-sm tracking-widest transition-colors cursor-pointer whitespace-nowrap">SITE</span>`;
+            }
+        }
+
         function refreshSiteDependentUI() {
             if (typeof updateGlobalSiteBadge === 'function') {
                 updateGlobalSiteBadge();
+            }
+            if (typeof renderPage1SiteControl === 'function') {
+                renderPage1SiteControl();
             }
             if (typeof renderProposalChecklist === 'function') {
                 renderProposalChecklist();
@@ -3721,7 +3807,12 @@
         `;
             }
 
-            container.innerHTML = html;
+            let clearBtnHtml = '';
+            if (isMeaningfulSiteProfileActive()) {
+                clearBtnHtml = `<div class="mt-4 pt-4 border-t border-slate-700/50"><button onclick="promptClearSiteProfileSafe()" type="button" class="w-full bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500 border-opacity-50 font-bold uppercase tracking-wider text-xs py-2 rounded transition-colors shadow-sm">Clear Profile / Return to Standard</button></div>`;
+            }
+
+            container.innerHTML = html + clearBtnHtml;
             updateSiteSetupPreview();
         }
 
@@ -3955,7 +4046,10 @@
         function toggleProposalRow(rowIndex) {
             const idx = selectedProposalRows.indexOf(rowIndex);
             if (idx > -1) {
-                selectedProposalRows.splice(idx, 1);
+                executeProtectedSystemRemoval(rowIndex, () => {
+                    const freshIdx = selectedProposalRows.indexOf(rowIndex);
+                    if (freshIdx > -1) selectedProposalRows.splice(freshIdx, 1);
+                });
             } else {
                 selectedProposalRows.push(rowIndex);
                 // JIT Scratchpad Initialization
@@ -3991,7 +4085,13 @@
                         condo: { required: false, includedInBase: false, charge: 0, locked: false, source: 'none' },
                         siteFloorAllowance: { profileId: null, amount: 0, bakedIn: true }
                     };
-                    checkSiteSetupTriggers(itemSite);
+
+                    const active = ensureActiveSiteState();
+                    if (selectedProposalRows.length === 1 && itemSite === 'Oceana' && !active.confirmed) {
+                        openSiteSetupModal('auto', 'oceana');
+                    } else {
+                        checkSiteSetupTriggers(itemSite);
+                    }
                     applyActiveSiteToSelectedOptions();
                 }
             }
@@ -6014,7 +6114,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v08.05.8',
+                appVersion: 'v08.07.11',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6208,7 +6308,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v08.05.8_${stamp}.json`;
+                `platts_config_v08.07.11_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -10535,10 +10635,15 @@
         }
 
         function removeSystemFromProposal(index) {
-            selectedProposalRows.splice(index, 1);
-            document.getElementById('cartCounterBadge').innerText = selectedProposalRows.length;
-            renderGrid();
-            updateProposalCartUI();
+            const rowIndex = selectedProposalRows[index];
+            if (rowIndex === undefined) return;
+            executeProtectedSystemRemoval(rowIndex, () => {
+                const refreshedIdx = selectedProposalRows.indexOf(rowIndex);
+                if (refreshedIdx > -1) selectedProposalRows.splice(refreshedIdx, 1);
+                document.getElementById('cartCounterBadge').innerText = selectedProposalRows.length;
+                renderGrid();
+                updateProposalCartUI();
+            });
         }
 
         window.cachedProposalText = "";
@@ -11166,6 +11271,9 @@
                     customLines: []
                 };
 
+                const auditState = typeof window.getCurrentAuditStateForItem === 'function' ? window.getCurrentAuditStateForItem(item) : null;
+                const hasAuditMismatch = auditState && auditState.found && auditState.changes && auditState.changes.length > 0;
+
                 let rawBasePrice = window.getSystemBasePriceResolution(item, sp).effectiveRawBasePrice;
                 let bakedInTotal = 0;
                 let visibleAdditions = 0;
@@ -11460,7 +11568,7 @@
                         if (spread.mapping === 'desc') {
                             let stColor = window.getSystemTypeColorClass(sysType);
                             let msColor = window.getStageColorClass(mechStage);
-                            content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span></span>`;
+                            content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span><br/><span class="text-[9px] text-slate-500 pr-1">AHRI</span><span class="text-[9px] text-slate-400 font-mono tracking-tight">${ahri || 'N/A'}</span></span>`;
                         }
                         else if (spread.mapping === 'ahri') {
                             content = `<span class="font-bold whitespace-nowrap"><span class="text-slate-500 mr-1">AHRI</span><span class="text-blue-400">${ahri || 'N/A'}</span></span>`;
@@ -11504,8 +11612,9 @@
 
                             let coastalSuffix = (sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0) ? ` <span class="text-cyan-400">(Coastal Match)</span>` : '';
                             let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
+                            let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
 
-                            let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}</span>`;
+                            let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
                             content = rawContent.replace(/\s+/g, ' ').trim();
                         }
                         else if (spread.mapping === 'basePrice') content = cleanBaseStr;
@@ -11836,10 +11945,11 @@
                 if (mechStage === 'single stage' || mechStage === '1 stage') proposalStage = 'single-stage';
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
-                let rawOptText = `■ System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${ahri}`;
+                let effectiveAhriForProposal = typeof window.getEffectiveAhri === 'function' ? window.getEffectiveAhri(item, sp) : ahri;
+                let rawOptText = `■ System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
                 let optText = rawOptText.replace(/\s+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
-                window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${otdFinalPrice.toLocaleString()}` });
+                window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${systemSubtotal.toLocaleString()}` });
 
                 if (coastalPackageLines.length > 0) {
                     window.proposalBlocks.push({
@@ -14291,22 +14401,33 @@
                 let changesList = '';
                 if (auditState.isNew) changesList += `<div>&bull; NEW SYSTEM CATALOGED</div>`;
                 if (auditState.isMissing) changesList += `<div>&bull; MISSING IN MASTER</div>`;
-                if (auditState.ahriChanged) changesList += `<div>&bull; AHRI: <span class="text-slate-400">${auditState.oldAhri}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newAhri}</span></div>`;
-                if (auditState.priceChanged) {
-                    let pOld = window.formatAuditCurrency ? window.formatAuditCurrency(auditState.oldPrice) : '$' + auditState.oldPrice;
-                    let pNew = window.formatAuditCurrency ? window.formatAuditCurrency(auditState.newPrice) : '$' + auditState.newPrice;
-                    let pDelta = "";
-                    let deltaNum = (typeof auditState.priceDelta === 'number') ? auditState.priceDelta : (typeof auditState.oldPrice === 'number' && typeof auditState.newPrice === 'number' ? auditState.newPrice - auditState.oldPrice : 0);
-                    if (deltaNum !== 0) {
-                        let dStr = window.formatAuditDelta ? window.formatAuditDelta(deltaNum) : deltaNum;
-                        let dClr = deltaNum > 0 ? "text-rose-400" : "text-emerald-400";
-                        pDelta = ` (<span class="${dClr} font-bold">${dStr}</span>)`;
-                    }
-                    changesList += `<div>&bull; Price: <span class="text-slate-400">${pOld}</span> &rarr; <span class="font-bold text-blue-300">${pNew}</span>${pDelta}</div>`;
+
+                if (auditState.changes && auditState.changes.length > 0) {
+                    auditState.changes.forEach(c => {
+                        let fName = c.field === 'price' ? 'Price'
+                            : c.field === 'ahri' ? 'AHRI'
+                                : c.field === 'seer2' ? 'SEER2'
+                                    : c.field === 'coolingBtu' ? 'Cooling BTU'
+                                        : c.field === 'heatingBtu' ? 'Heating BTU'
+                                            : (String(c.field).charAt(0).toUpperCase() + String(c.field).slice(1));
+
+                        let oldVal = c.oldValue;
+                        let newVal = c.newValue;
+                        let deltaStr = '';
+                        if (c.field === 'price') {
+                            oldVal = window.formatAuditCurrency ? window.formatAuditCurrency(oldVal) : '$' + oldVal;
+                            newVal = window.formatAuditCurrency ? window.formatAuditCurrency(newVal) : '$' + newVal;
+                            let deltaNum = (typeof auditState.priceDelta === 'number') ? auditState.priceDelta : (Number(c.newValue) - Number(c.oldValue));
+                            if (deltaNum !== 0) {
+                                let dStr = window.formatAuditDelta ? window.formatAuditDelta(deltaNum) : deltaNum;
+                                let dClr = deltaNum > 0 ? "text-rose-400" : "text-emerald-400";
+                                deltaStr = ` (<span class="${dClr} font-bold">${dStr}</span>)`;
+                            }
+                        }
+
+                        changesList += `<div>&bull; ${fName}: <span class="text-slate-400">${oldVal}</span> &rarr; <span class="font-bold ${c.field === 'price' ? 'text-blue-300' : 'text-amber-400'}">${newVal}</span>${deltaStr}</div>`;
+                    });
                 }
-                if (auditState.seer2Changed) changesList += `<div>&bull; SEER2: <span class="text-slate-400">${auditState.oldSeer2}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newSeer2}</span></div>`;
-                if (auditState.coolingBtuChanged) changesList += `<div>&bull; Cooling BTU: <span class="text-slate-400">${auditState.oldCoolingBtu}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newCoolingBtu}</span></div>`;
-                if (auditState.heatingBtuChanged) changesList += `<div>&bull; Heating BTU: <span class="text-slate-400">${auditState.oldHeatingBtu}</span> &rarr; <span class="font-bold text-amber-400">${auditState.newHeatingBtu}</span></div>`;
 
                 if (auditState.messages && auditState.messages.length > 0) {
                     changesList += `<div class="text-cyan-300 mt-1">${auditState.messages.join("<br/>")}</div>`;
@@ -14424,7 +14545,10 @@
                 `;
             }
 
+            content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 mb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">AHRI</span><span class="font-semibold text-[13px] sm:text-sm text-slate-100 text-right shrink-0 break-words">${itemObj.ahri || 'N/A'}</span></div>`;
+
             Object.entries(itemObj).forEach(([key, val]) => {
+                if (key.toLowerCase() === 'ahri') return;
                 const niceKey = key.replace(/([A-Z])/g, ' $1').toUpperCase();
                 let displayVal = (val !== undefined && val !== null && val !== '') ? val : 'N/A';
                 if (typeof displayVal === 'string') {
@@ -16006,7 +16130,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v08.05.8',
+                appVersion: 'v08.07.11',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16015,7 +16139,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v08.05.8_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v08.07.11_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16034,7 +16158,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v08.05.8',
+                appVersion: 'v08.07.11',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16043,7 +16167,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v08.05.8_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v08.07.11_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17864,27 +17988,25 @@
             openReceiptModal(index);
         }
 
-        window.applyManualRawBasePriceOverride = function (index) {
+        window.applyPriceResolutionMode = function (index, mode) {
             const rowIndex = selectedProposalRows[index];
             const sp = window.systemScratchpads[rowIndex];
             if (!sp) return;
-            const inputEl = document.getElementById(`manual-raw-base-input-${index}`);
-            if (!inputEl) return;
-            const val = Number(inputEl.value.replace(/[^0-9.-]+/g, ''));
-            if (!isNaN(val) && val > 0) {
-                sp.manualRawBasePriceOverride = val;
-                updateProposalCartUI();
-                openReceiptModal(index);
-            }
-        };
 
-        window.clearManualRawBasePriceOverride = function (index) {
-            const rowIndex = selectedProposalRows[index];
-            const sp = window.systemScratchpads[rowIndex];
-            if (!sp) return;
-            sp.manualRawBasePriceOverride = null;
-            updateProposalCartUI();
-            openReceiptModal(index);
+            if (mode === 'custom') {
+                const inputEl = document.getElementById(`receipt-base-price-input-${index}`);
+                if (inputEl) {
+                    const val = Number(inputEl.value.replace(/[^0-9.-]+/g, ''));
+                    if (!isNaN(val) && val > 0) {
+                        sp.manualRawBasePriceOverride = val;
+                    } else {
+                        return;
+                    }
+                }
+            }
+            sp.priceResolutionMode = mode;
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+            if (typeof openReceiptModal === 'function') openReceiptModal(index);
         };
 
         function openReceiptModal(index) {
@@ -18046,34 +18168,61 @@
 
             let stealthIconsInner = '';
 
+            let priceBadge = resolution.source === 'updated' ? '<span class="bg-amber-500 text-white px-1 ml-1 rounded text-[8px] font-black tracking-widest leading-none translate-y-[-1px] inline-block">AUDIT</span>' : (resolution.source === 'custom' ? '<span class="bg-emerald-500 text-white px-1 ml-1 rounded text-[8px] font-black tracking-widest leading-none translate-y-[-1px] inline-block">CUSTOM</span>' : '');
+
             let rawBaseHtml = `
-        <div class="flex flex-col gap-1 mb-2 pb-2 border-b border-slate-700/50">
-            <div class="flex justify-between items-center text-slate-300">
-                <span class="font-semibold">Raw Base Price</span>
-                <div class="flex items-center gap-1">
-                    <input type="text" id="manual-raw-base-input-${index}" value="${resolution.effectiveRawBasePrice}" class="w-20 bg-slate-900 border border-slate-600 rounded px-1.5 py-0.5 text-right text-slate-100 font-mono text-xs">
-                    <button onclick="window.applyManualRawBasePriceOverride(${index})" class="bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded text-[10px] font-bold hover:bg-blue-500 hover:text-white transition-colors">APPLY</button>
-                    <button onclick="window.clearManualRawBasePriceOverride(${index})" class="bg-rose-600/20 text-rose-400 px-2 py-0.5 rounded text-[10px] font-bold hover:bg-rose-500 hover:text-white transition-colors">RESET</button>
-                </div>
+        <div class="flex flex-col gap-2 mb-3 pb-3 border-b border-slate-700/50">
+            <span class="font-bold text-slate-300 text-sm mb-1 uppercase tracking-wide">Price Resolution</span>
+            
+            <div class="flex justify-between items-center bg-slate-900/50 p-1.5 rounded border border-slate-700/50">
+                <span class="text-xs font-mono text-slate-400 leading-tight">Database Price <br><span class="text-sm font-bold text-white mt-0.5 inline-block">$${resolution.databasePrice.toLocaleString()}</span></span>
+                <button onclick="window.applyPriceResolutionMode(${index}, 'database')" class="${sp.priceResolutionMode === 'database' || (!sp.priceResolutionMode && resolution.source === 'database') ? 'bg-amber-600 text-white font-bold shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 hover:text-slate-200'} px-3 py-1.5 rounded transition font-bold tracking-wider text-[10px] w-28 text-center shrink-0">USE DATABASE</button>
             </div>`;
 
-            if (resolution.source === 'manual') {
-                rawBaseHtml += `<div class="text-[10px] text-rose-400 font-bold text-right">⚠️ MANUAL RAW BASE OVERRIDE</div>`;
-            }
-            if (resolution.auditDelta !== undefined && !isNaN(resolution.auditDelta)) {
+            if (resolution.auditNewPrice !== undefined && resolution.auditNewPrice !== null) {
                 const sign = resolution.auditDelta > 0 ? '+' : '';
-                rawBaseHtml += `<div class="text-[9px] text-slate-400 text-right font-mono mt-0.5">Audit Update: $${resolution.auditNewPrice.toLocaleString()} (${sign}$${resolution.auditDelta.toLocaleString()})</div>`;
+                rawBaseHtml += `
+            <div class="flex justify-between items-center bg-slate-900/50 p-1.5 rounded border border-slate-700/50">
+                <span class="text-xs font-mono text-slate-400 leading-tight text-left">Updated Price <span class="text-amber-500/80 tracking-tighter">(${sign}$${resolution.auditDelta.toLocaleString()})</span><br><span class="text-sm font-bold text-amber-500 mt-0.5 inline-block">$${resolution.auditNewPrice.toLocaleString()}</span></span>
+                <button onclick="window.applyPriceResolutionMode(${index}, 'updated')" class="${sp.priceResolutionMode === 'updated' || (!sp.priceResolutionMode && resolution.source === 'updated') ? 'bg-amber-600 text-white font-bold shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 hover:text-slate-200'} px-3 py-1.5 rounded transition font-bold tracking-wider text-[10px] w-28 text-center shrink-0">USE UPDATED</button>
+            </div>`;
             }
-            if (
-                resolution.source !== 'database' ||
-                Number(resolution.databasePrice) !== Number(resolution.effectiveRawBasePrice)
-            ) {
-                rawBaseHtml += `<div class="text-[9px] text-slate-400 text-right font-mono mt-0.5">Database: $${resolution.databasePrice.toLocaleString()}</div>`;
+
+            rawBaseHtml += `
+            <div class="flex justify-between items-center bg-slate-900/50 p-1.5 rounded border border-slate-700/50">
+                <div class="flex flex-col text-xs font-mono text-slate-400 leading-tight">
+                    <span class="mb-1 text-[11px]">Custom Price</span>
+                    <input type="number" id="receipt-base-price-input-${index}" placeholder="$" value="${sp.manualRawBasePriceOverride || ''}" class="bg-slate-950 border border-slate-600 focus:border-blue-500 text-white px-2 py-0.5 rounded w-24 text-[13px] font-bold outline-none" inputmode="numeric">
+                </div>
+                <button onclick="window.applyPriceResolutionMode(${index}, 'custom')" class="${sp.priceResolutionMode === 'custom' || (!sp.priceResolutionMode && resolution.source === 'custom') ? 'bg-emerald-600 text-white font-bold shadow-sm border border-emerald-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 hover:text-slate-200'} px-3 py-1.5 rounded transition font-bold tracking-wider text-[10px] w-28 text-center shrink-0">USE CUSTOM</button>
+            </div>
+        </div>`;
+
+            const localAuditState = typeof getCurrentAuditStateForItem === 'function' ? getCurrentAuditStateForItem(item) : { changes: [] };
+            let ahriMismatch = localAuditState.changes ? localAuditState.changes.find(c => c.field === 'ahri') : null;
+            if (ahriMismatch) {
+                const isOverrideNew = sp.ahriOverride === ahriMismatch.newValue;
+                const isOverrideOld = sp.ahriOverride === ahriMismatch.oldValue || !sp.ahriOverride;
+                rawBaseHtml += `
+                <div class="flex flex-col gap-1 mb-2 pb-2 border-b border-slate-700/50">
+                    <div class="flex justify-between items-center text-slate-300">
+                        <span class="font-semibold uppercase tracking-wide text-[13px]">AHRI Resolution</span>
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button onclick="window.applyAhriOverride(${index}, '${ahriMismatch.oldValue}')" class="${isOverrideOld ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Database</button>
+                            <button onclick="window.applyAhriOverride(${index}, '${ahriMismatch.newValue}')" class="${isOverrideNew ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Updated</button>
+                        </div>
+                    </div>
+                    <div class="text-[10px] ${isOverrideOld ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Database AHRI:</span> <span>${ahriMismatch.oldValue}</span></div>
+                    <div class="text-[10px] ${isOverrideNew ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Updated AHRI:</span> <span>${ahriMismatch.newValue}</span></div>
+                </div>`;
             }
-            rawBaseHtml += `</div>`;
 
             let breakdownHtml = `<div class="price-breakdown-details bg-slate-800/30 p-2 rounded-lg border border-slate-700/50 mb-3 text-xs salesman-math">
-        ${rawBaseHtml}`;
+        ${rawBaseHtml}
+        <div class="flex justify-between items-center text-slate-300 font-bold mb-1 pb-1">
+            <span>Initial Base Price</span>
+            <span>$${resolution.effectiveRawBasePrice.toLocaleString()}</span>
+        </div>`;
 
             if (sp.condo && sp.condo.required) {
                 if (sp.condo.includedInBase) {
@@ -18527,13 +18676,25 @@
             }
             let badgesHtml = modalBadges.length > 0 ? `<div class="flex items-center gap-1.5 mt-1.5">${modalBadges.join('')}</div>` : '';
 
+            const effectiveAhri = typeof window.getEffectiveAhri === 'function' ? window.getEffectiveAhri(item, sp) : item.ahri;
+            const effectiveAhriMismatch = localAuditState.changes ? localAuditState.changes.find(c => c.field === 'ahri') : null;
+            let ahriBadge = effectiveAhriMismatch && effectiveAhri === effectiveAhriMismatch.newValue ? '<span class="bg-amber-500/80 text-white px-1 ml-1 rounded text-[8px] font-black tracking-widest leading-none translate-y-[-1px] inline-block shadow-sm">AUDIT</span>' : '';
+
             document.getElementById('receiptTitle').innerHTML = `
-        <div class="text-[10px] text-slate-500 font-bold tracking-widest uppercase mb-1">SYSTEM OPTION ${index + 1}</div>
-        <div class="text-[10px] font-bold tracking-wide flex flex-col gap-0.5">
-            <div>${line1}</div>
-            <div>${line2}</div>
+        <div class="flex justify-between items-start">
+            <div class="flex-1 min-w-0 pr-2">
+                <div class="text-[10px] text-slate-500 font-bold tracking-widest uppercase mb-1">SYSTEM OPTION ${index + 1}</div>
+                <div class="text-[10px] font-bold tracking-wide flex flex-col gap-0.5">
+                    <div>${line1}</div>
+                    <div>${line2}</div>
+                </div>
+                ${badgesHtml}
+            </div>
+            <div class="text-right flex flex-col justify-center items-end gap-1.5 shrink-0 ml-1 border-l border-slate-700/50 pl-4 py-1 h-full min-w-max">
+                <div class="text-[10px] font-mono text-slate-400 tracking-tight flex items-center">AHRI: <span class="text-white font-bold ml-1.5 text-xs">${effectiveAhri}</span>${ahriBadge}</div>
+                <div class="text-[10px] font-mono text-slate-400 tracking-tight flex items-center">Base Price: <span class="text-emerald-400 font-bold ml-1.5 text-xs">$${resolution.effectiveRawBasePrice.toLocaleString()}</span>${priceBadge}</div>
+            </div>
         </div>
-        ${badgesHtml}
     `;
 
             if (optionalEnhancementsHtml) {
@@ -18829,6 +18990,7 @@
                 coolingBtuChanged: false, oldCoolingBtu: null, newCoolingBtu: null,
                 heatingBtuChanged: false, oldHeatingBtu: null, newHeatingBtu: null,
                 messages: [],
+                changes: [],
                 debugStructuredEventsPresent: false,
                 debugStructuredEventMatched: false
             };
@@ -18881,6 +19043,11 @@
                         if (event.type === "UPDATE" || event.type === "FORMAT_CONFLICT") {
                             if (event.changes && Array.isArray(event.changes)) {
                                 event.changes.forEach(change => {
+                                    state.changes.push({
+                                        field: change.field,
+                                        oldValue: change.oldValue,
+                                        newValue: change.newValue
+                                    });
                                     if (change.field === "price") {
                                         state.priceChanged = true;
                                         state.oldPrice = Number(change.oldValue);
@@ -19035,6 +19202,22 @@
             };
         };
 
+        window.getEffectiveAhri = function (item, sp) {
+            if (sp && sp.ahriOverride) {
+                return sp.ahriOverride;
+            }
+            return item.ahri || '';
+        };
+
+        window.applyAhriOverride = function (index, val) {
+            const sp = window.systemScratchpads[selectedProposalRows[index]];
+            if (sp) {
+                sp.ahriOverride = val;
+                if (typeof window.updateProposalCartUI === 'function') window.updateProposalCartUI();
+                if (typeof window.openReceiptModal === 'function') window.openReceiptModal(index);
+            }
+        };
+
         window.getSystemBasePriceResolution = function (item, sp) {
             const rawPriceStr = String(item.price || item[3] || '0').replace(/[^0-9.-]+/g, '');
             const databasePrice = Math.ceil(Number(rawPriceStr));
@@ -19049,32 +19232,37 @@
                 }
             }
 
+            let mode = sp && sp.priceResolutionMode ? sp.priceResolutionMode : undefined;
+            if (!mode) {
+                if (manualOverride !== null) mode = 'custom';
+                else if (audit.found && databasePrice === audit.oldPrice) mode = 'updated';
+                else mode = 'database';
+            }
+
             let effectiveRawBasePrice = databasePrice;
             let source = 'database';
             let auditApplied = false;
 
-            if (manualOverride !== null) {
+            if (mode === 'custom' && manualOverride !== null) {
                 effectiveRawBasePrice = manualOverride;
-                source = 'manual';
-            } else if (audit.found) {
-                if (databasePrice === audit.oldPrice) {
-                    effectiveRawBasePrice = audit.newPrice;
-                    source = 'audit';
-                    auditApplied = true;
-                } else if (databasePrice === audit.newPrice) {
-                    effectiveRawBasePrice = databasePrice;
-                    source = 'database';
-                }
+                source = 'custom';
+            } else if (mode === 'updated' && audit.found) {
+                effectiveRawBasePrice = audit.newPrice;
+                source = 'updated';
+                auditApplied = true;
+            } else {
+                effectiveRawBasePrice = databasePrice;
+                source = 'database';
             }
 
             return {
+                effectiveRawBasePrice: Math.ceil(effectiveRawBasePrice),
                 databasePrice,
                 auditOldPrice: audit.oldPrice,
                 auditNewPrice: audit.newPrice,
                 auditDelta: audit.delta,
                 auditApplied,
                 manualOverride,
-                effectiveRawBasePrice,
                 source
             };
         };
@@ -19719,53 +19907,62 @@
             return `${year}-${month}-${day}`;
         };
 
-        window.applyCustomerBulkPaste = function () {
-            const textarea =
-                document.getElementById('customer-bulk-paste');
+        window.looksLikeCustomerEmail = function (value) {
+            const trimmed = value.trim();
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+        };
 
-            const status =
-                document.getElementById('customer-bulk-status');
-
-            if (!textarea) return;
-
-            const raw =
-                textarea.value.replace(/\r/g, '');
-
-            if (!raw.trim()) {
-                if (status) {
-                    status.textContent =
-                        'Paste customer information first.';
-
-                    status.className =
-                        'text-[9px] text-amber-400';
+        window.looksLikeCustomerPhone = function (value) {
+            const trimmed = value.trim();
+            const digits = trimmed.replace(/\D/g, '');
+            if (digits.length >= 10 && digits.length <= 15) {
+                if (/^(\+?1\s*[-.]?\s*)?(\(\d{3}\)|\d{3})\s*[-.]?\s*\d{3}\s*[-.]?\s*\d{4}(\s*(ext|x)\s*\d+)?$/i.test(trimmed)) {
+                    return true;
                 }
-
-                return;
+                if (/^\d{10}$/.test(trimmed)) {
+                    return true;
+                }
             }
+            return false;
+        };
 
-            let lines =
-                raw.split('\n');
+        window.looksLikeCustomerDate = function (value) {
+            const trimmed = value.trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return true;
+            if (/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/.test(trimmed)) return true;
+            return false;
+        };
 
-            while (
-                lines.length > 0 &&
-                lines[0].trim() === ''
-            ) {
-                lines.shift();
+        window.looksLikeCustomerAddress = function (value) {
+            const trimmed = value.trim();
+            if (/^\d+\s+[A-Za-z]+/.test(trimmed)) {
+                const lower = trimmed.toLowerCase();
+                const suffixes = [' st', ' street', ' rd', ' road', ' ave', ' avenue', ' blvd', ' boulevard', ' dr', ' drive', ' ln', ' lane', ' ct', ' court', ' cir', ' circle', ' pkwy', ' parkway', ' hwy', ' highway', ' ter', ' terrace', ' way', ' pl', ' place', ' trl', ' trail'];
+                if (suffixes.some(s => lower.includes(s))) {
+                    return true;
+                }
             }
+            if (/^p\.?o\.?\s+box\s+\d+/i.test(trimmed)) return true;
+            return false;
+        };
 
-            while (
-                lines.length > 0 &&
-                lines[lines.length - 1].trim() === ''
-            ) {
-                lines.pop();
-            }
+        window.looksLikeCustomerName = function (value) {
+            const trimmed = value.trim();
+            if (trimmed.length < 2 || trimmed.length > 50) return false;
+            if (!/[A-Za-z]/.test(trimmed)) return false;
+            const digits = (trimmed.match(/\d/g) || []).length;
+            if (digits > trimmed.length / 2) return false;
+            return true;
+        };
 
+        window.parseCustomerBulkText = function (raw) {
             const parsed = {
                 proposalDate: '',
                 customerName: '',
                 address: '',
                 phone: '',
-                email: ''
+                email: '',
+                detectedCount: 0
             };
 
             const labelMap = {
@@ -19781,98 +19978,122 @@
                 'email': 'email'
             };
 
-            let labeledCount = 0;
+            let lines = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            let unclassified = [];
 
             lines.forEach(line => {
-                const match =
-                    line.match(
-                        /^\s*([^:]+?)\s*:\s*(.*)$/
-                    );
-
-                if (!match) return;
-
-                const label =
-                    match[1]
-                        .trim()
-                        .toLowerCase();
-
-                const key =
-                    labelMap[label];
-
-                if (!key) return;
-
-                parsed[key] =
-                    match[2].trim();
-
-                labeledCount += 1;
+                const match = line.match(/^\s*([^:]+?)\s*:\s*(.*)$/);
+                if (match) {
+                    const label = match[1].trim().toLowerCase();
+                    const key = labelMap[label];
+                    if (key) {
+                        parsed[key] = match[2].trim();
+                        return;
+                    }
+                }
+                unclassified.push(line);
             });
 
-            if (labeledCount === 0) {
-                const ordered =
-                    lines.slice(0, 5);
-
-                parsed.proposalDate =
-                    (ordered[0] || '').trim();
-
-                parsed.customerName =
-                    (ordered[1] || '').trim();
-
-                parsed.address =
-                    (ordered[2] || '').trim();
-
-                parsed.phone =
-                    (ordered[3] || '').trim();
-
-                parsed.email =
-                    (ordered[4] || '').trim();
+            if (unclassified.length >= 2 && !parsed.address) {
+                for (let i = 0; i < unclassified.length - 1; i++) {
+                    const line1 = unclassified[i];
+                    const line2 = unclassified[i + 1];
+                    if (/^\d+\s+[A-Za-z]+/.test(line1) && /^[A-Za-z]/.test(line2)) {
+                        if (window.looksLikeCustomerAddress(line1)) {
+                            parsed.address = line1 + ', ' + line2;
+                            unclassified.splice(i, 2);
+                            break;
+                        }
+                    }
+                }
             }
 
-            parsed.proposalDate =
-                window.normalizeBulkProposalDate(
-                    parsed.proposalDate
-                );
+            let stillUnclassified = [];
+
+            unclassified.forEach(line => {
+                if (!parsed.email && window.looksLikeCustomerEmail(line)) {
+                    parsed.email = line;
+                } else if (!parsed.phone && window.looksLikeCustomerPhone(line)) {
+                    parsed.phone = line;
+                } else if (!parsed.proposalDate && window.looksLikeCustomerDate(line)) {
+                    parsed.proposalDate = line;
+                } else if (!parsed.address && window.looksLikeCustomerAddress(line)) {
+                    parsed.address = line;
+                } else {
+                    stillUnclassified.push(line);
+                }
+            });
+
+            if (!parsed.customerName && stillUnclassified.length > 0) {
+                for (let i = 0; i < stillUnclassified.length; i++) {
+                    if (window.looksLikeCustomerName(stillUnclassified[i])) {
+                        parsed.customerName = stillUnclassified[i];
+                        stillUnclassified.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            const orderedKeys = ['proposalDate', 'customerName', 'address', 'phone', 'email'];
+            let uIndex = 0;
+            for (let i = 0; i < orderedKeys.length; i++) {
+                const key = orderedKeys[i];
+                if (!parsed[key] && uIndex < stillUnclassified.length) {
+                    parsed[key] = stillUnclassified[uIndex];
+                    uIndex++;
+                }
+            }
+
+            for (const key of orderedKeys) {
+                if (parsed[key]) parsed.detectedCount++;
+            }
+
+            return parsed;
+        };
+
+        window.applyCustomerBulkPaste = function () {
+            const textarea = document.getElementById('customer-bulk-paste');
+            const status = document.getElementById('customer-bulk-status');
+
+            if (!textarea) return;
+
+            const raw = textarea.value.replace(/\r/g, '');
+
+            if (!raw.trim()) {
+                if (status) {
+                    status.textContent = 'Paste customer information first.';
+                    status.className = 'text-[9px] text-amber-400';
+                }
+                return;
+            }
+
+            const parsed = window.parseCustomerBulkText(raw);
+            parsed.proposalDate = window.normalizeBulkProposalDate(parsed.proposalDate);
 
             const fieldValues = {
-                'job-proposal-date':
-                    parsed.proposalDate,
-
-                'job-customer-name':
-                    parsed.customerName,
-
-                'job-address':
-                    parsed.address,
-
-                'job-phone':
-                    parsed.phone,
-
-                'job-email':
-                    parsed.email
+                'job-proposal-date': parsed.proposalDate,
+                'job-customer-name': parsed.customerName,
+                'job-address': parsed.address,
+                'job-phone': parsed.phone,
+                'job-email': parsed.email
             };
 
-            Object.entries(fieldValues)
-                .forEach(([id, value]) => {
-                    const input =
-                        document.getElementById(id);
-
-                    if (input) {
-                        input.value = value || '';
-                    }
-                });
+            Object.entries(fieldValues).forEach(([id, value]) => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = value || '';
+                }
+            });
 
             window.updateJobDataFromForm();
 
             if (status) {
-                status.textContent =
-                    'Customer information applied to fields.';
-
-                status.className =
-                    'text-[9px] text-emerald-400 font-bold';
+                status.textContent = `Customer information applied: ${parsed.detectedCount} field${parsed.detectedCount === 1 ? '' : 's'} detected.`;
+                status.className = 'text-[9px] text-emerald-400 font-bold';
             }
 
             if (typeof showToast === 'function') {
-                showToast(
-                    'Customer information applied.'
-                );
+                showToast('Customer information applied.');
             }
         };
 
@@ -20508,7 +20729,7 @@
     <script id="dispatch-prototype-js">
         // â”€â”€ DISPATCH HEADER PROTOTYPE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-        window.activeDispatchTab = 'layout';
+        window.activeDispatchTab = 'body';
         window.dispatchSelectedContainer = 0;
         window.dispatchSelectedStack = 0;
         window.dispatchSelectedSplit = 0;
@@ -22907,6 +23128,662 @@
 
 
 
+
+    <script>
+        // === SHARED GRID FOUNDATION v08.07.6 ===
+
+        window.sharedGridState = {
+            activeSurface: null,
+            selectedContainer: 0,
+            selectedStack: 0,
+            selectedSplit: 0
+        };
+
+        window.getSharedGridData = function (surfaceType) {
+            if (surfaceType === 'page2-header') {
+                window.sanitizePage2HeaderSettings();
+                return propSettings.page2Header;
+            } else if (surfaceType === 'dispatch-header') {
+                window.sanitizeDispatchPanelSettings();
+                return propSettings.dispatchPanel;
+            }
+            return null;
+        };
+
+        window.renderSharedGrid = function (surfaceType) {
+            const p = window.getSharedGridData(surfaceType);
+            if (!p || !p.headerLayout || !p.headerLayout.containers) return;
+
+            const layoutWrapperId = surfaceType === 'page2-header' ? 'page2-header-layout' : 'dispatch-header-layout';
+            const target = document.getElementById(layoutWrapperId);
+            if (!target) return;
+
+            const settingsModal = document.getElementById('proposal-settings-modal');
+            const isSettingsModalVisible = !!settingsModal && settingsModal.style.display !== 'none' && !settingsModal.classList.contains('hidden');
+
+            // Explicit mapping to existing settings scope variables to preserve legacy UI toggle behavior safely:
+            const scopeCheck = surfaceType === 'page2-header' ? 'page2' : 'dispatch';
+            // Active only if they have selected grid specifically (for dispatch, this means explicitly opening grid redirect)
+            const activeGridOverride = window.sharedGridState.activeSurface === surfaceType;
+            const isEditMode = activeGridOverride && isSettingsModalVisible;
+
+            let html = `<div style="display: flex; width: 100%; gap: ${p.containerGap}px; padding: ${p.headerOuterPadding}px; height: ${p.headerHeight}px; min-height: 44px; overflow: hidden;">`;
+
+            p.headerLayout.containers.forEach((cont, cIdx) => {
+                const cStyle = cont.widthLocked ? `flex: 0 0 ${cont.lockedWidthPx}px;` : `flex: ${cont.widthWeight} 1 0%;`;
+                const cIsSelected = isEditMode && window.sharedGridState.selectedContainer === cIdx;
+                const cBorder = isEditMode ? (cIsSelected ? 'border-2 border-blue-500 rounded-lg' : 'border border-dashed border-slate-600 rounded-lg hover:border-slate-400') : '';
+                const cClick = isEditMode ? `onclick="event.stopPropagation(); window.selectSharedGridCell('${surfaceType}', ${cIdx}, 0, 0);"` : '';
+
+                html += `<div ${cClick} class="${cBorder}" style="${cStyle} display: flex; flex-direction: column; gap: ${p.stackGap}px; min-width: 0; min-height: 0;">`;
+
+                if (cont.stacks) {
+                    cont.stacks.forEach((st, stIdx) => {
+                        const sStyle = st.heightLocked ? `flex: 0 0 ${st.lockedHeightPx}px;` : `flex: ${st.heightWeight} 1 0%;`;
+                        const stIsSelected = isEditMode && cIsSelected && window.sharedGridState.selectedStack === stIdx;
+                        const stBorder = isEditMode ? (stIsSelected ? 'border-2 border-emerald-500 rounded' : 'border border-dashed border-slate-600 rounded hover:border-slate-400') : '';
+                        const sClick = isEditMode ? `onclick="event.stopPropagation(); window.selectSharedGridCell('${surfaceType}', ${cIdx}, ${stIdx}, 0);"` : '';
+
+                        html += `<div ${sClick} class="${stBorder}" style="${sStyle} display: flex; width: 100%; gap: ${p.splitGap}px; min-height: 0; overflow: hidden;">`;
+
+                        if (st.splits) {
+                            st.splits.forEach((sp, spIdx) => {
+                                const spStyle = sp.widthLocked ? `flex: 0 0 ${sp.lockedWidthPx}px;` : `flex: ${sp.widthWeight} 1 0%;`;
+                                const spIsSelected = isEditMode && stIsSelected && window.sharedGridState.selectedSplit === spIdx;
+                                const spBorder = isEditMode ? (spIsSelected ? 'bg-blue-900/40 border-2 border-blue-400 rounded shadow-[inset_0_0_10px_rgba(59,130,246,0.3)]' : 'border border-dotted border-slate-500 rounded hover:border-slate-300 hover:bg-slate-800/50') : '';
+
+                                let hAlign = 'flex-start';
+                                if (sp.horizontalAlign === 'center') hAlign = 'center';
+                                else if (sp.horizontalAlign === 'right') hAlign = 'flex-end';
+
+                                let vAlign = 'center';
+                                if (sp.verticalAlign === 'top') vAlign = 'flex-start';
+                                else if (sp.verticalAlign === 'bottom') vAlign = 'flex-end';
+
+                                const spClick = isEditMode ? `onclick="event.preventDefault(); event.stopPropagation(); window.selectSharedGridCell('${surfaceType}', ${cIdx}, ${stIdx}, ${spIdx});"` : '';
+
+                                html += `<div ${spClick} class="${spBorder}" style="${spStyle} display: flex; align-items: ${vAlign}; justify-content: ${hAlign}; padding: ${p.cellPadding}px; position: relative; overflow: hidden; min-width: 0; min-height: 0; cursor:${isEditMode ? 'pointer' : 'default'}">`;
+
+                                if (isEditMode) {
+                                    html += `<div style="position: absolute; top: 0; left: 0; font-size: 7px; color: #94a3b8; background: rgba(15, 23, 42, 0.8); padding: 1px 2px; pointer-events: none; z-index: 10;">C${cIdx + 1}·S${stIdx + 1}·${spIdx + 1}</div>`;
+                                }
+                                if (isEditMode && sp.mapping === 'empty') {
+                                    html += `<div class="absolute inset-0 flex items-center justify-center opacity-30 text-[8px] font-bold text-slate-400 select-none uppercase tracking-widest pointer-events-none">Empty</div>`;
+                                }
+
+                                html += `<div id="shared-target-${surfaceType}-${cIdx}-${stIdx}-${spIdx}" style="display: flex; align-items: ${vAlign}; justify-content: ${hAlign}; width: 100%; height: 100%; max-width: 100%; max-height: 100%;"></div>`;
+
+                                html += `</div>`;
+                            });
+                        }
+                        html += `</div>`;
+                    });
+                }
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            target.innerHTML = html;
+
+            // Phase 2: Inject Mapped Contents
+            p.headerLayout.containers.forEach((cont, cIdx) => {
+                if (!cont.stacks) return;
+                cont.stacks.forEach((st, stIdx) => {
+                    if (!st.splits) return;
+                    st.splits.forEach((sp, spIdx) => {
+                        const cell = document.getElementById(`shared-target-${surfaceType}-${cIdx}-${stIdx}-${spIdx}`);
+                        if (!cell || sp.mapping === 'empty') return;
+
+                        let activeMapping = sp.mapping;
+
+                        // Compatibility aliases (adapt shorthand to authoritative canonical schema)
+                        if (activeMapping === 'mic') activeMapping = 'microphone';
+                        if (activeMapping === 'settings') activeMapping = (surfaceType === 'page2-header') ? 'page2-settings' : 'dispatch-settings';
+                        if (activeMapping === 'title') activeMapping = 'dispatch-title';
+                        if (activeMapping === 'status') activeMapping = 'dispatch-status';
+
+                        let activeExternalReg = null;
+
+                        if (activeMapping === 'external-control') {
+                            const registryKey = `${sp.externalSourceSection}.${sp.externalSourceElement}`;
+                            if (surfaceType === 'page2-header') {
+                                activeExternalReg = window.page2HeaderExternalMappingRegistry ? window.page2HeaderExternalMappingRegistry[registryKey] : null;
+                                if (!activeExternalReg) return;
+                                activeMapping = activeExternalReg.type;
+                                if (activeExternalReg.type === 'source-node' || activeExternalReg.type === 'source-query') {
+                                    activeMapping = 'external-source-node';
+                                }
+                            } else if (surfaceType === 'dispatch-header') {
+                                activeExternalReg = window.dispatchExternalMappingRegistry ? window.dispatchExternalMappingRegistry[registryKey] : null;
+                                if (!activeExternalReg) return;
+                                activeMapping = 'external-control'; // Stays external control for dispatch
+                            }
+                        }
+
+                        const wrapStr = (sp.wrapMode === 'wrap') ? 'white-space: normal; overflow-wrap: anywhere;' : 'white-space: nowrap;';
+                        const style = `transform: translate(${sp.offsetX || 0}px, ${sp.offsetY || 0}px); font-size: ${sp.fontSize}px; max-width: 100%; min-width: 0; ${wrapStr}`;
+
+                        if (surfaceType === 'dispatch-header') {
+                            // Dispatch Mappings
+                            let content = '';
+                            if (activeMapping === 'dispatch-icon') {
+                                content = `<div style="${style} display: flex; align-items: center;"><i data-lucide="scan-line" style="width: ${sp.iconSize}px; height: ${sp.iconSize}px; color: #818cf8;"></i></div>`;
+                            } else if (activeMapping === 'dispatch-title') {
+                                const tText = p.titleOverride?.trim() || 'Dispatch Ticket Image';
+                                content = `<div style="${style} font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: white;">${tText}</div>`;
+                            } else if (activeMapping === 'dispatch-status') {
+                                const oldStatus = document.getElementById('dispatch-image-status');
+                                let cText = oldStatus ? oldStatus.innerText : 'No Image Selected';
+                                let cClass = oldStatus ? oldStatus.className : 'text-[9px] text-slate-400 font-bold uppercase tracking-wider';
+                                content = `<div id="dispatch-image-status" class="${cClass}" style="${style}">${cText}</div>`;
+                            } else if (activeMapping === 'dispatch-settings') {
+                                content = `<button type="button" onclick="event.preventDefault(); event.stopPropagation(); openPage2Settings('dispatch')" style="${style} cursor: pointer; color: #64748b; transition: color 0.2s;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='#64748b'" title="Dispatch Ticket Settings"><i data-lucide="settings" style="width: ${sp.iconSize}px; height: ${sp.iconSize}px;"></i></button>`;
+                            } else if (activeMapping === 'custom-text') {
+                                content = `<div style="${style} color: white;">${window.escapeDispatchHtml ? window.escapeDispatchHtml(sp.customText || '') : (sp.customText || '')}</div>`;
+                            } else if (activeMapping === 'take-photo') {
+                                content = `<button type="button" id="dispatch-take-photo-btn-clone" onclick="openDispatchCamera()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-2.5 rounded transition-colors shadow-sm flex items-center justify-center gap-2 text-xs" style="${style}"><i data-lucide="camera" class="w-4 h-4"></i>Take Photo</button>`;
+                            } else if (activeMapping === 'choose-photo') {
+                                content = `<button type="button" id="dispatch-choose-photo-btn-clone" onclick="openDispatchGallery()" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white font-bold px-3 py-2.5 rounded transition-colors shadow-sm flex items-center justify-center gap-2 text-xs" style="${style}"><i data-lucide="image-plus" class="w-4 h-4"></i>Choose Screenshot / Photo</button>`;
+                            } else if (activeMapping === 'extract') {
+                                content = `<button type="button" id="dispatch-extract-button-clone" onclick="prepareDispatchImageForExtraction()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2.5 rounded transition-colors shadow-sm flex items-center justify-center gap-2 text-xs" style="${style}"><i data-lucide="scan-text" class="w-4 h-4"></i>Extract Customer Info</button>`;
+                            } else if (activeMapping === 'external-control' && activeExternalReg) {
+                                if (activeExternalReg.icon) {
+                                    let clickAction = '';
+                                    if (sp.externalSourceElement === 'microphone') {
+                                        clickAction = "const t = document.getElementById('inj-text'); if(t) t.focus(); dictateCustomLine();";
+                                    } else if (sp.externalSourceElement === 'theme') {
+                                        clickAction = "toggleThemeMode()";
+                                    } else if (sp.externalSourceElement === 'fullscreen') {
+                                        clickAction = "toggleFullScreen()";
+                                    }
+                                    content = `<div style="${style} display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="${clickAction}"><i data-lucide="${activeExternalReg.icon}" style="width: ${sp.iconSize}px; height: ${sp.iconSize}px; color: #fff;"></i></div>`;
+                                } else if (activeExternalReg.type === 'logo') {
+                                    content = `<img src="./platts.png" style="${style} height: ${sp.iconSize * 1.5}px; object-fit: contain;">`;
+                                } else if (activeExternalReg.type === 'version') {
+                                    const verText = document.getElementById('page2-version-badge')?.textContent || '';
+                                    content = `<span class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm" style="${style} font-size: ${sp.fontSize}px; padding: ${sp.fontSize * 0.2}px ${sp.fontSize * 0.4}px;">${verText}</span>`;
+                                }
+                            }
+                            if (content) cell.innerHTML = content;
+
+                        } else if (surfaceType === 'page2-header') {
+                            // Page 2 Header DOM Cloning Architecture
+                            if (activeMapping === 'custom-text') {
+                                cell.innerHTML = `<div class="text-white font-bold" style="${style}">${window.escapePage2HeaderHtml ? window.escapePage2HeaderHtml(sp.customText || '') : sp.customText}</div>`;
+                                return;
+                            }
+                            if (activeMapping === 'logo') {
+                                let sl = document.getElementById(activeExternalReg ? activeExternalReg.sourceId : 'page2-platts-logo');
+                                let sf = document.getElementById('page2-platts-fallback');
+                                const lClone = sl ? sl.cloneNode(true) : null;
+                                const fClone = sf ? sf.cloneNode(true) : null;
+                                if (lClone) {
+                                    lClone.id = ''; lClone.style.height = `${sp.iconSize}px`; lClone.style.width = 'auto'; lClone.style.transform = `translate(${sp.offsetX || 0}px, ${sp.offsetY || 0}px)`; if (isEditMode) lClone.style.pointerEvents = 'none';
+                                    cell.appendChild(lClone);
+                                }
+                                if (fClone) {
+                                    fClone.id = ''; fClone.style.fontSize = `${Math.max(10, Number(sp.iconSize) * 0.4)}px`; fClone.style.transform = `translate(${sp.offsetX || 0}px, ${sp.offsetY || 0}px)`; if (isEditMode) fClone.style.pointerEvents = 'none';
+                                    cell.appendChild(fClone);
+                                }
+                                return;
+                            }
+
+                            const sourceBank = document.getElementById('page2-header-native-source-bank');
+                            let source = null;
+                            if (activeMapping === 'external-source-node') {
+                                if (activeExternalReg && activeExternalReg.type === 'source-node') {
+                                    source = document.getElementById(activeExternalReg.sourceId);
+                                } else if (activeExternalReg && activeExternalReg.type === 'source-query') {
+                                    source = sourceBank?.querySelector(activeExternalReg.selector);
+                                }
+                            } else if (activeMapping === 'builder-title' || (activeExternalReg && activeExternalReg.type === 'text')) {
+                                source = document.getElementById(activeExternalReg ? activeExternalReg.sourceId : 'page2-builder-title');
+                            } else if (activeMapping === 'version' || (activeExternalReg && activeExternalReg.type === 'version')) {
+                                source = document.getElementById(activeExternalReg ? activeExternalReg.sourceId : 'page2-version-badge');
+                            } else if (activeMapping === 'site-badge') source = document.getElementById(activeExternalReg ? activeExternalReg.sourceId : 'global-site-badge');
+                            else if (activeMapping === 'job-notes') source = document.getElementById('job-notes-btn');
+                            else if (activeMapping === 'microphone') source = document.getElementById('page2-proposal-mic-btn');
+                            else if (activeMapping === 'page2-settings') source = sourceBank?.querySelector('button[onclick*="openPage2Settings"]');
+                            else if (activeMapping === 'theme') source = sourceBank?.querySelector('button[onclick*="toggleThemeMode"]');
+                            else if (activeMapping === 'fullscreen') source = sourceBank?.querySelector('button[onclick*="toggleFullScreen"]');
+                            else if (activeMapping === 'back') source = sourceBank?.querySelector('button[onclick*="toggleViewSwap"]');
+
+                            if (source) {
+                                const el = source.cloneNode(true);
+                                el.id = el.id ? el.id + '-clone' : '';
+                                if (['job-notes', 'microphone', 'page2-settings', 'theme', 'fullscreen', 'back'].includes(activeMapping) || activeMapping === 'external-source-node') {
+                                    if (!(activeExternalReg && activeExternalReg.sourceId === 'global-site-badge')) {
+                                        el.style.width = `${sp.controlSize || 32}px`;
+                                        el.style.height = `${sp.controlSize || 32}px`;
+                                        const icon = el.querySelector('i');
+                                        if (icon) { icon.style.width = `${sp.iconSize}px`; icon.style.height = `${sp.iconSize}px`; }
+                                    }
+                                } else {
+                                    if (sp.fontSize && sp.fontSize !== 'inherit') el.style.fontSize = `${sp.fontSize}px`;
+                                }
+                                el.style.transform = `translate(${sp.offsetX || 0}px, ${sp.offsetY || 0}px)`;
+                                if (isEditMode) el.style.pointerEvents = 'none';
+                                cell.appendChild(el);
+                            }
+                        }
+                    });
+                });
+            });
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        };
+
+        window.renderPage2HeaderLayout = function () { window.renderSharedGrid('page2-header'); };
+        window.renderDispatchHeaderLayout = function () { window.renderSharedGrid('dispatch-header'); };
+
+        window.selectSharedGridCell = function (surfaceType, cIdx, stIdx, spIdx) {
+            window.sharedGridState.activeSurface = surfaceType;
+            window.sharedGridState.selectedContainer = cIdx;
+            window.sharedGridState.selectedStack = stIdx;
+            window.sharedGridState.selectedSplit = spIdx;
+
+            // Auto-sync legacy boundaries for safety wrapper:
+            window.activePage2SettingsScope = surfaceType === 'page2-header' ? 'page2' : 'dispatch';
+
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        };
+
+        window.selectDispatchCell = function (c, st, sp) { window.selectSharedGridCell('dispatch-header', c, st, sp); };
+        window.selectPage2HeaderCell = function (c, st, sp) { window.selectSharedGridCell('page2-header', c, st, sp); };
+
+        window.sharedGridChangeLayoutCount = function (level, delta) {
+            const surfaceType = window.sharedGridState.activeSurface;
+            if (!surfaceType) return;
+            const p = window.getSharedGridData(surfaceType);
+            const layout = p.headerLayout;
+
+            let targetParent;
+            if (level === 'containers') {
+                if (delta > 0) {
+                    layout.containers.push({ widthWeight: 1, stacks: [{ heightWeight: 1, splits: [{ widthWeight: 1, mapping: 'empty', horizontalAlign: 'center', verticalAlign: 'middle', fontSize: 12, iconSize: 20 }] }] });
+                } else if (layout.containers.length > 1) {
+                    layout.containers.pop();
+                    window.sharedGridState.selectedContainer = Math.min(window.sharedGridState.selectedContainer, layout.containers.length - 1);
+                }
+            } else if (level === 'stacks') {
+                const c = layout.containers[window.sharedGridState.selectedContainer];
+                if (delta > 0) {
+                    c.stacks.push({ heightWeight: 1, splits: [{ widthWeight: 1, mapping: 'empty', horizontalAlign: 'center', verticalAlign: 'middle', fontSize: 12, iconSize: 20 }] });
+                } else if (c.stacks.length > 1) {
+                    c.stacks.pop();
+                    window.sharedGridState.selectedStack = Math.min(window.sharedGridState.selectedStack, c.stacks.length - 1);
+                }
+            } else if (level === 'splits') {
+                const c = layout.containers[window.sharedGridState.selectedContainer];
+                const s = c.stacks[window.sharedGridState.selectedStack];
+                if (delta > 0) {
+                    s.splits.push({ widthWeight: 1, mapping: 'empty', horizontalAlign: 'center', verticalAlign: 'middle', fontSize: 12, iconSize: 20 });
+                } else if (s.splits.length > 1) {
+                    s.splits.pop();
+                    window.sharedGridState.selectedSplit = Math.min(window.sharedGridState.selectedSplit, s.splits.length - 1);
+                }
+            }
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        };
+
+        window.modSharedGridWeight = function (surfaceType, level, delta) {
+            const layout = window.getSharedGridData(surfaceType).headerLayout;
+
+            const state = window.sharedGridState;
+            if (state.activeSurface !== surfaceType) return;
+
+            let target;
+            if (level === 'containers') target = layout.containers[state.selectedContainer];
+            if (level === 'stacks') target = layout.containers[state.selectedContainer].stacks[state.selectedStack];
+            if (level === 'splits') target = layout.containers[state.selectedContainer].stacks[state.selectedStack].splits[state.selectedSplit];
+
+            const key = level === 'stacks' ? 'heightWeight' : 'widthWeight';
+            const next = Math.round((Number(target[key]) + delta) * 10) / 10;
+            target[key] = Math.max(0.1, next);
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        };
+
+        window.sharedGridAdjustProperty = function (property, delta) {
+            const surfaceType = window.sharedGridState.activeSurface;
+            const p = window.getSharedGridData(surfaceType);
+            const split = p.headerLayout.containers[window.sharedGridState.selectedContainer].stacks[window.sharedGridState.selectedStack].splits[window.sharedGridState.selectedSplit];
+
+            if (!split[property]) split[property] = 16;
+            if (property === 'fontSize' && typeof split[property] === 'string') split[property] = parseInt(split[property]) || 16;
+
+            split[property] = Math.max(8, Number(split[property]) + delta);
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        };
+
+        window.sharedGridSetEnum = function (property, val) {
+            const surfaceType = window.sharedGridState.activeSurface;
+            const p = window.getSharedGridData(surfaceType);
+            const split = p.headerLayout.containers[window.sharedGridState.selectedContainer].stacks[window.sharedGridState.selectedStack].splits[window.sharedGridState.selectedSplit];
+
+            split[property] = val;
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        };
+
+        window.sharedGridSetCustomText = function (val) {
+            const surfaceType = window.sharedGridState.activeSurface;
+            const p = window.getSharedGridData(surfaceType);
+            const split = p.headerLayout.containers[window.sharedGridState.selectedContainer].stacks[window.sharedGridState.selectedStack].splits[window.sharedGridState.selectedSplit];
+
+            split.customText = val;
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        }
+
+        window.adjustSharedGridRowHeight = function (surfaceType, delta) {
+            const p = window.getSharedGridData(surfaceType);
+            if (!p.headerLayout.rowHeight) p.headerLayout.rowHeight = p.headerHeight || 80;
+            p.headerLayout.rowHeight = Math.max(20, p.headerLayout.rowHeight + delta);
+            p.headerHeight = p.headerLayout.rowHeight; // Legacy compatibility
+
+            if (typeof window.savePropSettings === 'function') window.savePropSettings();
+            window.renderSharedGrid(surfaceType);
+            window.renderSharedGridSettingsContent(surfaceType);
+        }
+
+        window.renderSharedGridSettingsContent = function (surfaceType) {
+            const contentBox = document.getElementById('shared-grid-settings-content');
+            if (!contentBox) return;
+
+            if (!surfaceType) surfaceType = window.sharedGridState.activeSurface;
+            if (!surfaceType) return;
+
+            const labelContext = document.getElementById('shared-grid-context-location');
+            if (labelContext) {
+                labelContext.textContent = `Container ${window.sharedGridState.selectedContainer + 1} · Stack ${window.sharedGridState.selectedStack + 1} · Split ${window.sharedGridState.selectedSplit + 1}`;
+            }
+
+            const p = window.getSharedGridData(surfaceType);
+            const layout = p.headerLayout;
+            if (!layout || !layout.containers) return;
+
+            const cont = layout.containers[window.sharedGridState.selectedContainer];
+            const stack = cont ? cont.stacks[window.sharedGridState.selectedStack] : null;
+            const split = stack ? stack.splits[window.sharedGridState.selectedSplit] : null;
+
+            if (!split) return;
+
+            let activeMapping = split.mapping;
+            if (activeMapping === 'mic') activeMapping = 'microphone';
+            if (activeMapping === 'settings') activeMapping = (surfaceType === 'page2-header') ? 'page2-settings' : 'dispatch-settings';
+            if (activeMapping === 'title') activeMapping = 'dispatch-title';
+            if (activeMapping === 'status') activeMapping = 'dispatch-status';
+
+            let mappingsOptions = '';
+            if (surfaceType === 'page2-header') {
+                const p2Mappings = ['empty', 'logo', 'builder-title', 'version', 'site-badge', 'job-notes', 'microphone', 'page2-settings', 'theme', 'fullscreen', 'back', 'custom-text'];
+                if (activeMapping === 'external-control' || activeMapping === 'external-source-node') p2Mappings.push(activeMapping);
+                p2Mappings.forEach(m => {
+                    mappingsOptions += `<option value="${m}" ${activeMapping === m ? 'selected' : ''}>${m.toUpperCase()}</option>`;
+                });
+            } else {
+                const dispMappings = ['empty', 'dispatch-icon', 'dispatch-title', 'dispatch-status', 'dispatch-settings', 'take-photo', 'choose-photo', 'extract', 'custom-text'];
+                if (activeMapping === 'external-control') dispMappings.push(activeMapping);
+                dispMappings.forEach(m => {
+                    mappingsOptions += `<option value="${m}" ${activeMapping === m ? 'selected' : ''}>${m.toUpperCase()}</option>`;
+                });
+            }
+
+            const customTextRow = split.mapping === 'custom-text' ?
+                `<input type="text" value="${split.customText || ''}" onchange="window.sharedGridSetCustomText(this.value)" placeholder="Enter custom text..." class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-xs text-white mt-1">` : '';
+
+            let html = `
+        <div class="space-y-4">
+            <!-- Global & Containers -->
+            <div class="bg-slate-900/50 border border-slate-700 rounded p-2">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Global & Containers</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Universal Row Height</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.adjustSharedGridRowHeight('${surfaceType}', -5)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200">${layout.rowHeight || p.headerHeight || 80}px</span>
+                        <button onclick="window.adjustSharedGridRowHeight('${surfaceType}', 5)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-1 border-t border-slate-700/50 pt-1 mt-1">
+                    <span class="text-xs text-slate-300">Container Count</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.sharedGridChangeLayoutCount('containers', -1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200">${layout.containers.length}</span>
+                        <button onclick="window.sharedGridChangeLayoutCount('containers', 1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Container ${window.sharedGridState.selectedContainer + 1} Width Weight</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'containers', -0.5)" class="w-6 h-6 bg-blue-700 hover:bg-blue-600 rounded text-white font-bold">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200 font-bold">${cont.widthWeight}</span>
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'containers', 0.5)" class="w-6 h-6 bg-blue-700 hover:bg-blue-600 rounded text-white font-bold">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stacks (Vertical) -->
+            <div class="bg-slate-900/50 border border-slate-700 rounded p-2">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Stacks (Inside Container ${window.sharedGridState.selectedContainer + 1})</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Stack Count</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.sharedGridChangeLayoutCount('stacks', -1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200">${cont.stacks.length}</span>
+                        <button onclick="window.sharedGridChangeLayoutCount('stacks', 1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Stack ${window.sharedGridState.selectedStack + 1} Height Weight</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'stacks', -0.5)" class="w-6 h-6 bg-emerald-700 hover:bg-emerald-600 rounded text-white font-bold">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200 font-bold">${stack.heightWeight}</span>
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'stacks', 0.5)" class="w-6 h-6 bg-emerald-700 hover:bg-emerald-600 rounded text-white font-bold">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Splits (Horizontal) -->
+            <div class="bg-slate-900/50 border border-slate-700 rounded p-2">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Splits (Inside Stack ${window.sharedGridState.selectedStack + 1})</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Split Count</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.sharedGridChangeLayoutCount('splits', -1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200">${stack.splits.length}</span>
+                        <button onclick="window.sharedGridChangeLayoutCount('splits', 1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Split ${window.sharedGridState.selectedSplit + 1} Width Weight</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'splits', -0.5)" class="w-6 h-6 bg-blue-700 hover:bg-blue-600 rounded text-white font-bold">-</button>
+                        <span class="text-xs w-8 text-center text-slate-200 font-bold">${split.widthWeight}</span>
+                        <button onclick="window.modSharedGridWeight('${surfaceType}', 'splits', 0.5)" class="w-6 h-6 bg-blue-700 hover:bg-blue-600 rounded text-white font-bold">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapping & Styling -->
+            <div class="bg-slate-900/50 border border-slate-700 rounded p-2">
+                <div class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest mb-2">Split ${window.sharedGridState.selectedSplit + 1} Contents</div>
+                
+                <div class="mb-2 border-b border-slate-700/50 pb-2">
+                    <span class="text-[10px] text-slate-400 font-bold tracking-wider">MAPPING</span>
+                    <select onchange="window.sharedGridSetEnum('mapping', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded p-1.5 text-xs text-white mt-1">
+                        ${mappingsOptions}
+                    </select>
+                    ${customTextRow}
+                </div>
+
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-slate-300">Font Size</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.sharedGridAdjustProperty('fontSize', -1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-[11px] w-8 text-center text-slate-200">${(split.fontSize === 'inherit' || !split.fontSize) ? 'N/A' : split.fontSize}</span>
+                        <button onclick="window.sharedGridAdjustProperty('fontSize', 1)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-2 border-b border-slate-700/50 pb-2">
+                    <span class="text-xs text-slate-300">Icon / Element Size</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="window.sharedGridAdjustProperty('iconSize', -2)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">-</button>
+                        <span class="text-[11px] w-8 text-center text-slate-200">${(split.iconSize === 'inherit' || !split.iconSize) ? 'N/A' : split.iconSize}</span>
+                        <button onclick="window.sharedGridAdjustProperty('iconSize', 2)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded text-white">+</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                    <div>
+                        <span class="text-[9px] text-slate-400 font-bold tracking-wider">H-ALIGN</span>
+                        <div class="flex border border-slate-700 rounded overflow-hidden mt-1 pointer-events-auto">
+                            <button onclick="window.sharedGridSetEnum('horizontalAlign', 'left')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors ${split.horizontalAlign === 'left' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'}">L</button>
+                            <button onclick="window.sharedGridSetEnum('horizontalAlign', 'center')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors border-l border-r border-slate-700 ${split.horizontalAlign === 'center' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'}">C</button>
+                            <button onclick="window.sharedGridSetEnum('horizontalAlign', 'right')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors ${split.horizontalAlign === 'right' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'}">R</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[9px] text-slate-400 font-bold tracking-wider">V-ALIGN</span>
+                        <div class="flex border border-slate-700 rounded overflow-hidden mt-1 pointer-events-auto">
+                            <button onclick="window.sharedGridSetEnum('verticalAlign', 'top')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors ${split.verticalAlign === 'top' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}">T</button>
+                            <button onclick="window.sharedGridSetEnum('verticalAlign', 'middle')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors border-l border-r border-slate-700 ${(split.verticalAlign === 'middle' || !split.verticalAlign) ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}">M</button>
+                            <button onclick="window.sharedGridSetEnum('verticalAlign', 'bottom')" class="flex-1 py-1 text-[10px] uppercase font-bold transition-colors ${split.verticalAlign === 'bottom' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'}">B</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            contentBox.innerHTML = html;
+        };
+
+
+        window.origOpenPage2Settings = window.openPage2Settings;
+        window.openPage2Settings = function (scope) {
+            const modal = document.getElementById('proposal-settings-modal');
+
+            if (scope === 'page2') {
+                window.activePage2SettingsScope = 'page2';
+                window.sharedGridState.activeSurface = 'page2-header';
+                window.sharedGridState.selectedContainer = 0;
+                window.sharedGridState.selectedStack = 0;
+                window.sharedGridState.selectedSplit = 0;
+
+                const titleEl = document.getElementById('proposal-settings-title');
+                if (titleEl) titleEl.textContent = "PAGE 2 HEADER SETTINGS";
+
+                const allPanels = document.querySelectorAll('#proposal-settings-body > div');
+                allPanels.forEach(p => p.classList.add('hidden'));
+
+                let sg = document.getElementById('shared-grid-settings-panel');
+                if (sg) sg.classList.remove('hidden');
+
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+                }
+
+                if (typeof window.initDraggableModal === 'function') window.initDraggableModal('proposal-settings-modal', 'proposal-settings-header');
+
+                window.renderSharedGridSettingsContent('page2-header');
+                window.renderSharedGrid('page2-header');
+                return;
+            }
+
+            if (scope === 'dispatch-grid-redirect') {
+                window.activePage2SettingsScope = 'dispatch-grid-redirect';
+                window.sharedGridState.activeSurface = 'dispatch-header';
+                window.sharedGridState.selectedContainer = 0;
+                window.sharedGridState.selectedStack = 0;
+                window.sharedGridState.selectedSplit = 0;
+
+                const titleEl = document.getElementById('proposal-settings-title');
+                if (titleEl) titleEl.textContent = "DISPATCH HEADER SETTINGS";
+
+                const allPanels = document.querySelectorAll('#proposal-settings-body > div');
+                allPanels.forEach(p => p.classList.add('hidden'));
+
+                let sg = document.getElementById('shared-grid-settings-panel');
+                if (sg) sg.classList.remove('hidden');
+
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+                }
+
+                if (typeof window.initDraggableModal === 'function') window.initDraggableModal('proposal-settings-modal', 'proposal-settings-header');
+
+                window.renderSharedGridSettingsContent('dispatch-header');
+                window.renderSharedGrid('dispatch-header');
+                return;
+            }
+
+            if (scope === 'dispatch') {
+                window.sharedGridState.activeSurface = 'dispatch-header';
+                window.activePage2SettingsScope = 'dispatch';
+
+                if (typeof window.origOpenPage2Settings === 'function') {
+                    window.origOpenPage2Settings(scope);
+                }
+
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+                }
+
+                window.renderSharedGrid('dispatch-header');
+                return;
+            }
+
+            // Fallback
+            window.sharedGridState.activeSurface = null;
+            window.activePage2SettingsScope = scope;
+
+            if (typeof window.origOpenPage2Settings === 'function') {
+                window.origOpenPage2Settings(scope);
+            }
+
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        };
+
+        window.resetSharedGrid = function () {
+            const surfaceType = window.sharedGridState.activeSurface;
+            if (surfaceType === 'page2-header') {
+                if (typeof window.resetPage2HeaderLayout === 'function') { window.resetPage2HeaderLayout(); return; }
+            } else if (surfaceType === 'dispatch-header') {
+                if (typeof window.resetDispatchHeaderLayout === 'function') { window.resetDispatchHeaderLayout(); return; }
+            }
+        }
+        // Ensure init execution:
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof window.renderSharedGrid === 'function') {
+                    window.renderSharedGrid('page2-header');
+                    window.renderSharedGrid('dispatch-header');
+                }
+            }, 150);
+        });
+
+    </script>
     <!-- VOICE COMMAND HELP MODAL -->
     <div id="voice-help-modal"
         class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center pt-10 sm:pt-20 pb-10 px-4">
@@ -23010,6 +23887,199 @@
             if (modal) modal.classList.add('hidden');
         }
     </script>
+<script>
+
+window.plattsProposalFoldersLoaded = false;
+window.plattsProposalFolders = [];
+
+window.saveProposalDestinationPref = function () {
+    const el = document.getElementById("proposal-destination-folder");
+    if (el && el.value) {
+        localStorage.setItem("plattsProposalDestinationFolderId", el.value);
+    }
+};
+
+window.loadProposalDestinationFolders = async function () {
+    if (window.plattsProposalFoldersLoaded) return;
+    const selectEl = document.getElementById("proposal-destination-folder");
+    if (!selectEl) return;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'getProposalFolders' })
+        });
+
+        if (!response.ok) throw new Error("Network response was not ok");
+        const json = await response.json();
+
+        if (json.success && Array.isArray(json.folders)) {
+            window.plattsProposalFolders = json.folders;
+            window.plattsProposalFoldersLoaded = true;
+
+            selectEl.innerHTML = "";
+            let html = "";
+            window.plattsProposalFolders.forEach(f => {
+                html += `<option value="${f.id}">${f.name}</option>`;
+            });
+            selectEl.innerHTML = html;
+
+            // Selection logic
+            const savedId = localStorage.getItem("plattsProposalDestinationFolderId");
+            const hasSaved = window.plattsProposalFolders.some(f => f.id === savedId);
+
+            const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
+            let propYear = new Date().getFullYear().toString();
+            if (job.proposalDate) {
+                propYear = String(job.proposalDate).split('-')[0] || propYear;
+            }
+
+            if (hasSaved) {
+                selectEl.value = savedId;
+            } else {
+                const yearMatch = window.plattsProposalFolders.find(f => f.name.includes(propYear));
+                if (yearMatch) {
+                    selectEl.value = yearMatch.id;
+                } else if (window.plattsProposalFolders.length > 0) {
+                    selectEl.value = window.plattsProposalFolders[0].id;
+                }
+            }
+
+            window.saveProposalDestinationPref();
+        } else {
+            throw new Error(json.error || "Invalid folder list returned.");
+        }
+    } catch (err) {
+        console.error("Failed to load proposal folders:", err);
+        selectEl.innerHTML = `<option value="">Load Failed. Tap to Retry.</option>`;
+        selectEl.onclick = function () {
+            if (!window.plattsProposalFoldersLoaded) {
+                selectEl.innerHTML = '<option value="">Retrying...</option>';
+                selectEl.onclick = null;
+                window.loadProposalDestinationFolders();
+            }
+        };
+    }
+};
+
+
+function showProposalExportStatus(message, isError) {
+    const statusEl = document.getElementById('proposal-export-status');
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
+    statusEl.classList.add(isError ? 'text-rose-400' : 'text-emerald-400');
+}
+
+window.createProposalExportFromRetest = async function () {
+    if (typeof window.updateJobDataFromForm === "function") {
+        window.updateJobDataFromForm();
+    }
+
+    const selectEl = document.getElementById("proposal-destination-folder");
+    const btnEl = document.getElementById("btn-create-proposal");
+    const statusEl = document.getElementById("proposal-export-status");
+    const linksContainer = document.getElementById("proposal-links-container");
+    const docLink = document.getElementById("proposal-doc-link");
+    const pdfLink = document.getElementById("proposal-pdf-link");
+
+    statusEl.classList.add("hidden");
+    linksContainer.classList.add("hidden");
+
+    if (!selectEl || !selectEl.value) {
+        showProposalExportStatus("Select a valid Proposal Destination.", true);
+        return;
+    }
+
+    const destId = selectEl.value;
+    const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
+    const pDate = job.proposalDate || '';
+    const pName = job.customerName || '';
+    const pAddr = job.address || '';
+    const pZip = job.zip || '';
+    const pText = window.pureCopyText || "";
+
+    if (!destId || !pDate || !pName || !pAddr || !pText) {
+        showProposalExportStatus("Missing Date, Name, Address, or Proposal Output.", true);
+        return;
+    }
+
+    btnEl.disabled = true;
+    btnEl.innerHTML = "Creating...";
+    btnEl.classList.remove("bg-emerald-700", "hover:bg-emerald-600");
+    btnEl.classList.add("bg-slate-600");
+
+    const originalLucide = typeof window.lucide !== "undefined" ? true : false;
+
+    try {
+        const payload = {
+            action: 'createProposalExport',
+            destinationFolderId: destId,
+            proposalDate: pDate,
+            customerName: pName,
+            address: pAddr,
+            zip: pZip,
+            proposalText: pText
+        };
+
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const json = await response.json();
+
+        if (json.success) {
+            statusEl.innerHTML = `Proposal V${json.version} created.`;
+            statusEl.classList.remove("hidden", "text-rose-400");
+            statusEl.classList.add("text-emerald-400");
+
+            docLink.href = json.googleDocUrl;
+            pdfLink.href = json.pdfUrl;
+            linksContainer.classList.remove("hidden");
+
+            if (originalLucide && window.lucide.createIcons) {
+                window.lucide.createIcons();
+            }
+        } else {
+            throw new Error(json.error || "Backend returned failure.");
+        }
+    } catch (err) {
+        console.error("Proposal Export Failed:", err);
+        statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> ${err.message || 'Export failed.'}`;
+        statusEl.classList.remove("hidden", "text-emerald-400");
+        statusEl.classList.add("text-rose-400");
+        if (originalLucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    } finally {
+        btnEl.disabled = false;
+        btnEl.innerHTML = "Create Proposal";
+        btnEl.classList.remove("bg-slate-600");
+        btnEl.classList.add("bg-emerald-700", "hover:bg-emerald-600");
+    }
+};
+
+// Auto-trigger folder fetch when clicking into Page 2 the first time
+const origSwitchToPage = window.switchToPage;
+if (origSwitchToPage) {
+    window.switchToPage = function (pageNum) {
+        origSwitchToPage(pageNum);
+        if (pageNum === 2) {
+            window.loadProposalDestinationFolders();
+        }
+    };
+} else {
+    // Fallback if switchToPage is defined differently
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(window.loadProposalDestinationFolders, 2000);
+    });
+}
+
+</script>
 </body>
 
 </html>
