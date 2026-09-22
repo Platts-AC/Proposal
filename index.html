@@ -1,4 +1,4 @@
-<!-- Retest Prototype v08.07.11 | Version Identifier Repair -->
+<!-- Retest Prototype v08.07.17 | Version Identifier Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v08.07.11</title>
+    <title>Changeout Lookup v08.07.17</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.07.11</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.07.17</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1411,7 +1411,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.07.11</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.07.17</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -3375,6 +3375,7 @@
         // â”€â”€ LIVE DATA BRIDGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Global database array â€” populated via fetch() on window load
         let HVAC_DATABASE = [];
+        window.HVAC_ENHANCEMENTS = [];
 
         const API_URL = "https://script.google.com/macros/s/AKfycbwVpGwCMAct5xFhADHIbgEIpp-Klb1cjRKLbx1fgBUsv39ZA59mmaxh-fCmFBEkrGM/exec";
 
@@ -3413,6 +3414,7 @@
                             flag: row[19]
                         }));
                         // Render grid now that data is loaded
+                        window.HVAC_ENHANCEMENTS = Array.isArray(result.enhancements) ? result.enhancements : [];
                         window.HVAC_ALERTS = result.alerts || null;
                         renderGrid();
                         processAuditFlags();
@@ -6114,7 +6116,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v08.07.11',
+                appVersion: 'v08.07.17',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6308,7 +6310,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v08.07.11_${stamp}.json`;
+                `platts_config_v08.07.17_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -6428,7 +6430,8 @@
                             if (sys) {
                                 const sysCap = String(sys.capacity || '').toUpperCase();
                                 const sysSeer = String(sys.seer2 || '').toUpperCase();
-                                let shields = calculateSystemSaltShield(sysCap, sysSeer);
+                                const sysStyle = String(sys.applicationStyle || sys.style || '');
+                                let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle);
                                 let val = item.label.includes('Heresite') ? shields.here : shields.infi;
                                 prices.add(val);
                             }
@@ -9507,7 +9510,7 @@
                     'Enhancement Options:',
 
                 protectionHeading:
-                    'Warranty & Protection:',
+                    '■ Warranty & Protection',
 
                 warrantyClosing:
                     '■ Platt\'s Air and Heat has a 1-year workmanship warranty.\n' +
@@ -11777,7 +11780,9 @@
                 const effectiveSaltShields = window.getEffectiveSaltShields(sp);
 
                 if (effectiveSaltShields.length > 0) {
-                    const shieldPrices = calculateSystemSaltShield(capacity, seer2);
+                    const shieldItem = HVAC_DATABASE[sp.absoluteIndex] || {};
+                    const appStyle = String(shieldItem.applicationStyle || shieldItem.style || '').toUpperCase();
+                    const shieldPrices = calculateSystemSaltShield(capacity, seer2, appStyle);
 
                     effectiveSaltShields.forEach(label => {
                         let isInfused = sp.infusedItems && sp.infusedItems.includes(label);
@@ -11806,9 +11811,9 @@
 
                         if (isTagged) {
                             if (itemRoute === 'protection') {
-                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ____ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             } else {
-                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ____ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             }
                         } else {
                             const targetEngine =
@@ -11852,9 +11857,9 @@
 
                             if (isTagged) {
                                 if (itemRoute === 'protection') {
-                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ____ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 } else {
-                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}: ___ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ____ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 }
                             } else {
                                 const targetEngine =
@@ -11946,8 +11951,8 @@
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
                 let effectiveAhriForProposal = typeof window.getEffectiveAhri === 'function' ? window.getEffectiveAhri(item, sp) : ahri;
-                let rawOptText = `■ System Option ${index + 1}: ___ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
-                let optText = rawOptText.replace(/\s+/g, ' ');
+                let rawOptText = `■ System Option ${index + 1}\n____ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
+                let optText = rawOptText.replace(/[ \t\r]+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
                 window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${systemSubtotal.toLocaleString()}` });
 
@@ -12069,7 +12074,7 @@
                     const protectionHeading =
                         typeof getTerminalTemplateValue === 'function'
                             ? getTerminalTemplateValue('protectionHeading')
-                            : 'Warranty & Protection:';
+                            : '■ Warranty & Protection';
 
                     let protText = `${protectionHeading}\n`;
                     let protLines = [];
@@ -12095,7 +12100,7 @@
                                         : ` for ${formatProposalOptionNumbers(optGroup)}`;
 
                                 protLines.push(
-                                    `■ ___ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
+                                    `____ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
                                 );
                             } else if (groups.length > 1) {
                                 maybeOpenProtectionPriceConflict(
@@ -12112,7 +12117,7 @@
                                     });
 
                                 protLines.push(
-                                    `■ ___ Add ${label} for ${groupedStrs.join('; ')}`
+                                    `____ Add ${label} for ${groupedStrs.join('; ')}`
                                 );
                             }
                         }
@@ -12224,7 +12229,7 @@
             }
 
             // Render HTML Blocks
-            let html = '<div class="flex flex-col gap-0.5 p-1.5">';
+            let html = '<div class="flex flex-col gap-0.5 px-0 py-1.5">';
 
             // Explicit clipboard Initialization
             window.pureCopyText = "";
@@ -12295,7 +12300,7 @@
                 }
 
                 html += `
-        <div draggable="true" ondragstart="dragBlockStart(event, '${b.target}')" ondragover="dragBlockOver(event)" ondrop="dragBlockDrop(event, '${b.target}')" class="proposal-output-block relative group bg-slate-900 border border-slate-800 py-1 px-2 rounded shadow-sm hover:border-blue-500/50 transition-colors min-h-[28px] flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1 min-w-0">
+        <div draggable="true" ondragstart="dragBlockStart(event, '${b.target}')" ondragover="dragBlockOver(event)" ondrop="dragBlockDrop(event, '${b.target}')" class="proposal-output-block relative group bg-slate-900 border border-slate-800 py-1 px-1 rounded shadow-sm hover:border-blue-500/50 transition-colors min-h-[28px] flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1 min-w-0">
             <div class="flex items-start sm:items-center w-full min-w-0">
                 <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-blue-400 px-1 py-0.5 shrink-0"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></div>
                 <div class="whitespace-pre-wrap break-words text-emerald-400 pr-2 sm:pr-24 w-full min-w-0">${b.text}</div>
@@ -16130,7 +16135,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v08.07.11',
+                appVersion: 'v08.07.17',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16139,7 +16144,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v08.07.11_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v08.07.17_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16158,7 +16163,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v08.07.11',
+                appVersion: 'v08.07.17',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16167,7 +16172,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v08.07.11_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v08.07.17_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17199,12 +17204,52 @@
 
             if (typeof updateCalculatorTotal === 'function') updateCalculatorTotal();
         };
-        window.calculateSystemSaltShield = function (capacity, seer) {
+        window.calculateSystemSaltShield = function (capacity, seer, applicationStyle = "") {
             let capNum = parseFloat(String(capacity || '').replace(/[^0-9.]/g, '')) || 0;
             let isLarge = capNum >= 3;
 
             let seerNum = parseFloat(String(seer || '').replace(/[^0-9.]/g, '')) || 15;
             if (seerNum >= 16 && seerNum < 17) seerNum = 17; // Apply 16 SEER bump rule
+
+            let sizeBucket = "";
+            const appStyleUpper = String(applicationStyle).toUpperCase().trim();
+            if (appStyleUpper === "PACKAGE") {
+                sizeBucket = "1-4 Ton Package";
+            } else {
+                sizeBucket = (capNum < 3) ? "1.5-2.5 Ton" : "3-5 Ton";
+            }
+
+            let seerBucket = "15-16 SEER2";
+            if (seerNum >= 20) seerBucket = "20+ SEER2";
+            else if (seerNum >= 18) seerBucket = "18 SEER2";
+            else if (seerNum >= 17) seerBucket = "17 SEER2";
+
+            const enhancementName = `${sizeBucket} | ${seerBucket}`;
+            
+            let dynHere = null;
+            let dynInfi = null;
+            
+            if (window.HVAC_ENHANCEMENTS && window.HVAC_ENHANCEMENTS.length > 0) {
+                const hereItem = window.HVAC_ENHANCEMENTS.find(e => 
+                    String(e.category).trim() === "Salt Shield Heresite" && 
+                    String(e.name).trim() === enhancementName
+                );
+                const infiItem = window.HVAC_ENHANCEMENTS.find(e => 
+                    String(e.category).trim() === "Salt Shield Infiniguard" && 
+                    String(e.name).trim() === enhancementName
+                );
+                
+                if (hereItem && !isNaN(Number(hereItem.price))) dynHere = Number(hereItem.price);
+                if (infiItem && !isNaN(Number(infiItem.price))) dynInfi = Number(infiItem.price);
+            }
+            
+            if (dynHere !== null && dynInfi !== null) {
+                return { here: dynHere, infi: dynInfi };
+            }
+            
+            if (appStyleUpper === "PACKAGE") {
+                console.warn("Salt Shield fallback missing package data for:", capacity, seer, applicationStyle, enhancementName);
+            }
 
             let here = 0; let infi = 0;
 
@@ -17222,7 +17267,7 @@
                 else { here = 769; infi = 819; }
             }
 
-            return { here: here, infi: infi };
+            return { here: (dynHere !== null ? dynHere : here), infi: (dynInfi !== null ? dynInfi : infi) };
         }
 
         function autoSelectWarranty(siteName) {
@@ -17259,15 +17304,21 @@
             });
         }
 
-        function openPriceCalculator(element, brand, capacity, seer, basePrice, site = "Standard", absoluteIndex = null, systemType = null) {
+        function openPriceCalculator(element, brand, capacity, seer, basePrice, site = "Standard", absoluteIndex = null, systemType = null, applicationStyle = null) {
             currentBasePrice = parseFloat(String(basePrice).replace(/[^0-9.]/g, '')) || 0;
             currentSystemObj = { brand, capacity, seer2: seer, site, absoluteIndex, systemType };
+
+            if (applicationStyle == null && absoluteIndex != null && HVAC_DATABASE[absoluteIndex]) {
+                applicationStyle = String(HVAC_DATABASE[absoluteIndex].applicationStyle || HVAC_DATABASE[absoluteIndex].style || "");
+            }
+            currentSystemObj.applicationStyle = applicationStyle;
+
             window.proposalAppState.baseSite = site || 'Standard';
 
             document.getElementById('calcSystemTitle').innerHTML = `${brand} - ${capacity} ${site === 'Oceana' ? '<span class="text-blue-400 text-[12px] font-bold ml-2 tracking-widest">(OCEANA)</span>' : ''}`;
             document.getElementById('calcSystemSpecs').innerText = `Base Price: $${currentBasePrice.toLocaleString()}`;
 
-            let shields = calculateSystemSaltShield(capacity, seer);
+            let shields = calculateSystemSaltShield(capacity, seer, applicationStyle);
 
             // Assign value to BOTH the commit checkbox and the preview radio
             const commitHere = document.getElementById('commitHeresite');
@@ -18580,7 +18631,9 @@
             });
 
             if (sp.saltShield && sp.saltShield.length > 0) {
-                let shields = calculateSystemSaltShield(capacity, seer2);
+                const itemObj = HVAC_DATABASE[sp.absoluteIndex] || {};
+                const sysStyle = String(itemObj.applicationStyle || itemObj.style || '');
+                let shields = calculateSystemSaltShield(capacity, seer2, sysStyle);
                 sp.saltShield.forEach(shieldLabel => {
                     let sPrice = shieldLabel.includes('Heresite') ? shields.here : shields.infi;
                     protectionHtml += renderOptionalEnhancementRow(shieldLabel.replace('Heresite', 'HereShield'), sPrice);
@@ -18851,7 +18904,8 @@
                         const item = HVAC_DATABASE[sp.absoluteIndex];
                         const sysCap = String(item.capacity || '').toUpperCase();
                         const sysSeer = String(item.seer2 || '').toUpperCase();
-                        let shields = calculateSystemSaltShield(sysCap, sysSeer);
+                        const sysStyle = String(item.applicationStyle || item.style || '');
+                        let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle);
                         return shieldLabel.includes('Heresite') ? Number(shields.here) : Number(shields.infi);
                     });
                     warHtml += renderQuickSummaryPlacement(shieldLabel.replace('Heresite', 'HereShield'), placement);
