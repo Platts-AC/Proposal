@@ -1,4 +1,4 @@
-<!-- Retest Prototype v09.00.8 | Version Identifier Repair -->
+<!-- Retest Prototype v09.01.1 | Version Identifier Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v09.00.8</title>
+    <title>Changeout Lookup v09.01.1</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v09.00.8</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v09.01.1</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1411,7 +1411,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v09.00.8</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v09.01.1</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6142,7 +6142,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v09.00.8',
+                appVersion: 'v09.01.1',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6336,7 +6336,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v09.00.8_${stamp}.json`;
+                `platts_config_v09.01.1_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -11628,7 +11628,27 @@
                             let content = '';
                             let alignClass = split.align === 'center' ? 'items-center text-center justify-center' : split.align === 'right' ? 'items-end text-right justify-center' : 'items-start text-left justify-center';
                             
-                            if (split.mapping === 'desc') {
+                            
+                            let SorterContext = {
+                                brand: brand,
+                                capacity: capacity,
+                                systemType: sysType,
+                                seriesTier: series,
+                                mechanicalStage: mechStage,
+                                applicationStyle: printStyle,
+                                seer2: seer2,
+                                eer2: item.eer2,
+                                hspf2: item.hspf2,
+                                ahri: String(ahri || '').toUpperCase(),
+                                coolingBtu: item.coolingBtu,
+                                heatingBtu: item.heatingBtu,
+                                site: site
+                            };
+
+                            if (split.mapping === 'composite' || ['capacity','systemType','mechanicalStage','applicationStyle','seriesTier','seer2','eer2','hspf2','coolingBtu','heatingBtu'].includes(split.mapping)) {
+                                content = window.renderSorterCompositeContent(split, SorterContext);
+                            }
+                            else if (split.mapping === 'desc') {
                                 let stColor = window.getSystemTypeColorClass(sysType);
                                 let msColor = window.getStageColorClass(mechStage);
                                 content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span></span>`;
@@ -16256,7 +16276,7 @@ window.updateProposalTerminal = function () {
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v09.00.8',
+                appVersion: 'v09.01.1',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16265,7 +16285,7 @@ window.updateProposalTerminal = function () {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v09.00.8_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v09.01.1_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16284,7 +16304,7 @@ window.updateProposalTerminal = function () {
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v09.00.8',
+                appVersion: 'v09.01.1',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16293,7 +16313,7 @@ window.updateProposalTerminal = function () {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v09.00.8_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v09.01.1_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -20666,10 +20686,237 @@ window.updateProposalTerminal = function () {
             window.saveSorterSettings();
         };
         window.updateCartMap = function (cIdx, sIdx, pIdx, key, val, isFloat) {
-            if (isFloat) window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = parseFloat(val);
-            else if (key === 'fontSize') window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = parseInt(val);
-            else window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = val;
+            let split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (isFloat) split[key] = parseFloat(val);
+            else if (key === 'fontSize') split[key] = parseInt(val);
+            else split[key] = val;
+
+            if (key === 'mapping' && val === 'composite') {
+                if (!split.compositeFields || !Array.isArray(split.compositeFields)) {
+                    split.compositeFields = [
+                        { field: 'capacity', showLabel: false },
+                        { field: 'systemType', showLabel: false },
+                        { field: 'mechanicalStage', showLabel: false }
+                    ];
+                }
+                if (!split.compositeSeparator) {
+                    split.compositeSeparator = 'space';
+                }
+                window.saveSorterSettings();
+                if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+                if (typeof window.updateProposalCartUI === 'function') window.updateProposalCartUI();
+                return;
+            }
+
             window.saveSorterSettings();
+            if (typeof window.updateProposalCartUI === 'function') window.updateProposalCartUI();
+        };
+
+        
+        window.getSorterCompositeFieldValue = function(fieldKey, context) {
+            let val = context[fieldKey];
+            if (val === undefined || val === null || val === '' || val === 'N/A' || val === 'NA' || val === 'NULL' || val === 'UNDEFINED') return null;
+            val = String(val).trim();
+            if (!val) return null;
+            
+            if (fieldKey === 'systemType') {
+                const sysColor = window.getSystemTypeColorClass(val.toUpperCase());
+                return `<span class="${sysColor}">${val.toUpperCase()}</span>`;
+            } else if (fieldKey === 'capacity') {
+                return val.toUpperCase();
+            } else if (fieldKey === 'mechanicalStage') {
+                const stageColor = window.getStageColorClass(val.toLowerCase());
+                return `<span class="${stageColor}">${val.toLowerCase()}</span>`;
+            } else if (fieldKey === 'applicationStyle') {
+                const styleColor = window.getApplicationStyleColorClass(val);
+                return `<span class="${styleColor}">${val}</span>`;
+            } else if (fieldKey === 'seriesTier') {
+                const serColor = window.getSeriesTierColorClass(val.toUpperCase());
+                return `<span class="${serColor}">${val}</span>`;
+            } else if (fieldKey === 'coolingBtu' || fieldKey === 'heatingBtu') {
+                let num = parseInt(val.replace(/[^0-9]/g, ''));
+                if (!isNaN(num) && num > 0) return num.toLocaleString() + ' BTU';
+            }
+            return val; 
+        };
+
+        window.renderSorterCompositeContent = function(split, context) {
+            if (split.mapping !== 'composite') {
+                let v = window.getSorterCompositeFieldValue(split.mapping, context);
+                if (!v) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+                let lbl = '';
+                if (split.mapping === 'seer2') lbl = 'SEER2 ';
+                if (split.mapping === 'eer2') lbl = 'EER2 ';
+                if (split.mapping === 'hspf2') lbl = 'HSPF2 ';
+                if (split.mapping === 'coolingBtu') lbl = 'Cooling ';
+                if (split.mapping === 'heatingBtu') lbl = 'Heating ';
+                return `<span class="font-semibold tracking-wide flex items-center gap-1 leading-tight"><span class="text-slate-400">${lbl}</span>${v}</span>`;
+            }
+
+            if (!split.compositeFields || split.compositeFields.length === 0) {
+                return `<span class="text-slate-500 italic text-[11px]">Empty Custom Description</span>`;
+            }
+
+            let pieces = [];
+            split.compositeFields.forEach(f => {
+                let v = window.getSorterCompositeFieldValue(f.field, context);
+                if (v) {
+                    let lbl = '';
+                    if (f.showLabel) {
+                        if (f.field === 'systemType') lbl = 'System Type ';
+                        else if (f.field === 'mechanicalStage') lbl = 'Mechanical Stage ';
+                        else if (f.field === 'applicationStyle') lbl = 'Style ';
+                        else if (f.field === 'seriesTier') lbl = 'Series / Tier ';
+                        else if (f.field === 'seer2') lbl = 'SEER2 ';
+                        else if (f.field === 'eer2') lbl = 'EER2 ';
+                        else if (f.field === 'hspf2') lbl = 'HSPF2 ';
+                        else if (f.field === 'ahri') lbl = 'AHRI ';
+                        else if (f.field === 'coolingBtu') lbl = 'Cooling ';
+                        else if (f.field === 'heatingBtu') lbl = 'Heating ';
+                        else lbl = f.field.charAt(0).toUpperCase() + f.field.slice(1) + ' ';
+                    }
+                    pieces.push(`<span class="inline-flex items-center"><span class="text-slate-400">${lbl}</span>${v}</span>`);
+                }
+            });
+
+            if (pieces.length === 0) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+
+            let sepStr = ' ';
+            if (split.compositeSeparator === 'bullet') sepStr = ' &middot; ';
+            else if (split.compositeSeparator === 'slash') sepStr = ' / ';
+            else if (split.compositeSeparator === 'pipe') sepStr = ' | ';
+
+            let finalHtml = pieces.join(`<span class="text-slate-600 mx-1.5">${sepStr.trim()}</span>`);
+            return `<span class="font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
+        };
+
+        window.addSorterCompositeField = function(cIdx, sIdx, pIdx, field) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields) return;
+            if (split.compositeFields.some(f => f.field === field)) return;
+            let showLabel = ['seer2', 'eer2', 'hspf2', 'ahri', 'coolingBtu', 'heatingBtu'].includes(field);
+            split.compositeFields.push({ field: field, showLabel: showLabel });
+            window.saveSorterSettings();
+            if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.removeSorterCompositeField = function(cIdx, sIdx, pIdx, fIdx) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields) return;
+            split.compositeFields.splice(fIdx, 1);
+            window.saveSorterSettings();
+            if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.moveSorterCompositeField = function(cIdx, sIdx, pIdx, fIdx, dir) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields) return;
+            const target = fIdx + dir;
+            if (target < 0 || target >= split.compositeFields.length) return;
+            const temp = split.compositeFields[fIdx];
+            split.compositeFields[fIdx] = split.compositeFields[target];
+            split.compositeFields[target] = temp;
+            window.saveSorterSettings();
+            if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.setSorterCompositeFieldLabel = function(cIdx, sIdx, pIdx, fIdx, isChecked) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields) return;
+            split.compositeFields[fIdx].showLabel = isChecked;
+            window.saveSorterSettings();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.setSorterCompositeSeparator = function(cIdx, sIdx, pIdx, val) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            split.compositeSeparator = val;
+            window.saveSorterSettings();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.renderCartCompositeControls = function(cIdx, sIdx, pIdx, split) {
+            let fieldsHtml = '';
+            if (split.compositeFields && Array.isArray(split.compositeFields)) {
+                split.compositeFields.forEach((f, fIdx) => {
+                    let dispName = f.field;
+                    if (f.field === 'systemType') dispName = 'System Type';
+                    else if (f.field === 'mechanicalStage') dispName = 'Mechanical Stage';
+                    else if (f.field === 'applicationStyle') dispName = 'Style';
+                    else if (f.field === 'seriesTier') dispName = 'Series / Tier';
+                    else if (f.field === 'seer2') dispName = 'SEER2';
+                    else if (f.field === 'eer2') dispName = 'EER2';
+                    else if (f.field === 'hspf2') dispName = 'HSPF2';
+                    else if (f.field === 'ahri') dispName = 'AHRI';
+                    else if (f.field === 'coolingBtu') dispName = 'Cooling BTU';
+                    else if (f.field === 'heatingBtu') dispName = 'Heating BTU';
+                    else dispName = dispName.charAt(0).toUpperCase() + dispName.slice(1);
+
+                    fieldsHtml += `<div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded px-2 py-1 mb-1 shadow-sm">
+                        <span class="text-[10px] text-slate-300 w-24 truncate font-semibold">${dispName}</span>
+                        <div class="flex items-center gap-2">
+                            <label class="flex items-center gap-1 cursor-pointer hover:bg-slate-800 px-1 rounded transition-colors">
+                                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Label</span>
+                                <input type="checkbox" onchange="setSorterCompositeFieldLabel(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.checked)" ${f.showLabel ? 'checked' : ''} class="w-3 h-3 accent-emerald-500 rounded-sm">
+                            </label>
+                            <div class="flex border border-slate-700 rounded overflow-hidden">
+                                <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, -1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors ${fIdx === 0 ? 'opacity-30 pointer-events-none' : ''}">↑</button>
+                                <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, 1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors border-l border-slate-700 ${fIdx === split.compositeFields.length - 1 ? 'opacity-30 pointer-events-none' : ''}">↓</button>
+                            </div>
+                            <button onclick="removeSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx})" class="text-rose-500 hover:bg-rose-950 px-1.5 rounded transition-colors text-lg leading-none mt-[-2px]">&times;</button>
+                        </div>
+                    </div>`;
+                });
+            }
+
+            let fieldOpts = `
+                <option value="">+ Add Field</option>
+                <option value="brand">Brand</option>
+                <option value="capacity">Capacity</option>
+                <option value="systemType">System Type</option>
+                <option value="seriesTier">Series / Tier</option>
+                <option value="mechanicalStage">Mechanical Stage</option>
+                <option value="applicationStyle">Application / Style</option>
+                <option value="seer2">SEER2</option>
+                <option value="eer2">EER2</option>
+                <option value="hspf2">HSPF2</option>
+                <option value="ahri">AHRI</option>
+                <option value="coolingBtu">Cooling BTU</option>
+                <option value="heatingBtu">Heating BTU</option>
+                <option value="site">Site / Location</option>
+            `;
+
+            if (split.compositeFields) {
+                split.compositeFields.forEach(f => {
+                    fieldOpts = fieldOpts.replace(new RegExp(`<option value="${f.field}">.*?</option>`), ''); 
+                });
+            }
+
+            let sep = split.compositeSeparator || 'space';
+            
+            return `<div class="col-span-2 bg-slate-950 p-2 rounded-md border border-blue-900/40 mt-1 shadow-inner">
+                <div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <i data-lucide="text-cursor-input" class="w-3 h-3"></i> Custom Description Fields
+                </div>
+                ${fieldsHtml}
+                <div class="flex items-center gap-2 mt-2">
+                    <select onchange="if(this.value) { addSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, this.value); this.value=''; }" class="bg-slate-900 border border-emerald-900/50 text-slate-300 font-semibold text-[10px] rounded px-1.5 py-1 outline-none flex-1 focus:border-emerald-500 transition-colors">
+                        ${fieldOpts}
+                    </select>
+                    <div class="flex items-center gap-1.5 shrink-0 bg-slate-900 border border-slate-700/80 rounded px-1.5">
+                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Separator</span>
+                        <select onchange="setSorterCompositeSeparator(${cIdx}, ${sIdx}, ${pIdx}, this.value)" class="bg-transparent text-slate-300 font-semibold text-[10px] outline-none py-1 w-16">
+                            <option value="space" ${sep === 'space' ? 'selected' : ''}>Space</option>
+                            <option value="bullet" ${sep === 'bullet' ? 'selected' : ''}>Bullet</option>
+                            <option value="slash" ${sep === 'slash' ? 'selected' : ''}>Slash</option>
+                            <option value="pipe" ${sep === 'pipe' ? 'selected' : ''}>Pipe</option>
+                        </select>
+                    </div>
+                </div>
+            </div>`;
         };
 
         window.renderCartConfigurator = function () {
@@ -20729,7 +20976,18 @@ window.updateProposalTerminal = function () {
                                 </div>
                                 <select onchange="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'mapping', this.value, false)" class="bg-slate-900 text-[10px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
                                     <option value="desc" ${split.mapping === 'desc' ? 'selected' : ''}>System Desc</option>
+                                    <option value="composite" ${split.mapping === 'composite' ? 'selected' : ''}>Custom Description</option>
+                                    <option value="capacity" ${split.mapping === 'capacity' ? 'selected' : ''}>Capacity</option>
+                                    <option value="systemType" ${split.mapping === 'systemType' ? 'selected' : ''}>System Type</option>
+                                    <option value="mechanicalStage" ${split.mapping === 'mechanicalStage' ? 'selected' : ''}>Mechanical Stage</option>
+                                    <option value="applicationStyle" ${split.mapping === 'applicationStyle' ? 'selected' : ''}>Application / Style</option>
+                                    <option value="seriesTier" ${split.mapping === 'seriesTier' ? 'selected' : ''}>Series / Tier</option>
+                                    <option value="seer2" ${split.mapping === 'seer2' ? 'selected' : ''}>SEER2</option>
+                                    <option value="eer2" ${split.mapping === 'eer2' ? 'selected' : ''}>EER2</option>
+                                    <option value="hspf2" ${split.mapping === 'hspf2' ? 'selected' : ''}>HSPF2</option>
                                     <option value="ahri" ${split.mapping === 'ahri' ? 'selected' : ''}>AHRI</option>
+                                    <option value="coolingBtu" ${split.mapping === 'coolingBtu' ? 'selected' : ''}>Cooling BTU</option>
+                                    <option value="heatingBtu" ${split.mapping === 'heatingBtu' ? 'selected' : ''}>Heating BTU</option>
                                     <option value="brandLogo" ${split.mapping === 'brandLogo' ? 'selected' : ''}>Brand Logo</option>
                                     <option value="brandName" ${split.mapping === 'brandName' ? 'selected' : ''}>Brand Name</option>
                                     <option value="brand" ${split.mapping === 'brand' ? 'selected' : ''}>Brand / Style / Series</option>
@@ -20768,6 +21026,7 @@ window.updateProposalTerminal = function () {
                                     <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'fontSize', ${split.fontSize + 1}, false)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">+</button>
                                 </div>
                             </div>
+                            ${split.mapping === 'composite' ? window.renderCartCompositeControls(cIdx, sIdx, pIdx, split) : ''}
                         </div>`;
                     });
                     html += `<button onclick="addCartSplit(${cIdx}, ${sIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded border border-dashed border-slate-600 transition-colors text-[9px] uppercase tracking-widest">+ Add Split</button></div>`;
