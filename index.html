@@ -1,4 +1,4 @@
-<!-- Retest Prototype v08.07.17 | Version Identifier Repair -->
+<!-- Retest Prototype v09.00.8 | Version Identifier Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v08.07.17</title>
+    <title>Changeout Lookup v09.00.8</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v08.07.17</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v09.00.8</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1411,7 +1411,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v08.07.17</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v09.00.8</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1859,11 +1859,14 @@
                             <option value="fee">Additional Fee</option>
                             <option value="spacer">Blank Spacer Card</option>
                         </select>
-                        <label
-                            class="flex items-center gap-1 text-[10px] font-bold text-slate-300 uppercase tracking-widest cursor-pointer">
-                            <input type="checkbox" id="inj-initial"
-                                class="rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-0 w-3 h-3">
-                            Initial
+                        <label class="flex items-center gap-1">
+                            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Acknowledge</span>
+                            <select id="inj-ack"
+                                class="bg-slate-900 text-slate-300 text-[10px] font-bold border border-slate-700 rounded p-1.5 h-[30px] min-w-[90px]">
+                                <option value="none">None</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="initial">Initial Line</option>
+                            </select>
                         </label>
                         <input type="number" id="inj-price" placeholder="$"
                             class="bg-slate-900 text-emerald-400 font-bold text-xs border border-slate-700 rounded p-1.5 w-full sm:w-20 hidden">
@@ -2452,6 +2455,18 @@
 
                 <div class="space-y-3 pt-3 border-t border-slate-700">
 
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <label class="flex items-center justify-between text-xs text-slate-300 font-bold mb-1">
+                            <span>Proposal Selection Marker</span>
+                            <select id="terminal-selection-marker" onchange="window.setTerminalSelectionMarker(this.value)" class="bg-slate-900 border border-slate-600 rounded p-1 text-white w-32 focus:outline-none focus:border-blue-500">
+                                <option value="checkbox">Checkbox</option>
+                                <option value="initial">Initial Line</option>
+                            </select>
+                        </label>
+                        <div class="text-[9px] text-slate-500 leading-tight">Controls the built-in system option and warranty selection toggles. Note Acknowledgments remain independent.</div>
+                    </div>
+
                     <div>
                         <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                             Saved Proposal Note Presets
@@ -2486,10 +2501,14 @@
 
                     </div>
 
-                    <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                        <input id="terminal-note-preset-initial" type="checkbox"
-                            class="w-3.5 h-3.5 rounded bg-slate-900 border-slate-600 text-blue-500">
-                        Include Initial Blank
+                    <label class="flex items-center gap-2 text-xs text-slate-300">
+                        <span>Acknowledge</span>
+                        <select id="terminal-note-preset-ack"
+                            class="bg-slate-950 border border-slate-700 rounded p-2 text-xs text-white">
+                            <option value="none">None</option>
+                            <option value="checkbox">Checkbox</option>
+                            <option value="initial">Initial Line</option>
+                        </select>
                     </label>
 
                     <textarea id="terminal-note-preset-text" rows="4" placeholder="Preset text"
@@ -5379,6 +5398,7 @@
                 lineHeight: 1.5,
                 blockGap: 8,
                 align: 'left',
+                selectionMarker: 'checkbox',
                 copySections: {
                     customer: true,
                     intro: true,
@@ -5390,7 +5410,7 @@
                 },
                 scopeOverrides: (function () {
                     const r = {};
-                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
+                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
                         r[k] = { state: 'default', source: 'default' };
                     });
                     return r;
@@ -5416,7 +5436,7 @@
                 }
 
                 if (propSettings.terminal && propSettings.terminal.scopeOverrides) {
-                    const scopeKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+                    const scopeKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'];
                     const allowedStates = {
                         ductwork: ['default', 'existing', 'new', 'modify', 'notIncluded'],
                         copper: ['default', 'existing', 'new', 'notIncluded'],
@@ -5425,8 +5445,9 @@
                         thermostat: ['default', 'existing', 'new', 'notIncluded'],
                         pad: ['default', 'existing', 'new', 'notIncluded'],
                         platformTop: ['default', 'replace', 'existing', 'notIncluded'],
-                        floatSwitch: ['default', 'install', 'notIncluded'],
-                        auxFloatSwitch: ['default', 'install', 'notIncluded'],
+                        floatSwitch: ['default', 'existing', 'new', 'notIncluded'],
+                        auxFloatSwitch: ['default', 'existing', 'new', 'notIncluded'],
+                        auxDrainPan: ['default', 'existing', 'new', 'notIncluded'],
                         disconnect: ['default', 'existing', 'new', 'notIncluded'],
                         whip: ['default', 'existing', 'new', 'notIncluded'],
                         ductTransitions: ['default', 'modify', 'new', 'notIncluded']
@@ -5434,11 +5455,13 @@
                     scopeKeys.forEach(k => {
                         let val = propSettings.terminal.scopeOverrides[k];
                         if (typeof val === 'string') {
+                            if ((k === 'floatSwitch' || k === 'auxFloatSwitch') && val === 'install') val = 'new';
                             if (val === 'auto') val = { state: 'default', source: 'default' };
                             else if (val === 'new') val = { state: 'new', source: 'manual' };
                             else if (val === 'existing') val = { state: 'existing', source: 'manual' };
                             else val = { state: 'default', source: 'default' };
                         } else if (typeof val === 'object' && val !== null) {
+                            if ((k === 'floatSwitch' || k === 'auxFloatSwitch') && val.state === 'install') val.state = 'new';
                             if (!allowedStates[k]) return;
                             if (!allowedStates[k].includes(val.state)) val.state = 'default';
                             if (val.state === 'default') val.source = 'default';
@@ -5540,7 +5563,8 @@
                     fontSize: 14,
                     lineHeight: 1.5,
                     blockGap: 8,
-                    align: 'left',
+                align: 'left',
+                selectionMarker: 'checkbox',
                     ...storedTerminalSettings,
 
                     copySections: {
@@ -5557,14 +5581,16 @@
                     scopeOverrides: (function () {
                         const oldOvr = storedTerminalSettings.scopeOverrides || {};
                         const nOvr = {};
-                        const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+                        const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'];
                         keys.forEach(k => {
                             let val = oldOvr[k];
                             // Migrate Legacy values backward compat
                             if (typeof val === 'string') {
+                                if ((k === 'floatSwitch' || k === 'auxFloatSwitch') && val === 'install') val = 'new';
                                 if (val === 'auto') val = 'default';
                                 nOvr[k] = { state: val, source: 'manual' };
                             } else if (val && typeof val === 'object' && val.state !== undefined) {
+                                if ((k === 'floatSwitch' || k === 'auxFloatSwitch') && val.state === 'install') val.state = 'new';
                                 nOvr[k] = val;
                             } else {
                                 nOvr[k] = { state: 'default', source: 'default' };
@@ -6116,7 +6142,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v08.07.17',
+                appVersion: 'v09.00.8',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6310,7 +6336,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v08.07.17_${stamp}.json`;
+                `platts_config_v09.00.8_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -6812,8 +6838,9 @@
                 { key: 'thermostat', icon: 'thermometer', name: 'Thermostat', help: 'Proposal wording for thermostat', states: ['default', 'existing', 'new', 'notIncluded'] },
                 { key: 'pad', icon: 'box', name: 'Hurricane Pad', help: 'Proposal wording for equipment pad', states: ['default', 'existing', 'new', 'notIncluded'] },
                 { key: 'platformTop', icon: 'layout-template', name: 'Platform Top', help: 'Proposal wording for platform top', states: ['default', 'replace', 'existing', 'notIncluded'] },
-                { key: 'floatSwitch', icon: 'toggle-left', name: 'Primary Float Switch', help: 'Proposal wording for float switch', states: ['default', 'install', 'notIncluded'] },
-                { key: 'auxFloatSwitch', icon: 'toggle-right', name: 'Auxiliary Float Switch', help: 'Proposal wording for aux float switch', states: ['default', 'install', 'notIncluded'] },
+                { key: 'floatSwitch', icon: 'toggle-left', name: 'Primary Float Switch', help: 'Proposal wording for primary float switch', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'auxFloatSwitch', icon: 'toggle-right', name: 'Auxiliary Float Switch', help: 'Proposal wording for auxiliary float switch', states: ['default', 'existing', 'new', 'notIncluded'] },
+                { key: 'auxDrainPan', icon: 'square', name: 'Auxiliary Drain Pan', help: 'Proposal wording for auxiliary drain pan', states: ['default', 'existing', 'new', 'notIncluded'] },
                 { key: 'disconnect', icon: 'power', name: 'Disconnect', help: 'Proposal wording for safety disconnect', states: ['default', 'existing', 'new', 'notIncluded'] },
                 { key: 'whip', icon: 'plug-2', name: 'Electrical Whip', help: 'Proposal wording for high-voltage whip', states: ['default', 'existing', 'new', 'notIncluded'] },
                 { key: 'ductTransitions', icon: 'milestone', name: 'Duct Transitions / Modifications', help: 'Proposal wording for duct connections', states: ['default', 'modify', 'new', 'notIncluded'] }
@@ -9296,6 +9323,7 @@
                 lineHeight: 1.5,
                 blockGap: 8,
                 align: 'left',
+                selectionMarker: 'checkbox',
                 copySections: {
                     customer: true,
                     intro: true,
@@ -9307,7 +9335,7 @@
                 },
                 scopeOverrides: (function () {
                     const r = {};
-                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
+                    ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'].forEach(k => {
                         r[k] = { state: 'default', source: 'default' };
                     });
                     return r;
@@ -9396,7 +9424,7 @@
                 }
             });
 
-            const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+            const keys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'];
             keys.forEach(k => {
                 const el = document.getElementById('terminal-scope-' + k);
                 if (el) el.value = typeof getInstallationScopeState === 'function' ? getInstallationScopeState(k) : 'default';
@@ -9468,8 +9496,9 @@
                 thermostat: ['default', 'existing', 'new', 'notIncluded'],
                 pad: ['default', 'existing', 'new', 'notIncluded'],
                 platformTop: ['default', 'replace', 'existing', 'notIncluded'],
-                floatSwitch: ['default', 'install', 'notIncluded'],
-                auxFloatSwitch: ['default', 'install', 'notIncluded'],
+                floatSwitch: ['default', 'existing', 'new', 'notIncluded'],
+                auxFloatSwitch: ['default', 'existing', 'new', 'notIncluded'],
+                auxDrainPan: ['default', 'existing', 'new', 'notIncluded'],
                 disconnect: ['default', 'existing', 'new', 'notIncluded'],
                 whip: ['default', 'existing', 'new', 'notIncluded'],
                 ductTransitions: ['default', 'modify', 'new', 'notIncluded']
@@ -9485,7 +9514,7 @@
         }
 
         function setTerminalScopeOverride(key, value) {
-            const validKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'disconnect', 'whip', 'ductTransitions'];
+            const validKeys = ['ductwork', 'copper', 'drain', 'highVoltage', 'thermostat', 'pad', 'platformTop', 'floatSwitch', 'auxFloatSwitch', 'auxDrainPan', 'disconnect', 'whip', 'ductTransitions'];
             if (!validKeys.includes(key)) return;
             setInstallationScopeState(key, value, 'manual');
 
@@ -9543,6 +9572,9 @@
 
             const status =
                 document.getElementById('terminal-template-status');
+            const smSel = document.getElementById('terminal-selection-marker');
+            if (smSel) smSel.value = propSettings.terminal && propSettings.terminal.selectionMarker ? propSettings.terminal.selectionMarker : 'checkbox';
+            
 
             if (!editor) return;
 
@@ -10216,8 +10248,8 @@
             const price =
                 document.getElementById('terminal-note-preset-price');
 
-            const initial =
-                document.getElementById('terminal-note-preset-initial');
+            const ack =
+                document.getElementById('terminal-note-preset-ack');
 
             const text =
                 document.getElementById('terminal-note-preset-text');
@@ -10229,7 +10261,7 @@
             if (name) name.value = '';
             if (category) category.value = 'note';
             if (price) price.value = '';
-            if (initial) initial.checked = false;
+            if (ack) ack.value = 'none';
             if (text) text.value = '';
 
             if (status) {
@@ -10264,8 +10296,8 @@
             const price =
                 document.getElementById('terminal-note-preset-price');
 
-            const initial =
-                document.getElementById('terminal-note-preset-initial');
+            const ack =
+                document.getElementById('terminal-note-preset-ack');
 
             const text =
                 document.getElementById('terminal-note-preset-text');
@@ -10286,9 +10318,9 @@
                         : '';
             }
 
-            if (initial) {
-                initial.checked =
-                    preset.initial === true;
+            if (ack) {
+                const presetAck = preset.acknowledgment || (preset.initial === true ? 'initial' : 'none');
+                ack.value = ['none', 'checkbox', 'initial'].includes(presetAck) ? presetAck : 'none';
             }
 
             if (text) {
@@ -10340,8 +10372,8 @@
             const priceInput =
                 document.getElementById('terminal-note-preset-price');
 
-            const initialInput =
-                document.getElementById('terminal-note-preset-initial');
+            const ackInput =
+                document.getElementById('terminal-note-preset-ack');
 
             const textInput =
                 document.getElementById('terminal-note-preset-text');
@@ -10401,10 +10433,10 @@
                 name,
                 category,
 
-                initial:
-                    initialInput
-                        ? initialInput.checked === true
-                        : false,
+                acknowledgment:
+                    ackInput
+                        ? ackInput.value
+                        : 'none',
 
                 price:
                     priceInput
@@ -10482,8 +10514,8 @@
             const category =
                 document.getElementById('inj-category');
 
-            const initial =
-                document.getElementById('inj-initial');
+            const acknowledgment =
+                document.getElementById('inj-ack');
 
             const price =
                 document.getElementById('inj-price');
@@ -10494,7 +10526,7 @@
             if (
                 !presetSelect ||
                 !category ||
-                !initial ||
+                !acknowledgment ||
                 !price ||
                 !text
             ) {
@@ -10532,8 +10564,16 @@
                     ? preset.category
                     : 'note';
 
-            initial.checked =
-                preset.initial === true;
+            if (acknowledgment) {
+                const presetAck =
+                preset.acknowledgment ||
+                (preset.initial === true ? 'initial' : 'none');
+            
+            acknowledgment.value =
+                ['none', 'checkbox', 'initial'].includes(presetAck)
+                    ? presetAck
+                    : 'none';
+            }
 
             price.value =
                 Number(preset.price) > 0
@@ -10727,6 +10767,8 @@
         };
 
         function updateProposalCartUI() {
+    const selectionMarker = window.getProposalSelectionMarker();
+
             let stitchLines = [];
             const sorterList = document.getElementById('proposal-sorter-list');
             if (!sorterList) return;
@@ -10939,8 +10981,18 @@
                 thermostat: { existing: 'thermostat', new: 'thermostat' },
                 pad: { existing: 'hurricane pad', new: 'hurricane pad' },
                 platformTop: { existing: 'platform top', replace: 'the platform top' },
-                floatSwitch: { install: 'primary float switch' },
-                auxFloatSwitch: { install: 'auxiliary float switch' },
+                floatSwitch: {
+                        existing: 'primary float switch',
+                        new: 'primary float switch'
+                    },
+                auxFloatSwitch: {
+                        existing: 'auxiliary float switch',
+                        new: 'auxiliary float switch'
+                    },
+                    auxDrainPan: {
+                        existing: 'auxiliary drain pan',
+                        new: 'auxiliary drain pan'
+                    },
                 ductTransitions: { modify: 'necessary duct transitions/modifications', new: 'duct transitions/modifications' }
             };
 
@@ -10954,6 +11006,7 @@
                 platformTop: 'platform top',
                 floatSwitch: 'primary float switch',
                 auxFloatSwitch: 'auxiliary float switch',
+                auxDrainPan: 'auxiliary drain pan',
                 disconnect: 'disconnect',
                 whip: 'electrical whip',
                 ductTransitions: 'duct transitions/modifications'
@@ -11456,12 +11509,14 @@
 
                 // Scan Sorter Settings to dynamically inherit Adjustments column alignment
                 let adjustmentsAlign = 'right'; // Fallback default
-                if (window.sorterSettings && window.sorterSettings.stacks) {
-                    window.sorterSettings.stacks.forEach(stack => {
-                        stack.spreads.forEach(spread => {
-                            if (spread.mapping === 'adjustments') {
-                                adjustmentsAlign = spread.align || 'right';
-                            }
+                if (window.sorterSettings && window.sorterSettings.containers) {
+                    window.sorterSettings.containers.forEach(container => {
+                        container.stacks.forEach(stack => {
+                            stack.splits.forEach(split => {
+                                if (split.mapping === 'adjustments') {
+                                    adjustmentsAlign = split.align || 'right';
+                                }
+                            });
                         });
                     });
                 }
@@ -11553,100 +11608,108 @@
                 let cleanBaseStr = baseStr.replace(sizeRegex, '');
                 let cleanModStr = modifierStr.replace(sizeRegex, '');
 
-                // Execute Smart Pod Layout Engine
-                let stacksHtml = '';
-                window.sorterSettings.stacks.forEach(stack => {
-                    if (stack.heightWeight <= 0) return;
-                    let spreadsHtml = '';
-                    stack.spreads.forEach(spread => {
-                        if (spread.weight <= 0) return;
-
-                        // If End Cap is enabled, totalPrice will render on the right, so skip standard stack render
-                        if (spread.mapping === 'totalPrice' && window.sorterSettings.enableEndCap) return;
-                        if (spread.mapping === 'otdPrice' && window.sorterSettings.enableEndCap) return;
-
-                        let content = '';
-                        let alignClass = spread.align === 'center' ? 'items-center text-center justify-center' : spread.align === 'right' ? 'items-end text-right justify-center' : 'items-start text-left justify-center';
-
-                        if (spread.mapping === 'desc') {
-                            let stColor = window.getSystemTypeColorClass(sysType);
-                            let msColor = window.getStageColorClass(mechStage);
-                            content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span><br/><span class="text-[9px] text-slate-500 pr-1">AHRI</span><span class="text-[9px] text-slate-400 font-mono tracking-tight">${ahri || 'N/A'}</span></span>`;
-                        }
-                        else if (spread.mapping === 'ahri') {
-                            content = `<span class="font-bold whitespace-nowrap"><span class="text-slate-500 mr-1">AHRI</span><span class="text-blue-400">${ahri || 'N/A'}</span></span>`;
-                        }
-                        else if (spread.mapping === 'brandLogo') {
-                            if (brand.toUpperCase() === 'CARRIER') {
-                                content = `<img src="./carrier.png" alt="Carrier" class="object-contain" style="max-height: 1.5em;" />`;
-                            } else if (brand.toUpperCase() === 'COMFORTMAKER') {
-                                content = `<img src="./comfortmaker.png" alt="Comfortmaker" class="object-contain" style="max-height: 2em;" />`;
-                            } else if (brand.toUpperCase() === 'DURASTAR') {
-                                content = `<img src="./durastar.png" alt="Durastar" class="object-contain" style="max-height: 1.5em;" />`;
-                            } else {
+                // Execute Smart Pod Layout Engine (v3 Containers -> Stacks -> Splits)
+                let containersHtml = '';
+                
+                window.sorterSettings.containers.forEach(container => {
+                    if(container.widthWeight <= 0) return;
+                    let stacksHtml = '';
+                    
+                    container.stacks.forEach(stack => {
+                        if (stack.heightWeight <= 0) return;
+                        let splitsHtml = '';
+                        
+                        stack.splits.forEach(split => {
+                            if (split.widthWeight <= 0) return;
+                            
+                            // If End Cap is enabled, totalPrice and otdPrice normally render on the right, skip here
+                            if ((split.mapping === 'totalPrice' || split.mapping === 'otdPrice') && window.sorterSettings.enableEndCap) return;
+                            
+                            let content = '';
+                            let alignClass = split.align === 'center' ? 'items-center text-center justify-center' : split.align === 'right' ? 'items-end text-right justify-center' : 'items-start text-left justify-center';
+                            
+                            if (split.mapping === 'desc') {
+                                let stColor = window.getSystemTypeColorClass(sysType);
+                                let msColor = window.getStageColorClass(mechStage);
+                                content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span></span>`;
+                            }
+                            else if (split.mapping === 'ahri') {
+                                content = `<span class="font-bold whitespace-nowrap"><span class="text-slate-500 mr-1">AHRI</span><span class="text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSystemDetails(window.selectedProposalRows[${index}])">${ahri || 'N/A'}</span></span>`;
+                            }
+                            else if (split.mapping === 'brandLogo') {
+                                if (brand.toUpperCase() === 'CARRIER') {
+                                    content = `<img src="./carrier.png" alt="Carrier" class="object-contain" style="max-height: 1.5em;" />`;
+                                } else if (brand.toUpperCase() === 'COMFORTMAKER') {
+                                    content = `<img src="./comfortmaker.png" alt="Comfortmaker" class="object-contain" style="max-height: 2em;" />`;
+                                } else if (brand.toUpperCase() === 'DURASTAR') {
+                                    content = `<img src="./durastar.png" alt="Durastar" class="object-contain" style="max-height: 1.5em;" />`;
+                                } else {
+                                    content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
+                                }
+                            }
+                            else if (split.mapping === 'brandName') {
                                 content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
                             }
-                        }
-                        else if (spread.mapping === 'brandName') {
-                            content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
-                        }
-                        else if (spread.mapping === 'brand') {
-                            let asColor = window.getApplicationStyleColorClass(printStyle);
-                            let serColor = window.getSeriesTierColorClass(series);
+                            else if (split.mapping === 'brand') {
+                                let asColor = window.getApplicationStyleColorClass(printStyle);
+                                let serColor = window.getSeriesTierColorClass(series);
+                                
+                                let dispSeries = series;
+                                if (series === 'MAIN LINE' || series === 'MAINLINE') dispSeries = 'Mainline';
+                                else if (series === 'PERFORMER') dispSeries = 'Performer';
+                                else if (series === 'PERFORMANCE') dispSeries = 'Performance';
+                                else if (series === 'COMFORT') dispSeries = 'Comfort';
+                                else if (series === 'STANDARD') dispSeries = 'Standard';
+                                else if (series === 'BUILDER') dispSeries = 'Builder';
+                                else if (series === 'INFINITY') dispSeries = 'Infinity';
 
-                            let dispSeries = series;
-                            if (series === 'MAIN LINE' || series === 'MAINLINE') dispSeries = 'Mainline';
-                            else if (series === 'PERFORMER') dispSeries = 'Performer';
-                            else if (series === 'PERFORMANCE') dispSeries = 'Performance';
-                            else if (series === 'COMFORT') dispSeries = 'Comfort';
-                            else if (series === 'STANDARD') dispSeries = 'Standard';
-                            else if (series === 'BUILDER') dispSeries = 'Builder';
-                            else if (series === 'INFINITY') dispSeries = 'Infinity';
+                                let dispStyle = printStyle;
+                                if (printStyle.toUpperCase() === 'STANDARD') dispStyle = 'Standard';
+                                else if (printStyle.toUpperCase() === 'COASTAL') dispStyle = 'Coastal';
 
-                            let dispStyle = printStyle;
-                            if (printStyle.toUpperCase() === 'STANDARD') dispStyle = 'Standard';
-                            else if (printStyle.toUpperCase() === 'COASTAL') dispStyle = 'Coastal';
+                                let seriesHtml = ` <span class="${serColor}">${dispSeries}</span>`;
+                                const upSeries = dispSeries.toUpperCase();
+                                if (upSeries === dispStyle.toUpperCase() || !dispSeries || upSeries === "N/A" || upSeries === "NA" || upSeries === "NULL" || upSeries === "UNDEFINED") {
+                                    seriesHtml = '';
+                                }
 
-                            let seriesHtml = ` <span class="${serColor}">${dispSeries}</span>`;
-                            const upSeries = dispSeries.toUpperCase();
-                            if (upSeries === dispStyle.toUpperCase() || !dispSeries || upSeries === "N/A" || upSeries === "NA" || upSeries === "NULL" || upSeries === "UNDEFINED") {
-                                seriesHtml = '';
+                                let coastalSuffix = (sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0) ? ` <span class="text-cyan-400">(Coastal Match)</span>` : '';
+                                let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
+                                let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
+
+                                let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
+                                content = rawContent.replace(/\s+/g, ' ').trim();
                             }
-
-                            let coastalSuffix = (sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0) ? ` <span class="text-cyan-400">(Coastal Match)</span>` : '';
-                            let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
-                            let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
-
-                            let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
-                            content = rawContent.replace(/\s+/g, ' ').trim();
-                        }
-                        else if (spread.mapping === 'basePrice') content = cleanBaseStr;
-                        else if (spread.mapping === 'adjustments') {
-                            content = cleanModStr;
-                        }
-                        else if (spread.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
-                        else if (spread.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
-                        else if (spread.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
-
-                        spreadsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${spread.weight} 1 0%; font-size: ${spread.fontSize}px;">${content}</div>`;
+                            else if (split.mapping === 'basePrice') content = cleanBaseStr;
+                            else if (split.mapping === 'adjustments') content = cleanModStr;
+                            else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
+                            else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
+                            else if (split.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
+                            
+                            splitsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${split.widthWeight} 1 0%; font-size: ${split.fontSize}px;">${content}</div>`;
+                        });
+                        
+                        stacksHtml += `<div class="flex flex-row w-full gap-3 overflow-hidden" style="flex: ${stack.heightWeight} 1 0%;">${splitsHtml}</div>`;
                     });
-                    stacksHtml += `<div class="flex flex-row w-full gap-3 overflow-hidden" style="flex: ${stack.heightWeight} 1 0%;">${spreadsHtml}</div>`;
+                    
+                    containersHtml += `<div class="flex flex-col h-full gap-1 overflow-hidden" style="flex: ${container.widthWeight} 1 0%;">${stacksHtml}</div>`;
                 });
 
                 // Split Sorter layout horizontally if End Cap is checked
-                let rowContentHtml = `<div class="flex flex-col w-full gap-1 overflow-hidden">${stacksHtml}</div>`;
+                let rowContentHtml = `<div class="flex flex-row w-full gap-3 overflow-hidden h-full">${containersHtml}</div>`;
+
                 if (window.sorterSettings.enableEndCap) {
                     let endCapContent = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-black proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex flex-col items-center justify-center cursor-pointer text-center" style="font-size: ${window.sorterSettings.endCapFontSize}px; line-height: 1.1;"><span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Total (OTD)</span>$${otdFinalPrice.toLocaleString()}</button>`;
 
                     rowContentHtml = `
-            <div class="flex flex-row w-full gap-3 overflow-hidden h-full">
-                <div class="flex flex-col flex-1 gap-1 overflow-hidden h-full">
-                    ${stacksHtml}
-                </div>
-                <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2 h-full">
-                    ${endCapContent}
-                </div>
-            </div>`;
+                        <div class="flex flex-row w-full gap-3 overflow-hidden h-full">
+                            <div class="flex flex-row flex-1 gap-3 overflow-hidden h-full">
+                                ${containersHtml}
+                            </div>
+                            <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2 h-full">
+                                ${endCapContent}
+                            </div>
+                        </div>`;
                 }
 
                 html += `<div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-900 border ${overrideBorder} px-1.5 py-2.5 rounded-lg flex gap-2 cursor-grab active:cursor-grabbing hover:border-blue-500 transition-colors shadow-sm mb-2" style="min-height: ${window.sorterSettings.rowHeight}px; height: auto;">
@@ -11728,7 +11791,7 @@
 
                                 if (isTagged) {
                                     optionEnhancementLines.push(
-                                        `    ▪ Optional Enhancement for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Optional Enhancement for System Option ${optionNumber}: ${selectionMarker} Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
                                 } else if (
                                     typeof addProposalPlacement ===
@@ -11749,7 +11812,7 @@
                                 if (isTagged) {
 
                                     optionProtectionLines.push(
-                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ${selectionMarker} Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11757,7 +11820,7 @@
                                 ) {
 
                                     optionProtectionLines.push(
-                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ___ Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
+                                        `    ▪ Warranty / Protection for System Option ${optionNumber}: ${selectionMarker} Add ${proposalDisplayLabel}: $${Number(addonPrice).toLocaleString()}`
                                     );
 
                                 } else if (
@@ -11811,9 +11874,9 @@
 
                         if (isTagged) {
                             if (itemRoute === 'protection') {
-                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ____ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ${selectionMarker} Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             } else {
-                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ____ Add ${displayLabel}: $${sPrice.toLocaleString()}`);
+                                optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ${selectionMarker} Add ${displayLabel}: $${sPrice.toLocaleString()}`);
                             }
                         } else {
                             const targetEngine =
@@ -11857,9 +11920,9 @@
 
                             if (isTagged) {
                                 if (itemRoute === 'protection') {
-                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ____ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionProtectionLines.push(`    ▪ Warranty / Protection for System Option ${index + 1}\n        ${selectionMarker} Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 } else {
-                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ____ Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
+                                    optionEnhancementLines.push(`    ▪ Optional Enhancement for System Option ${index + 1}\n        ${selectionMarker} Add ${warrantyLabel}: $${wPrice.toLocaleString()}`);
                                 }
                             } else {
                                 const targetEngine =
@@ -11951,7 +12014,7 @@
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
                 let effectiveAhriForProposal = typeof window.getEffectiveAhri === 'function' ? window.getEffectiveAhri(item, sp) : ahri;
-                let rawOptText = `■ System Option ${index + 1}\n____ SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
+                let rawOptText = `■ System Option ${index + 1}\n${selectionMarker} SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
                 let optText = rawOptText.replace(/[ \t\r]+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
                 window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${systemSubtotal.toLocaleString()}` });
@@ -12004,7 +12067,7 @@
                     let feesText = `${feesHeading}\n`;
                     let lines = [];
                     globalNecessaryFees.forEach((val, name) => {
-                        lines.push(`■ ___ ${name}: add $${val.toLocaleString()}`);
+                        lines.push(`■ ${name}: add $${val.toLocaleString()}`);
                     });
                     window.proposalBlocks.push({ target: 'Fees', text: feesText + lines.join('\n') });
                 }
@@ -12032,14 +12095,14 @@
                         if (sortedPrices.length === 1) {
                             let optGroup = pEngine.priceGroups.get(sortedPrices[0]).sort((a, b) => a - b);
                             let optStr = optGroup.length === selectedProposalRows.length ? '' : ` for ${formatProposalOptionNumbers(optGroup)}`;
-                            lines.push(`■ ___ Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
+                            lines.push(`■ ${selectionMarker} Add ${label}${optStr}: $${sortedPrices[0].toLocaleString()}`);
                         } else if (sortedPrices.length > 1) {
                             let groupedStrs = [];
                             sortedPrices.forEach(p => {
                                 let opts = pEngine.priceGroups.get(p).sort((a, b) => a - b);
                                 groupedStrs.push(`${formatProposalOptionNumbers(opts)}: $${p.toLocaleString()}`);
                             });
-                            lines.push(`■ ___ Add ${label} for ${groupedStrs.join('; ')}`);
+                            lines.push(`■ ${selectionMarker} Add ${label} for ${groupedStrs.join('; ')}`);
                         }
                     });
 
@@ -12100,7 +12163,7 @@
                                         : ` for ${formatProposalOptionNumbers(optGroup)}`;
 
                                 protLines.push(
-                                    `____ Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
+                                    `${selectionMarker} Add ${label}${optStr}: $${groups[0].price.toLocaleString()}`
                                 );
                             } else if (groups.length > 1) {
                                 maybeOpenProtectionPriceConflict(
@@ -12117,7 +12180,7 @@
                                     });
 
                                 protLines.push(
-                                    `____ Add ${label} for ${groupedStrs.join('; ')}`
+                                    `${selectionMarker} Add ${label} for ${groupedStrs.join('; ')}`
                                 );
                             }
                         }
@@ -12139,7 +12202,38 @@
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        window.updateProposalTerminal = function () {
+        window.getProposalSelectionMarker = function () {
+            const terminal =
+                propSettings &&
+                propSettings.terminal
+                    ? propSettings.terminal
+                    : {};
+
+            return terminal.selectionMarker === 'initial'
+                ? '____'
+                : '☐';
+        };
+
+        window.setTerminalSelectionMarker = function (value) {
+            propSettings.terminal.selectionMarker =
+                value === 'initial'
+                    ? 'initial'
+                    : 'checkbox';
+
+            savePropSettings();
+
+            if (typeof window.updateProposalTerminal === 'function') {
+                window.updateProposalTerminal();
+            }
+
+            if (typeof updateProposalCartUI === 'function') {
+                updateProposalCartUI();
+            }
+        };
+
+window.updateProposalTerminal = function () {
+    const selectionMarker = window.getProposalSelectionMarker();
+
             const terminal = document.getElementById('proposal-terminal');
             if (!terminal) return;
             if (selectedProposalRows.length === 0) {
@@ -12371,6 +12465,42 @@
             if (modal) modal.classList.add('hidden');
         };
 
+        window.buildProposalInjectionText = function (text, category, acknowledgment, price) {
+            const cleanText = String(text || '').trim();
+            const cat = category || 'note';
+            const ack = acknowledgment || 'none';
+            const numericPrice = Number(price) || 0;
+
+            if (cat === 'spacer') {
+                return cleanText || ' ';
+            }
+
+            let finalString = '';
+
+            // Standard injected content uses the minor/supporting round bullet.
+            finalString += '• ';
+
+            if (ack === 'checkbox') {
+                finalString += '☐ ';
+            } else if (ack === 'initial') {
+                finalString += '____ ';
+            }
+
+            if (cat === 'enhancement') {
+                finalString += 'System Enhancement: ';
+            } else if (cat === 'fee') {
+                finalString += 'Additional Installation Fee: ';
+            }
+
+            finalString += cleanText;
+
+            if (numericPrice > 0) {
+                finalString += `: add $${numericPrice.toLocaleString()} to selection above`;
+            }
+
+            return finalString;
+        };
+
         window.injectCustomLine = function () {
             let text = document.getElementById('inj-text').value;
             const cat = document.getElementById('inj-category').value;
@@ -12378,20 +12508,11 @@
             if (cat === 'spacer' && text.trim() === '') text = ' ';
             else if (!text.trim()) return;
 
-            const needsInit = document.getElementById('inj-initial').checked;
+            const ackSelect = document.getElementById('inj-ack');
+            const acknowledgment = ackSelect ? ackSelect.value : 'none';
             const price = Number(document.getElementById('inj-price').value) || 0;
 
-            let finalString = "";
-            if (cat === 'spacer') {
-                finalString = text;
-            } else {
-                finalString = "- ";
-                if (needsInit) finalString += "___ ";
-                if (cat === 'enhancement') finalString += "System enhancement: ";
-                if (cat === 'fee') finalString += "Additional Installation Fee: ";
-                finalString += text.trim();
-                if (price > 0) finalString += `: add $${price.toLocaleString()} to selection above`;
-            }
+            const finalString = window.buildProposalInjectionText(text, cat, acknowledgment, price);
 
             if (!window.proposalAppState.lineInjections) window.proposalAppState.lineInjections = [];
             let injId = 'INJ_' + Date.now();
@@ -16135,7 +16256,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v08.07.17',
+                appVersion: 'v09.00.8',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16144,7 +16265,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v08.07.17_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v09.00.8_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16163,7 +16284,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v08.07.17',
+                appVersion: 'v09.00.8',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16172,7 +16293,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v08.07.17_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v09.00.8_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16869,7 +16990,7 @@
                 document.getElementById('inj-revert-btn').innerText = 'Revert';
                 document.getElementById('inj-revert-btn').className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1.5 rounded text-xs whitespace-nowrap transition shadow-sm';
                 document.getElementById('inj-category').classList.remove('hidden');
-                if (document.getElementById('inj-initial')) document.getElementById('inj-initial').closest('label').classList.remove('hidden');
+                if (document.getElementById('inj-ack')) document.getElementById('inj-ack').closest('label').classList.remove('hidden');
             }
         };
 
@@ -16900,7 +17021,7 @@
                 // Expose add-controls to show the Line # display for moving, but hide category dropdowns
                 addControls.classList.remove('hidden');
                 document.getElementById('inj-category').classList.add('hidden');
-                if (document.getElementById('inj-initial')) document.getElementById('inj-initial').closest('label').classList.add('hidden');
+                if (document.getElementById('inj-ack')) document.getElementById('inj-ack').closest('label').classList.add('hidden');
                 document.getElementById('inj-line-display').innerText = `Line: ${inj.line}`;
                 window.targetInjectionLine = inj.line;
                 revertBtn.innerText = '🗑️ Delete';
@@ -16940,16 +17061,12 @@
             if (window.injectorMode === 'add') {
                 if (!window.targetInjectionLine) return alert("Please click a line number in the gutter to select an injection point!");
                 const cat = document.getElementById('inj-category').value;
-                const needsInit = document.getElementById('inj-initial').checked;
+                const ackSelect = document.getElementById('inj-ack');
+                const acknowledgment = ackSelect ? ackSelect.value : 'none';
                 const price = Number(document.getElementById('inj-price').value) || 0;
 
-                let finalString = "- ";
-                if (needsInit) finalString += "___ ";
-                if (cat === 'enhancement') finalString += "System enhancement: ";
-                if (cat === 'fee') finalString += "Additional Installation Fee: ";
-                finalString += text;
-                if (price > 0) finalString += `: add $${price.toLocaleString()} to selection above`;
-
+                const finalString = window.buildProposalInjectionText(text, cat, acknowledgment, price);
+                
                 window.proposalAppState.lineInjections.push({ line: window.targetInjectionLine, text: finalString });
             } else {
                 const target = document.getElementById('inj-target').value;
@@ -16968,7 +17085,7 @@
             document.getElementById('inj-text').value = '';
             document.getElementById('inj-price').value = '';
             document.getElementById('inj-category').classList.remove('hidden');
-            if (document.getElementById('inj-initial')) document.getElementById('inj-initial').closest('label').classList.remove('hidden');
+            if (document.getElementById('inj-ack')) document.getElementById('inj-ack').closest('label').classList.remove('hidden');
 
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
             if (typeof updateProposalTerminal === 'function') updateProposalTerminal();
@@ -20353,38 +20470,120 @@
         };
 
         // --- V06.00 Cart Layout Mapping Engine ---
-        window.sorterSettings = {
-            rowHeight: 120,
-            enableEndCap: false,
-            endCapFontSize: 18,
-            stacks: [
-                {
-                    heightWeight: 1.0, spreads: [
-                        { mapping: 'desc', weight: 3.0, fontSize: 13, align: 'left' },
-                        { mapping: 'icons', weight: 1.0, fontSize: 12, align: 'right' }
-                    ]
-                },
-                {
-                    heightWeight: 1.0, spreads: [
-                        { mapping: 'brand', weight: 1.0, fontSize: 11, align: 'left' }
-                    ]
-                },
-                {
-                    heightWeight: 3.0, spreads: [
-                        { mapping: 'basePrice', weight: 1.0, fontSize: 11, align: 'left' },
-                        { mapping: 'adjustments', weight: 2.0, fontSize: 11, align: 'left' },
-                        { mapping: 'totalPrice', weight: 1.0, fontSize: 16, align: 'right' }
-                    ]
-                }
-            ]
+        window.createEmptySorterSplit = function() {
+            return { mapping: 'empty', widthWeight: 1.0, fontSize: 12, align: 'left' };
         };
+        window.createEmptySorterStack = function() {
+            return { heightWeight: 1.0, splits: [window.createEmptySorterSplit()] };
+        };
+        window.createEmptySorterContainer = function() {
+            return { widthWeight: 1.0, stacks: [window.createEmptySorterStack()] };
+        };
+        window.createDefaultSorterSettingsV3 = function() {
+            return {
+                schemaVersion: 3,
+                rowHeight: 120,
+                enableEndCap: false,
+                endCapFontSize: 18,
+                containers: [
+                    {
+                        widthWeight: 3.0,
+                        stacks: [
+                            { heightWeight: 2.0, splits: [{ mapping: 'desc', widthWeight: 1.0, fontSize: 13, align: 'left' }] },
+                            { heightWeight: 1.0, splits: [{ mapping: 'ahri', widthWeight: 1.0, fontSize: 11, align: 'left' }] },
+                            { heightWeight: 1.0, splits: [{ mapping: 'brand', widthWeight: 1.0, fontSize: 11, align: 'left' }] }
+                        ]
+                    },
+                    {
+                        widthWeight: 2.0,
+                        stacks: [
+                            { heightWeight: 1.0, splits: [{ mapping: 'icons', widthWeight: 1.0, fontSize: 12, align: 'center' }] },
+                            { heightWeight: 3.0, splits: [{ mapping: 'adjustments', widthWeight: 1.0, fontSize: 11, align: 'center' }] }
+                        ]
+                    },
+                    {
+                        widthWeight: 1.5,
+                        stacks: [
+                            { heightWeight: 1.0, splits: [{ mapping: 'basePrice', widthWeight: 1.0, fontSize: 11, align: 'right' }] },
+                            { heightWeight: 2.0, splits: [{ mapping: 'totalPrice', widthWeight: 1.0, fontSize: 16, align: 'right' }] }
+                        ]
+                    }
+                ]
+            };
+        };
+
+        window.migrateSorterSettingsV2ToV3 = function(v2) {
+            let v3 = window.createDefaultSorterSettingsV3();
+            if (!v2 || !v2.stacks || !Array.isArray(v2.stacks)) return v3;
+            
+            // Build lookup of preferences
+            let prefs = {};
+            v2.stacks.forEach(stack => {
+                if(stack.spreads) {
+                    stack.spreads.forEach(spread => {
+                        prefs[spread.mapping] = spread;
+                    });
+                }
+            });
+            
+            v3.rowHeight = v2.rowHeight || 120;
+            v3.enableEndCap = !!v2.enableEndCap;
+            if(v2.endCapFontSize) v3.endCapFontSize = v2.endCapFontSize;
+            
+            v3.containers.forEach(container => {
+                container.stacks.forEach(stack => {
+                    stack.splits.forEach(split => {
+                        if (prefs[split.mapping]) {
+                            split.fontSize = prefs[split.mapping].fontSize;
+                            split.align = prefs[split.mapping].align;
+                        }
+                    });
+                });
+            });
+            
+            return v3;
+        };
+
         try {
-            const saved = localStorage.getItem('changeout_cart_mapping_v2');
-            if (saved) window.sorterSettings = JSON.parse(saved);
-        } catch (e) { }
+            const savedV3 = localStorage.getItem('changeout_cart_mapping_v3');
+            if (savedV3) {
+                window.sorterSettings = JSON.parse(savedV3);
+            } else {
+                const savedV2 = localStorage.getItem('changeout_cart_mapping_v2');
+                if (savedV2) {
+                    window.sorterSettings = window.migrateSorterSettingsV2ToV3(JSON.parse(savedV2));
+                    localStorage.setItem('changeout_cart_mapping_v3', JSON.stringify(window.sorterSettings));
+                } else {
+                    window.sorterSettings = window.createDefaultSorterSettingsV3();
+                }
+            }
+            
+            // Lightweight Validator Normalizer
+            if(!window.sorterSettings.containers || !Array.isArray(window.sorterSettings.containers) || window.sorterSettings.containers.length === 0) {
+                window.sorterSettings = window.createDefaultSorterSettingsV3();
+            } else {
+                window.sorterSettings.rowHeight = Math.max(60, Math.min(300, window.sorterSettings.rowHeight || 120));
+                window.sorterSettings.containers.forEach(cont => {
+                    cont.widthWeight = Math.max(0.1, cont.widthWeight || 1.0);
+                    if(!cont.stacks || cont.stacks.length === 0) cont.stacks = [window.createEmptySorterStack()];
+                    cont.stacks.forEach(stack => {
+                        stack.heightWeight = Math.max(0.1, stack.heightWeight || 1.0);
+                        if(!stack.splits || stack.splits.length === 0) stack.splits = [window.createEmptySorterSplit()];
+                        stack.splits.forEach(split => {
+                            split.widthWeight = Math.max(0.1, split.widthWeight || 1.0);
+                            if(!split.mapping) split.mapping = 'empty';
+                            if(!split.align) split.align = 'left';
+                            if(!split.fontSize) split.fontSize = 12;
+                        });
+                    });
+                });
+            }
+        } catch (e) {
+            window.sorterSettings = window.createDefaultSorterSettingsV3();
+        }
 
         window.saveSorterSettings = function () {
-            localStorage.setItem('changeout_cart_mapping_v2', JSON.stringify(window.sorterSettings));
+            localStorage.setItem('changeout_cart_mapping_v3', JSON.stringify(window.sorterSettings));
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
             window.renderCartConfigurator();
         };
@@ -20399,45 +20598,77 @@
             window.saveSorterSettings();
         };
 
-        window.addCartStack = function () {
-            window.sorterSettings.stacks.push({ heightWeight: 1.0, spreads: [{ mapping: 'empty', weight: 1.0, fontSize: 12, align: 'left' }] });
+        // Container Mutators
+        window.addCartContainer = function () {
+            window.sorterSettings.containers.push(window.createEmptySorterContainer());
             window.saveSorterSettings();
         };
-        window.removeCartStack = function (sIdx) {
-            window.sorterSettings.stacks.splice(sIdx, 1);
+        window.removeCartContainer = function (cIdx) {
+            if (window.sorterSettings.containers.length <= 1) return;
+            window.sorterSettings.containers.splice(cIdx, 1);
+            window.saveSorterSettings();
+        };
+        window.moveCartContainer = function (cIdx, direction) {
+            const arr = window.sorterSettings.containers;
+            const targetIdx = cIdx + direction;
+            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            const temp = arr[cIdx];
+            arr[cIdx] = arr[targetIdx];
+            arr[targetIdx] = temp;
+            window.saveSorterSettings();
+        };
+        window.updateCartContainerWt = function(cIdx, val) {
+            window.sorterSettings.containers[cIdx].widthWeight = parseFloat(val);
             window.saveSorterSettings();
         };
 
-        window.moveCartStack = function (sIdx, direction) {
-            const stacks = window.sorterSettings.stacks;
+        // Stack Mutators
+        window.addCartStack = function (cIdx) {
+            window.sorterSettings.containers[cIdx].stacks.push(window.createEmptySorterStack());
+            window.saveSorterSettings();
+        };
+        window.removeCartStack = function (cIdx, sIdx) {
+            if (window.sorterSettings.containers[cIdx].stacks.length <= 1) return;
+            window.sorterSettings.containers[cIdx].stacks.splice(sIdx, 1);
+            window.saveSorterSettings();
+        };
+        window.moveCartStack = function (cIdx, sIdx, direction) {
+            const arr = window.sorterSettings.containers[cIdx].stacks;
             const targetIdx = sIdx + direction;
-            if (targetIdx < 0 || targetIdx >= stacks.length) return;
-
-            // Swap stacks
-            const temp = stacks[sIdx];
-            stacks[sIdx] = stacks[targetIdx];
-            stacks[targetIdx] = temp;
-
+            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            const temp = arr[sIdx];
+            arr[sIdx] = arr[targetIdx];
+            arr[targetIdx] = temp;
             window.saveSorterSettings();
         };
-        window.addCartSpread = function (sIdx) {
-            window.sorterSettings.stacks[sIdx].spreads.push({ mapping: 'empty', weight: 1.0, fontSize: 12, align: 'left' });
-            window.saveSorterSettings();
-        };
-        window.removeCartSpread = function (sIdx, pIdx) {
-            window.sorterSettings.stacks[sIdx].spreads.splice(pIdx, 1);
+        window.updateCartStackWt = function (cIdx, sIdx, val) {
+            window.sorterSettings.containers[cIdx].stacks[sIdx].heightWeight = parseFloat(val);
             window.saveSorterSettings();
         };
 
-        window.updateCartMap = function (sIdx, pIdx, key, val, isFloat) {
-            if (isFloat) window.sorterSettings.stacks[sIdx].spreads[pIdx][key] = parseFloat(val);
-            else if (key === 'fontSize') window.sorterSettings.stacks[sIdx].spreads[pIdx][key] = parseInt(val);
-            else window.sorterSettings.stacks[sIdx].spreads[pIdx][key] = val;
+        // Split Mutators
+        window.addCartSplit = function (cIdx, sIdx) {
+            window.sorterSettings.containers[cIdx].stacks[sIdx].splits.push(window.createEmptySorterSplit());
             window.saveSorterSettings();
         };
-
-        window.updateCartStackWt = function (sIdx, val) {
-            window.sorterSettings.stacks[sIdx].heightWeight = parseFloat(val);
+        window.removeCartSplit = function (cIdx, sIdx, pIdx) {
+            if (window.sorterSettings.containers[cIdx].stacks[sIdx].splits.length <= 1) return;
+            window.sorterSettings.containers[cIdx].stacks[sIdx].splits.splice(pIdx, 1);
+            window.saveSorterSettings();
+        };
+        window.moveCartSplit = function (cIdx, sIdx, pIdx, direction) {
+            const arr = window.sorterSettings.containers[cIdx].stacks[sIdx].splits;
+            const targetIdx = pIdx + direction;
+            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            const temp = arr[pIdx];
+            arr[pIdx] = arr[targetIdx];
+            arr[targetIdx] = temp;
+            window.saveSorterSettings();
+        };
+        window.updateCartMap = function (cIdx, sIdx, pIdx, key, val, isFloat) {
+            if (isFloat) window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = parseFloat(val);
+            else if (key === 'fontSize') window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = parseInt(val);
+            else window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx][key] = val;
             window.saveSorterSettings();
         };
 
@@ -20448,74 +20679,101 @@
             if (ecToggle) ecToggle.checked = !!window.sorterSettings.enableEndCap;
 
             let html = '';
-            window.sorterSettings.stacks.forEach((stack, sIdx) => {
-                html += `<div class="bg-slate-950 border border-slate-700 p-2 rounded relative">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3 border-b border-slate-800 pb-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase">Stack ${sIdx + 1}</span>
-                    <button onclick="removeCartStack(${sIdx})" class="text-rose-500 hover:text-rose-400"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                    <button onclick="moveCartStack(${sIdx}, -1)" class="text-slate-400 hover:text-white ${sIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Up"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
-                    <button onclick="moveCartStack(${sIdx}, 1)" class="text-slate-400 hover:text-white ${sIdx === window.sorterSettings.stacks.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Down"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
-                </div>
-                <div class="flex items-center gap-2 bg-slate-900 rounded border border-slate-700 px-1 self-start sm:self-auto">
-                    <span class="text-[8px] text-slate-500 font-bold">HT WT</span>
-                    <button onclick="updateCartStackWt(${sIdx}, ${Math.max(0.1, stack.heightWeight - 0.5)})" class="text-slate-400 hover:text-white px-1">-</button>
-                    <span class="text-[10px] text-white font-bold w-4 text-center">${stack.heightWeight.toFixed(1)}</span>
-                    <button onclick="updateCartStackWt(${sIdx}, ${stack.heightWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
-                </div>
-            </div>`;
-                stack.spreads.forEach((spread, pIdx) => {
-                    html += `<div class="grid grid-cols-2 gap-2.5 bg-slate-900 p-2.5 rounded mb-2 border border-slate-800">
-                <!-- Top Left: Content & Remove -->
-                <div class="flex flex-col gap-1 relative w-full">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Content</span>
-                        <button onclick="removeCartSpread(${sIdx}, ${pIdx})" class="text-rose-500 hover:text-rose-400 leading-none" title="Remove Spread"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-                    </div>
-                    <select onchange="updateCartMap(${sIdx}, ${pIdx}, 'mapping', this.value, false)" class="bg-slate-800 text-[10px] text-slate-300 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
-                        <option value="desc" ${spread.mapping === 'desc' ? 'selected' : ''}>System Desc</option>
-                        <option value="ahri" ${spread.mapping === 'ahri' ? 'selected' : ''}>AHRI</option>
-                        <option value="brandLogo" ${spread.mapping === 'brandLogo' ? 'selected' : ''}>Brand Logo</option>
-                        <option value="brandName" ${spread.mapping === 'brandName' ? 'selected' : ''}>Brand Name</option>
-                        <option value="brand" ${spread.mapping === 'brand' ? 'selected' : ''}>Brand / Style / Series</option>
-                        <option value="basePrice" ${spread.mapping === 'basePrice' ? 'selected' : ''}>Base Price</option>
-                        <option value="adjustments" ${spread.mapping === 'adjustments' ? 'selected' : ''}>Adjustments</option>
-                        <option value="totalPrice" ${spread.mapping === 'totalPrice' ? 'selected' : ''}>Total Price</option>
-                        <option value="otdPrice" ${spread.mapping === 'otdPrice' ? 'selected' : ''}>Out the Door (OTD)</option>
-                        <option value="icons" ${spread.mapping === 'icons' ? 'selected' : ''}>Icons/Flags</option>
-                        <option value="empty" ${spread.mapping === 'empty' ? 'selected' : ''}>Empty</option>
-                    </select>
-                </div>
-                <!-- Top Right: Align -->
-                <div class="flex flex-col gap-1 w-full">
-                    <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider h-[14px] flex items-center">Align</span>
-                    <select onchange="updateCartMap(${sIdx}, ${pIdx}, 'align', this.value, false)" class="bg-slate-800 text-[10px] text-slate-300 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
-                        <option value="left" ${spread.align === 'left' ? 'selected' : ''}>Left</option>
-                        <option value="center" ${spread.align === 'center' ? 'selected' : ''}>Center</option>
-                        <option value="right" ${spread.align === 'right' ? 'selected' : ''}>Right</option>
-                    </select>
-                </div>
-                <!-- Bottom Left: Weight -->
-                <div class="flex flex-col gap-1">
-                    <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Weight</span>
-                    <div class="flex items-center bg-slate-950 rounded border border-slate-800 overflow-hidden w-fit h-[20px]">
-                        <button onclick="updateCartMap(${sIdx}, ${pIdx}, 'weight', ${Math.max(0.1, spread.weight - 0.5)}, true)" class="text-slate-400 hover:text-white hover:bg-slate-800 px-2 flex items-center justify-center transition-colors h-full">-</button>
-                        <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${spread.weight.toFixed(1)}</span>
-                        <button onclick="updateCartMap(${sIdx}, ${pIdx}, 'weight', ${spread.weight + 0.5}, true)" class="text-slate-400 hover:text-white hover:bg-slate-800 px-2 flex items-center justify-center transition-colors h-full">+</button>
-                    </div>
-                </div>
-                <!-- Bottom Right: Font Size -->
-                <div class="flex flex-col gap-1">
-                    <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Font Size</span>
-                    <div class="flex items-center bg-slate-950 rounded border border-slate-800 overflow-hidden w-fit h-[20px]">
-                        <button onclick="updateCartMap(${sIdx}, ${pIdx}, 'fontSize', ${Math.max(8, spread.fontSize - 1)}, false)" class="text-slate-400 hover:text-white hover:bg-slate-800 px-2 flex items-center justify-center transition-colors h-full">-</button>
-                        <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${spread.fontSize}</span>
-                        <button onclick="updateCartMap(${sIdx}, ${pIdx}, 'fontSize', ${spread.fontSize + 1}, false)" class="text-slate-400 hover:text-white hover:bg-slate-800 px-2 flex items-center justify-center transition-colors h-full">+</button>
-                    </div>
-                </div>
-            </div>`;
+            window.sorterSettings.containers.forEach((container, cIdx) => {
+                html += `<div class="bg-slate-950 border-2 border-emerald-900/50 p-2 rounded relative mb-3">
+                    <!-- Container Header -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3 border-b-2 border-emerald-900/50 pb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[12px] text-emerald-400 font-extrabold uppercase">Container ${cIdx + 1}</span>
+                            <button onclick="removeCartContainer(${cIdx})" class="text-rose-500 hover:text-rose-400 ${window.sorterSettings.containers.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                            <button onclick="moveCartContainer(${cIdx}, -1)" class="text-slate-400 hover:text-white ${cIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Left"><i data-lucide="arrow-left" class="w-3 h-3"></i></button>
+                            <button onclick="moveCartContainer(${cIdx}, 1)" class="text-slate-400 hover:text-white ${cIdx === window.sorterSettings.containers.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Right"><i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 rounded border border-emerald-800/80 px-1 self-start sm:self-auto">
+                            <span class="text-[8px] text-emerald-500 font-bold">WIDTH WT</span>
+                            <button onclick="updateCartContainerWt(${cIdx}, ${Math.max(0.1, container.widthWeight - 0.5)})" class="text-slate-400 hover:text-white px-1">-</button>
+                            <span class="text-[10px] text-white font-bold w-4 text-center">${container.widthWeight.toFixed(1)}</span>
+                            <button onclick="updateCartContainerWt(${cIdx}, ${container.widthWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
+                        </div>
+                    </div>`;
+                    
+                container.stacks.forEach((stack, sIdx) => {
+                    html += `<div class="bg-slate-900 border border-slate-700 p-2 rounded relative mb-2">
+                        <!-- Stack Header -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2 border-b border-slate-700/50 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] text-blue-400 font-bold uppercase">Stack ${sIdx + 1}</span>
+                                <button onclick="removeCartStack(${cIdx}, ${sIdx})" class="text-rose-500 hover:text-rose-400 ${container.stacks.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                                <button onclick="moveCartStack(${cIdx}, ${sIdx}, -1)" class="text-slate-400 hover:text-white ${sIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Up"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
+                                <button onclick="moveCartStack(${cIdx}, ${sIdx}, 1)" class="text-slate-400 hover:text-white ${sIdx === container.stacks.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Down"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
+                            </div>
+                            <div class="flex items-center gap-2 bg-slate-800 rounded border border-slate-600 px-1 self-start sm:self-auto">
+                                <span class="text-[8px] text-slate-400 font-bold">HEIGHT WT</span>
+                                <button onclick="updateCartStackWt(${cIdx}, ${sIdx}, ${Math.max(0.1, stack.heightWeight - 0.5)})" class="text-slate-400 hover:text-white px-1">-</button>
+                                <span class="text-[10px] text-white font-bold w-4 text-center">${stack.heightWeight.toFixed(1)}</span>
+                                <button onclick="updateCartStackWt(${cIdx}, ${sIdx}, ${stack.heightWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
+                            </div>
+                        </div>`;
+                        
+                    stack.splits.forEach((split, pIdx) => {
+                        html += `<div class="grid grid-cols-2 gap-2.5 bg-slate-800 p-2 rounded mb-2 border border-slate-600">
+                            <!-- Top Left: Content & Remove -->
+                            <div class="flex flex-col gap-1 relative w-full">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Split ${pIdx+1}</span>
+                                        <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, -1)" class="text-slate-500 hover:text-white ${pIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Left"><i data-lucide="arrow-left" class="w-3 h-3"></i></button>
+                                        <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, 1)" class="text-slate-500 hover:text-white ${pIdx === stack.splits.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Right"><i data-lucide="arrow-right" class="w-3 h-3"></i></button>
+                                    </div>
+                                    <button onclick="removeCartSplit(${cIdx}, ${sIdx}, ${pIdx})" class="text-rose-500 hover:text-rose-400 leading-none ${stack.splits.length <= 1 ? 'opacity-30 pointer-events-none' : ''}" title="Remove Split"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                                </div>
+                                <select onchange="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'mapping', this.value, false)" class="bg-slate-900 text-[10px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
+                                    <option value="desc" ${split.mapping === 'desc' ? 'selected' : ''}>System Desc</option>
+                                    <option value="ahri" ${split.mapping === 'ahri' ? 'selected' : ''}>AHRI</option>
+                                    <option value="brandLogo" ${split.mapping === 'brandLogo' ? 'selected' : ''}>Brand Logo</option>
+                                    <option value="brandName" ${split.mapping === 'brandName' ? 'selected' : ''}>Brand Name</option>
+                                    <option value="brand" ${split.mapping === 'brand' ? 'selected' : ''}>Brand / Style / Series</option>
+                                    <option value="basePrice" ${split.mapping === 'basePrice' ? 'selected' : ''}>Base Price</option>
+                                    <option value="adjustments" ${split.mapping === 'adjustments' ? 'selected' : ''}>Adjustments</option>
+                                    <option value="totalPrice" ${split.mapping === 'totalPrice' ? 'selected' : ''}>Total Price</option>
+                                    <option value="otdPrice" ${split.mapping === 'otdPrice' ? 'selected' : ''}>Out the Door (OTD)</option>
+                                    <option value="icons" ${split.mapping === 'icons' ? 'selected' : ''}>Icons/Flags</option>
+                                    <option value="empty" ${split.mapping === 'empty' ? 'selected' : ''}>Empty</option>
+                                </select>
+                            </div>
+                            <!-- Top Right: Align -->
+                            <div class="flex flex-col gap-1 w-full">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider h-[14px] flex items-center">Align</span>
+                                <select onchange="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'align', this.value, false)" class="bg-slate-900 text-[10px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
+                                    <option value="left" ${split.align === 'left' ? 'selected' : ''}>Left</option>
+                                    <option value="center" ${split.align === 'center' ? 'selected' : ''}>Center</option>
+                                    <option value="right" ${split.align === 'right' ? 'selected' : ''}>Right</option>
+                                </select>
+                            </div>
+                            <!-- Bottom Left: Weight -->
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Width Weight</span>
+                                <div class="flex items-center bg-slate-900 rounded border border-slate-700 overflow-hidden w-fit h-[20px]">
+                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'widthWeight', ${Math.max(0.1, split.widthWeight - 0.5)}, true)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">-</button>
+                                    <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${split.widthWeight.toFixed(1)}</span>
+                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'widthWeight', ${split.widthWeight + 0.5}, true)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">+</button>
+                                </div>
+                            </div>
+                            <!-- Bottom Right: Font Size -->
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Font Size</span>
+                                <div class="flex items-center bg-slate-900 rounded border border-slate-700 overflow-hidden w-fit h-[20px]">
+                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'fontSize', ${Math.max(8, split.fontSize - 1)}, false)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">-</button>
+                                    <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${split.fontSize}</span>
+                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'fontSize', ${split.fontSize + 1}, false)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">+</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    html += `<button onclick="addCartSplit(${cIdx}, ${sIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded border border-dashed border-slate-600 transition-colors text-[9px] uppercase tracking-widest">+ Add Split</button></div>`;
                 });
-                html += `<button onclick="addCartSpread(${sIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded border border-dashed border-slate-600 transition-colors text-[9px] uppercase tracking-widest">+ Add Spread</button></div>`;
+                
+                html += `<button onclick="addCartStack(${cIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-blue-400 font-bold rounded border border-blue-900/50 transition-colors text-[10px] uppercase tracking-widest">+ Add Stack</button></div>`;
             });
             const cl = document.getElementById('cart-configurator-list');
             if (cl) cl.innerHTML = html;
