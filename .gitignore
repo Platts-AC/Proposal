@@ -46,3 +46,9 @@ Agent/target*.txt
 Agent/view_math.txt
 # Consolidated historical archive
 Archive/
+
+# Google Drive pointer files
+*.gsheet
+
+# Reference material
+Reference/
