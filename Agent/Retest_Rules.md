@@ -1,25 +1,62 @@
-# Master IDE Instructions: Standalone Retest Protocol
+# Retest Frontend Rules
 
-## Core Objective
-This rulebook strictly governs the creation and editing of the new multi-column grid builder test bed. Manage the "retest" environment cleanly without touching `index.html`, `merge.html`, `fivestack.html`, or `redo.html`.
+## Purpose
+This file contains frontend-specific rules for the current Changeout Pricing interface.
 
-## 1. The Static Live File vs. The Sync Mirror
-* **The Live File:** The active working file must always remain static as `retest.html`. **Never** append version numbers to this live file name.
-* **The Sync Mirror:** Every time you edit the live file, you must ALSO overwrite a static `retest.txt` file with the exact same code so external AI tools can maintain a live sync.
+For overall project workflow, Git usage, scope control, backend handling, archive policy, and validation requirements, follow `Changeout_Rules.md`.
 
-## 2. Backup Naming Structure & Incrementing
-* Every time you successfully edit the live file, you MUST generate an exact clone of the code saved strictly as BOTH a timestamped `.txt` backup and a timestamped `.html` visual backup.
-* Backup files must follow this exact format:
-  `retest_v[Major].[Minor]_[YYYY-MM-DD]_[HHMMSS].txt`
-  `retest_v[Major].[Minor]_[YYYY-MM-DD]_[HHMMSS].html`
+## 1. Canonical Frontend Files
+- Live frontend: `retest.html`
+- Required mirror: `retest.txt`
 
-## 3. Mandatory Internal Code Updates (The Version Stamps)
-The moment a new version is generated, you must update the internal tags inside `retest.html` so the version is visibly stamped for the user:
-1. Update the `<title>` tag (e.g., `<title>HVAC Grid Builder v01.00</title>`).
-2. Update a highly visible UI Version Badge located directly on the screen (inside the header).
-3. Update the descriptive HTML comment tag at the very top detailing the exact structural change.
+The live filename must remain `retest.html`.
 
-## 4. Workspace Limit & Archiving Rules
-You must manage the file tree automatically using a rolling first-in, first-out queue:
-* **Active Workspace:** This main directory is strictly capped at a **maximum of 4 active `.txt` backup files AND 4 active `.html` backup files**.
-* **Archive Directory:** The moment you generate a 5th backup version, you must immediately locate the oldest versions in the active workspace and move them into the `archive_retest/` folder.
+Do not create numbered, timestamped, or alternate live copies unless the user explicitly requests one.
+
+## 2. Mirror Synchronization
+Whenever `retest.html` is changed:
+
+1. Make the requested edit in `retest.html`.
+2. Overwrite `retest.txt` with the exact same code.
+3. Verify both files match exactly.
+
+Do not allow the mirror to become stale.
+
+## 3. Version Display
+If the application currently contains:
+- a page title version
+- a visible UI version badge
+- a top-of-file descriptive change comment
+
+keep those references synchronized when a version increment is part of the requested change.
+
+Do not generate backup files because the version changes.
+
+## 4. Asset Safety
+The frontend may reference local assets in the same `Agent` directory, including:
+- `carrier.png`
+- `comfortmaker.png`
+- `durastar.png`
+- `platts.png`
+
+Do not move or rename these files without verifying and updating all references.
+
+## 5. Scope Control
+Modify only what the current request requires.
+
+Do not:
+- change unrelated layout or logic
+- restructure working code without approval
+- restore legacy Retest backup behavior
+- create `archive_retest/`
+- create timestamped Retest copies
+- revive retired `index`, `merge`, `redo`, or `fivestack` workflows
+
+## 6. Validation
+After a frontend edit:
+
+1. Confirm `retest.html` contains the intended change.
+2. Confirm `retest.txt` is identical.
+3. Check for obvious HTML, JavaScript, or CSS errors.
+4. Review Git diff for unintended edits.
+5. Check Git status for unexpected files.

@@ -1,46 +1,112 @@
-*NOTE: If the user prompt begins with "[REDO MODE]", immediately ignore this document and strictly follow Redo_Rules.md.*
-*NOTE: If the user prompt begins with "[TEST MODE]", immediately ignore this document and strictly follow FiveStack_Rules.md.*
-
-# Master IDE Instructions: Changeout Web App Version Control & Archiving
+# Master IDE Instructions: Changeout Pricing Project
 
 ## Core Objective
-You are responsible for managing the version control, file formatting, and archiving of both frontend (HTML/JS) and backend (Google Apps Script / .gs) files in this workspace. You must maintain static live files for functionality, while generating strict, timestamped backups.
+Maintain the current Changeout Pricing application safely and predictably. Make only requested changes, preserve the existing working structure unless explicitly instructed otherwise, and use Git for version history instead of creating timestamped backup copies.
 
-## 1. File Formats & Naming
-- **Live Files:** The active working files must always remain static (e.g., `index.html`, `merge.html`, `Code.gs`). Never append version numbers to these live file names.
-- **Sync Mirror:** For each live HTML file, maintain a plain‑text mirror with the same base name and `.txt` extension (e.g., `index.txt`, `merge.txt`). This mirror is overwritten on every edit.
-- **Timestamped Backups:** Every time you edit a live HTML file you must generate **both**:
-  - a `.txt` backup: `index_vXX.XX_[Timestamp].txt`
-  - a visual `.html` backup: `index_vXX.XX_[Timestamp].html`
-  The same rule applies to other frontend files (`merge_v...` etc.). Backend `.gs` files continue to use only `.txt` backups.
+## 1. Canonical Live Files
 
-## 2. Version Incrementing Rules
-- **Minor Updates:** Increment the decimal (e.g., `v01.00` → `v01.01`) for small UI tweaks, bug fixes, or CSS adjustments.
-- **Major Updates:** Increment the major number and reset decimal to zero (e.g., `v01.05` → `v02.00`) for large logic overhauls or new page features.
+### Frontend
+- Canonical live frontend: `Agent/retest.html`
+- Required plain-text mirror: `Agent/retest.txt`
 
-## 3. Mandatory Internal Code Updates (Split by File Type)
+### Backend
+- Canonical live backend: `script_changeout.gs`
+- Required plain-text mirror: `script_changeout.txt`
 
-**IF EDITING HTML FILES:**
-1. Update the `<title>` tag (e.g., `<title>Changeout Lookup v01.01</title>`).
-2. Update the version `<span class="text-[8px] font-normal">vX.XX</span>` located on the active button in the bottom navigation ribbon.
-3. Update the descriptive comment tag at the very top detailing the exact structural change.
+These filenames are static and must not be renamed or version-numbered.
 
-**IF EDITING APPS SCRIPT (.gs) FILES:**
-1. Update the version number inside the primary execution `console.log` message.
-2. Update the version number in the master comment block at the very top of the script.
+Do not create alternate live files such as `index.html`, `merge.html`, `redo.html`, `fivestack.html`, or additional numbered copies unless the user explicitly requests one.
 
-## 4. Workspace Limits & Archiving Rules
-- **Active Workspace:** Must contain **at most 4 active `.txt` backup files** **and** **4 active `.html` backup files** for each frontend component.
-- **Archive Directories:** When a 5th backup of a given type is generated, move the oldest backup of that type into the appropriate archive folder:
-  - Frontend text backups → `archive_html/`
-  - Frontend visual HTML backups → `archive_visual/`
-  - Backend script backups → `archive_script/`
+## 2. Mirror Requirements
+Whenever `Agent/retest.html` is changed:
+1. Apply the requested edit to `Agent/retest.html`.
+2. Overwrite `Agent/retest.txt` so it contains the exact same code.
+3. Verify that the HTML and TXT files match.
 
-## 5. Standard Edit Flow
-When instructed to edit or update code:
-1. Apply the requested edits directly to the live static file (`index.html`, `merge.html`, or `Code.gs`).
-2. Update the internal version numbers inside the code per Section 3.
-3. Create the `.txt` clone with the incremented version number and exact current timestamp.
-4. Create the visual `.html` clone with the same version and timestamp.
-5. Overwrite the sync mirror (`index.txt` or `merge.txt`).
-6. Execute the archiving rule if the workspace limit of 4 active backups (per type) is exceeded.
+Whenever `script_changeout.gs` is changed:
+1. Apply the requested edit to `script_changeout.gs`.
+2. Overwrite `script_changeout.txt` so it contains the exact same code.
+3. Verify that the GS and TXT files match.
+
+The TXT mirrors exist so external AI tools can inspect the same current source without requiring conversion.
+
+## 3. Git Is the Version History
+Git is the authoritative version-history system for current development.
+
+Do not automatically create:
+- timestamped HTML backups
+- timestamped TXT backups
+- numbered backup files
+- rolling backup queues
+- new `archive_*` folders
+- duplicate version-history copies
+
+Historical material belongs under `Archive/`, which is intentionally excluded from Git.
+
+Before or after substantial changes, use Git status and diff to verify exactly what changed. Do not commit unrelated changes together unless explicitly requested.
+
+## 4. Internal Version Numbers
+The application may continue to display internal version numbers for user-facing identification.
+
+When a requested change warrants a version increment:
+- update the existing version indicator in the affected live file
+- update any existing matching version reference or top-of-file change comment that is part of the current application
+
+Do not create backup files merely because a version number changes.
+
+Do not invent a version increase when the user has not requested one unless the existing project workflow clearly requires it for that specific change.
+
+## 5. Scope Control
+Make only the changes required by the current request.
+
+Do not:
+- rewrite unrelated sections
+- reorganize unrelated code
+- rename files or folders without instruction
+- remove functionality because it appears unused
+- replace working logic with a different architecture without approval
+- modify archived or reference material unless specifically requested
+
+If a requested change requires touching additional files, identify those files before changing them.
+
+## 6. File and Dependency Safety
+Preserve existing relative paths and runtime dependencies.
+
+Current frontend assets may include files located beside `Agent/retest.html`, including:
+- `carrier.png`
+- `comfortmaker.png`
+- `durastar.png`
+- `platts.png`
+
+Do not move or rename runtime assets without also verifying and updating every reference.
+
+Do not assume old files under `Archive/` or `Reference/` are active dependencies.
+
+## 7. Validation After Changes
+After editing frontend or backend code:
+
+1. Verify the canonical file was changed.
+2. Verify its TXT mirror matches exactly.
+3. Check for syntax or structural errors appropriate to the file type.
+4. Review Git diff to confirm only intended changes occurred.
+5. Check Git status for unexpected modified or untracked files.
+6. Report what was changed and any validation performed.
+
+Do not claim validation that was not actually performed.
+
+## 8. Historical Material
+The following are historical/reference areas and are not part of the current live application unless the user explicitly says otherwise:
+- `Archive/`
+- `Reference/`
+
+Do not recreate retired project structures, legacy mode files, timestamped backup systems, or old archive folders merely because historical documents mention them.
+
+## 9. Current Project Priority
+Unless explicitly instructed otherwise, treat these as the current authoritative application files:
+
+1. `Agent/retest.html`
+2. `Agent/retest.txt`
+3. `script_changeout.gs`
+4. `script_changeout.txt`
+
+When instructions from an older file conflict with this rulebook, follow this rulebook and the current user request.
