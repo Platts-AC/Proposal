@@ -110,3 +110,13 @@ Unless explicitly instructed otherwise, treat these as the current authoritative
 4. `script_changeout.txt`
 
 When instructions from an older file conflict with this rulebook, follow this rulebook and the current user request.
+
+## 10. Local Development and GitHub Deployment
+- Local files are the active development workspace.
+- Test Agent/retest.html locally in the browser before publishing.
+- Local Git commits are development checkpoints and do not automatically imply deployment.
+- GitHub is a separate deployment target for tested/stable versions.
+- Do not automatically merge origin/main into local main.
+- Do not automatically push local main to GitHub.
+- Publish to GitHub only when the user explicitly requests deployment of a tested version.
+- Existing GitHub history should be preserved unless the user explicitly requests restructuring.
