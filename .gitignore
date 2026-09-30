@@ -1,0 +1,46 @@
+# Windows / OS clutter
+desktop.ini
+Thumbs.db
+
+# Screenshots and transient media
+Screenshot_*.jpg
+
+# Temporary dumps / diagnostics
+dump*.txt
+inspect_out.txt
+diagnostics_report_*.txt
+discovery_scan_results.md.resolved
+
+# Historical archive folders
+archive_*/
+Agent/archive_*/
+Agent/Archive/
+
+# Historical backend folder
+script/
+
+# Historical numbered backend versions
+script_changeout_v*
+script_changeout_*_diff.txt
+script_changeout_*analysis*.txt
+
+# Historical numbered Retest versions
+Agent/retest_v*.html
+Agent/retest_v*.txt
+
+# Historical archive / validation reports
+Agent/archive_report_*.txt
+Agent/*validation_report*.txt
+Agent/*diagnostic_report*.txt
+
+# Legacy project version histories
+**/fivestack_v*
+**/merge_v*
+**/redo_v*
+**/analyzer_v*
+
+# Temporary patch/check output
+Agent/diff_output.txt
+Agent/results*.txt
+Agent/target*.txt
+Agent/view_math.txt
