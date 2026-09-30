@@ -1,4 +1,4 @@
-<!-- Retest Prototype v09.01.1 | Version Identifier Repair -->
+<!-- Retest Prototype v10.00.0 | Version Identifier Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v09.01.1</title>
+    <title>Changeout Lookup v10.00.0</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v09.01.1</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.00.0</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1411,7 +1411,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v09.01.1</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.00.0</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1812,15 +1812,25 @@
                         class="text-[10px] text-slate-500 uppercase font-bold tracking-widest flex flex-wrap items-center gap-4 ml-auto">
                         <!-- PROPOSAL EXPORT CONTROLS -->
                         <div class="flex items-center gap-2 border-r border-slate-700 pr-4">
-                            <span id="proposal-export-status" class="hidden text-emerald-400 normal-case whitespace-nowrap text-xs font-normal"></span>
+                            <span id="proposal-export-status"
+                                class="hidden text-emerald-400 normal-case whitespace-nowrap text-xs font-normal"></span>
                             <div id="proposal-links-container" class="hidden flex gap-2">
-                                <a id="proposal-doc-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-blue-700 hover:bg-blue-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center" title="Open Google Doc"><i data-lucide="file-text" class="w-3.5 h-3.5 mr-1"></i> Doc</a>
-                                <a id="proposal-pdf-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-rose-700 hover:bg-rose-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center" title="Open PDF"><i data-lucide="file" class="w-3.5 h-3.5 mr-1"></i> PDF</a>
+                                <a id="proposal-doc-link" href="#" target="_blank" rel="noopener noreferrer"
+                                    class="bg-blue-700 hover:bg-blue-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center"
+                                    title="Open Google Doc"><i data-lucide="file-text" class="w-3.5 h-3.5 mr-1"></i>
+                                    Doc</a>
+                                <a id="proposal-pdf-link" href="#" target="_blank" rel="noopener noreferrer"
+                                    class="bg-rose-700 hover:bg-rose-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center"
+                                    title="Open PDF"><i data-lucide="file" class="w-3.5 h-3.5 mr-1"></i> PDF</a>
                             </div>
-                            <select id="proposal-destination-folder" class="bg-slate-800 text-white text-[10px] font-bold uppercase tracking-wider border border-slate-600 rounded p-1.5 w-48 truncate" onchange="window.saveProposalDestinationPref()">
+                            <select id="proposal-destination-folder"
+                                class="bg-slate-800 text-white text-[10px] font-bold uppercase tracking-wider border border-slate-600 rounded p-1.5 w-48 truncate"
+                                onchange="window.saveProposalDestinationPref()">
                                 <option value="">Loading folders...</option>
                             </select>
-                            <button id="btn-create-proposal" type="button" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10 whitespace-nowrap" onclick="event.preventDefault(); window.createProposalExportFromRetest();">
+                            <button id="btn-create-proposal" type="button"
+                                class="bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] px-3 py-1.5 rounded tracking-widest uppercase font-bold transition-colors cursor-pointer shadow z-10 whitespace-nowrap"
+                                onclick="event.preventDefault(); window.createProposalExportFromRetest();">
                                 Create Proposal
                             </button>
                         </div>
@@ -1860,7 +1870,8 @@
                             <option value="spacer">Blank Spacer Card</option>
                         </select>
                         <label class="flex items-center gap-1">
-                            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Acknowledge</span>
+                            <span
+                                class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Acknowledge</span>
                             <select id="inj-ack"
                                 class="bg-slate-900 text-slate-300 text-[10px] font-bold border border-slate-700 rounded p-1.5 h-[30px] min-w-[90px]">
                                 <option value="none">None</option>
@@ -2455,16 +2466,19 @@
 
                 <div class="space-y-3 pt-3 border-t border-slate-700">
 
-                    
+
                     <div class="mt-4 pt-4 border-t border-slate-700">
                         <label class="flex items-center justify-between text-xs text-slate-300 font-bold mb-1">
                             <span>Proposal Selection Marker</span>
-                            <select id="terminal-selection-marker" onchange="window.setTerminalSelectionMarker(this.value)" class="bg-slate-900 border border-slate-600 rounded p-1 text-white w-32 focus:outline-none focus:border-blue-500">
+                            <select id="terminal-selection-marker"
+                                onchange="window.setTerminalSelectionMarker(this.value)"
+                                class="bg-slate-900 border border-slate-600 rounded p-1 text-white w-32 focus:outline-none focus:border-blue-500">
                                 <option value="checkbox">Checkbox</option>
                                 <option value="initial">Initial Line</option>
                             </select>
                         </label>
-                        <div class="text-[9px] text-slate-500 leading-tight">Controls the built-in system option and warranty selection toggles. Note Acknowledgments remain independent.</div>
+                        <div class="text-[9px] text-slate-500 leading-tight">Controls the built-in system option and
+                            warranty selection toggles. Note Acknowledgments remain independent.</div>
                     </div>
 
                     <div>
@@ -5102,6 +5116,34 @@
         // Synchronize registered Smart Scope addition/deduction state
         // from quote-level canonical state to every selected system.
         window.syncRegisteredSmartScopeItemToScratchpads = function (label) {
+            if (String(label || '').includes('Salt Shield')) {
+                const globalShields = window.proposalAppState && window.proposalAppState.saltShield ? window.proposalAppState.saltShield : [];
+                const isActive = globalShields.includes(label);
+
+                if (typeof selectedProposalRows !== 'undefined') {
+                    selectedProposalRows.forEach(rowIndex => {
+                        const sp = window.systemScratchpads[rowIndex];
+                        if (!sp) return;
+                        if (!Array.isArray(sp.saltShield)) sp.saltShield = [];
+
+                        const isCoastalInfi = sp.coastalMatch === true && sp.infusedItems && sp.infusedItems.includes('Salt Shield (Infiniguard)');
+
+                        if (isActive) {
+                            if (!sp.saltShield.includes(label)) sp.saltShield.push(label);
+                        } else {
+                            if (label === 'Salt Shield (Infiniguard)' && isCoastalInfi) {
+                                // Do not remove package-included Coastal Match Infiniguard
+                            } else {
+                                sp.saltShield = sp.saltShield.filter(x => x !== label);
+                                if (sp.taggedItems) sp.taggedItems = sp.taggedItems.filter(i => i !== label);
+                                if (sp.infusedItems) sp.infusedItems = sp.infusedItems.filter(i => i !== label);
+                                if (sp.removedGlobals) sp.removedGlobals = sp.removedGlobals.filter(i => i !== label);
+                            }
+                        }
+                    });
+                }
+            }
+
             const isAddition =
                 typeof window.isSmartScopeAdditionItem === 'function' &&
                 window.isSmartScopeAdditionItem(label);
@@ -5563,8 +5605,8 @@
                     fontSize: 14,
                     lineHeight: 1.5,
                     blockGap: 8,
-                align: 'left',
-                selectionMarker: 'checkbox',
+                    align: 'left',
+                    selectionMarker: 'checkbox',
                     ...storedTerminalSettings,
 
                     copySections: {
@@ -6142,7 +6184,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v09.01.1',
+                appVersion: 'v10.00.0',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6336,7 +6378,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v09.01.1_${stamp}.json`;
+                `platts_config_v10.00.0_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -7755,8 +7797,10 @@
                     window.isSmartScopeDeductionItem(label)
                 );
 
+            const isSaltShield = String(label || '').includes('Salt Shield');
+
             if (
-                isRegisteredFinancialItem &&
+                (isRegisteredFinancialItem || isSaltShield) &&
                 typeof window.syncRegisteredSmartScopeItemToScratchpads === 'function'
             ) {
                 window.syncRegisteredSmartScopeItemToScratchpads(label);
@@ -7783,19 +7827,7 @@
                 selectedProposalRows.forEach(id => {
                     let sp = window.systemScratchpads[id];
                     if (sp) {
-                        if (label.includes('Salt Shield')) {
-                            if (!sp.saltShield) sp.saltShield = [];
-                            if (cb.checked && !sp.saltShield.includes(label)) sp.saltShield.push(label);
-                            else if (!cb.checked) {
-                                sp.saltShield = sp.saltShield.filter(x => x !== label);
-                                const isCoastalInfi = label.includes('Infiniguard') && window.proposalAppState.activeSite.coastal === true;
-                                if (!isCoastalInfi) {
-                                    if (sp.taggedItems) sp.taggedItems = sp.taggedItems.filter(i => i !== label);
-                                    if (sp.infusedItems) sp.infusedItems = sp.infusedItems.filter(i => i !== label);
-                                    if (sp.removedGlobals) sp.removedGlobals = sp.removedGlobals.filter(i => i !== label);
-                                }
-                            }
-                        } else if (label.includes('Labor')) {
+                        if (label.includes('Labor')) {
                             if (!Array.isArray(sp.laborWarranties)) {
                                 sp.laborWarranties = [];
                                 if (typeof sp.laborWarranty === 'string' && sp.laborWarranty) {
@@ -9574,7 +9606,7 @@
                 document.getElementById('terminal-template-status');
             const smSel = document.getElementById('terminal-selection-marker');
             if (smSel) smSel.value = propSettings.terminal && propSettings.terminal.selectionMarker ? propSettings.terminal.selectionMarker : 'checkbox';
-            
+
 
             if (!editor) return;
 
@@ -10566,13 +10598,13 @@
 
             if (acknowledgment) {
                 const presetAck =
-                preset.acknowledgment ||
-                (preset.initial === true ? 'initial' : 'none');
-            
-            acknowledgment.value =
-                ['none', 'checkbox', 'initial'].includes(presetAck)
-                    ? presetAck
-                    : 'none';
+                    preset.acknowledgment ||
+                    (preset.initial === true ? 'initial' : 'none');
+
+                acknowledgment.value =
+                    ['none', 'checkbox', 'initial'].includes(presetAck)
+                        ? presetAck
+                        : 'none';
             }
 
             price.value =
@@ -10767,7 +10799,7 @@
         };
 
         function updateProposalCartUI() {
-    const selectionMarker = window.getProposalSelectionMarker();
+            const selectionMarker = window.getProposalSelectionMarker();
 
             let stitchLines = [];
             const sorterList = document.getElementById('proposal-sorter-list');
@@ -10982,17 +11014,17 @@
                 pad: { existing: 'hurricane pad', new: 'hurricane pad' },
                 platformTop: { existing: 'platform top', replace: 'the platform top' },
                 floatSwitch: {
-                        existing: 'primary float switch',
-                        new: 'primary float switch'
-                    },
+                    existing: 'primary float switch',
+                    new: 'primary float switch'
+                },
                 auxFloatSwitch: {
-                        existing: 'auxiliary float switch',
-                        new: 'auxiliary float switch'
-                    },
-                    auxDrainPan: {
-                        existing: 'auxiliary drain pan',
-                        new: 'auxiliary drain pan'
-                    },
+                    existing: 'auxiliary float switch',
+                    new: 'auxiliary float switch'
+                },
+                auxDrainPan: {
+                    existing: 'auxiliary drain pan',
+                    new: 'auxiliary drain pan'
+                },
                 ductTransitions: { modify: 'necessary duct transitions/modifications', new: 'duct transitions/modifications' }
             };
 
@@ -11564,18 +11596,26 @@
                 }
                 let activeSaltShield = false;
                 let activeShieldLabel = '';
+                let activeSaltShieldLabels = [];
                 if (sp.saltShield && sp.saltShield.length > 0) {
                     let activeShields = sp.saltShield.filter(ss => !(sp.removedGlobals && sp.removedGlobals.includes(ss)));
-                    if (activeShields.length > 0) {
-                        activeSaltShield = true;
-                        activeShieldLabel = activeShields[0];
+                    activeShields.forEach(ss => {
+                        if (!activeSaltShieldLabels.includes(ss)) activeSaltShieldLabels.push(ss);
+                    });
+                }
+
+                if (sp.coastalMatch === true && sp.infusedItems && sp.infusedItems.includes('Salt Shield (Infiniguard)')) {
+                    if (!activeSaltShieldLabels.includes('Salt Shield (Infiniguard)')) activeSaltShieldLabels.push('Salt Shield (Infiniguard)');
+                }
+
+                activeSaltShieldLabels.forEach(shieldLabel => {
+                    let sName = shieldLabel.replace('Heresite', 'HereShield');
+                    let dedupeKey = 'shield:' + shieldLabel;
+                    if (!addedIcons.has(dedupeKey)) {
+                        emojiCluster.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(shieldLabel, 'w-5 h-5')}</span>`);
+                        addedIcons.add(dedupeKey);
                     }
-                }
-                if (activeSaltShield && !addedIcons.has('shield')) {
-                    let sName = activeShieldLabel.replace('Heresite', 'HereShield');
-                    emojiCluster.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(activeShieldLabel, 'w-4 h-4')}</span>`);
-                    addedIcons.add('shield');
-                }
+                });
 
                 let hasManualRefrig = sp.refrigerantFee > 0;
                 let hasOceanaRefrig = sp.siteFloorAllowance && sp.siteFloorAllowance.amount > 0 && sp.siteFloorAllowance.bakedIn;
@@ -11610,25 +11650,25 @@
 
                 // Execute Smart Pod Layout Engine (v3 Containers -> Stacks -> Splits)
                 let containersHtml = '';
-                
+
                 window.sorterSettings.containers.forEach(container => {
-                    if(container.widthWeight <= 0) return;
+                    if (container.widthWeight <= 0) return;
                     let stacksHtml = '';
-                    
+
                     container.stacks.forEach(stack => {
                         if (stack.heightWeight <= 0) return;
                         let splitsHtml = '';
-                        
+
                         stack.splits.forEach(split => {
                             if (split.widthWeight <= 0) return;
-                            
+
                             // If End Cap is enabled, totalPrice and otdPrice normally render on the right, skip here
                             if ((split.mapping === 'totalPrice' || split.mapping === 'otdPrice') && window.sorterSettings.enableEndCap) return;
-                            
+
                             let content = '';
                             let alignClass = split.align === 'center' ? 'items-center text-center justify-center' : split.align === 'right' ? 'items-end text-right justify-center' : 'items-start text-left justify-center';
-                            
-                            
+
+
                             let SorterContext = {
                                 brand: brand,
                                 capacity: capacity,
@@ -11645,7 +11685,7 @@
                                 site: site
                             };
 
-                            if (split.mapping === 'composite' || ['capacity','systemType','mechanicalStage','applicationStyle','seriesTier','seer2','eer2','hspf2','coolingBtu','heatingBtu'].includes(split.mapping)) {
+                            if (split.mapping === 'composite' || ['capacity', 'systemType', 'mechanicalStage', 'applicationStyle', 'seriesTier', 'seer2', 'eer2', 'hspf2', 'coolingBtu', 'heatingBtu'].includes(split.mapping)) {
                                 content = window.renderSorterCompositeContent(split, SorterContext);
                             }
                             else if (split.mapping === 'desc') {
@@ -11673,7 +11713,7 @@
                             else if (split.mapping === 'brand') {
                                 let asColor = window.getApplicationStyleColorClass(printStyle);
                                 let serColor = window.getSeriesTierColorClass(series);
-                                
+
                                 let dispSeries = series;
                                 if (series === 'MAIN LINE' || series === 'MAINLINE') dispSeries = 'Mainline';
                                 else if (series === 'PERFORMER') dispSeries = 'Performer';
@@ -11705,13 +11745,13 @@
                             else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
                             else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
                             else if (split.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
-                            
+
                             splitsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${split.widthWeight} 1 0%; font-size: ${split.fontSize}px;">${content}</div>`;
                         });
-                        
+
                         stacksHtml += `<div class="flex flex-row w-full gap-3 overflow-hidden" style="flex: ${stack.heightWeight} 1 0%;">${splitsHtml}</div>`;
                     });
-                    
+
                     containersHtml += `<div class="flex flex-col h-full gap-1 overflow-hidden" style="flex: ${container.widthWeight} 1 0%;">${stacksHtml}</div>`;
                 });
 
@@ -11959,12 +11999,10 @@
                 }
 
                 let includedScopeItems = [];
-                let coastalPackageLines = [];
-
                 if (Array.isArray(sp.infusedItems)) {
                     sp.infusedItems.forEach(item => {
                         if (item === 'Salt Shield (Infiniguard)' && sp.coastalMatch === true) {
-                            coastalPackageLines.push('Infiniguard included in price');
+                            // Handled inline in system option description
                         } else {
                             includedScopeItems.push(item);
                         }
@@ -12034,17 +12072,16 @@
                 else if (mechStage === '2 stage' || mechStage === 'two stage') proposalStage = '2-stage';
 
                 let effectiveAhriForProposal = typeof window.getEffectiveAhri === 'function' ? window.getEffectiveAhri(item, sp) : ahri;
-                let rawOptText = `■ System Option ${index + 1}\n${selectionMarker} SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system AHRI #: ${effectiveAhriForProposal}`;
+                let rawOptText = `■ System Option ${index + 1}\n${selectionMarker} SEER2 ${seer2} ${proposalBrand} ${proposalStyle} ${proposalSeries} ${proposalCapacity} ${proposalStage} ${printSysType} R-454B system`;
+                if (sp.coastalMatch === true && sp.infusedItems && sp.infusedItems.includes('Salt Shield (Infiniguard)')) {
+                    rawOptText += ` (with Salt-Shield Infiniguard protection for condenser included)`;
+                }
+                rawOptText += ` AHRI #: ${effectiveAhriForProposal}`;
                 let optText = rawOptText.replace(/[ \t\r]+/g, ' ');
                 if (window.proposalAppState.textOverrides && window.proposalAppState.textOverrides[optKey]) optText = window.proposalAppState.textOverrides[optKey];
                 window.proposalBlocks.push({ target: optKey, text: optText + ` Investment: $${systemSubtotal.toLocaleString()}` });
 
-                if (coastalPackageLines.length > 0) {
-                    window.proposalBlocks.push({
-                        target: `Option ${index + 1} Coastal Package`,
-                        text: `    ■ ${coastalPackageLines.join(', ')}`
-                    });
-                }
+
 
                 if (uniqueIncludedScopeItems.length > 0) {
                     window.proposalBlocks.push({
@@ -12225,7 +12262,7 @@
         window.getProposalSelectionMarker = function () {
             const terminal =
                 propSettings &&
-                propSettings.terminal
+                    propSettings.terminal
                     ? propSettings.terminal
                     : {};
 
@@ -12251,8 +12288,8 @@
             }
         };
 
-window.updateProposalTerminal = function () {
-    const selectionMarker = window.getProposalSelectionMarker();
+        window.updateProposalTerminal = function () {
+            const selectionMarker = window.getProposalSelectionMarker();
 
             const terminal = document.getElementById('proposal-terminal');
             if (!terminal) return;
@@ -16276,7 +16313,7 @@ window.updateProposalTerminal = function () {
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v09.01.1',
+                appVersion: 'v10.00.0',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16285,7 +16322,7 @@ window.updateProposalTerminal = function () {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v09.01.1_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.00.0_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16304,7 +16341,7 @@ window.updateProposalTerminal = function () {
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v09.01.1',
+                appVersion: 'v10.00.0',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16313,7 +16350,7 @@ window.updateProposalTerminal = function () {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v09.01.1_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.00.0_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17086,7 +17123,7 @@ window.updateProposalTerminal = function () {
                 const price = Number(document.getElementById('inj-price').value) || 0;
 
                 const finalString = window.buildProposalInjectionText(text, cat, acknowledgment, price);
-                
+
                 window.proposalAppState.lineInjections.push({ line: window.targetInjectionLine, text: finalString });
             } else {
                 const target = document.getElementById('inj-target').value;
@@ -17362,28 +17399,28 @@ window.updateProposalTerminal = function () {
             else if (seerNum >= 17) seerBucket = "17 SEER2";
 
             const enhancementName = `${sizeBucket} | ${seerBucket}`;
-            
+
             let dynHere = null;
             let dynInfi = null;
-            
+
             if (window.HVAC_ENHANCEMENTS && window.HVAC_ENHANCEMENTS.length > 0) {
-                const hereItem = window.HVAC_ENHANCEMENTS.find(e => 
-                    String(e.category).trim() === "Salt Shield Heresite" && 
+                const hereItem = window.HVAC_ENHANCEMENTS.find(e =>
+                    String(e.category).trim() === "Salt Shield Heresite" &&
                     String(e.name).trim() === enhancementName
                 );
-                const infiItem = window.HVAC_ENHANCEMENTS.find(e => 
-                    String(e.category).trim() === "Salt Shield Infiniguard" && 
+                const infiItem = window.HVAC_ENHANCEMENTS.find(e =>
+                    String(e.category).trim() === "Salt Shield Infiniguard" &&
                     String(e.name).trim() === enhancementName
                 );
-                
+
                 if (hereItem && !isNaN(Number(hereItem.price))) dynHere = Number(hereItem.price);
                 if (infiItem && !isNaN(Number(infiItem.price))) dynInfi = Number(infiItem.price);
             }
-            
+
             if (dynHere !== null && dynInfi !== null) {
                 return { here: dynHere, infi: dynInfi };
             }
-            
+
             if (appStyleUpper === "PACKAGE") {
                 console.warn("Salt Shield fallback missing package data for:", capacity, seer, applicationStyle, enhancementName);
             }
@@ -17975,6 +18012,19 @@ window.updateProposalTerminal = function () {
             if (typeof showToast === 'function') showToast("Coastal Match Applied!");
             updateProposalCartUI();
             openReceiptModal(index);
+        }
+
+        window.removeCoastalMatch = function (index) {
+            const sp = window.systemScratchpads[selectedProposalRows[index]];
+            if (!sp) return;
+            sp.coastalMatch = false;
+            sp.coastalPriceOverride = null;
+            if (Array.isArray(sp.infusedItems)) {
+                sp.infusedItems = sp.infusedItems.filter(item => item !== 'Salt Shield (Infiniguard)');
+            }
+            if (typeof showToast === 'function') showToast("Coastal Match Removed");
+            updateProposalCartUI();
+            openReceiptModal(index);
         };
 
         window.toggleCustomerView = function () {
@@ -18467,13 +18517,19 @@ window.updateProposalTerminal = function () {
             <span class="text-white font-bold text-sm shrink-0">$${basePrice.toLocaleString()}</span>
         </div>`;
 
-            if (stealthIcons || (sp.site !== 'Oceana' && !sp.coastalMatch && !appStyle.includes('COASTAL'))) {
+            if (
+                stealthIcons ||
+                (sp.coastalMatch === true && !appStyle.includes('COASTAL')) ||
+                (sp.site !== 'Oceana' && !sp.coastalMatch && !appStyle.includes('COASTAL'))
+            ) {
                 html += `<div class="flex flex-wrap items-center justify-between gap-2 w-full mt-1">
             <div class="flex flex-wrap items-center gap-2 text-[11px] shrink-0">
                 ${stealthIconsInner ? stealthIconsInner : ''}
             </div>`;
 
-                if (sp.site !== 'Oceana' && !sp.coastalMatch && !appStyle.includes('COASTAL')) {
+                if (sp.coastalMatch === true && !appStyle.includes('COASTAL')) {
+                    html += `<button onclick="removeCoastalMatch(${index})" class="text-[10px] bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 hover:text-white px-2 py-1 rounded transition-colors tracking-widest font-bold shadow-sm w-full sm:w-auto text-center mt-2 sm:mt-0">REMOVE COASTAL MATCH</button>`;
+                } else if (sp.site !== 'Oceana' && !sp.coastalMatch && !appStyle.includes('COASTAL')) {
                     html += `<button onclick="applyCoastalMatch(${index})" class="text-[10px] bg-blue-900/50 text-blue-300 border border-blue-500 hover:bg-blue-600 hover:text-white px-2 py-1 rounded transition-colors tracking-widest font-bold shadow-sm w-full sm:w-auto text-center mt-2 sm:mt-0">APPLY COASTAL MATCH</button>`;
                 }
 
@@ -18767,11 +18823,20 @@ window.updateProposalTerminal = function () {
                 );
             });
 
-            if (sp.saltShield && sp.saltShield.length > 0) {
+            let effectiveSaltShieldsRows = typeof window.getEffectiveSaltShields === 'function' ? window.getEffectiveSaltShields(sp) : (Array.isArray(sp.saltShield) ? sp.saltShield : []);
+
+            if (sp.coastalMatch === true && sp.infusedItems && sp.infusedItems.includes('Salt Shield (Infiniguard)')) {
+                const newRows = [];
+                for (let i = 0; i < effectiveSaltShieldsRows.length; i++) newRows.push(effectiveSaltShieldsRows[i]);
+                if (!newRows.includes('Salt Shield (Infiniguard)')) newRows.push('Salt Shield (Infiniguard)');
+                effectiveSaltShieldsRows = newRows;
+            }
+
+            if (effectiveSaltShieldsRows.length > 0) {
                 const itemObj = HVAC_DATABASE[sp.absoluteIndex] || {};
                 const sysStyle = String(itemObj.applicationStyle || itemObj.style || '');
                 let shields = calculateSystemSaltShield(capacity, seer2, sysStyle);
-                sp.saltShield.forEach(shieldLabel => {
+                effectiveSaltShieldsRows.forEach(shieldLabel => {
                     let sPrice = shieldLabel.includes('Heresite') ? shields.here : shields.infi;
                     protectionHtml += renderOptionalEnhancementRow(shieldLabel.replace('Heresite', 'HereShield'), sPrice);
                 });
@@ -20490,16 +20555,16 @@ window.updateProposalTerminal = function () {
         };
 
         // --- V06.00 Cart Layout Mapping Engine ---
-        window.createEmptySorterSplit = function() {
+        window.createEmptySorterSplit = function () {
             return { mapping: 'empty', widthWeight: 1.0, fontSize: 12, align: 'left' };
         };
-        window.createEmptySorterStack = function() {
+        window.createEmptySorterStack = function () {
             return { heightWeight: 1.0, splits: [window.createEmptySorterSplit()] };
         };
-        window.createEmptySorterContainer = function() {
+        window.createEmptySorterContainer = function () {
             return { widthWeight: 1.0, stacks: [window.createEmptySorterStack()] };
         };
-        window.createDefaultSorterSettingsV3 = function() {
+        window.createDefaultSorterSettingsV3 = function () {
             return {
                 schemaVersion: 3,
                 rowHeight: 120,
@@ -20532,24 +20597,24 @@ window.updateProposalTerminal = function () {
             };
         };
 
-        window.migrateSorterSettingsV2ToV3 = function(v2) {
+        window.migrateSorterSettingsV2ToV3 = function (v2) {
             let v3 = window.createDefaultSorterSettingsV3();
             if (!v2 || !v2.stacks || !Array.isArray(v2.stacks)) return v3;
-            
+
             // Build lookup of preferences
             let prefs = {};
             v2.stacks.forEach(stack => {
-                if(stack.spreads) {
+                if (stack.spreads) {
                     stack.spreads.forEach(spread => {
                         prefs[spread.mapping] = spread;
                     });
                 }
             });
-            
+
             v3.rowHeight = v2.rowHeight || 120;
             v3.enableEndCap = !!v2.enableEndCap;
-            if(v2.endCapFontSize) v3.endCapFontSize = v2.endCapFontSize;
-            
+            if (v2.endCapFontSize) v3.endCapFontSize = v2.endCapFontSize;
+
             v3.containers.forEach(container => {
                 container.stacks.forEach(stack => {
                     stack.splits.forEach(split => {
@@ -20560,7 +20625,7 @@ window.updateProposalTerminal = function () {
                     });
                 });
             });
-            
+
             return v3;
         };
 
@@ -20577,23 +20642,23 @@ window.updateProposalTerminal = function () {
                     window.sorterSettings = window.createDefaultSorterSettingsV3();
                 }
             }
-            
+
             // Lightweight Validator Normalizer
-            if(!window.sorterSettings.containers || !Array.isArray(window.sorterSettings.containers) || window.sorterSettings.containers.length === 0) {
+            if (!window.sorterSettings.containers || !Array.isArray(window.sorterSettings.containers) || window.sorterSettings.containers.length === 0) {
                 window.sorterSettings = window.createDefaultSorterSettingsV3();
             } else {
                 window.sorterSettings.rowHeight = Math.max(60, Math.min(300, window.sorterSettings.rowHeight || 120));
                 window.sorterSettings.containers.forEach(cont => {
                     cont.widthWeight = Math.max(0.1, cont.widthWeight || 1.0);
-                    if(!cont.stacks || cont.stacks.length === 0) cont.stacks = [window.createEmptySorterStack()];
+                    if (!cont.stacks || cont.stacks.length === 0) cont.stacks = [window.createEmptySorterStack()];
                     cont.stacks.forEach(stack => {
                         stack.heightWeight = Math.max(0.1, stack.heightWeight || 1.0);
-                        if(!stack.splits || stack.splits.length === 0) stack.splits = [window.createEmptySorterSplit()];
+                        if (!stack.splits || stack.splits.length === 0) stack.splits = [window.createEmptySorterSplit()];
                         stack.splits.forEach(split => {
                             split.widthWeight = Math.max(0.1, split.widthWeight || 1.0);
-                            if(!split.mapping) split.mapping = 'empty';
-                            if(!split.align) split.align = 'left';
-                            if(!split.fontSize) split.fontSize = 12;
+                            if (!split.mapping) split.mapping = 'empty';
+                            if (!split.align) split.align = 'left';
+                            if (!split.fontSize) split.fontSize = 12;
                         });
                     });
                 });
@@ -20637,7 +20702,7 @@ window.updateProposalTerminal = function () {
             arr[targetIdx] = temp;
             window.saveSorterSettings();
         };
-        window.updateCartContainerWt = function(cIdx, val) {
+        window.updateCartContainerWt = function (cIdx, val) {
             window.sorterSettings.containers[cIdx].widthWeight = parseFloat(val);
             window.saveSorterSettings();
         };
@@ -20712,13 +20777,13 @@ window.updateProposalTerminal = function () {
             if (typeof window.updateProposalCartUI === 'function') window.updateProposalCartUI();
         };
 
-        
-        window.getSorterCompositeFieldValue = function(fieldKey, context) {
+
+        window.getSorterCompositeFieldValue = function (fieldKey, context) {
             let val = context[fieldKey];
             if (val === undefined || val === null || val === '' || val === 'N/A' || val === 'NA' || val === 'NULL' || val === 'UNDEFINED') return null;
             val = String(val).trim();
             if (!val) return null;
-            
+
             if (fieldKey === 'systemType') {
                 const sysColor = window.getSystemTypeColorClass(val.toUpperCase());
                 return `<span class="${sysColor}">${val.toUpperCase()}</span>`;
@@ -20737,10 +20802,10 @@ window.updateProposalTerminal = function () {
                 let num = parseInt(val.replace(/[^0-9]/g, ''));
                 if (!isNaN(num) && num > 0) return num.toLocaleString() + ' BTU';
             }
-            return val; 
+            return val;
         };
 
-        window.renderSorterCompositeContent = function(split, context) {
+        window.renderSorterCompositeContent = function (split, context) {
             if (split.mapping !== 'composite') {
                 let v = window.getSorterCompositeFieldValue(split.mapping, context);
                 if (!v) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
@@ -20790,7 +20855,7 @@ window.updateProposalTerminal = function () {
             return `<span class="font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
         };
 
-        window.addSorterCompositeField = function(cIdx, sIdx, pIdx, field) {
+        window.addSorterCompositeField = function (cIdx, sIdx, pIdx, field) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
             if (split.compositeFields.some(f => f.field === field)) return;
@@ -20801,7 +20866,7 @@ window.updateProposalTerminal = function () {
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        window.removeSorterCompositeField = function(cIdx, sIdx, pIdx, fIdx) {
+        window.removeSorterCompositeField = function (cIdx, sIdx, pIdx, fIdx) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
             split.compositeFields.splice(fIdx, 1);
@@ -20810,7 +20875,7 @@ window.updateProposalTerminal = function () {
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        window.moveSorterCompositeField = function(cIdx, sIdx, pIdx, fIdx, dir) {
+        window.moveSorterCompositeField = function (cIdx, sIdx, pIdx, fIdx, dir) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
             const target = fIdx + dir;
@@ -20823,7 +20888,7 @@ window.updateProposalTerminal = function () {
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        window.setSorterCompositeFieldLabel = function(cIdx, sIdx, pIdx, fIdx, isChecked) {
+        window.setSorterCompositeFieldLabel = function (cIdx, sIdx, pIdx, fIdx, isChecked) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
             split.compositeFields[fIdx].showLabel = isChecked;
@@ -20831,14 +20896,14 @@ window.updateProposalTerminal = function () {
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        window.setSorterCompositeSeparator = function(cIdx, sIdx, pIdx, val) {
+        window.setSorterCompositeSeparator = function (cIdx, sIdx, pIdx, val) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             split.compositeSeparator = val;
             window.saveSorterSettings();
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        window.renderCartCompositeControls = function(cIdx, sIdx, pIdx, split) {
+        window.renderCartCompositeControls = function (cIdx, sIdx, pIdx, split) {
             let fieldsHtml = '';
             if (split.compositeFields && Array.isArray(split.compositeFields)) {
                 split.compositeFields.forEach((f, fIdx) => {
@@ -20891,12 +20956,12 @@ window.updateProposalTerminal = function () {
 
             if (split.compositeFields) {
                 split.compositeFields.forEach(f => {
-                    fieldOpts = fieldOpts.replace(new RegExp(`<option value="${f.field}">.*?</option>`), ''); 
+                    fieldOpts = fieldOpts.replace(new RegExp(`<option value="${f.field}">.*?</option>`), '');
                 });
             }
 
             let sep = split.compositeSeparator || 'space';
-            
+
             return `<div class="col-span-2 bg-slate-950 p-2 rounded-md border border-blue-900/40 mt-1 shadow-inner">
                 <div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
                     <i data-lucide="text-cursor-input" class="w-3 h-3"></i> Custom Description Fields
@@ -20943,7 +21008,7 @@ window.updateProposalTerminal = function () {
                             <button onclick="updateCartContainerWt(${cIdx}, ${container.widthWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
                         </div>
                     </div>`;
-                    
+
                 container.stacks.forEach((stack, sIdx) => {
                     html += `<div class="bg-slate-900 border border-slate-700 p-2 rounded relative mb-2">
                         <!-- Stack Header -->
@@ -20961,14 +21026,14 @@ window.updateProposalTerminal = function () {
                                 <button onclick="updateCartStackWt(${cIdx}, ${sIdx}, ${stack.heightWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
                             </div>
                         </div>`;
-                        
+
                     stack.splits.forEach((split, pIdx) => {
                         html += `<div class="grid grid-cols-2 gap-2.5 bg-slate-800 p-2 rounded mb-2 border border-slate-600">
                             <!-- Top Left: Content & Remove -->
                             <div class="flex flex-col gap-1 relative w-full">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center gap-1.5">
-                                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Split ${pIdx+1}</span>
+                                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Split ${pIdx + 1}</span>
                                         <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, -1)" class="text-slate-500 hover:text-white ${pIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Left"><i data-lucide="arrow-left" class="w-3 h-3"></i></button>
                                         <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, 1)" class="text-slate-500 hover:text-white ${pIdx === stack.splits.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Right"><i data-lucide="arrow-right" class="w-3 h-3"></i></button>
                                     </div>
@@ -21031,7 +21096,7 @@ window.updateProposalTerminal = function () {
                     });
                     html += `<button onclick="addCartSplit(${cIdx}, ${sIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded border border-dashed border-slate-600 transition-colors text-[9px] uppercase tracking-widest">+ Add Split</button></div>`;
                 });
-                
+
                 html += `<button onclick="addCartStack(${cIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-blue-400 font-bold rounded border border-blue-900/50 transition-colors text-[10px] uppercase tracking-widest">+ Add Stack</button></div>`;
             });
             const cl = document.getElementById('cart-configurator-list');
@@ -24458,199 +24523,210 @@ window.updateProposalTerminal = function () {
             if (modal) modal.classList.add('hidden');
         }
     </script>
-<script>
+    <script>
 
-window.plattsProposalFoldersLoaded = false;
-window.plattsProposalFolders = [];
+        window.plattsProposalFoldersLoaded = false;
+        window.plattsProposalFolders = [];
 
-window.saveProposalDestinationPref = function () {
-    const el = document.getElementById("proposal-destination-folder");
-    if (el && el.value) {
-        localStorage.setItem("plattsProposalDestinationFolderId", el.value);
-    }
-};
-
-window.loadProposalDestinationFolders = async function () {
-    if (window.plattsProposalFoldersLoaded) return;
-    const selectEl = document.getElementById("proposal-destination-folder");
-    if (!selectEl) return;
-
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getProposalFolders' })
-        });
-
-        if (!response.ok) throw new Error("Network response was not ok");
-        const json = await response.json();
-
-        if (json.success && Array.isArray(json.folders)) {
-            window.plattsProposalFolders = json.folders;
-            window.plattsProposalFoldersLoaded = true;
-
-            selectEl.innerHTML = "";
-            let html = "";
-            window.plattsProposalFolders.forEach(f => {
-                html += `<option value="${f.id}">${f.name}</option>`;
-            });
-            selectEl.innerHTML = html;
-
-            // Selection logic
-            const savedId = localStorage.getItem("plattsProposalDestinationFolderId");
-            const hasSaved = window.plattsProposalFolders.some(f => f.id === savedId);
-
-            const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
-            let propYear = new Date().getFullYear().toString();
-            if (job.proposalDate) {
-                propYear = String(job.proposalDate).split('-')[0] || propYear;
+        window.saveProposalDestinationPref = function () {
+            const el = document.getElementById("proposal-destination-folder");
+            if (el && el.value) {
+                localStorage.setItem("plattsProposalDestinationFolderId", el.value);
             }
+        };
 
-            if (hasSaved) {
-                selectEl.value = savedId;
-            } else {
-                const yearMatch = window.plattsProposalFolders.find(f => f.name.includes(propYear));
-                if (yearMatch) {
-                    selectEl.value = yearMatch.id;
-                } else if (window.plattsProposalFolders.length > 0) {
-                    selectEl.value = window.plattsProposalFolders[0].id;
+        window.loadProposalDestinationFolders = async function () {
+            if (window.plattsProposalFoldersLoaded) return;
+            const selectEl = document.getElementById("proposal-destination-folder");
+            if (!selectEl) return;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getProposalFolders' })
+                });
+
+                if (!response.ok) throw new Error("Network response was not ok");
+                const json = await response.json();
+
+                if (json.success && Array.isArray(json.folders)) {
+                    window.plattsProposalFolders = json.folders;
+                    window.plattsProposalFoldersLoaded = true;
+
+                    selectEl.innerHTML = "";
+                    let html = "";
+                    window.plattsProposalFolders.forEach(f => {
+                        html += `<option value="${f.id}">${f.name}</option>`;
+                    });
+                    selectEl.innerHTML = html;
+
+                    // Selection logic
+                    const savedId = localStorage.getItem("plattsProposalDestinationFolderId");
+                    const hasSaved = window.plattsProposalFolders.some(f => f.id === savedId);
+
+                    const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
+                    let propYear = new Date().getFullYear().toString();
+                    if (job.proposalDate) {
+                        propYear = String(job.proposalDate).split('-')[0] || propYear;
+                    }
+
+                    if (hasSaved) {
+                        selectEl.value = savedId;
+                    } else {
+                        const yearMatch = window.plattsProposalFolders.find(f => f.name.includes(propYear));
+                        if (yearMatch) {
+                            selectEl.value = yearMatch.id;
+                        } else if (window.plattsProposalFolders.length > 0) {
+                            selectEl.value = window.plattsProposalFolders[0].id;
+                        }
+                    }
+
+                    window.saveProposalDestinationPref();
+                } else {
+                    throw new Error(json.error || "Invalid folder list returned.");
                 }
-            }
-
-            window.saveProposalDestinationPref();
-        } else {
-            throw new Error(json.error || "Invalid folder list returned.");
-        }
-    } catch (err) {
-        console.error("Failed to load proposal folders:", err);
-        selectEl.innerHTML = `<option value="">Load Failed. Tap to Retry.</option>`;
-        selectEl.onclick = function () {
-            if (!window.plattsProposalFoldersLoaded) {
-                selectEl.innerHTML = '<option value="">Retrying...</option>';
-                selectEl.onclick = null;
-                window.loadProposalDestinationFolders();
+            } catch (err) {
+                console.error("Failed to load proposal folders:", err);
+                selectEl.innerHTML = `<option value="">Load Failed. Tap to Retry.</option>`;
+                selectEl.onclick = function () {
+                    if (!window.plattsProposalFoldersLoaded) {
+                        selectEl.innerHTML = '<option value="">Retrying...</option>';
+                        selectEl.onclick = null;
+                        window.loadProposalDestinationFolders();
+                    }
+                };
             }
         };
-    }
-};
 
 
-function showProposalExportStatus(message, isError) {
-    const statusEl = document.getElementById('proposal-export-status');
-    if (!statusEl) return;
-    statusEl.textContent = message;
-    statusEl.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
-    statusEl.classList.add(isError ? 'text-rose-400' : 'text-emerald-400');
-}
+        function showProposalExportStatus(message, isError) {
+            const statusEl = document.getElementById('proposal-export-status');
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
+            statusEl.classList.add(isError ? 'text-rose-400' : 'text-emerald-400');
+        }
 
-window.createProposalExportFromRetest = async function () {
-    if (typeof window.updateJobDataFromForm === "function") {
-        window.updateJobDataFromForm();
-    }
+        window.createProposalExportFromRetest = async function () {
+            if (typeof window.updateJobDataFromForm === "function") {
+                window.updateJobDataFromForm();
+            }
 
-    const selectEl = document.getElementById("proposal-destination-folder");
-    const btnEl = document.getElementById("btn-create-proposal");
-    const statusEl = document.getElementById("proposal-export-status");
-    const linksContainer = document.getElementById("proposal-links-container");
-    const docLink = document.getElementById("proposal-doc-link");
-    const pdfLink = document.getElementById("proposal-pdf-link");
+            const selectEl = document.getElementById("proposal-destination-folder");
+            const btnEl = document.getElementById("btn-create-proposal");
+            const statusEl = document.getElementById("proposal-export-status");
+            const linksContainer = document.getElementById("proposal-links-container");
+            const docLink = document.getElementById("proposal-doc-link");
+            const pdfLink = document.getElementById("proposal-pdf-link");
 
-    statusEl.classList.add("hidden");
-    linksContainer.classList.add("hidden");
+            statusEl.classList.add("hidden");
+            linksContainer.classList.add("hidden");
 
-    if (!selectEl || !selectEl.value) {
-        showProposalExportStatus("Select a valid Proposal Destination.", true);
-        return;
-    }
+            if (!selectEl || !selectEl.value) {
+                showProposalExportStatus("Select a valid Proposal Destination.", true);
+                return;
+            }
 
-    const destId = selectEl.value;
-    const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
-    const pDate = job.proposalDate || '';
-    const pName = job.customerName || '';
-    const pAddr = job.address || '';
-    const pZip = job.zip || '';
-    const pText = window.pureCopyText || "";
+            const destId = selectEl.value;
+            const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : ((window.proposalAppState && window.proposalAppState.jobData) || {});
+            const pDate = job.proposalDate || '';
+            const pName = job.customerName || '';
+            const pAddr = job.address || '';
+            const pZip = job.zip || '';
+            const pText = window.pureCopyText || "";
 
-    if (!destId || !pDate || !pName || !pAddr || !pText) {
-        showProposalExportStatus("Missing Date, Name, Address, or Proposal Output.", true);
-        return;
-    }
+            if (!destId || !pDate || !pName || !pAddr || !pText) {
+                showProposalExportStatus("Missing Date, Name, Address, or Proposal Output.", true);
+                return;
+            }
 
-    btnEl.disabled = true;
-    btnEl.innerHTML = "Creating...";
-    btnEl.classList.remove("bg-emerald-700", "hover:bg-emerald-600");
-    btnEl.classList.add("bg-slate-600");
+            btnEl.disabled = true;
+            btnEl.innerHTML = "Creating...";
+            btnEl.classList.remove("bg-emerald-700", "hover:bg-emerald-600");
+            btnEl.classList.add("bg-slate-600");
 
-    const originalLucide = typeof window.lucide !== "undefined" ? true : false;
+            const originalLucide = typeof window.lucide !== "undefined" ? true : false;
 
-    try {
-        const payload = {
-            action: 'createProposalExport',
-            destinationFolderId: destId,
-            proposalDate: pDate,
-            customerName: pName,
-            address: pAddr,
-            zip: pZip,
-            proposalText: pText
+            try {
+                const builderState = JSON.parse(JSON.stringify({
+                    proposalAppState: window.proposalAppState || {},
+                    systemScratchpads: window.systemScratchpads || {},
+                    selectedProposalRows:
+                        typeof selectedProposalRows !== 'undefined' &&
+                            Array.isArray(selectedProposalRows)
+                            ? selectedProposalRows
+                            : []
+                }));
+
+                const payload = {
+                    action: 'createProposalExport',
+                    destinationFolderId: destId,
+                    proposalDate: pDate,
+                    customerName: pName,
+                    address: pAddr,
+                    zip: pZip,
+                    proposalText: pText,
+                    builderState: builderState
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const json = await response.json();
+
+                if (json.success) {
+                    statusEl.innerHTML = `Proposal V${json.version} created.`;
+                    statusEl.classList.remove("hidden", "text-rose-400");
+                    statusEl.classList.add("text-emerald-400");
+
+                    docLink.href = json.googleDocUrl;
+                    pdfLink.href = json.pdfUrl;
+                    linksContainer.classList.remove("hidden");
+
+                    if (originalLucide && window.lucide.createIcons) {
+                        window.lucide.createIcons();
+                    }
+                } else {
+                    throw new Error(json.error || "Backend returned failure.");
+                }
+            } catch (err) {
+                console.error("Proposal Export Failed:", err);
+                statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> ${err.message || 'Export failed.'}`;
+                statusEl.classList.remove("hidden", "text-emerald-400");
+                statusEl.classList.add("text-rose-400");
+                if (originalLucide && window.lucide.createIcons) {
+                    window.lucide.createIcons();
+                }
+            } finally {
+                btnEl.disabled = false;
+                btnEl.innerHTML = "Create Proposal";
+                btnEl.classList.remove("bg-slate-600");
+                btnEl.classList.add("bg-emerald-700", "hover:bg-emerald-600");
+            }
         };
 
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const json = await response.json();
-
-        if (json.success) {
-            statusEl.innerHTML = `Proposal V${json.version} created.`;
-            statusEl.classList.remove("hidden", "text-rose-400");
-            statusEl.classList.add("text-emerald-400");
-
-            docLink.href = json.googleDocUrl;
-            pdfLink.href = json.pdfUrl;
-            linksContainer.classList.remove("hidden");
-
-            if (originalLucide && window.lucide.createIcons) {
-                window.lucide.createIcons();
-            }
+        // Auto-trigger folder fetch when clicking into Page 2 the first time
+        const origSwitchToPage = window.switchToPage;
+        if (origSwitchToPage) {
+            window.switchToPage = function (pageNum) {
+                origSwitchToPage(pageNum);
+                if (pageNum === 2) {
+                    window.loadProposalDestinationFolders();
+                }
+            };
         } else {
-            throw new Error(json.error || "Backend returned failure.");
+            // Fallback if switchToPage is defined differently
+            document.addEventListener("DOMContentLoaded", () => {
+                setTimeout(window.loadProposalDestinationFolders, 2000);
+            });
         }
-    } catch (err) {
-        console.error("Proposal Export Failed:", err);
-        statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> ${err.message || 'Export failed.'}`;
-        statusEl.classList.remove("hidden", "text-emerald-400");
-        statusEl.classList.add("text-rose-400");
-        if (originalLucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
-        }
-    } finally {
-        btnEl.disabled = false;
-        btnEl.innerHTML = "Create Proposal";
-        btnEl.classList.remove("bg-slate-600");
-        btnEl.classList.add("bg-emerald-700", "hover:bg-emerald-600");
-    }
-};
 
-// Auto-trigger folder fetch when clicking into Page 2 the first time
-const origSwitchToPage = window.switchToPage;
-if (origSwitchToPage) {
-    window.switchToPage = function (pageNum) {
-        origSwitchToPage(pageNum);
-        if (pageNum === 2) {
-            window.loadProposalDestinationFolders();
-        }
-    };
-} else {
-    // Fallback if switchToPage is defined differently
-    document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(window.loadProposalDestinationFolders, 2000);
-    });
-}
-
-</script>
+    </script>
 </body>
 
 </html>
