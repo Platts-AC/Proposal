@@ -44,3 +44,5 @@ Agent/diff_output.txt
 Agent/results*.txt
 Agent/target*.txt
 Agent/view_math.txt
+# Consolidated historical archive
+Archive/
