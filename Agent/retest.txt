@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.02.05 | Proposal Empty State and Stale Output Fix -->
+﻿<!-- Retest Prototype v10.03.00 | Custom / Standalone Proposal Core -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.02.05</title>
+    <title>Changeout Lookup v10.03.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -672,7 +672,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.02.05</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.03.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1621,7 +1621,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.02.05</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.03.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -1942,6 +1942,16 @@
                 </div>
             </details>
 
+            <!-- CUSTOM / STANDALONE PROPOSAL (v10.03.00): shown only when the Proposal Type is Custom; the item list is built by the Custom Proposal panel script -->
+            <details id="custom-proposal-builder" style="display:none" open
+                class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden">
+                <summary class="bg-slate-900 border-b border-slate-700 p-3 flex justify-between items-center cursor-pointer select-none rounded-t-lg">
+                    <span class="flex items-center gap-2 text-white text-[11px] font-bold uppercase tracking-widest"><i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-400"></i> Custom Proposal</span>
+                    <span id="cp-summary-line" class="text-[10px] text-slate-400 font-bold uppercase tracking-wider"></span>
+                </summary>
+                <div id="cp-body" class="p-3 flex flex-col gap-3 bg-slate-800"></div>
+            </details>
+
             <!-- TIER 1: Smart Checklist (Collapsible Tabbed Hybrid) -->
             <details id="proposal-checklist-container"
                 class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden transition-all duration-300 group"
@@ -2047,6 +2057,11 @@
                                     class="bg-rose-700 hover:bg-rose-600 text-white px-2 py-1.5 rounded shadow text-[10px] flex items-center"
                                     title="Open PDF"><i data-lucide="file" class="w-3.5 h-3.5 mr-1"></i> PDF</a>
                             </div>
+                            <select id="proposal-type-select" data-pb-component="control:proposalType" aria-label="Proposal type" onchange="window.setProposalType(this.value)"
+                                class="bg-slate-800 text-white text-[10px] font-bold uppercase tracking-wider border border-slate-600 rounded p-1.5 w-44 truncate">
+                                <option value="system">System Changeout</option>
+                                <option value="custom">Custom / Standalone</option>
+                            </select>
                             <select id="proposal-destination-folder" data-pb-component="control:destination"
                                 class="bg-slate-800 text-white text-[10px] font-bold uppercase tracking-wider border border-slate-600 rounded p-1.5 w-48 truncate"
                                 onchange="window.saveProposalDestinationPref()">
@@ -2727,6 +2742,7 @@
                         <option value="optionalHeading">Enhancement Options Heading</option>
                         <option value="protectionHeading">Warranty & Protection Heading</option>
                         <option value="warrantyClosing">Warranty / Closing Text</option>
+                        <option value="customClosing">Custom Proposal Closing Text (optional)</option>
                     </select>
 
                     <textarea id="terminal-template-editor"
@@ -6472,7 +6488,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.02.05',
+                appVersion: 'v10.03.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6666,7 +6682,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.02.05_${stamp}.json`;
+                `platts_config_v10.03.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -11107,7 +11123,9 @@
         // neither has to learn about proposal types. When it says no, the output state is reset (not just hidden) so text from a previous
         // render can never be copied, shown or sent. Only rendered/output state is reset: the proposal state, scratchpads, injected lines,
         // overrides and settings are never touched.
+        // v10.03.00: type-aware. System: one or more selected system rows. Custom: at least one custom item with a name or a description.
         function hasRenderableProposalContent() {
+            if (getProposalType() === 'custom') return customProposalHasContent(sanitizeCustomProposal((window.proposalAppState || {}).customProposal));
             return typeof selectedProposalRows !== 'undefined' && Array.isArray(selectedProposalRows) && selectedProposalRows.length > 0;
         }
         function resetProposalOutputState() {
@@ -11121,8 +11139,268 @@
         window.hasRenderableProposalContent = hasRenderableProposalContent;
         window.resetProposalOutputState = resetProposalOutputState;
 
+        // === CUSTOM / STANDALONE PROPOSAL CORE (v10.03.00, Phase 1A) ===
+        // A second proposal type next to System Changeout. The state lives INSIDE proposalAppState, so Create, Update, the working draft and managed
+        // Load carry it with no backend change:
+        //   proposalAppState.proposalType    'system' | 'custom'   (absent = 'system': every older proposal is a System proposal)
+        //   proposalAppState.customProposal  { schemaVersion, intent, scopeTerms, presentation, packageTitle, items[] }
+        // Each item owns its values (no catalog reference is needed to reload a saved proposal). Prices are typed numbers; the System pricing
+        // engine, site profiles, Smart Scope pricing and the pricing snapshot are never used for a custom proposal. Custom output is built as
+        // blocks with their own targets (Custom Intro, Custom Package, Custom Item N, Custom Option N, Custom Total, Custom Closing) that can
+        // never collide with the System blocks; the Smart Injector stays a separate place for supplemental lines.
+        // ONE sanitizer (sanitizeCustomProposalDetailed) is used for the live state, the working draft and managed Load. It strips control
+        // characters, caps lengths, accepts only known enums and numeric prices, builds fresh objects from fixed keys (unknown keys and
+        // prototype keys never survive) and keeps text as DATA: custom text is shown through an escaping path, never as markup.
+        const CP_PRESENTATIONS = ['combined', 'itemized', 'options'];
+        const CP_PRESENTATION_LABEL = { combined: 'Combined Package', itemized: 'Itemized', options: 'Customer Options' };
+        const CP_ACTIONS = ['', 'replace', 'install', 'addUpgrade', 'repairModify'];
+        const CP_ACTION_LABEL = { '': 'Not specified', replace: 'Replace', install: 'Install New', addUpgrade: 'Add / Upgrade', repairModify: 'Repair / Modify' };
+        const CP_GENERIC_TYPES = [['', 'Not specified'], ['bathFan', 'Bath Fan'], ['dehumidifier', 'Whole-Home Dehumidifier'], ['erv', 'ERV / Fresh Air Ventilator'], ['miniSplit', 'Mini-Split'],
+            ['thermostat', 'Thermostat'], ['iaqDevice', 'IAQ Device'], ['uvLight', 'UV Light'], ['ductwork', 'Ductwork'], ['dryerVent', 'Dryer Vent'], ['condensatePump', 'Condensate Pump'],
+            ['exhaustFan', 'Exhaust Fan'], ['other', 'Other / Custom']];
+        const CP_GENERIC_IDS = CP_GENERIC_TYPES.map(t => t[0]);
+        const CP_ROLES = ['package', 'line', 'option'];
+        const CP_MARKERS = ['none', 'selection'];
+        const CP_ROLE_FOR = { combined: 'package', itemized: 'line', options: 'option' };
+        const CP_MARKER_FOR = { combined: 'none', itemized: 'none', options: 'selection' };
+        const CP_LIM = { items: 40, terms: 12, title: 120, name: 160, description: 4000, brand: 80, model: 80, term: 60, price: 10000000 };
+        const CP_LS_RE = new RegExp('[' + String.fromCharCode(0x2028, 0x2029) + ']', 'g');
+        const cpIsObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+        function normalizeProposalType(v) { return v === 'custom' ? 'custom' : 'system'; }
+        function getProposalType() {
+            const pas = window.proposalAppState;
+            return pas && typeof pas === 'object' && pas.proposalType === 'custom' ? 'custom' : 'system';
+        }
+        function emptyCustomProposal() { return { schemaVersion: 1, intent: '', scopeTerms: [], presentation: 'combined', packageTitle: '', items: [] }; }
+        // Text as data: control characters removed, line breaks normalized, length capped. NOT trimmed (the editor must be able to hold a trailing space while typing).
+        function cpText(v, max, multiline) {
+            if (typeof v !== 'string') return '';
+            let s = v.replace(/\r\n?/g, '\n').replace(CP_LS_RE, '\n').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '');
+            if (!multiline) s = s.replace(/\n+/g, ' ');
+            return s.slice(0, max);
+        }
+        function cpPrice(v) {
+            if (typeof v !== 'number' || !isFinite(v) || v < 0 || v > CP_LIM.price) return null;
+            return Math.round(v * 100) / 100;
+        }
+        function cpNewId(used) {
+            let n = used.size + 1, id;
+            do { id = 'CI_' + Date.now().toString(36) + '_' + (n++).toString(36); } while (used.has(id));
+            return id;
+        }
+        function cpSanitizeItem(raw, used, presentation, notes, index) {
+            if (!cpIsObj(raw)) { notes.push('Custom item ' + (index + 1) + ' was not valid and was dropped.'); return null; }
+            let id = typeof raw.id === 'string' && /^CI_[A-Za-z0-9_-]{1,48}$/.test(raw.id) && !used.has(raw.id) ? raw.id : '';
+            if (!id) { let k = 1; while (used.has('CI_x' + k)) k++; id = 'CI_x' + k; }
+            used.add(id);
+            const gt = typeof raw.genericType === 'string' ? raw.genericType : '';
+            return {
+                id: id,
+                genericType: CP_GENERIC_IDS.indexOf(gt) >= 0 ? gt : (gt ? 'other' : ''),
+                action: CP_ACTIONS.indexOf(raw.action) >= 0 ? raw.action : '',
+                name: cpText(raw.name, CP_LIM.name, false),
+                description: cpText(raw.description, CP_LIM.description, true),
+                brand: cpText(raw.brand, CP_LIM.brand, false),
+                model: cpText(raw.model, CP_LIM.model, false),
+                price: cpPrice(raw.price),
+                role: CP_ROLES.indexOf(raw.role) >= 0 ? raw.role : CP_ROLE_FOR[presentation],
+                marker: CP_MARKERS.indexOf(raw.marker) >= 0 ? raw.marker : CP_MARKER_FOR[presentation],
+                catalogRef: null
+            };
+        }
+        // -> { value: clean customProposal, notes: [what was repaired or dropped] }
+        function sanitizeCustomProposalDetailed(raw) {
+            const notes = [];
+            if (!cpIsObj(raw)) return { value: emptyCustomProposal(), notes: raw === undefined || raw === null ? [] : ['The saved custom proposal was not valid and was reset.'] };
+            const presentation = CP_PRESENTATIONS.indexOf(raw.presentation) >= 0 ? raw.presentation : 'combined';
+            const used = new Set();
+            const items = [];
+            const rawItems = Array.isArray(raw.items) ? raw.items : [];
+            if (rawItems.length > CP_LIM.items) notes.push('Only the first ' + CP_LIM.items + ' custom items were kept.');
+            rawItems.slice(0, CP_LIM.items).forEach((r, i) => { const it = cpSanitizeItem(r, used, presentation, notes, i); if (it) items.push(it); });
+            const terms = [];
+            (Array.isArray(raw.scopeTerms) ? raw.scopeTerms : []).slice(0, CP_LIM.terms).forEach(t => {
+                if (!cpIsObj(t)) return;
+                const termId = typeof t.termId === 'string' && /^[A-Za-z0-9_-]{1,40}$/.test(t.termId) ? t.termId : '';
+                const label = cpText(t.label, CP_LIM.term, false).trim();
+                if (termId && label) terms.push({ termId: termId, label: label, action: CP_ACTIONS.indexOf(t.action) >= 0 ? t.action : '' });
+            });
+            return {
+                value: { schemaVersion: 1, intent: CP_ACTIONS.indexOf(raw.intent) >= 0 ? raw.intent : '', scopeTerms: terms, presentation: presentation, packageTitle: cpText(raw.packageTitle, CP_LIM.title, false), items: items },
+                notes: notes
+            };
+        }
+        function sanitizeCustomProposal(raw) { return sanitizeCustomProposalDetailed(raw).value; }
+        const cpItemRenderable = it => cpIsObj(it) && ((typeof it.name === 'string' && it.name.trim() !== '') || (typeof it.description === 'string' && it.description.trim() !== ''));
+        // The minimum that makes a custom proposal renderable: at least one item with a name or a description.
+        function customProposalHasContent(cp) {
+            return cpIsObj(cp) && Array.isArray(cp.items) && cp.items.some(cpItemRenderable);
+        }
+        function ensureCustomProposal(pas) {
+            const c = pas.customProposal;
+            if (!cpIsObj(c) || c.schemaVersion !== 1 || !Array.isArray(c.items)) pas.customProposal = sanitizeCustomProposal(c);
+            return pas.customProposal;
+        }
+        const cpMoney = n => '$' + (Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        function cpHeading(it) {
+            const nm = it.name.trim(), bm = [it.brand.trim(), it.model.trim()].filter(Boolean).join(' ');
+            return (nm || bm || 'Item') + (nm && bm ? ' (' + bm + ')' : '');
+        }
+        function cpDescription(it, indent) {
+            const d = it.description.trim();
+            return d ? d.split('\n').map(l => indent + l.replace(/\s+$/, '')).join('\n') : '';
+        }
+        function buildCustomProposalBlocks() {
+            const pas = window.proposalAppState || {};
+            const cp = sanitizeCustomProposal(pas.customProposal);
+            const ov = cpIsObj(pas.textOverrides) ? pas.textOverrides : {};
+            const blocks = [];
+            const job = typeof window.ensureProposalJobData === 'function' ? window.ensureProposalJobData() : (pas.jobData || {});
+            if (job.includeInCopy !== false) {
+                const lines = [];
+                if (job.proposalDate) lines.push(job.proposalDate);
+                if (job.customerName) lines.push(job.customerName);
+                if (job.address) lines.push(job.address);
+                if (job.phone) lines.push(job.phone);
+                if (job.email) lines.push(job.email);
+                if (lines.length > 0) {
+                    const heading = typeof getTerminalTemplateValue === 'function' ? getTerminalTemplateValue('customerHeading') : 'Customer / Job Information:';
+                    blocks.push({ target: 'Customer Information', text: heading + '\n' + lines.join('\n') });
+                }
+            }
+            // custom text is DATA: flagged plain so the terminal escapes it (the copy / Create text stays exactly as typed)
+            const push = (target, text) => blocks.push({ target: target, text: typeof ov[target] === 'string' && ov[target].trim() ? ov[target] : text, plain: true });
+            push('Custom Intro', 'We are pleased to offer you a quote for the following work.');
+            const items = cp.items.filter(cpItemRenderable);
+            const priced = items.filter(it => it.price !== null);
+            const sum = priced.reduce((a, it) => a + it.price, 0);
+            if (cp.presentation === 'combined') {
+                const lines = ['■ ' + (cp.packageTitle.trim() || 'Proposed Work')];
+                items.forEach(it => { lines.push('• ' + cpHeading(it)); const d = cpDescription(it, '    '); if (d) lines.push(d); });
+                if (priced.length) lines.push('Investment: ' + cpMoney(Math.round(sum * 100) / 100));
+                push('Custom Package', lines.join('\n'));
+            } else if (cp.presentation === 'itemized') {
+                items.forEach((it, i) => {
+                    const lines = ['■ ' + cpHeading(it)];
+                    const d = cpDescription(it, '    '); if (d) lines.push(d);
+                    if (it.price !== null) lines.push('Investment: ' + cpMoney(it.price));
+                    push('Custom Item ' + (i + 1), lines.join('\n'));
+                });
+                if (priced.length > 1) push('Custom Total', 'Total Investment: ' + cpMoney(Math.round(sum * 100) / 100));
+            } else {
+                items.forEach((it, i) => {
+                    const mark = it.marker === 'selection' && typeof window.getProposalSelectionMarker === 'function' ? window.getProposalSelectionMarker() + ' ' : '';
+                    const lines = ['■ Option ' + (i + 1), mark + cpHeading(it)];
+                    const d = cpDescription(it, '    '); if (d) lines.push(d);
+                    if (it.price !== null) lines.push('Investment: ' + cpMoney(it.price));
+                    push('Custom Option ' + (i + 1), lines.join('\n'));
+                });
+            }
+            return blocks;
+        }
+        // The optional closing text: empty by default (a restrained baseline, no warranty claims); the owner can set it in Default Proposal Wording.
+        function customClosingBlock() {
+            const pas = window.proposalAppState || {};
+            const ov = cpIsObj(pas.textOverrides) && typeof pas.textOverrides['Custom Closing'] === 'string' ? pas.textOverrides['Custom Closing'].trim() : '';
+            const text = ov || (typeof getTerminalTemplateValue === 'function' ? String(getTerminalTemplateValue('customClosing') || '').trim() : '');
+            return text ? { target: 'Custom Closing', text: text, plain: true } : null;
+        }
+        function escapeProposalBlockHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        // Used by the managed Load confirmation and the Load toast: null for a System proposal.
+        function customProposalSummary(bs) {
+            const pas = cpIsObj(bs) && cpIsObj(bs.proposalAppState) ? bs.proposalAppState : null;
+            if (!pas || pas.proposalType !== 'custom') return null;
+            const cp = sanitizeCustomProposal(pas.customProposal);
+            const items = cp.items.filter(cpItemRenderable), priced = items.filter(it => it.price !== null);
+            const sum = Math.round(priced.reduce((a, it) => a + it.price, 0) * 100) / 100;
+            const total = cp.presentation === 'options' ? priced.length + ' of ' + items.length + ' priced' : (priced.length ? cpMoney(sum) : 'no prices entered');
+            return { items: items.length, priced: priced.length, presentation: cp.presentation, presentationLabel: CP_PRESENTATION_LABEL[cp.presentation], total: total };
+        }
+        // The managed proposal's file name: a Custom proposal gets its own base name so it never collides with a System proposal for the same customer and date.
+        // The backend builds "<date> - <customer> - Proposal", so a Custom proposal sends "<customer> - Custom" and becomes "<date> - <customer> - Custom - Proposal".
+        function proposalFileCustomerPart(name) { return getProposalType() === 'custom' ? String(name) + ' - Custom' : String(name); }
+        // ---- state edits (used by the panel and by tests); each one re-renders the output ----
+        let cpPanelOwnsEdit = false;
+        function cpCommit(fromPanel) {
+            cpPanelOwnsEdit = !!fromPanel;
+            try { updateProposalCartUI(); } finally { cpPanelOwnsEdit = false; }
+        }
+        function cpState() {
+            const pas = window.proposalAppState;
+            if (!pas || typeof pas !== 'object') return null;
+            return ensureCustomProposal(pas);
+        }
+        function setProposalType(v) {
+            const pas = window.proposalAppState;
+            if (!pas || typeof pas !== 'object') return;
+            const t = normalizeProposalType(v);
+            pas.proposalType = t;
+            if (t === 'custom') ensureCustomProposal(pas);
+            cpCommit(false);
+        }
+        const customProposalApi = {
+            addItem: function () {
+                const cp = cpState(); if (!cp) return null;
+                const used = new Set(cp.items.map(i => i.id));
+                const it = { id: cpNewId(used), genericType: '', action: '', name: '', description: '', brand: '', model: '', price: null, role: CP_ROLE_FOR[cp.presentation], marker: CP_MARKER_FOR[cp.presentation], catalogRef: null };
+                if (cp.items.length >= CP_LIM.items) return null;
+                cp.items.push(it); cpCommit(false); return it.id;
+            },
+            removeItem: function (id) {
+                const cp = cpState(); if (!cp) return false;
+                const i = cp.items.findIndex(x => x.id === id); if (i < 0) return false;
+                cp.items.splice(i, 1); cpCommit(false); return true;
+            },
+            moveItem: function (id, dir) {
+                const cp = cpState(); if (!cp) return false;
+                const i = cp.items.findIndex(x => x.id === id), j = i + (dir < 0 ? -1 : 1);
+                if (i < 0 || j < 0 || j >= cp.items.length) return false;
+                const t = cp.items[i]; cp.items[i] = cp.items[j]; cp.items[j] = t; cpCommit(false); return true;
+            },
+            updateItem: function (id, field, value, fromPanel) {
+                const cp = cpState(); if (!cp) return false;
+                const it = cp.items.find(x => x.id === id); if (!it) return false;
+                if (field === 'name') it.name = cpText(value, CP_LIM.name, false);
+                else if (field === 'description') it.description = cpText(value, CP_LIM.description, true);
+                else if (field === 'brand') it.brand = cpText(value, CP_LIM.brand, false);
+                else if (field === 'model') it.model = cpText(value, CP_LIM.model, false);
+                else if (field === 'genericType') it.genericType = CP_GENERIC_IDS.indexOf(value) >= 0 ? value : '';
+                else if (field === 'action') it.action = CP_ACTIONS.indexOf(value) >= 0 ? value : '';
+                else if (field === 'price') {
+                    const s = typeof value === 'string' ? value.replace(/[$,\s]/g, '') : value;
+                    it.price = s === '' || s === null || s === undefined ? null : cpPrice(typeof s === 'number' ? s : (/^\d*\.?\d+$/.test(s) || /^\d+\.?$/.test(s) ? Number(s) : NaN));
+                } else return false;
+                cpCommit(fromPanel === true); return true;
+            },
+            setPresentation: function (v, fromPanel) {
+                const cp = cpState(); if (!cp || CP_PRESENTATIONS.indexOf(v) < 0) return false;
+                cp.presentation = v;
+                cp.items.forEach(it => { it.role = CP_ROLE_FOR[v]; it.marker = CP_MARKER_FOR[v]; });
+                cpCommit(fromPanel === true); return true;
+            },
+            setPackageTitle: function (v, fromPanel) {
+                const cp = cpState(); if (!cp) return false;
+                cp.packageTitle = cpText(v, CP_LIM.title, false); cpCommit(fromPanel === true); return true;
+            },
+            panelOwnsEdit: () => cpPanelOwnsEdit,
+            presentations: CP_PRESENTATIONS.slice(), presentationLabels: CP_PRESENTATION_LABEL, actions: CP_ACTIONS.slice(), actionLabels: CP_ACTION_LABEL, genericTypes: CP_GENERIC_TYPES.map(t => t.slice()),
+            limits: CP_LIM
+        };
+        window.normalizeProposalType = normalizeProposalType;
+        window.getProposalType = getProposalType;
+        window.emptyCustomProposal = emptyCustomProposal;
+        window.sanitizeCustomProposal = sanitizeCustomProposal;
+        window.sanitizeCustomProposalDetailed = sanitizeCustomProposalDetailed;
+        window.customProposalHasContent = customProposalHasContent;
+        window.customProposalSummary = customProposalSummary;
+        window.buildCustomProposalBlocks = buildCustomProposalBlocks;
+        window.proposalFileCustomerPart = proposalFileCustomerPart;
+        window.setProposalType = setProposalType;
+        window.customProposalApi = customProposalApi;
+
         function updateProposalCartUI() {
             const selectionMarker = window.getProposalSelectionMarker();
+            if (typeof window.syncCustomProposalUI === 'function') window.syncCustomProposalUI();   // v10.03.00: Proposal Type control, Custom panel, hidden System areas
 
             let stitchLines = [];
             const sorterList = document.getElementById('proposal-sorter-list');
@@ -11300,6 +11578,13 @@
             if (!hasRenderableProposalContent()) {
                 sorterList.innerHTML = `<div class="text-slate-500 text-center text-xs italic mt-6 flex flex-col items-center gap-2"><i data-lucide="shopping-cart" class="w-6 h-6 opacity-50"></i>Your selected systems will appear here.</div>`;
                 window.cachedProposalText = "";
+                updateProposalTerminal();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                return;
+            }
+
+            if (getProposalType() === 'custom') {      // v10.03.00: the Custom proposal builds its own blocks; none of the System composer below runs for it
+                window.proposalBlocks = buildCustomProposalBlocks();
                 updateProposalTerminal();
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 return;
@@ -12631,9 +12916,12 @@
                 });
             }
 
-            // Append Boilerplate
+            // Append Boilerplate (System) or the optional Custom Closing (Custom, v10.03.00)
             let bpText = "";
-            if (window.proposalAppState.textOverrides['Boilerplate']) {
+            if (getProposalType() === 'custom') {
+                const customClosing = customClosingBlock();
+                if (customClosing) window.lastRenderedBlocks.push(customClosing);
+            } else if (window.proposalAppState.textOverrides['Boilerplate']) {
                 bpText = window.proposalAppState.textOverrides['Boilerplate'];
             } else {
                 let bpLines = [];
@@ -12666,7 +12954,7 @@
                     .forEach(line => bpLines.push(line));
                 bpText = bpLines.join('\n');
             }
-            window.lastRenderedBlocks.push({ target: 'Boilerplate', text: bpText });
+            if (getProposalType() !== 'custom') window.lastRenderedBlocks.push({ target: 'Boilerplate', text: bpText });
 
             if (window.proposalAppState.blockOrder) {
                 // 1. Splice new blocks into memory so they never hit 999
@@ -12738,6 +13026,12 @@
                     sectionKey = 'protection';
                 } else if (b.target === 'Boilerplate') {
                     sectionKey = 'warranty';
+                } else if (b.target === 'Custom Intro') {
+                    sectionKey = 'intro';
+                } else if (b.target === 'Custom Closing') {
+                    sectionKey = 'warranty';
+                } else if (b.target.startsWith('Custom ')) {
+                    sectionKey = 'options';
                 }
 
                 if (
@@ -12777,7 +13071,7 @@
         <div draggable="true" ondragstart="dragBlockStart(event, '${b.target}')" ondragover="dragBlockOver(event)" ondrop="dragBlockDrop(event, '${b.target}')" class="proposal-output-block relative group bg-slate-900 border border-slate-800 py-1 px-1 rounded shadow-sm hover:border-blue-500/50 transition-colors min-h-[28px] flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1 min-w-0">
             <div class="flex items-start sm:items-center w-full min-w-0">
                 <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-blue-400 px-1 py-0.5 shrink-0"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></div>
-                <div class="whitespace-pre-wrap break-words text-emerald-400 pr-2 sm:pr-24 w-full min-w-0">${b.text}</div>
+                <div class="whitespace-pre-wrap break-words text-emerald-400 pr-2 sm:pr-24 w-full min-w-0">${b.plain ? escapeProposalBlockHtml(b.text) : b.text}</div>
             </div>
             <div class="z-10 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5 bg-slate-900 sm:bg-slate-900/90 sm:pl-2 rounded self-end sm:self-auto sm:absolute sm:top-1 sm:right-2 mt-1 sm:mt-0 pb-1 sm:pb-0">
                 ${actionButtons}
@@ -12798,7 +13092,7 @@
             let fb = window.lastRenderedBlocks.find(x => x.target === target);
             if (fb) {
                 currentText = fb.text;
-                if (target.includes('Option')) {
+                if (target.includes('Option') && !target.startsWith('Custom ')) {
                     let splitIndex = currentText.lastIndexOf(' Investment: $');
                     if (splitIndex !== -1) currentText = currentText.substring(0, splitIndex);
                 }
@@ -16652,7 +16946,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.02.05',
+                appVersion: 'v10.03.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16661,7 +16955,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.02.05_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.03.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16680,7 +16974,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.02.05',
+                appVersion: 'v10.03.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16689,7 +16983,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.02.05_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.03.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -25040,10 +25334,11 @@
             const pAddr = job.address || '';
             const pZip = job.zip || '';
             const pText = window.pureCopyText || "";
+            const pFileName = typeof window.proposalFileCustomerPart === 'function' ? window.proposalFileCustomerPart(pName) : pName;   // Custom: "<customer> - Custom" so its name never collides with a System proposal
             const attemptStartedAt = Date.now();
             const loadedAtStart = window.retestLoadedProposal || null;
             const expectedBaseName = typeof window.expectedManagedProposalBaseName === 'function'
-                ? window.expectedManagedProposalBaseName(pDate, pName) : '';
+                ? window.expectedManagedProposalBaseName(pDate, pFileName) : '';
             let transportFailure = false;
             let attemptBuilderState = null;
 
@@ -25079,7 +25374,7 @@
                     action: 'createProposalExport',
                     destinationFolderId: destId,
                     proposalDate: pDate,
-                    customerName: pName,
+                    customerName: pFileName,
                     address: pAddr,
                     zip: pZip,
                     proposalText: pText,
@@ -25564,9 +25859,17 @@
                 state.siteData = Object.assign({ name: 'Standard', isCustom: false }, state.siteData);
                 state.refrigerant = Object.assign({ feet: 0, fee: 0 }, state.refrigerant);
                 state.manualTextOverrides = Object.assign({ Upgrades: false, Fees: false }, state.manualTextOverrides);
+                // v10.03.00: an older proposal has neither key and is left exactly as it was (a System proposal); when present they go through the one Custom sanitizer
+                const customNotes = [];
+                if (Object.prototype.hasOwnProperty.call(state, 'proposalType') || Object.prototype.hasOwnProperty.call(state, 'customProposal')) {
+                    state.proposalType = window.normalizeProposalType(state.proposalType);
+                    const cp = window.sanitizeCustomProposalDetailed(state.customProposal);
+                    state.customProposal = cp.value;
+                    cp.notes.forEach(n => customNotes.push(n));
+                }
                 return {
                     state: state,
-                    warnings: defaulted.length ? ['Filled missing or invalid proposal fields with defaults: ' + defaulted.join(', ') + '.'] : []
+                    warnings: (defaulted.length ? ['Filled missing or invalid proposal fields with defaults: ' + defaulted.join(', ') + '.'] : []).concat(customNotes)
                 };
             };
 
@@ -25582,7 +25885,8 @@
                 if (errors.length) return { ok: false, errors: errors, warnings: warnings };
 
                 const dbLen = (typeof HVAC_DATABASE !== 'undefined' && Array.isArray(HVAC_DATABASE)) ? HVAC_DATABASE.length : 0;
-                if (dbLen === 0) {
+                const customOnly = bs.proposalAppState.proposalType === 'custom' && bs.selectedProposalRows.length === 0 && Object.keys(bs.systemScratchpads).length === 0;   // a Custom proposal needs no equipment catalog
+                if (dbLen === 0 && !customOnly) {
                     errors.push('The equipment catalog is not loaded.');
                     return { ok: false, errors: errors, warnings: warnings };
                 }
@@ -25590,7 +25894,7 @@
                 const sps = bs.systemScratchpads;
                 const rows = bs.selectedProposalRows;
                 const referenced = new Set();
-                if (rows.length === 0) warnings.push('The saved proposal has no selected options.');
+                if (rows.length === 0 && bs.proposalAppState.proposalType !== 'custom') warnings.push('The saved proposal has no selected options.');
 
                 rows.forEach((id, i) => {
                     if (typeof id !== 'string' && typeof id !== 'number') {
@@ -25757,20 +26061,20 @@
                 const rows = (isObj(bs) && Array.isArray(bs.selectedProposalRows)) ? bs.selectedProposalRows : [];
                 const sps = (isObj(bs) && isObj(bs.systemScratchpads)) ? bs.systemScratchpads : {};
 
+                const cpSum = typeof window.customProposalSummary === 'function' ? window.customProposalSummary(bs) : null;   // null for a System proposal
                 const dl = h('dl', 'grid grid-cols-[6rem_1fr] gap-x-3 gap-y-1');
                 [
                     ['Proposal', files.baseName || json.proposalId],
                     ['Revision', 'Rev ' + json.currentRevision],
                     ['Saved', fmtDate(json.updatedAt || json.createdAt)],
-                    ['Customer', job.customerName || '(not recorded)'],
-                    ['Options', String(rows.length)]
-                ].forEach(([k, v]) => {
+                    ['Customer', job.customerName || '(not recorded)']
+                ].concat(cpSum ? [['Type', 'Custom / Standalone'], ['Items', String(cpSum.items)], ['Presentation', cpSum.presentationLabel], ['Total', cpSum.total]] : [['Options', String(rows.length)]]).forEach(([k, v]) => {
                     dl.appendChild(h('dt', 'text-slate-400 font-bold uppercase text-[10px]', k));
                     dl.appendChild(h('dd', 'text-slate-100 break-words', String(v)));
                 });
                 box.appendChild(dl);
 
-                if (rows.length) {
+                if (rows.length && !cpSum) {
                     const wrap = h('div', 'border border-slate-700 rounded-lg p-3 bg-slate-900/50 space-y-1');
                     wrap.appendChild(h('div', 'text-slate-400 font-bold uppercase text-[10px] tracking-wider',
                         'Equipment these saved catalog positions resolve to today'));
@@ -25780,7 +26084,7 @@
                     box.appendChild(wrap);
                 }
 
-                if (validation.ok && typeof window.buildPricingReview === 'function') {
+                if (validation.ok && !cpSum && typeof window.buildPricingReview === 'function') {
                     const pr = window.buildPricingReview(bs, json);
                     box.appendChild(pr.node);
                     pr.errors.forEach(x => validation.errors.push(x));
@@ -25797,7 +26101,7 @@
                 const notice = h('div', 'border border-amber-500/40 bg-amber-900/20 rounded-lg p-3 text-amber-200 leading-relaxed space-y-1');
                 notice.appendChild(h('div', '', 'Loading replaces the current cart and proposal state.'));
                 notice.appendChild(h('div', '',
-                    (typeof window.pricingNoticeText === 'function' ? window.pricingNoticeText(bs) : 'The proposal is reconstructed and re-priced from the CURRENT equipment catalog, so it may differ from the saved PDF. Use the saved files below to compare.')));
+                    (cpSum ? 'Custom / Standalone proposal: the saved prices are the values typed into the proposal. Nothing is re-priced or compared with the equipment catalog.' : typeof window.pricingNoticeText === 'function' ? window.pricingNoticeText(bs) : 'The proposal is reconstructed and re-priced from the CURRENT equipment catalog, so it may differ from the saved PDF. Use the saved files below to compare.')));
                 notice.appendChild(h('div', '',
                     'Create Proposal after loading creates a new proposal. Update saves a new revision of the loaded proposal.'));
                 box.appendChild(notice);
@@ -25969,7 +26273,7 @@
                 showProposalExportStatus(statusText, false);
                 showLoadedLinks(lp.currentFiles, statusText);
                 if (typeof showToast === 'function') {
-                    showToast(typeof window.pricingLoadedToast === 'function' ? window.pricingLoadedToast(lp.baseName, resp.builderState) : 'Loaded ' + lp.baseName + ' (re-priced from the current catalog).');
+                    showToast(typeof window.customProposalSummary === 'function' && window.customProposalSummary(resp.builderState) ? 'Loaded ' + lp.baseName + ' (custom proposal, typed prices).' : typeof window.pricingLoadedToast === 'function' ? window.pricingLoadedToast(lp.baseName, resp.builderState) : 'Loaded ' + lp.baseName + ' (re-priced from the current catalog).');
                 }
                 if (result.warnings.length) console.warn('Managed proposal Load warnings:', result.warnings);
             }
@@ -26171,7 +26475,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.02.05';
+            const APP_VERSION = 'v10.03.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26225,7 +26529,8 @@
                 const job = isObj(pas.jobData) ? pas.jobData : {};
                 const jobEmpty = !['customerName', 'address', 'phone', 'email', 'jobNumber', 'advisor'].some(k => String(job[k] || '').trim());
                 const quiet = !(Array.isArray(pas.lineInjections) && pas.lineInjections.length) && !(Array.isArray(pas.customLines) && pas.customLines.length) &&
-                    !Object.keys(isObj(pas.textOverrides) ? pas.textOverrides : {}).length && !(isObj(pas.activeSite) && pas.activeSite.confirmed);
+                    !Object.keys(isObj(pas.textOverrides) ? pas.textOverrides : {}).length && !(isObj(pas.activeSite) && pas.activeSite.confirmed) &&
+                    !(typeof window.customProposalHasContent === 'function' && window.customProposalHasContent(pas.customProposal));      // v10.03.00: custom items are meaningful content
                 return d.selectedProposalRows.length === 0 && Object.keys(d.systemScratchpads).length === 0 && jobEmpty && quiet;
             }
 
@@ -26466,7 +26771,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.02.05';
+            const APP_VERSION = 'v10.03.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -26623,6 +26928,7 @@
             window.attachPricingSnapshot = function (builderState) {
                 try {
                     if (!isObj(builderState) || !Array.isArray(builderState.selectedProposalRows) || !isObj(builderState.systemScratchpads)) return false;
+                    if (isObj(builderState.proposalAppState) && builderState.proposalAppState.proposalType === 'custom') return false;      // v10.03.00: a Custom proposal's prices are typed values; there is no catalog quote to snapshot
                     if (typeof updateProposalCartUI === 'function') updateProposalCartUI();       // the printed text must reflect the state being saved
                     const printed = printedInvestments();
                     const app = builderState.proposalAppState || {};
@@ -26985,8 +27291,11 @@
             // older) gets them in a default band once, and a component the user deliberately left unplaced stays unplaced afterwards.
             // Revision 3 (v10.02.00) = layouts may carry component appearance (`styles`). It is purely additive: a revision 2 layout loads
             // unchanged with no styles (Auto everywhere) and is not rewritten until it is edited.
-            const REVISION = 5;
+            // Revision 6 (v10.03.00) = the Proposal Type control exists: a saved layout older than that gets it once (first empty Actions cell, else a new
+            // Expanded-only band), and a layout that deliberately leaves it unplaced afterwards keeps it unplaced. Purely additive; not rewritten until edited.
+            const REVISION = 6;
             const INJECTOR_REVISION = 2;
+            const PROPTYPE_REVISION = 6;
             const ALIGNS = ['start', 'center', 'end'];
             const ALIGN_LABEL = { start: 'Left', center: 'Center', end: 'Right' };
 
@@ -27020,6 +27329,7 @@
                 'utility:settings': { label: 'Proposal settings (gear)', type: 'utility', allowedSurfaces: ['summary'], required: true, removable: false, icon: true, style: ['icon', 'nudge'] },
                 'utility:collapseHint': { label: 'Tap to Collapse hint', type: 'utility', allowedSurfaces: ['summary'] },
                 'region:messages': { label: 'Dynamic message region', type: 'region', allowedSurfaces: ['band'], required: true, removable: false, fill: 'width', style: ['text', 'textAlign', 'vAlign', 'density', 'nudge'] },
+                'control:proposalType': { label: 'Proposal type', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'width', style: S_TXT },
                 'control:destination': { label: 'Destination folder', type: 'control', allowedSurfaces: ['actions'], fill: 'width', style: S_TXT },
                 'control:loadProposal': { label: 'Load', type: 'control', allowedSurfaces: ['actions'], fill: 'both', wrap: 'never', style: S_TXT },
                 'control:updateProposal': { label: 'Update', type: 'control', allowedSurfaces: ['actions'], conditional: true, fill: 'both', wrap: 'never', style: S_TXT, avail: 'notHidden', hint: 'Available after loading an existing proposal.' },
@@ -27286,6 +27596,13 @@
                 ];
                 return { position: 'bottom', height: 0, visibility: 'expanded', stacks: stacks };
             };
+            // v10.03.00: one-time placement of the Proposal Type control in an older saved layout (nothing else is moved).
+            function placeProposalType(layout) {
+                let hit = null;
+                layout.surfaces.actions.containers.forEach(c => c.stacks.forEach(s => s.splits.forEach(p => { if (!hit && p.mapping === 'empty') hit = p; })));
+                if (hit) { hit.mapping = 'control:proposalType'; return; }
+                if (layout.bands.length < LIM.bands) layout.bands.push(newBand('middle', 'expanded', 'control:proposalType'));
+            }
             // Whole layout -> clean v3 layout. Accepts three shapes:
             //   v3 (this version): surfaces + bands.
             //   v2 (v10.01.5/6): surfaces + messagePlacement. Summary and Actions are kept exactly; the old above/below message
@@ -27339,6 +27656,7 @@
                 if (rev < INJECTOR_REVISION && profile && layout.bands.length < LIM.bands && INJECTOR_IDS.every(id => !findAddr(layout, id))) {
                     layout.bands.push(injectorBand(profile));   // one-time migration: deterministic area, existing components stay where they are
                 }
+                if (rev < PROPTYPE_REVISION && profile && !findAddr(layout, 'control:proposalType')) placeProposalType(layout);
                 dedupeAll(layout);                       // a fallback surface may repeat a component that a band already holds
                 ensureRequired(layout);
                 return layout;
@@ -27357,7 +27675,7 @@
                             { widthWeight: 1.4, stacks: [
                                 { heightWeight: 0, splits: [sp('control:destination', 2), sp('control:loadProposal', 1)] },
                                 { heightWeight: 0, splits: [sp('control:updateProposal', 1), sp('control:createProposal', 2)] },
-                                { heightWeight: 1, splits: [E(), E()] }] },
+                                { heightWeight: 1, splits: [sp('control:proposalType', 1), E()] }] },
                             { widthWeight: 1.2, stacks: [
                                 { heightWeight: 0, splits: [sp('link:doc'), sp('link:pdf')] },
                                 { heightWeight: 0, splits: [sp('display:loadedProposal', 4), sp('empty', 0.5)] },
@@ -27377,6 +27695,7 @@
                         actions: { height: 0, containers: [
                             { widthWeight: 1, stacks: [
                                 { heightWeight: 1, splits: [sp('control:destination', 1)] },
+                                { heightWeight: 1, splits: [sp('control:proposalType', 1)] },
                                 { heightWeight: 1, splits: [sp('control:loadProposal', 1), sp('control:updateProposal', 1), sp('control:createProposal', 1.6)] },
                                 { heightWeight: 1, splits: [sp('link:doc', 1), sp('link:pdf', 1)] },
                                 { heightWeight: 1, splits: [sp('utility:copyText', 1)] },
@@ -28289,7 +28608,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.02.05 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.03.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -28914,7 +29233,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.02.05',
+                version: 'v10.03.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -28984,7 +29303,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.02.05';
+            const APP_VERSION = 'v10.03.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
@@ -29596,6 +29915,133 @@
                 ui: { open: openUI, close: closeUI, render: renderUI, select: function (n) { selectedName = String(n || ''); renderUI(); } }
             };
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderEntry); else renderEntry();
+        })();
+    </script>
+    <script>
+        // === CUSTOM PROPOSAL PANEL (v10.03.00, Phase 1A) ===
+        // The dynamic item list for a Custom / Standalone proposal. Deliberately NOT part of the Proposal Builder grid: the grid places fixed
+        // components, this panel holds a list that grows. All edits go through window.customProposalApi (state + re-render); this file only draws
+        // the panel and keeps it in step with the state (Proposal Type, Load, draft restore, New Quote all call syncCustomProposalUI through
+        // updateProposalCartUI). In Custom mode the System-specific areas (Smart Scope checklist, Systems Sorter) are hidden, never emptied:
+        // switching back restores them with their state untouched. All text is set through DOM properties (never as markup).
+        (function () {
+            'use strict';
+            const $ = id => document.getElementById(id);
+            const CSS = '#custom-proposal-builder .cp-row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}' +
+                '#custom-proposal-builder label.cp-f{display:flex;flex-direction:column;gap:3px;font-size:10px;font-weight:700;letter-spacing:.05em;color:#94a3b8;text-transform:uppercase;min-width:0}' +
+                '#custom-proposal-builder .cp-grow{flex:1 1 180px}' +
+                '#custom-proposal-builder input,#custom-proposal-builder select,#custom-proposal-builder textarea{background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:6px;padding:6px 8px;font-size:12px;min-height:32px;width:100%;box-sizing:border-box;text-transform:none;letter-spacing:0;font-weight:400}' +
+                '#custom-proposal-builder textarea{resize:vertical;min-height:84px;font-family:inherit;line-height:1.4}' +
+                '#custom-proposal-builder .cp-card{border:1px solid #334155;border-radius:8px;padding:10px;background:rgba(15,23,42,.55);display:flex;flex-direction:column;gap:8px}' +
+                '#custom-proposal-builder .cp-head{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11px;font-weight:800;color:#cbd5e1;letter-spacing:.06em;text-transform:uppercase}' +
+                '#custom-proposal-builder .cp-head button{width:auto;min-height:28px;padding:2px 9px;font-size:11px}' +
+                '#custom-proposal-builder button{background:#334155;color:#e2e8f0;border:1px solid #475569;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;min-height:34px;padding:4px 12px}' +
+                '#custom-proposal-builder button:hover:not(:disabled){background:#475569}#custom-proposal-builder button:disabled{opacity:.4;cursor:default}' +
+                '#custom-proposal-builder button.cp-add{background:#047857;border-color:#10b981;color:#fff;align-self:flex-start}' +
+                '#custom-proposal-builder button.cp-del{color:#fca5a5;border-color:#7f1d1d}' +
+                '#custom-proposal-builder .cp-help{font-size:10.5px;color:#94a3b8;line-height:1.45}' +
+                '@media (max-width:640px){#custom-proposal-builder input,#custom-proposal-builder select,#custom-proposal-builder textarea{font-size:16px}}';
+            function style() {
+                if ($('custom-proposal-style')) return;
+                const st = document.createElement('style'); st.id = 'custom-proposal-style'; st.textContent = CSS; document.head.appendChild(st);
+            }
+            const api = () => window.customProposalApi;
+            const el = (tag, props, kids) => { const n = document.createElement(tag); Object.assign(n, props || {}); (kids || []).forEach(k => n.appendChild(typeof k === 'string' ? document.createTextNode(k) : k)); return n; };
+            const field = (label, control, cls) => { const l = el('label', { className: 'cp-f ' + (cls || '') }, [label]); l.appendChild(control); return l; };
+            function selectOf(options, value, attrs) {
+                const s = el('select', attrs || {});
+                options.forEach(o => { const op = el('option', { value: o[0], textContent: o[1] }); s.appendChild(op); });
+                s.value = value;
+                return s;
+            }
+            function buildCard(it, index, count) {
+                const card = el('div', { className: 'cp-card' }); card.setAttribute('data-cp-id', it.id);
+                const head = el('div', { className: 'cp-head' }, [el('span', { textContent: 'Item ' + (index + 1) })]);
+                const btns = el('span', { style: 'display:flex;gap:4px' });
+                const mk = (act, label, title, cls, disabled) => { const b = el('button', { type: 'button', textContent: label, title: title, className: cls || '', disabled: !!disabled }); b.setAttribute('data-cp-act', act); return b; };
+                btns.appendChild(mk('up', '↑', 'Move up', '', index === 0)); btns.appendChild(mk('down', '↓', 'Move down', '', index === count - 1)); btns.appendChild(mk('remove', 'Remove', 'Remove this item', 'cp-del'));
+                head.appendChild(btns); card.appendChild(head);
+                const f = (name, control) => { control.setAttribute('data-cp-field', name); return control; };
+                const row1 = el('div', { className: 'cp-row' });
+                row1.appendChild(field('Generic type', f('genericType', selectOf(api().genericTypes, it.genericType)), 'cp-grow'));
+                row1.appendChild(field('Action', f('action', selectOf(Object.keys(api().actionLabels).map(k => [k, api().actionLabels[k]]), it.action)), 'cp-grow'));
+                card.appendChild(row1);
+                card.appendChild(field('Proposal / display name', f('name', el('input', { type: 'text', value: it.name, maxLength: api().limits.name, placeholder: 'For example: Aprilaire E100 Whole-Home Dehumidifier', autocomplete: 'off' }))));
+                card.appendChild(field('Description / scope (paste friendly, several lines allowed)', f('description', el('textarea', { value: it.description, maxLength: api().limits.description, rows: 4, placeholder: 'Paste or type the scope of work for this item...' }))));
+                const row2 = el('div', { className: 'cp-row' });
+                row2.appendChild(field('Brand (optional)', f('brand', el('input', { type: 'text', value: it.brand, maxLength: api().limits.brand, autocomplete: 'off' })), 'cp-grow'));
+                row2.appendChild(field('Model (optional)', f('model', el('input', { type: 'text', value: it.model, maxLength: api().limits.model, autocomplete: 'off' })), 'cp-grow'));
+                row2.appendChild(field('Price ($)', f('price', el('input', { type: 'text', value: it.price === null ? '' : String(it.price), inputMode: 'decimal', placeholder: '0', autocomplete: 'off' })), 'cp-grow'));
+                card.appendChild(row2);
+                return card;
+            }
+            function build() {
+                const body = $('cp-body');
+                if (!body || body.firstChild) return;
+                style();
+                const pres = selectOf(api().presentations.map(k => [k, api().presentationLabels[k]]), 'combined', { id: 'cp-presentation' });
+                const title = el('input', { type: 'text', id: 'cp-title', maxLength: api().limits.title, placeholder: 'Optional heading for the package', autocomplete: 'off' });
+                const top = el('div', { className: 'cp-row' });
+                top.appendChild(field('Presentation', pres, 'cp-grow')); top.appendChild(field('Package title (Combined Package)', title, 'cp-grow'));
+                body.appendChild(top);
+                body.appendChild(el('div', { className: 'cp-help', id: 'cp-help', textContent: 'Combined Package: one package with one total. Itemized: each item with its own price. Customer Options: each item is a separate choice for the customer. Prices are typed values.' }));
+                body.appendChild(el('div', { id: 'cp-items', style: 'display:flex;flex-direction:column;gap:10px' }));
+                const add = el('button', { type: 'button', id: 'cp-add', className: 'cp-add', textContent: '+ Add Item' });
+                body.appendChild(add);
+                body.appendChild(el('div', { className: 'cp-help', textContent: 'Notes, fees, enhancements and spacers still go through the Smart Injector below the proposal controls; items here are the proposal itself.' }));
+                pres.addEventListener('change', () => api().setPresentation(pres.value, true));
+                title.addEventListener('input', () => api().setPackageTitle(title.value, true));
+                add.addEventListener('click', () => { const id = api().addItem(); const c = id && document.querySelector('#cp-items [data-cp-id="' + id + '"] [data-cp-field="name"]'); if (c) c.focus(); });
+                body.addEventListener('input', onField); body.addEventListener('change', onField);
+                body.addEventListener('click', e => {
+                    const b = e.target.closest ? e.target.closest('[data-cp-act]') : null; if (!b) return;
+                    const card = b.closest('[data-cp-id]'); if (!card) return;
+                    const id = card.getAttribute('data-cp-id'), act = b.getAttribute('data-cp-act');
+                    if (act === 'remove') api().removeItem(id); else if (act === 'up') api().moveItem(id, -1); else if (act === 'down') api().moveItem(id, 1);
+                });
+            }
+            function onField(e) {
+                const t = e.target; if (!t || !t.getAttribute) return;
+                const name = t.getAttribute('data-cp-field'); if (!name) return;
+                if (e.type === 'input' && t.tagName === 'SELECT') return;
+                if (e.type === 'change' && t.tagName !== 'SELECT') return;
+                const card = t.closest('[data-cp-id]'); if (card) api().updateItem(card.getAttribute('data-cp-id'), name, t.value, true);
+            }
+            function sync() {
+                const type = typeof window.getProposalType === 'function' ? window.getProposalType() : 'system';
+                const sel = $('proposal-type-select');
+                if (sel && sel.value !== type) sel.value = type;
+                const panel = $('custom-proposal-builder'), custom = type === 'custom';
+                if (panel) panel.style.display = custom ? '' : 'none';
+                ['proposal-checklist-container', 'systems-sorter-details'].forEach(id => {
+                    const n = $(id); if (!n) return;
+                    if (custom) n.style.setProperty('display', 'none', 'important'); else n.style.removeProperty('display');
+                });
+                if (!custom || !panel) return;
+                build();
+                const pas = window.proposalAppState;
+                const cp = window.sanitizeCustomProposal(pas && pas.customProposal);
+                const list = $('cp-items'), owns = window.customProposalApi.panelOwnsEdit();
+                // Rebuild the cards only when the state differs from what the panel last drew AND the change did not come from typing in the panel
+                // itself (a keystroke already shows in its field; rebuilding would steal the caret). Type switch, Load, draft restore, add / remove / move rebuild.
+                const sig = JSON.stringify(cp.items);
+                if (list.getAttribute('data-sig') !== sig) {
+                    if (!owns) {
+                        list.textContent = '';
+                        cp.items.forEach((it, i) => list.appendChild(buildCard(it, i, cp.items.length)));
+                    }
+                    list.setAttribute('data-sig', sig);
+                }
+                if (!owns) {
+                    const pres = $('cp-presentation'); if (pres) pres.value = cp.presentation;
+                    const title = $('cp-title'); if (title) title.value = cp.packageTitle;
+                }
+                const sum = window.customProposalSummary({ proposalAppState: { proposalType: 'custom', customProposal: cp } });
+                const line = $('cp-summary-line');
+                if (line && sum) line.textContent = sum.items + (sum.items === 1 ? ' item' : ' items') + ' · ' + sum.presentationLabel + ' · ' + sum.total;
+            }
+            window.syncCustomProposalUI = sync;
+            document.addEventListener('DOMContentLoaded', () => { try { sync(); } catch (e) { console.error(e); } });
         })();
     </script>
 </body>
