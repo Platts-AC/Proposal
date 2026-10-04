@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.03.00 | Custom / Standalone Proposal Core -->
+﻿<!-- Retest Prototype v10.03.01 | Managed Proposal Type-Switch Update Warning -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.03.00</title>
+    <title>Changeout Lookup v10.03.01</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -672,7 +672,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.03.00</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.03.01</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1621,7 +1621,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.03.00</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.03.01</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6488,7 +6488,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.03.00',
+                appVersion: 'v10.03.01',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6682,7 +6682,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.03.00_${stamp}.json`;
+                `platts_config_v10.03.01_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -11395,6 +11395,30 @@
         window.customProposalSummary = customProposalSummary;
         window.buildCustomProposalBlocks = buildCustomProposalBlocks;
         window.proposalFileCustomerPart = proposalFileCustomerPart;
+        // v10.03.01: Update of a loaded managed proposal whose Proposal Type changed since it was loaded or last saved needs an explicit confirmation.
+        // The type it was loaded / last saved with is NOT a new stored field: it is read from the runtime copy of the Builder State that the loaded
+        // proposal already keeps (retestLoadedProposal.loadedBuilderState), which Load, Create and a successful Update set and New Quote clears
+        // together with the loaded proposal. A state without proposalType is a System proposal. A failed Update never replaces that copy.
+        const CP_TYPE_LABEL = { system: 'System Changeout', custom: 'Custom / Standalone' };
+        function managedProposalLoadedType(lp) {
+            const bs = lp && lp.loadedBuilderState;
+            const pas = cpIsObj(bs) && cpIsObj(bs.proposalAppState) ? bs.proposalAppState : null;
+            return normalizeProposalType(pas ? pas.proposalType : undefined);
+        }
+        // null when nothing is loaded or the type is unchanged; { from, to } when Update would change the saved proposal type.
+        function managedProposalTypeChange() {
+            const lp = window.retestLoadedProposal;
+            if (!lp || !lp.proposalId) return null;
+            const from = managedProposalLoadedType(lp), to = getProposalType();
+            return from === to ? null : { from: from, to: to };
+        }
+        function managedProposalTypeChangeText(tc) {
+            return 'This proposal was loaded as a ' + CP_TYPE_LABEL[tc.from] + ' proposal and is now set to ' + CP_TYPE_LABEL[tc.to] + '.\n\n' +
+                'Updating will save the new proposal type as the next revision of this managed proposal.\n\nContinue with Update?';
+        }
+        window.managedProposalLoadedType = managedProposalLoadedType;
+        window.managedProposalTypeChange = managedProposalTypeChange;
+        window.managedProposalTypeChangeText = managedProposalTypeChangeText;
         window.setProposalType = setProposalType;
         window.customProposalApi = customProposalApi;
 
@@ -16946,7 +16970,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.03.00',
+                appVersion: 'v10.03.01',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16955,7 +16979,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.03.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.03.01_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16974,7 +16998,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.03.00',
+                appVersion: 'v10.03.01',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -16983,7 +17007,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.03.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.03.01_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -25172,6 +25196,7 @@
         <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-lg p-5 space-y-4">
             <h2 class="text-lg font-bold text-slate-100">Update Loaded Proposal</h2>
             <p id="mpu-summary" class="text-slate-200 text-xs leading-relaxed"></p>
+            <div id="mpu-type-warning" class="hidden text-xs leading-relaxed text-amber-200 border border-amber-500/50 bg-amber-900/20 rounded-lg p-3" style="white-space:pre-line" role="alert"></div>
             <p id="mpu-status" class="hidden text-xs leading-relaxed" role="status"></p>
             <div class="flex justify-end gap-2">
                 <button id="mpu-cancel" type="button"
@@ -26351,6 +26376,15 @@
                     ' (' + lp.proposalId + '), creating revision ' + (lp.currentRevision + 1) +
                     '. The current revision will be archived. Create Proposal remains a separate new proposal.';
                 setStatus('', false);
+                // v10.03.01: the proposal type changed since this proposal was loaded / last saved: say so and ask for an explicit "Continue Update"
+                const typeChange = typeof window.managedProposalTypeChange === 'function' ? window.managedProposalTypeChange() : null;
+                const typeWarning = byId('mpu-type-warning');
+                if (typeWarning) {
+                    typeWarning.textContent = typeChange ? window.managedProposalTypeChangeText(typeChange) : '';
+                    typeWarning.classList.toggle('hidden', !typeChange);
+                }
+                confirmButton.textContent = typeChange ? 'Continue Update' : 'Save New Revision';
+                modal.setAttribute('data-type-change', typeChange ? '1' : '0');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             };
@@ -26475,7 +26509,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.03.00';
+            const APP_VERSION = 'v10.03.01';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26771,7 +26805,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.03.00';
+            const APP_VERSION = 'v10.03.01';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -28608,7 +28642,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.03.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.03.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29233,7 +29267,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.03.00',
+                version: 'v10.03.01',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29303,7 +29337,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.03.00';
+            const APP_VERSION = 'v10.03.01';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
