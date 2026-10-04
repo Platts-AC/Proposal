@@ -1,11 +1,11 @@
-// HVAC Zoned Universal Pricing Extraction & JSON API Backend (v16.51)
-// Updated: 2026-09-29 | Phase 1E Backend Managed Proposal Listing | Phase 1D Backend Managed Proposal Load Foundation | Phase 1C Managed Proposal Docs Folder Routing | Phase 1A Managed Proposal Create Foundation | DURASTAR Integration, Common Site Transition, & Unified Mega-Auditing | Rich Z1 JSON Payload & DURASTAR Capitalization | Batch Approval Processor, Audit Ledger, & Mobile Triggers | AHRI Collision Detector & Full Z1 Alert Payload Restoration
+// HVAC Zoned Universal Pricing Extraction & JSON API Backend (v16.52.1)
+// Updated: 2026-10-01 | Phase 1G Managed Create Naming | Phase 1F Managed Proposal Update |Phase 1E Backend Managed Proposal Listing | Phase 1D Backend Managed Proposal Load Foundation | Phase 1C Managed Proposal Docs Folder Routing | Phase 1A Managed Proposal Create Foundation | DURASTAR Integration, Common Site Transition, & Unified Mega-Auditing | Rich Z1 JSON Payload & DURASTAR Capitalization | Batch Approval Processor, Audit Ledger, & Mobile Triggers | AHRI Collision Detector & Full Z1 Alert Payload Restoration
 
 /**
  * Serves the equipment data catalog as a JSON payload for external web apps.
  */
 function doGet(e) {
-    console.log("Starting Changeout JSON API Backend (v16.51)...");
+    console.log("Starting Changeout JSON API Backend (v16.52.1)...");
     
     const enhancementData = getEnhancementData();
     // Fetch the 18-column data array
@@ -1843,7 +1843,7 @@ function processApprovals() {
 }
 
 // ==========================================
-// ZONE 8: PROPOSAL EXPORT BACKEND (v16.51)
+// ZONE 8: PROPOSAL EXPORT BACKEND (v16.52.1)
 // ==========================================
 
 const PROPOSAL_ROOT_FOLDER_ID = '1K3bKIPtx3ujlO1dgY3AGSuwZnjtlygkZ';
@@ -1884,6 +1884,10 @@ function doPost(e) {
 
         if (action === 'listManagedProposals') {
             return jsonResponse(listManagedProposals(payload));
+        }
+
+        if (action === 'updateProposalExport') {
+            return jsonResponse(updateProposalExport(payload));
         }
 
         return jsonResponse({
@@ -1970,6 +1974,26 @@ function getNextProposalVersion(folder, stem) {
     }
 
     return maxVersion + 1;
+}
+
+/**
+ * Read-only. Throws if a managed proposal with this exact baseName already exists
+ * in the destination (live PDF/Doc, or a Rev 1 archive left by a past Update).
+ */
+function assertManagedProposalBaseNameAvailable(destinationFolder, baseName) {
+    const docs = getProposalSubfolderIfExists(destinationFolder, 'Proposal Docs');
+    const archive = getProposalSubfolderIfExists(destinationFolder, 'Archive');
+    const docArchive = archive && getProposalSubfolderIfExists(archive, 'Google Docs');
+    const inUse =
+        destinationFolder.getFilesByName(baseName + '.pdf').hasNext() ||
+        destinationFolder.getFilesByName(baseName).hasNext() ||
+        (docs && docs.getFilesByName(baseName).hasNext()) ||
+        (archive && archive.getFilesByName(baseName + '_v1.pdf').hasNext()) ||
+        (docArchive && docArchive.getFilesByName(baseName + '_v1').hasNext());
+    if (inUse) {
+        throw new Error('A proposal named "' + baseName + '" already exists in this destination folder. ' +
+            'Load that proposal and use Update, or change the customer name or proposal date.');
+    }
 }
 
 function generateProposalId() {
@@ -2307,6 +2331,101 @@ function createProposalManifest(dataFolder, destinationFolderId, proposalId, cur
     return file;
 }
 
+function updateProposalExport(payload) {
+    const proposalId = String(payload.proposalId || '').trim();
+    const folderId = String(payload.destinationFolderId || '').trim();
+    const loadedRevision = payload.loadedRevision;
+    const state = payload.builderState;
+    const text = payload.proposalText;
+    if (!/^PROP-\d{6}-[0-9A-F]{6}$/.test(proposalId) ||
+        !Number.isSafeInteger(loadedRevision) || loadedRevision < 1 ||
+        typeof text !== 'string' || !text.trim() ||
+        !state || typeof state !== 'object' || Array.isArray(state) ||
+        !state.proposalAppState || !state.systemScratchpads ||
+        !Array.isArray(state.selectedProposalRows)) {
+        throw new Error('Invalid managed proposal update payload.');
+    }
+    const destination = validateProposalDestinationFolder(folderId);
+    const lock = LockService.getScriptLock();
+    try { lock.waitLock(15000); }
+    catch (e) { throw new Error('Lock timeout: Could not safely update proposal.'); }
+    try {
+        const data = getProposalSubfolderIfExists(destination, 'Proposal Data');
+        if (!data) throw new Error('Managed proposal state not found.');
+        const found = data.getFilesByName(proposalId + '_manifest.json');
+        if (!found.hasNext()) throw new Error('Managed proposal state not found.');
+        const file = found.next();
+        if (found.hasNext()) throw new Error('Duplicate managed proposal manifests found.');
+        const oldText = file.getBlob().getDataAsString();
+        const manifest = JSON.parse(oldText);
+        if (!manifest || manifest.proposalId !== proposalId ||
+            manifest.destinationFolderId !== folderId ||
+            !Number.isSafeInteger(manifest.currentRevision) ||
+            !manifest.builderState || !manifest.currentFiles ||
+            !manifest.currentFiles.googleDocId || !manifest.currentFiles.pdfId ||
+            !manifest.currentFiles.baseName) throw new Error('Invalid managed proposal manifest.');
+        if (manifest.currentRevision !== loadedRevision) {
+            return {success:false,error:'STALE_REVISION',
+                currentRevision:manifest.currentRevision,message:'A newer revision exists. Reload before updating.'};
+        }
+        const oldDoc = DriveApp.getFileById(manifest.currentFiles.googleDocId);
+        const oldPdf = DriveApp.getFileById(manifest.currentFiles.pdfId);
+        const oldDocName = oldDoc.getName(), oldPdfName = oldPdf.getName();
+        const base = manifest.currentFiles.baseName;
+        const archivedDocName = base + '_v' + loadedRevision;
+        const archivedPdfName = archivedDocName + '.pdf';
+        const snapshotName = proposalId + '_builder_state_v' + loadedRevision + '.json';
+        const existingDataArchive = getProposalSubfolderIfExists(data,'Archive');
+        const existingArchive = getProposalSubfolderIfExists(destination,'Archive');
+        const existingDocArchive = existingArchive && getProposalSubfolderIfExists(existingArchive,'Google Docs');
+        if ((existingDataArchive && existingDataArchive.getFilesByName(snapshotName).hasNext()) ||
+            (existingArchive && existingArchive.getFilesByName(archivedPdfName).hasNext()) ||
+            (existingDocArchive && existingDocArchive.getFilesByName(archivedDocName).hasNext()))
+            throw new Error('Revision archive already exists; data review required.');
+        const docs = getProposalSubfolderIfExists(destination,'Proposal Docs');
+        if (!docs) throw new Error('Proposal Docs folder is missing.');
+        let newDoc=null, newPdf=null, snapshot=null, docMoved=false, pdfMoved=false;
+        try {
+            newDoc=DriveApp.getFileById(PROPOSAL_TEMPLATE_ID).makeCopy(base,docs);
+            const doc=DocumentApp.openById(newDoc.getId());
+            doc.getBody().replaceText('\\{\\{PROPOSAL_CONTENT\\}\\}',text);
+            doc.saveAndClose();
+            newPdf=destination.createFile(newDoc.getAs(MimeType.PDF).setName(base+'.pdf'));
+            const dataArchive=existingDataArchive || data.createFolder('Archive');
+            const archive=existingArchive || destination.createFolder('Archive');
+            const docArchive=existingDocArchive || archive.createFolder('Google Docs');
+            snapshot=dataArchive.createFile(snapshotName,oldText,MimeType.PLAIN_TEXT);
+            oldDoc.setName(archivedDocName);
+            oldDoc.moveTo(docArchive); docMoved=true;
+            oldPdf.setName(archivedPdfName);
+            oldPdf.moveTo(archive); pdfMoved=true;
+            manifest.currentRevision=loadedRevision+1;
+            manifest.updatedAt=new Date().toISOString();
+            manifest.currentFiles={googleDocId:newDoc.getId(),pdfId:newPdf.getId(),baseName:base};
+            manifest.builderState=state;
+            file.setContent(JSON.stringify(manifest));
+            return {success:true,managed:true,proposalId:proposalId,
+                currentRevision:manifest.currentRevision,destinationFolderId:folderId,
+                createdAt:manifest.createdAt||null,updatedAt:manifest.updatedAt,
+                currentFiles:{googleDocId:newDoc.getId(),pdfId:newPdf.getId(),baseName:base,
+                    googleDocExists:true,pdfExists:true,googleDocUrl:newDoc.getUrl(),pdfUrl:newPdf.getUrl()}};
+        } catch(e) {
+            const failures=[];
+            try { file.setContent(oldText); } catch(r) { failures.push('manifest: '+r.message); }
+            try { if(docMoved) oldDoc.moveTo(docs); oldDoc.setName(oldDocName); }
+            catch(r) { failures.push('Doc: '+r.message); }
+            try { if(pdfMoved) oldPdf.moveTo(destination); oldPdf.setName(oldPdfName); }
+            catch(r) { failures.push('PDF: '+r.message); }
+            if(!failures.length) {
+                try { if(snapshot) snapshot.setTrashed(true); } catch(r) { failures.push('snapshot: '+r.message); }
+                try { if(newDoc) newDoc.setTrashed(true); } catch(r) { failures.push('new Doc: '+r.message); }
+                try { if(newPdf) newPdf.setTrashed(true); } catch(r) { failures.push('new PDF: '+r.message); }
+            }
+            if(failures.length) throw new Error('Update failed; recovery needs review ('+failures.join('; ')+'). Original: '+e.message);
+            throw e;
+        }
+    } finally { lock.releaseLock(); }
+}
 function createProposalExport(payload) {
     const destinationFolderId = payload.destinationFolderId;
     const proposalDateRaw = payload.proposalDate || '';
@@ -2350,8 +2469,15 @@ function createProposalExport(payload) {
     }
 
     try {
-        const nextVersion = getNextProposalVersion(destinationFolder, stem);
-        const baseName = stem + nextVersion;
+        let nextVersion = null;
+        let baseName;
+        if (isManaged) {
+            baseName = `${safeDate} - ${safeCustomer} - Proposal`;
+            assertManagedProposalBaseNameAvailable(destinationFolder, baseName);
+        } else {
+            nextVersion = getNextProposalVersion(destinationFolder, stem);
+            baseName = stem + nextVersion;
+        }
 
         const templateFile = DriveApp.getFileById(PROPOSAL_TEMPLATE_ID);
         const docDestinationFolder = isManaged
@@ -2391,12 +2517,15 @@ function createProposalExport(payload) {
             const response = {
                 success: true,
                 baseName: baseName,
-                version: nextVersion,
                 docId: docFile.getId(),
                 googleDocUrl: docFile.getUrl(),
                 pdfFileId: pdfFile.getId(),
                 pdfUrl: pdfFile.getUrl()
             };
+
+            if (!isManaged) {
+                response.version = nextVersion;
+            }
 
             if (isManaged) {
                 response.managed = true;
