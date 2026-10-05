@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.05.01 | Page Width Relocation -->
+﻿<!-- Retest Prototype v10.05.02 | Header Usability and Appearance Hardening -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.05.01</title>
+    <title>Changeout Lookup v10.05.02</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -556,10 +556,16 @@
         #pb-hdr-host { padding: 8px; box-sizing: border-box; }
         [data-pb-hdr-btn] { flex: 0 0 auto; width: 32px; height: 32px; }
         [data-pb-component="header:back"] { min-width: 48px; }
-        [data-pb-component="header:builderTitle"] { font-size: 12px; white-space: nowrap; }
+        [data-pb-component="header:builderTitle"] { font-size: 12px; white-space: normal; overflow-wrap: anywhere; }
         [data-pb-component="header:versionBadge"] { font-size: 11px; white-space: nowrap; }
         [data-pb-component="header:siteBadge"] { white-space: nowrap; }
         [data-pb-component="header:text1"], [data-pb-component="header:text2"] { font-size: 12px; max-width: 100%; overflow-wrap: anywhere; }
+        /* v10.05.02: header geometry. A stack or cell never shrinks below what its content needs, so a small ratio stops shrinking instead of letting the content protrude; the editor preview uses the same sizes as the runtime. */
+        #pb-hdr-host .pb-stack { min-height: auto; }
+        #pb-hdr-host .pb-slot { min-height: auto; min-width: auto; }
+        .pb-editing #pb-hdr-host .pb-slot { min-height: auto; }
+        .pb-editing #pb-hdr-host .pb-slot:not([data-component-id]), .pb-editing #pb-hdr-host .pb-slot[data-conditional="true"] { min-height: 22px; }
+        #pb-hdr-host .pb-slot[data-fill="width"] > [data-pb-component^="header:"] { width: 100%; box-sizing: border-box; }
         #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box] { width: var(--pb-box) !important; height: var(--pb-box) !important; }
         #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box="logo"] { width: auto !important; height: auto !important; }
         #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box="logo"] img { height: var(--pb-box) !important; width: auto !important; }
@@ -685,7 +691,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.05.01</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.05.02</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1637,7 +1643,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.05.01</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.05.02</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6509,7 +6515,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.05.01',
+                appVersion: 'v10.05.02',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6703,7 +6709,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.05.01_${stamp}.json`;
+                `platts_config_v10.05.02_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -17077,7 +17083,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.05.01',
+                appVersion: 'v10.05.02',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17086,7 +17092,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.05.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.05.02_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17105,7 +17111,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.05.01',
+                appVersion: 'v10.05.02',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17114,7 +17120,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.05.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.05.02_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -26617,7 +26623,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.05.01';
+            const APP_VERSION = 'v10.05.02';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26913,7 +26919,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.05.01';
+            const APP_VERSION = 'v10.05.02';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -27498,7 +27504,7 @@
                 // Required: Back and the header gear (the way back to Pricing and into this editor). header:text1 / header:text2 are fixed custom-text slots (the text is
                 // saved per layout in styles[id].customText). Control size (boxSize) is the button size, or the logo height.
                 'header:logo': { label: "Platt's logo", type: 'display', allowedSurfaces: ['header'], style: ['vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'logo', sizeMin: 16, sizeMax: 120, sizeDef: 36 },
-                'header:builderTitle': { label: 'Proposal Builder title', type: 'display', allowedSurfaces: ['header'], style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
+                'header:builderTitle': { label: 'Proposal Builder title', type: 'display', allowedSurfaces: ['header'], fill: 'width', textTarget: true, labelTarget: true, style: ['text', 'textAlign', 'vAlign', 'nudge'], nudgeLim: 100 },
                 'header:versionBadge': { label: 'Version badge', type: 'display', allowedSurfaces: ['header'], style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
                 'header:siteBadge': { label: 'Site badge', type: 'display', allowedSurfaces: ['header'], conditional: true, style: ['vAlign', 'nudge'], nudgeLim: 100 },
                 'header:jobNotes': { label: 'Job Notes button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
@@ -27507,8 +27513,8 @@
                 'header:fullscreen': { label: 'Fullscreen button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
                 'header:back': { label: 'Back button', type: 'utility', allowedSurfaces: ['header'], required: true, removable: false, icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
                 'header:settings': { label: 'Header settings (gear)', type: 'utility', allowedSurfaces: ['header'], required: true, removable: false, icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
-                'header:text1': { label: 'Custom text 1', type: 'display', allowedSurfaces: ['header'], textSlot: true, style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
-                'header:text2': { label: 'Custom text 2', type: 'display', allowedSurfaces: ['header'], textSlot: true, style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 }
+                'header:text1': { label: 'Custom text 1', type: 'display', allowedSurfaces: ['header'], fill: 'width', textSlot: true, style: ['text', 'textAlign', 'vAlign', 'nudge'], nudgeLim: 100 },
+                'header:text2': { label: 'Custom text 2', type: 'display', allowedSurfaces: ['header'], fill: 'width', textSlot: true, style: ['text', 'textAlign', 'vAlign', 'nudge'], nudgeLim: 100 }
             };
             Object.keys(COMPONENTS).forEach(id => { COMPONENTS[id] = Object.assign({}, CAP_DEFAULTS, COMPONENTS[id]); });
             // textTarget: the component has its own label text that can be positioned on its own (wrapped in a span when nudged). Native selects,
@@ -27963,6 +27969,7 @@
                                     if (f) stl.textFine = f;
                                 }
                                 if (def.textSlot) stl.customText = typeof sp0.customText === 'string' ? sp0.customText : '';
+                                if (def.fill === 'width' && (sp0.horizontalAlign === 'center' || sp0.horizontalAlign === 'right')) stl.textAlign = sp0.horizontalAlign;
                                 if (def.sizeKind === 'btn') {
                                     const bs = Math.round(num(sp0.controlSize, 32));
                                     if (bs !== 32) stl.boxSize = bs;
@@ -28144,7 +28151,7 @@
                                 slot.setAttribute('data-label', def.label);
                                 slot.setAttribute('data-fill', kind === 'summary' ? 'natural' : def.fill);
                                 slot.setAttribute('data-wrap', def.wrap);
-                                if (explicit && s.heightWeight > 0) slot.setAttribute('data-pb-explicit', '1');
+                                if (explicit && kind !== 'header' && s.heightWeight > 0) slot.setAttribute('data-pb-explicit', '1');      // the header's stacks grow to their contents, so its text presets follow the cell width only (no requested-height bound)
                                 if (def.conditional) slot.setAttribute('data-conditional', 'true');
                                 if (def.required) slot.setAttribute('data-required', 'true');
                                 const n = nodeOf(p.mapping);
@@ -28957,7 +28964,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.05.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.05.02 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29092,6 +29099,10 @@
                     if (def.textSlot) h += lab('Text (shown in the header)') + '<input type="text" data-pb-textslot="1" maxlength="200" value="' + esc(st.customText || '') + '" placeholder="Enter custom text..." aria-label="Custom text" class="w-full bg-slate-950 border border-slate-700 rounded p-1.5 text-xs text-white">' +
                         '<div class="text-[9px] text-slate-500 leading-relaxed">Plain text, saved with this layout (Desktop and Mobile separately). Empty shows nothing.</div>';
                     if (has('size')) h += stepper(def.sizeKind === 'logo' ? 'Logo height' : 'Control size', (st.boxSize || def.sizeDef) + ' px', 'bs', 'size');
+                    if (def.sizeKind === 'logo') {
+                        const li = $('page2-platts-logo');
+                        if (li && li.classList.contains('hidden')) h += '<div data-pb-warn="logo" class="text-[10px] text-amber-300 leading-relaxed bg-amber-900/20 border border-amber-700/50 rounded p-1.5">The logo image could not be loaded, so the fallback text is shown and the logo height has no effect. Check that platts.png is next to this page.</div>';
+                    }
                     if (has('text')) h += lab('Text size') + seg('ts', TEXT_SIZES, TEXT_SIZE_LABEL, st.textSize || 'auto') + stepper('Text fine tune', signed(st.textFine || 0), 'tf', 'text');
                     const grp = def.textTarget || def.icon ? 'Content group' : 'Text';
                     if (has('textAlign')) h += lab(grp + ' alignment') + seg('ta', TEXT_ALIGNS, TALIGN_LABEL, st.textAlign || 'auto');
@@ -29206,7 +29217,7 @@
                         '<div class="text-[9px] text-slate-500">Stack</div>' + chips('selS', c.stacks.length, state.sel.s, 'S') +
                         '<div class="text-[9px] text-slate-500">Split</div>' + chips('selP', s.splits.length, state.sel.p, 'P')) +
                     (isBand ? '' : sect('Container ' + (state.sel.c + 1), stepper('Container Width Ratio', ratioLabel(c.widthWeight), 'wt', 'container', shareOf(containerWeights, state.sel.c)) + stepper('Stacks', c.stacks.length, 'cnt', 'stacks'))) +
-                    sect('Stack ' + (state.sel.s + 1), (isBand ? stepper('Stacks in band', c.stacks.length, 'cnt', 'stacks') : '') + stepper('Stack Height Ratio (0 = natural height)', ratioLabel(s.heightWeight), 'wt', 'stack', shareOf(stackWeights, state.sel.s, true)) + stackNote + stepper('Splits', s.splits.length, 'cnt', 'splits')) +
+                    sect('Stack ' + (state.sel.s + 1), (isBand ? stepper('Stacks in band', c.stacks.length, 'cnt', 'stacks') : '') + stepper('Stack Height Ratio (0 = natural height)', ratioLabel(s.heightWeight), 'wt', 'stack', shareOf(stackWeights, state.sel.s, true)) + stackNote + (kind === 'header' ? '<div class="text-[9px] text-slate-500 leading-relaxed">In the header a stack never gets smaller than its contents: a smaller ratio simply stops shrinking it at that point.</div>' : '') + stepper('Splits', s.splits.length, 'cnt', 'splits')) +
                     protectedHtml +
                     sect('Split ' + (state.sel.p + 1) + (reqId ? ' — Ratio / Alignment' : ' — Mapping / Contents'),
                         stepper('Split Width Ratio', ratioLabel(p.widthWeight), 'wt', 'split', shareOf(splitWeights, state.sel.p)) +
@@ -29619,7 +29630,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.05.01',
+                version: 'v10.05.02',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29696,7 +29707,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.05.01';
+            const APP_VERSION = 'v10.05.02';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
