@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.07.01 | Systems Sorter Text-Overflow Hardening -->
+﻿<!-- Retest Prototype v10.09.00 | Systems Sorter Canonical Brand Field -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.07.01</title>
+    <title>Changeout Lookup v10.09.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -709,7 +709,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.07.01</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.09.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1661,7 +1661,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.07.01</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.09.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6563,7 +6563,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.07.01',
+                appVersion: 'v10.09.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6757,7 +6757,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.07.01_${stamp}.json`;
+                `platts_config_v10.09.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -16995,7 +16995,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.07.01',
+                appVersion: 'v10.09.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17004,7 +17004,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.07.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.09.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17023,7 +17023,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.07.01',
+                appVersion: 'v10.09.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17032,7 +17032,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.07.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.09.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -21320,6 +21320,22 @@
             return v3;
         };
 
+        // v10.08.01: a composite is an ordered list of tokens in `compositeFields`. A FIELD token is { field, showLabel } (the only kind before v10.09.00, unchanged); a STATIC TEXT token is
+        // { type: 'text', text } (plain text, never HTML, at most SORTER_TEXT_MAX characters). The list stays in the same array, so old saved layouts load as they were and need no migration.
+        window.SORTER_TEXT_MAX = 40;
+        window.sorterCompositeIsText = function (f) { return !!f && typeof f === 'object' && f.type === 'text' && !f.field; };
+        window.sanitizeSorterText = function (t) {
+            return String(t === undefined || t === null ? '' : t).replace(/[\u0000-\u001f\u007f\u2028\u2029]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, window.SORTER_TEXT_MAX).trim();
+        };
+        window.sanitizeSorterCompositeTokens = function (list) {
+            const out = [];
+            list.forEach(f => {
+                if (window.sorterCompositeIsText(f)) { const t = window.sanitizeSorterText(f.text); if (t) out.push({ type: 'text', text: t }); }
+                else if (f && typeof f === 'object' && typeof f.field === 'string' && f.field) out.push(f);
+            });
+            return out;
+        };
+
         try {
             const savedV3 = localStorage.getItem('changeout_cart_mapping_v3');
             if (savedV3) {
@@ -21353,6 +21369,7 @@
                             if (window.GridPrimitives.pick(split.vAlign, ['top', 'bottom'], '')) { /* kept */ } else delete split.vAlign;
                             ['nudgeX', 'nudgeY'].forEach(k => { const n = window.GridPrimitives.clampInt(split[k], window.GridPrimitives.NUDGE.max); if (n) split[k] = n; else delete split[k]; });
                             if (!split.fontSize) split.fontSize = 12;
+                            if (Array.isArray(split.compositeFields)) split.compositeFields = window.sanitizeSorterCompositeTokens(split.compositeFields);
                         });
                     });
                 });
@@ -21564,17 +21581,20 @@
                 if (split.mapping === 'hspf2') lbl = 'HSPF2 ';
                 if (split.mapping === 'coolingBtu') lbl = 'Cooling ';
                 if (split.mapping === 'heatingBtu') lbl = 'Heating ';
-                return `<span class="font-semibold tracking-wide flex items-center gap-1 leading-tight" data-field="${window.sorterFieldId(split.mapping)}"><span class="text-slate-400">${lbl}</span>${v}</span>`;
+                return `<span class="srt-token font-semibold tracking-wide flex items-center gap-1 leading-tight" data-field="${window.sorterFieldId(split.mapping)}"><span class="srt-token-label text-slate-400">${lbl}</span><span class="srt-token-value">${v}</span></span>`;
             }
 
             if (!split.compositeFields || split.compositeFields.length === 0) {
                 return `<span class="text-slate-500 italic text-[11px]">Empty Custom Description</span>`;
             }
 
-            let pieces = [];
-            split.compositeFields.forEach(f => {
+            // One token per non-blank field, in saved order: <span class="srt-token" data-field="<canonical id>"> label span + value span (the value keeps the established
+            // field colour span). A blank field produces no token, so a separator only ever sits BETWEEN two tokens (v10.08.00).
+            // One field token (empty string when the field is blank); the markup is the v10.08.00 one.
+            const fieldToken = f => {
                 let v = window.getSorterCompositeFieldValue(f.field, context);
-                if (v) {
+                if (!v) return '';
+                {
                     let lbl = '';
                     if (f.showLabel) {
                         if (f.field === 'systemType') lbl = 'System Type ';
@@ -21589,19 +21609,58 @@
                         else if (f.field === 'heatingBtu') lbl = 'Heating ';
                         else lbl = f.field.charAt(0).toUpperCase() + f.field.slice(1) + ' ';
                     }
-                    pieces.push(`<span class="inline-flex items-center" data-field="${window.sorterFieldId(f.field)}"><span class="text-slate-400">${lbl}</span>${v}</span>`);
+                    return `<span class="srt-token inline-flex items-center" data-field="${window.sorterFieldId(f.field)}"><span class="srt-token-label text-slate-400">${lbl}</span><span class="srt-token-value">${v}</span></span>`;
                 }
-            });
-
-            if (pieces.length === 0) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+            };
 
             let sepStr = ' ';
             if (split.compositeSeparator === 'bullet') sepStr = ' &middot; ';
             else if (split.compositeSeparator === 'slash') sepStr = ' / ';
             else if (split.compositeSeparator === 'pipe') sepStr = ' | ';
+            const sepHtml = `<span class="srt-sep text-slate-600 mx-1.5" aria-hidden="true">${sepStr.trim()}</span>`;
 
-            let finalHtml = pieces.join(`<span class="text-slate-600 mx-1.5">${sepStr.trim()}</span>`);
-            return `<span class="font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
+            let finalHtml;
+            if (!split.compositeFields.some(window.sorterCompositeIsText)) {
+                // field tokens only (every layout saved before v10.08.01): exactly the v10.08.00 output
+                const pieces = split.compositeFields.map(fieldToken).filter(Boolean);
+                if (pieces.length === 0) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+                finalHtml = pieces.join(sepHtml);
+            } else {
+                // Static text tokens (v10.08.01). Deterministic rules, no grammar: (1) the Separator goes only between two field tokens that touch; next to a static token the gap is a small plain space;
+                // (2) a static token without a letter or digit (a punctuation mark such as "/", "-", "&", "(", ")") follows its field neighbours: between two fields it is a joiner, shown only
+                // when something is shown before it (not another joiner) and a non-blank field follows; touching only a field after it ("(") or before it (")", ":") it shows with that field
+                // only; with no field neighbour it always shows; (3) a static token with letters or digits ("System:", "with") is always shown; (4) when the composite has field tokens and
+                // every one is blank, the whole cell is N/A. Limit: no grammar, so a joiner-like mark after a dropped decoration can still lead the text.
+                const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const toks = [];
+                split.compositeFields.forEach(f => {
+                    if (window.sorterCompositeIsText(f)) { const t = window.sanitizeSorterText(f.text); if (t) toks.push({ k: 't', t: t }); }
+                    else if (f && f.field) toks.push({ k: 'f', h: fieldToken(f) });
+                });
+                if (toks.some(x => x.k === 'f') && !toks.some(x => x.k === 'f' && x.h)) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+                const isFld = x => !!x && x.k === 'f';
+                const kept = [];
+                toks.forEach((it, i) => {
+                    if (it.k === 'f') { if (it.h) kept.push(it); return; }
+                    if (!/[\p{L}\p{N}]/u.test(it.t)) {
+                        // punctuation only: between two fields it is a joiner (needs something shown before it, not another joiner, and a non-blank field after it); touching only a field after it,
+                        // it belongs to that field; touching only a field before it, to that one; with no field neighbour it always shows
+                        const P = toks[i - 1], N = toks[i + 1];
+                        let show = true;
+                        if (isFld(P) && isFld(N)) { const prev = kept[kept.length - 1]; show = !!prev && !prev.joiner && toks.slice(i + 1).some(x => x.k === 'f' && x.h); it.joiner = true; }
+                        else if (isFld(N)) show = !!N.h;
+                        else if (isFld(P)) show = !!P.h;
+                        if (!show) return;
+                    }
+                    kept.push(it);
+                });
+                if (kept.length === 0) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
+                finalHtml = kept.map((it, i) => {
+                    const gap = i === 0 ? '' : (it.k === 'f' && kept[i - 1].k === 'f' ? sepHtml : '<span class="srt-gap" aria-hidden="true" style="margin:0 0.125rem"></span>');
+                    return gap + (it.k === 'f' ? it.h : `<span class="srt-static text-slate-300">${esc(it.t)}</span>`);
+                }).join('');
+            }
+            return `<span class="srt-composite font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
         };
 
         // === SYSTEMS SORTER BODY: SPECIALIZED REPEATING-ROW RENDERER (Stage 1 v10.06.00; shared geometry and template editor Stage 2 v10.07.00) ===
@@ -21738,7 +21797,9 @@
                     }
                 }
                 else if (split.mapping === 'brandName') {
-                    content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
+                    // v10.09.00: the plain Brand value as the canonical `brand` field token (same look as before; a blank Brand is N/A like the other canonical mappings)
+                    const bv = window.getSorterCompositeFieldValue('brand', SorterContext);
+                    content = bv ? `<span class="srt-token font-bold text-blue-400 tracking-widest" data-field="brand"><span class="srt-token-value">${bv}</span></span>` : `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
                 }
                 else if (split.mapping === 'brand') {
                     let asColor = window.getApplicationStyleColorClass(printStyle);
@@ -21818,6 +21879,25 @@
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
+        // v10.08.01: add an empty static text token (typed in the row that appears), edit it (cleaned like the loader does)
+        window.addSorterCompositeText = function (cIdx, sIdx, pIdx) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields) return;
+            split.compositeFields.push({ type: 'text', text: '' });
+            window.saveSorterSettings();
+            if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
+        window.setSorterCompositeText = function (cIdx, sIdx, pIdx, fIdx, val) {
+            const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
+            if (!split.compositeFields || !window.sorterCompositeIsText(split.compositeFields[fIdx])) return;
+            split.compositeFields[fIdx].text = window.sanitizeSorterText(val);
+            window.saveSorterSettings();
+            if (typeof window.renderCartConfigurator === 'function') window.renderCartConfigurator();
+            if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
+        };
+
         window.removeSorterCompositeField = function (cIdx, sIdx, pIdx, fIdx) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
@@ -21842,7 +21922,7 @@
 
         window.setSorterCompositeFieldLabel = function (cIdx, sIdx, pIdx, fIdx, isChecked) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
-            if (!split.compositeFields) return;
+            if (!split.compositeFields || !split.compositeFields[fIdx] || window.sorterCompositeIsText(split.compositeFields[fIdx])) return;
             split.compositeFields[fIdx].showLabel = isChecked;
             window.saveSorterSettings();
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
@@ -21859,6 +21939,20 @@
             let fieldsHtml = '';
             if (split.compositeFields && Array.isArray(split.compositeFields)) {
                 split.compositeFields.forEach((f, fIdx) => {
+                    if (window.sorterCompositeIsText(f)) {
+                        const tv = String(f.text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+                        fieldsHtml += `<div class="flex items-center justify-between gap-2 bg-slate-900 border border-amber-900/40 rounded px-2 py-1 mb-1 shadow-sm">
+                        <input type="text" maxlength="${window.SORTER_TEXT_MAX}" value="${tv}" placeholder="Text" aria-label="Static text" onchange="setSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 text-[10px] rounded px-1.5 py-0.5 outline-none flex-1 min-w-0 focus:border-amber-500">
+                        <div class="flex items-center gap-2">
+                            <div class="flex border border-slate-700 rounded overflow-hidden">
+                                <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, -1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors ${fIdx === 0 ? 'opacity-30 pointer-events-none' : ''}">↑</button>
+                                <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, 1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors border-l border-slate-700 ${fIdx === split.compositeFields.length - 1 ? 'opacity-30 pointer-events-none' : ''}">↓</button>
+                            </div>
+                            <button onclick="removeSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx})" class="text-rose-500 hover:bg-rose-950 px-1.5 rounded transition-colors text-lg leading-none mt-[-2px]">&times;</button>
+                        </div>
+                    </div>`;
+                        return;
+                    }
                     let dispName = f.field;
                     if (f.field === 'systemType') dispName = 'System Type';
                     else if (f.field === 'mechanicalStage') dispName = 'Mechanical Stage';
@@ -21923,6 +22017,7 @@
                     <select onchange="if(this.value) { addSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, this.value); this.value=''; }" class="bg-slate-900 border border-emerald-900/50 text-slate-300 font-semibold text-[10px] rounded px-1.5 py-1 outline-none flex-1 focus:border-emerald-500 transition-colors">
                         ${fieldOpts}
                     </select>
+                    <button type="button" onclick="addSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx})" class="shrink-0 bg-slate-900 border border-amber-900/50 text-slate-300 font-semibold text-[10px] rounded px-1.5 py-1 hover:border-amber-500 transition-colors">+ Add Text</button>
                     <div class="flex items-center gap-1.5 shrink-0 bg-slate-900 border border-slate-700/80 rounded px-1.5">
                         <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Separator</span>
                         <select onchange="setSorterCompositeSeparator(${cIdx}, ${sIdx}, ${pIdx}, this.value)" class="bg-transparent text-slate-300 font-semibold text-[10px] outline-none py-1 w-16">
@@ -21980,7 +22075,10 @@
         window.renderSorterPreview = function () {
             const settings = window.sorterSettings, sel = window.sorterEditorSel;
             const labelOf = id => { const m = window.SORTER_MAPPINGS.find(x => x[0] === id); return m ? m[1] : id; };
+            // v10.08.00: a Custom Description cell is previewed with the REAL composite renderer (same tokens, order, separator, labels, colours) on sample values.
+            const sample = { brand: 'Carrier', capacity: '3 Ton', systemType: 'Heat Pump', seriesTier: 'Performance', mechanicalStage: 'two-stage', applicationStyle: 'Split', seer2: '16.0', eer2: '12.5', hspf2: '8.5', ahri: '1234567', coolingBtu: '36000', heatingBtu: '34000', site: 'Main' };
             const body = window.sorterBodyHtml(settings, function (split, skipped) {
+                if (split.mapping === 'composite' && !skipped) return '<span class="srt-ph-live">' + window.renderSorterCompositeContent(split, sample) + '</span>';
                 const name = split.mapping === 'empty' ? 'Empty' : labelOf(split.mapping);
                 return '<span class="srt-ph font-semibold leading-tight' + (skipped ? ' srt-ph-off' : '') + '">' + sorterEsc(name) + '</span>' + (skipped ? '<span class="srt-ph srt-ph-off leading-tight">End Cap</span>' : '');
             }, {
@@ -26778,7 +26876,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.07.01';
+            const APP_VERSION = 'v10.09.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27074,7 +27172,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.07.01';
+            const APP_VERSION = 'v10.09.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -29116,7 +29214,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.07.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.09.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29782,7 +29880,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.07.01',
+                version: 'v10.09.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29859,7 +29957,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.07.01';
+            const APP_VERSION = 'v10.09.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
