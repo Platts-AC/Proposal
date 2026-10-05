@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.04.01 | Page 2 Header Custom-Text Escaping Fix -->
+﻿<!-- Retest Prototype v10.05.00 | Page 2 Header Migration -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.04.01</title>
+    <title>Changeout Lookup v10.05.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -551,6 +551,19 @@
         /* Buttons and links stay on one line (component wrap: never). A narrow cell shrinks Auto text first (data-pb-fit, set by the layout engine), then
            clips the label; it never wraps into a taller row. Selects and inputs clip by themselves. */
         .pb-slot[data-wrap="never"] > button, .pb-slot[data-wrap="never"] > a { white-space: nowrap; overflow: hidden; }
+        /* === Page 2 header region (v10.05.00): the original header controls live in Proposal Builder cells; sizes are plain CSS defaults so the Builder appearance layer can act on them === */
+        #pb-hdr-wrap { width: 100%; }
+        #pb-hdr-host { padding: 8px; box-sizing: border-box; }
+        [data-pb-hdr-btn] { flex: 0 0 auto; width: 32px; height: 32px; }
+        [data-pb-component="header:back"] { min-width: 48px; }
+        [data-pb-component="header:builderTitle"] { font-size: 12px; white-space: nowrap; }
+        [data-pb-component="header:versionBadge"] { font-size: 11px; white-space: nowrap; }
+        [data-pb-component="header:siteBadge"] { white-space: nowrap; }
+        [data-pb-component="header:text1"], [data-pb-component="header:text2"] { font-size: 12px; max-width: 100%; overflow-wrap: anywhere; }
+        #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box] { width: var(--pb-box) !important; height: var(--pb-box) !important; }
+        #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box="logo"] { width: auto !important; height: auto !important; }
+        #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-box="logo"] img { height: var(--pb-box) !important; width: auto !important; }
+        #pb-hdr-host .pb-slot[data-pb-styled] > [data-pb-ifine0]:not([data-pb-is]) :is(svg, i[data-lucide]) { width: calc(16px + var(--pb-ifine, 0) * 1px); height: calc(16px + var(--pb-ifine, 0) * 1px); }
         .pb-slot[data-wrap="never"] > [data-pb-fit]:not([data-pb-ts]):not([data-pb-fine0]) { font-size: calc(var(--pb-fs0, 10px) * var(--pb-fit, 1)); }
         .pb-slot > [data-pb-fit]:not([data-pb-is]):not([data-pb-ifine0]) :is(svg, i[data-lucide]) { width: calc(14px * var(--pb-fit, 1)); height: calc(14px * var(--pb-fit, 1)); }
         .pb-editing .pb-slot > [data-pb-over] { outline: 2px solid #f43f5e; outline-offset: -2px; }
@@ -672,7 +685,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.04.01</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.05.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1600,6 +1613,8 @@
             <!-- === ZONE B HEADER INNER (3-ZONE GRID) === -->
             <!-- === ZONE B HEADER INNER (3-ZONE GRID) === -->
             <div id="zone-b-header-inner" class="w-full mx-auto">
+                <!-- v10.05.00: the Page 2 header is a Proposal Builder region (host built by the Builder); the legacy shared-grid target below stays empty and hidden -->
+                <div id="pb-hdr-wrap" class="w-full"></div>
                 <div id="page2-header-layout" class="w-full"></div>
 
                 <div id="page2-header-native-source-bank" class="hidden" aria-hidden="true">
@@ -1607,6 +1622,7 @@
                         <!-- LEFT BRANDING GROUP -->
                         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 shrink-0">
                             <div class="flex flex-col items-start select-none">
+                                <div data-pb-component="header:logo" class="flex flex-col items-start">
                                 <img id="page2-platts-logo" src="./platts.png" alt="Platt's Air and Heat"
                                     class="w-auto object-contain"
                                     onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');"
@@ -1614,15 +1630,15 @@
                                 <div id="page2-platts-fallback"
                                     class="hidden font-black tracking-wider text-white uppercase"
                                     style="font-size: 14.4px;">PLATT'S AIR & HEAT</div>
-                                <div id="page2-builder-title"
-                                    class="font-black tracking-widest uppercase text-emerald-500 leading-none mt-1"
-                                    style="font-size: 12px;">PROPOSAL BUILDER</div>
+                                </div>
+                                <div id="page2-builder-title" data-pb-component="header:builderTitle"
+                                    class="font-black tracking-widest uppercase text-emerald-500 leading-none">PROPOSAL BUILDER</div>
                                 <div class="flex items-center gap-2 mt-1 flex-wrap">
-                                    <span id="page2-version-badge"
-                                        class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
+                                    <span id="page2-version-badge" data-pb-component="header:versionBadge"
+                                        class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.04.01</span>
-                                    <div id="global-site-badge" data-page2-site-badge="true"
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.05.00</span>
+                                    <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
                                         <span id="global-site-badge-text"
@@ -1639,7 +1655,7 @@
                             <button id="job-notes-btn" data-page2-header-control="true" type="button"
                                 onclick="event.preventDefault(); event.stopPropagation(); window.openJobNotesModal();"
                                 class="relative flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Job Notes" style="width: 32px; height: 32px;">
+                                title="Job Notes" data-pb-component="header:jobNotes" data-pb-hdr-btn="1">
                                 <i data-lucide="notebook-pen" class="w-4 h-4"></i>
                                 <span id="job-notes-count"
                                     class="hidden absolute -top-1.5 -right-1.5 bg-blue-500 text-slate-950 font-black text-[9px] min-w-4 h-4 px-1 rounded-full items-center justify-center shadow-md">0</span>
@@ -1649,39 +1665,41 @@
                                 data-page2-control-type="mic"
                                 onclick="event.preventDefault(); const input = document.getElementById('inj-text'); if(input) input.focus(); dictateCustomLine();"
                                 class="flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Dictate Proposal Note" style="width: 32px; height: 32px;">
+                                title="Dictate Proposal Note" data-pb-component="header:mic" data-pb-hdr-btn="1">
                                 <i data-lucide="mic" class="w-4 h-4"></i>
                             </button>
                             <!-- Settings -->
                             <button data-page2-header-control="true"
                                 onclick="event.preventDefault(); openPage2Settings('page2')"
                                 class="flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Page 2 Layout Settings" style="width: 32px; height: 32px;">
+                                title="Page 2 Layout Settings" data-pb-component="header:settings" data-pb-hdr-btn="1">
                                 <i data-lucide="settings" class="w-4 h-4"></i>
                             </button>
                             <!-- Theme -->
                             <button data-page2-header-control="true" data-page2-control-type="theme"
                                 onclick="toggleThemeMode()"
                                 class="flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Toggle Theme" style="width: 32px; height: 32px;">
+                                title="Toggle Theme" data-pb-component="header:theme" data-pb-hdr-btn="1">
                                 <i id="themeToggleIcon-page2" data-lucide="sun" class="w-4 h-4"></i>
                             </button>
                             <!-- Fullscreen -->
                             <button data-page2-header-control="true" data-page2-control-type="fullscreen"
                                 onclick="toggleFullScreen()"
                                 class="flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Toggle Fullscreen" style="width: 32px; height: 32px;">
+                                title="Toggle Fullscreen" data-pb-component="header:fullscreen" data-pb-hdr-btn="1">
                                 <i data-lucide="maximize" class="w-4 h-4"></i>
                             </button>
                             <!-- Back -->
                             <button data-page2-header-control="true" onclick="toggleViewSwap()"
                                 class="flex shrink-0 items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer text-slate-300 hover:text-white shadow-sm"
-                                title="Back to Pricing Sheet" style="width: 32px; height: 32px; min-width: 48px;">
+                                title="Back to Pricing Sheet" data-pb-component="header:back" data-pb-hdr-btn="1">
                                 <i data-lucide="arrow-left" class="w-4 h-4"></i><span
                                     class="hidden sm:inline ml-1 font-bold text-[10px] uppercase">Back</span>
                             </button>
                         </div>
                     </div>
+                    <div data-pb-component="header:text1" class="text-white font-bold"></div>
+                    <div data-pb-component="header:text2" class="text-white font-bold"></div>
                 </div>
             </div>
         </div>
@@ -6488,7 +6506,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.04.01',
+                appVersion: 'v10.05.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6682,7 +6700,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.04.01_${stamp}.json`;
+                `platts_config_v10.05.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -17056,7 +17074,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.04.01',
+                appVersion: 'v10.05.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17065,7 +17083,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.04.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.05.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17084,7 +17102,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.04.01',
+                appVersion: 'v10.05.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17093,7 +17111,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.04.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.05.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -24539,6 +24557,7 @@
         };
 
         window.renderSharedGrid = function (surfaceType) {
+            if (surfaceType === 'page2-header' && window.__pbHeaderActive) return;   // v10.05.00: the Page 2 header is a Proposal Builder region now (the legacy grid is kept only as the fallback)
             const p = window.getSharedGridData(surfaceType);
             if (!p || !p.headerLayout || !p.headerLayout.containers) return;
 
@@ -26595,7 +26614,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.04.01';
+            const APP_VERSION = 'v10.05.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26891,7 +26910,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.04.01';
+            const APP_VERSION = 'v10.05.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -27394,9 +27413,10 @@
             const SCHEMA = 3;
             const PROFILES = ['desktop', 'mobile'];
             const PROFILE_LABEL = { desktop: 'Desktop', mobile: 'Mobile' };
-            const KINDS = ['summary', 'actions', 'band'];
-            const KIND_LABEL = { summary: 'Summary', actions: 'Actions', band: 'Bands' };
+            const KINDS = ['header', 'summary', 'actions', 'band'];
+            const KIND_LABEL = { header: 'Header', summary: 'Summary', actions: 'Actions', band: 'Bands' };
             const KIND_HINT = {
+                header: 'The Page 2 header at the very top of Page 2 (always visible): logo, title, version badge, site badge, Job Notes, Mic, Theme, Fullscreen, Back, the header settings gear and two custom-text slots. Back and the gear are required.',
                 summary: 'Always visible, even when the section is collapsed: section title, settings gear and expand/collapse hint.',
                 actions: 'Shown only while the section is expanded: destination, Load, Update, Create, DOC, PDF, loaded proposal, Copy Text and the note tools (preset, category, acknowledge, price, text, Mic, Add).',
                 band: 'Full-width rows made of stacks and splits. They hold the Dynamic message region and, if you like, the Loaded proposal and the note tools.'
@@ -27413,9 +27433,13 @@
             // unchanged with no styles (Auto everywhere) and is not rewritten until it is edited.
             // Revision 6 (v10.03.00) = the Proposal Type control exists: a saved layout older than that gets it once (first empty Actions cell, else a new
             // Expanded-only band), and a layout that deliberately leaves it unplaced afterwards keeps it unplaced. Purely additive; not rewritten until edited.
-            const REVISION = 6;
+            // Revision 7 (v10.05.00) = the Page 2 header region exists (surfaces.header, with its own height): a saved layout older than that gets the built-in
+            // header for its profile; a customized legacy Page 2 header (propSettings.page2Header) is converted into the DESKTOP header once, without touching
+            // the legacy data. Purely additive; an older layout is not rewritten until it is edited.
+            const REVISION = 7;
             const INJECTOR_REVISION = 2;
             const PROPTYPE_REVISION = 6;
+            const HEADER_REVISION = 7;
             const ALIGNS = ['start', 'center', 'end'];
             const ALIGN_LABEL = { start: 'Left', center: 'Center', end: 'Right' };
 
@@ -27466,7 +27490,22 @@
                 'control:injectorPrice': { label: 'Note price', type: 'control', allowedSurfaces: ['actions', 'band'], conditional: true, fill: 'width', style: S_TXT, avail: 'notHidden', hint: 'Available for categories that carry a price (not Standard Note).' },
                 'control:injectorText': { label: 'Custom note text', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'width', style: S_TXT },
                 'utility:injectorMic': { label: 'Mic', type: 'utility', allowedSurfaces: ['actions', 'band'], fill: 'both', wrap: 'never', icon: true, style: S_ICO },
-                'control:injectorAdd': { label: 'Add', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'both', wrap: 'never', style: S_TXT }
+                'control:injectorAdd': { label: 'Add', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'both', wrap: 'never', style: S_TXT },
+                // v10.05.00: Page 2 header components. The originals are moved into header cells (never cloned); 'natural' fill = their own size, placed by the cell.
+                // Required: Back and the header gear (the way back to Pricing and into this editor). header:text1 / header:text2 are fixed custom-text slots (the text is
+                // saved per layout in styles[id].customText). Control size (boxSize) is the button size, or the logo height.
+                'header:logo': { label: "Platt's logo", type: 'display', allowedSurfaces: ['header'], style: ['vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'logo', sizeMin: 16, sizeMax: 120, sizeDef: 36 },
+                'header:builderTitle': { label: 'Proposal Builder title', type: 'display', allowedSurfaces: ['header'], style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
+                'header:versionBadge': { label: 'Version badge', type: 'display', allowedSurfaces: ['header'], style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
+                'header:siteBadge': { label: 'Site badge', type: 'display', allowedSurfaces: ['header'], conditional: true, style: ['vAlign', 'nudge'], nudgeLim: 100 },
+                'header:jobNotes': { label: 'Job Notes button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:mic': { label: 'Mic button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:theme': { label: 'Theme button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:fullscreen': { label: 'Fullscreen button', type: 'utility', allowedSurfaces: ['header'], icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:back': { label: 'Back button', type: 'utility', allowedSurfaces: ['header'], required: true, removable: false, icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:settings': { label: 'Header settings (gear)', type: 'utility', allowedSurfaces: ['header'], required: true, removable: false, icon: true, style: ['icon', 'vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'btn', sizeMin: 24, sizeMax: 64, sizeDef: 32 },
+                'header:text1': { label: 'Custom text 1', type: 'display', allowedSurfaces: ['header'], textSlot: true, style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 },
+                'header:text2': { label: 'Custom text 2', type: 'display', allowedSurfaces: ['header'], textSlot: true, style: ['text', 'vAlign', 'nudge'], nudgeLim: 100 }
             };
             Object.keys(COMPONENTS).forEach(id => { COMPONENTS[id] = Object.assign({}, CAP_DEFAULTS, COMPONENTS[id]); });
             // textTarget: the component has its own label text that can be positioned on its own (wrapped in a span when nudged). Native selects,
@@ -27477,8 +27516,11 @@
             const INJECTOR_IDS = ['control:injectorPreset', 'control:injectorLoadPreset', 'control:injectorCategory', 'control:injectorAcknowledge', 'control:injectorPrice', 'control:injectorText', 'utility:injectorMic', 'control:injectorAdd'];   // markup order of the old strip
             const INJECTOR_SET = new Set(INJECTOR_IDS);
             const COMPONENT_IDS = Object.keys(COMPONENTS);
+            const HEADER_IDS = COMPONENT_IDS.filter(id => id.indexOf('header:') === 0);
+            const HEADER_TEXT_IDS = ['header:text1', 'header:text2'];
             const REQUIRED_IDS = COMPONENT_IDS.filter(id => COMPONENTS[id].required);
-            const allowedOn = (id, kind) => !!COMPONENTS[id] && COMPONENTS[id].allowedSurfaces.indexOf(kind) >= 0;
+            const hasComp = id => typeof id === 'string' && Object.prototype.hasOwnProperty.call(COMPONENTS, id);      // own components only (never "__proto__" or "constructor")
+            const allowedOn = (id, kind) => hasComp(id) && COMPONENTS[id].allowedSurfaces.indexOf(kind) >= 0;
             const IDS_FOR = {};
             KINDS.forEach(k => { IDS_FOR[k] = COMPONENT_IDS.filter(id => allowedOn(id, k)); });
             const nodeFor = id => document.querySelector('[data-pb-component="' + id + '"]');
@@ -27518,7 +27560,7 @@
             const TALIGN_LABEL = { auto: 'Auto', left: 'Left', center: 'Center', right: 'Right' };
             const DENSITIES = ['compact', 'normal', 'roomy'];
             const DENSITY_LABEL = { compact: 'Compact', normal: 'Normal', roomy: 'Roomy' };
-            const STYLE_ACTS = ['ts', 'tf', 'is', 'if', 'ig', 'va', 'ta', 'dn', 'nx', 'ny', 'nreset', 'tx', 'ty', 'treset', 'ix', 'iy', 'ireset', 'ipos', 'tax', 'tay', 'iax', 'iay', 'lreset', 'styleReset'];
+            const STYLE_ACTS = ['ts', 'tf', 'is', 'if', 'ig', 'va', 'ta', 'dn', 'nx', 'ny', 'nreset', 'tx', 'ty', 'treset', 'ix', 'iy', 'ireset', 'ipos', 'tax', 'tay', 'iax', 'iay', 'lreset', 'bs', 'styleReset'];
             const clampInt = (v, lim) => { const n = Math.round(Number(v)); return isFinite(n) ? Math.max(-lim, Math.min(lim, n)) : 0; };
             function sanitizeStyle(raw, def) {
                 if (!isObj(raw)) return null;
@@ -27536,8 +27578,16 @@
                 if (has('textAlign') && TEXT_ALIGNS.indexOf(raw.textAlign) > 0) out.textAlign = raw.textAlign;
                 if (has('vAlign') && (raw.vAlign === 'top' || raw.vAlign === 'bottom')) out.vAlign = raw.vAlign;
                 if (has('density') && (raw.density === 'compact' || raw.density === 'roomy')) out.density = raw.density;
+                if (has('size')) {      // v10.05.00: header button size / logo height (px); the default size is not stored
+                    const n = Math.round(Number(raw.boxSize));
+                    if (isFinite(n)) { const v = Math.max(def.sizeMin, Math.min(def.sizeMax, n)); if (v !== def.sizeDef) out.boxSize = v; }
+                }
+                if (def.textSlot && typeof raw.customText === 'string') {      // v10.05.00: the text of a header custom-text slot: plain text, no control characters, at most 200 characters
+                    const t = Array.from(raw.customText).filter(ch => ch.charCodeAt(0) >= 32 && ch.charCodeAt(0) !== 127).join('').trim().slice(0, 200);
+                    if (t) out.customText = t;
+                }
                 if (has('nudge')) {
-                    const lim = def.fill === 'natural' ? LIM.nudgeNatural : LIM.nudge;
+                    const lim = def.nudgeLim || (def.fill === 'natural' ? LIM.nudgeNatural : LIM.nudge);
                     const x = clampInt(raw.nudgeX, lim), y = clampInt(raw.nudgeY, lim);
                     if (x !== 0) out.nudgeX = x;
                     if (y !== 0) out.nudgeY = y;
@@ -27573,7 +27623,7 @@
                 const out = {};
                 if (!isObj(raw)) return out;
                 Object.keys(raw).forEach(id => {
-                    if (!COMPONENTS[id]) return;
+                    if (!hasComp(id)) return;
                     const s = sanitizeStyle(raw[id], COMPONENTS[id]);
                     if (s) out[id] = s;
                 });
@@ -27616,7 +27666,7 @@
             const surfaceAt = (layout, k, b) => k === 'band' ? (layout.bands[b] ? asSurface(layout.bands[b]) : null) : layout.surfaces[k];
             // Visit every cell (split) of the layout in reading order: summary, actions, then the bands in array order.
             function forEachCell(layout, fn) {
-                ['summary', 'actions'].forEach(k => layout.surfaces[k].containers.forEach((c, ci) => c.stacks.forEach((s, si) => s.splits.forEach((p, pi) => fn({ k: k, b: 0, c: ci, s: si, p: pi }, p)))));
+                ['summary', 'actions', 'header'].forEach(k => layout.surfaces[k].containers.forEach((c, ci) => c.stacks.forEach((s, si) => s.splits.forEach((p, pi) => fn({ k: k, b: 0, c: ci, s: si, p: pi }, p)))));
                 layout.bands.forEach((band, bi) => band.stacks.forEach((s, si) => s.splits.forEach((p, pi) => fn({ k: 'band', b: bi, c: 0, s: si, p: pi }, p))));
             }
             const cellAtAddr = (layout, a) => { const surf = surfaceAt(layout, a.k, a.b); return surf && surf.containers[a.c] && surf.containers[a.c].stacks[a.s] && surf.containers[a.c].stacks[a.s].splits[a.p]; };
@@ -27756,6 +27806,9 @@
                     return null;
                 }
                 const used = new Set();
+                const rawHeader = isObj(raw.surfaces) ? raw.surfaces.header : null;
+                let headerS = rawHeader ? sanitizeSurface(rawHeader, 'header', used) : null;
+                if (headerS) headerS = { height: clampH(rawHeader.height), containers: headerS.containers };
                 let summaryS = rawSummary ? sanitizeSurface(rawSummary, 'summary', used) : null;
                 let actions = sanitizeSurface(rawActions, 'actions', used);
                 if (actions) actions = { height: clampH(rawActions.height), containers: actions.containers };
@@ -27772,7 +27825,8 @@
                     if (fromV1 && !v1HadHint) clearMapping(summaryS, 'utility:collapseHint');   // the user had removed the hint before
                 }
                 if (!bands) { if (!fallback) return null; bands = clone(fallback.bands); }
-                const layout = { schemaVersion: SCHEMA, revision: REVISION, surfaces: { summary: summaryS, actions: actions }, bands: bands, styles: sanitizeStyles(raw.styles) };
+                if (!headerS) { if (!fallback) return null; headerS = clone(fallback.surfaces.header); }      // v10.05.00: an older layout (or an unusable region) gets the built-in header of its profile
+                const layout = { schemaVersion: SCHEMA, revision: REVISION, surfaces: { summary: summaryS, actions: actions, header: headerS }, bands: bands, styles: sanitizeStyles(raw.styles) };
                 if (rev < INJECTOR_REVISION && profile && layout.bands.length < LIM.bands && INJECTOR_IDS.every(id => !findAddr(layout, id))) {
                     layout.bands.push(injectorBand(profile));   // one-time migration: deterministic area, existing components stay where they are
                 }
@@ -27785,11 +27839,28 @@
             const E = () => sp('empty');
             const SUMMARY_DEFAULT = () => ({ containers: [{ widthWeight: 1, stacks: [{ heightWeight: 0, splits: [sp('display:sectionTitle', 3, 'start'), sp('utility:settings', 0.5, 'center'), sp('utility:collapseHint', 1.6, 'end')] }] }] });
             const BANDS_DEFAULT = profile => [newBand('middle', 'always', 'region:messages'), injectorBand(profile)];
+            // v10.05.00: built-in header regions. Desktop = the old canonical header (identity left: logo / title / version + site badge, an empty middle, the six
+            // utilities right; 88 px). Mobile = three short rows in one container (identity; the six utilities; the site badge), Auto height, so nothing is squeezed
+            // into tiny weighted cells at phone width; its buttons are 38 px (a comfortable touch size) and Back and the gear are always in the utility row.
+            const hb = (id, w) => sp(id, w || 1, 'center');
+            const HEADER_DEFAULT = profile => profile === 'mobile' ? { height: 0, containers: [{ widthWeight: 1, stacks: [
+                { heightWeight: 1, splits: [sp('header:logo', 1.1, 'start'), sp('header:builderTitle', 2, 'start'), sp('header:versionBadge', 1.2, 'end')] },
+                { heightWeight: 1, splits: [hb('header:jobNotes'), hb('header:mic'), hb('header:settings'), hb('header:theme'), hb('header:fullscreen'), hb('header:back', 1.4)] },
+                { heightWeight: 1, splits: [sp('header:siteBadge', 1, 'start')] }] }] } :
+                { height: 88, containers: [
+                    { widthWeight: 1, stacks: [
+                        { heightWeight: 2, splits: [sp('header:logo', 1, 'start')] },
+                        { heightWeight: 0.7, splits: [sp('header:builderTitle', 1, 'start')] },
+                        { heightWeight: 0.7, splits: [sp('header:versionBadge', 1, 'start'), sp('header:siteBadge', 1, 'start')] }] },
+                    { widthWeight: 1, stacks: [{ heightWeight: 1, splits: [E()] }] },
+                    { widthWeight: 1, stacks: [{ heightWeight: 1, splits: [hb('header:jobNotes'), hb('header:mic'), hb('header:settings'), hb('header:theme'), hb('header:fullscreen'), hb('header:back')] }] }] };
+            const HEADER_STYLES_DEFAULT = profile => profile === 'mobile' ? { 'header:jobNotes': { boxSize: 38 }, 'header:mic': { boxSize: 38 }, 'header:settings': { boxSize: 38 }, 'header:theme': { boxSize: 38 }, 'header:fullscreen': { boxSize: 38 }, 'header:back': { boxSize: 38 } } : {};
             let DEFAULTS = null;
             DEFAULTS = {
                 // Actions: initial template 3 containers x 3 stacks x 2 splits (a starting point, not a limit), Auto height.
                 desktop: sanitizeLayout({
                     schemaVersion: 3, revision: REVISION, surfaces: {
+                        header: HEADER_DEFAULT('desktop'),
                         summary: SUMMARY_DEFAULT(),
                         actions: { height: 0, containers: [
                             { widthWeight: 1.4, stacks: [
@@ -27806,11 +27877,13 @@
                                 { heightWeight: 1, splits: [E(), E()] }] }
                         ] }
                     },
-                    bands: BANDS_DEFAULT('desktop')
+                    bands: BANDS_DEFAULT('desktop'),
+                    styles: HEADER_STYLES_DEFAULT('desktop')
                 }),
                 // Phone: one container, five stacks, with independent split counts per stack.
                 mobile: sanitizeLayout({
                     schemaVersion: 3, revision: REVISION, surfaces: {
+                        header: HEADER_DEFAULT('mobile'),
                         summary: SUMMARY_DEFAULT(),
                         actions: { height: 0, containers: [
                             { widthWeight: 1, stacks: [
@@ -27822,7 +27895,8 @@
                                 { heightWeight: 1, splits: [sp('display:loadedProposal', 1)] }] }
                         ] }
                     },
-                    bands: BANDS_DEFAULT('mobile')
+                    bands: BANDS_DEFAULT('mobile'),
+                    styles: HEADER_STYLES_DEFAULT('mobile')
                 })
             };
             const HARD_FALLBACK = DEFAULTS.desktop;
@@ -27835,20 +27909,148 @@
             const settingsOk = () => typeof window.setLocalUserSetting === 'function' && typeof window.getLocalUserSetting === 'function' &&
                 typeof window.resetLocalUserSetting === 'function';
 
-            function effectiveLayout(profile) {
+            // ---- Legacy Page 2 header conversion (v10.05.00) -------------------------------------------------------------------
+            // The old header was propSettings.page2Header.headerLayout (changeout_prop_settings_v1): containers -> stacks -> splits with a mapping name. It is converted into the
+            // Builder's header region: structure, weights, alignment (cell alignment and top / bottom vertical position), custom text (the first two custom-text cells become
+            // header:text1 / header:text2; further ones are dropped), offsets (nudge, +/-100 px), text sizes (a fine step of 0.5 px, +/-4 px around the default), icon sizes (+/-8 px
+            // around 16) and control / logo sizes (button size or logo height). The legacy header height becomes the region height. NOT representable, and therefore not
+            // converted: fixed-pixel locks (the weight is kept), the header padding, the three gaps, the per-cell padding, wrap / overflow modes, and the vestigial settings.
+            // More than 6 containers, 10 stacks or 8 cells are trimmed (Back and the gear are always re-inserted). The legacy data itself is never changed or deleted
+            // (it stays available for rollback); a marker on it (builderHeaderReset) records that the user reset the Builder header, so a reset is not undone by a later load.
+            const LEGACY_HEADER_MAP = { logo: 'header:logo', 'builder-title': 'header:builderTitle', version: 'header:versionBadge', 'site-badge': 'header:siteBadge', 'job-notes': 'header:jobNotes',
+                microphone: 'header:mic', mic: 'header:mic', 'page2-settings': 'header:settings', settings: 'header:settings', theme: 'header:theme', fullscreen: 'header:fullscreen', back: 'header:back' };
+            const HEADER_TEXT_DEFAULT = { 'header:builderTitle': 12, 'header:versionBadge': 11, 'header:text1': 12, 'header:text2': 12 };
+            const LEGACY_HALIGN = { left: 'start', center: 'center', right: 'end' };
+            // -> { surface, styles, notes } or null when the legacy object has no usable layout
+            function convertLegacyHeader(h) {
+                if (!isObj(h) || !isObj(h.headerLayout) || !Array.isArray(h.headerLayout.containers) || !h.headerLayout.containers.length) return null;
+                const notes = [], used = new Set(), styles = {};
+                let texts = 0;
+                const num = (v, d) => { const n = Number(v); return isFinite(n) ? n : d; };
+                const resolve = sp0 => {
+                    let m = typeof sp0.mapping === 'string' ? sp0.mapping : 'empty';
+                    if (m === 'external-control') { m = sp0.externalSourceSection === 'page2-header' && typeof sp0.externalSourceElement === 'string' ? sp0.externalSourceElement : 'empty'; }
+                    if (m === 'custom-text') {
+                        if (texts >= 2) { notes.push('A third or later custom-text cell was not kept (the header has two custom-text slots).'); return 'empty'; }
+                        texts++;
+                        return 'header:text' + texts;
+                    }
+                    return Object.prototype.hasOwnProperty.call(LEGACY_HEADER_MAP, m) ? LEGACY_HEADER_MAP[m] : 'empty';
+                };
+                const containers = [];
+                h.headerLayout.containers.slice(0, LIM.containers).forEach(c => {
+                    if (!isObj(c) || !Array.isArray(c.stacks) || !c.stacks.length) return;
+                    const stacks = [];
+                    c.stacks.slice(0, LIM.stacks).forEach(st => {
+                        if (!isObj(st) || !Array.isArray(st.splits) || !st.splits.length) return;
+                        const splits = [];
+                        st.splits.slice(0, LIM.splits).forEach(sp0 => {
+                            if (!isObj(sp0)) return;
+                            let id = resolve(sp0);
+                            if (id !== 'empty' && used.has(id)) id = 'empty';
+                            if (id !== 'empty') {
+                                used.add(id);
+                                const stl = {}, def = COMPONENTS[id];
+                                if (sp0.verticalAlign === 'top' || sp0.verticalAlign === 'bottom') stl.vAlign = sp0.verticalAlign;
+                                const ox = clampInt(num(sp0.offsetX, 0), def.nudgeLim), oy = clampInt(num(sp0.offsetY, 0), def.nudgeLim);
+                                if (ox) stl.nudgeX = ox;
+                                if (oy) stl.nudgeY = oy;
+                                if (HEADER_TEXT_DEFAULT[id] !== undefined && sp0.mapping !== 'empty') {
+                                    const f = clampInt(Math.round((num(sp0.fontSize, HEADER_TEXT_DEFAULT[id]) - HEADER_TEXT_DEFAULT[id]) / 0.5), LIM.fine);
+                                    if (f) stl.textFine = f;
+                                }
+                                if (def.textSlot) stl.customText = typeof sp0.customText === 'string' ? sp0.customText : '';
+                                if (def.sizeKind === 'btn') {
+                                    const bs = Math.round(num(sp0.controlSize, 32));
+                                    if (bs !== 32) stl.boxSize = bs;
+                                    const f = clampInt(Math.round(num(sp0.iconSize, 16)) - 16, LIM.fine);
+                                    if (f) stl.iconFine = f;
+                                }
+                                if (def.sizeKind === 'logo') { const ls = Math.round(num(sp0.iconSize, 36)); if (ls !== 36) stl.boxSize = ls; }
+                                const clean = sanitizeStyle(stl, def);
+                                if (clean) styles[id] = clean;
+                            }
+                            splits.push({ widthWeight: clampW(sp0.widthWeight, 1), mapping: id, hAlign: LEGACY_HALIGN[sp0.horizontalAlign] || 'start' });
+                        });
+                        if (splits.length) stacks.push({ heightWeight: clampW(st.heightWeight, 1, 0), splits: splits });
+                    });
+                    if (stacks.length) containers.push({ widthWeight: clampW(c.widthWeight, 1), stacks: stacks });
+                });
+                if (!containers.length) return null;
+                if (h.headerLayout.containers.length > LIM.containers) notes.push('Containers beyond ' + LIM.containers + ' were not kept.');
+                return { surface: { height: clampH(num(h.headerHeight, 88)), containers: containers }, styles: styles, notes: notes };
+            }
+            // A legacy header that differs from what its own settings would build by default (layout, or a non-default height) counts as customized.
+            function legacyHeaderCustomized(h) {
+                try {
+                    if (!isObj(h) || typeof window.createCanonicalPage2HeaderLayout !== 'function') return false;
+                    const mine = convertLegacyHeader(h);
+                    if (!mine) return false;
+                    const ref = convertLegacyHeader(Object.assign({}, h, { headerLayout: window.createCanonicalPage2HeaderLayout(h) }));
+                    return JSON.stringify(mine) !== JSON.stringify(ref) || mine.surface.height !== 88;
+                } catch (e) { return false; }
+            }
+            const legacyHeader = () => { try { return typeof propSettings !== 'undefined' && isObj(propSettings) && isObj(propSettings.page2Header) ? propSettings.page2Header : null; } catch (e) { return null; } };
+            // The conversion to apply to the desktop layout of this device, or null (no legacy header, an uncustomized one, an unusable one, or the Builder header was reset).
+            function legacyHeaderOverride() {
+                const h = legacyHeader();
+                if (!h || h.builderHeaderReset === true || !legacyHeaderCustomized(h)) return null;
+                return convertLegacyHeader(h);
+            }
+            function markHeaderReset() {
+                try { const h = legacyHeader(); if (h && h.builderHeaderReset !== true) { h.builderHeaderReset = true; if (typeof savePropSettings === 'function') savePropSettings(); } } catch (e) { console.error(e); }
+            }
+            // A layout that has no header region of its own yet (a revision 6 layout, or no saved layout) gets the converted legacy header (desktop only), through the one sanitizer.
+            function injectLegacyHeader(layout, profile, noLegacy) {
+                if (noLegacy || profile !== 'desktop') return layout;
+                const lg = legacyHeaderOverride();
+                if (!lg) return layout;
+                const tmp = clone(layout);
+                tmp.surfaces.header = clone(lg.surface);
+                HEADER_IDS.forEach(id => { delete tmp.styles[id]; });
+                Object.keys(lg.styles).forEach(id => { tmp.styles[id] = clone(lg.styles[id]); });
+                return sanitizeLayout(tmp, profile) || layout;
+            }
+            function effectiveLayout(profile, noLegacy) {
                 const fallback = DEFAULTS[profile] || HARD_FALLBACK;
                 try {
                     if (settingsOk()) {
                         const stored = window.getLocalUserSetting(PATH(profile));
                         if (stored !== undefined) {
                             const clean = sanitizeLayout(stored, profile);
-                            if (clean) return clean;
+                            if (clean) return isObj(stored) && isObj(stored.surfaces) && isObj(stored.surfaces.header) ? clean : injectLegacyHeader(clean, profile, noLegacy);
                         }
                     }
                 } catch (err) {
                     console.error('Proposal Builder layout: stored layout unreadable, using the built-in default.', err);
                 }
-                return clone(fallback);
+                return injectLegacyHeader(clone(fallback), profile, noLegacy);
+            }
+            // What a Design Profile captures for a profile: null (built-in default) only when nothing is saved AND no legacy header would be applied.
+            function capturableLayout(profile) {
+                const stored = settingsOk() ? window.getLocalUserSetting(PATH(profile)) : undefined;
+                if (stored === undefined) return profile === 'desktop' && legacyHeaderOverride() ? effectiveLayout(profile) : null;
+                const clean = sanitizeLayout(stored, profile);
+                if (!clean) return null;
+                return isObj(stored) && isObj(stored.surfaces) && isObj(stored.surfaces.header) ? clean : injectLegacyHeader(clean, profile, false);
+            }
+            // Old Design Profile (page2.header unit) or any caller holding a legacy header object: write its header region into one profile's saved layout.
+            // A legacy header that is not customized writes the built-in header (so a profile apply never leaves a stale header behind).
+            function applyLegacyHeader(profile, legacy) {
+                if (PROFILES.indexOf(profile) < 0 || !isObj(legacy)) return false;
+                const lg = legacyHeaderCustomized(legacy) ? convertLegacyHeader(legacy) : null;
+                const def = DEFAULTS[profile] || HARD_FALLBACK;
+                const layout = clone(effectiveLayout(profile, true));
+                layout.surfaces.header = clone(lg ? lg.surface : def.surfaces.header);
+                HEADER_IDS.forEach(id => { delete layout.styles[id]; });
+                const st = lg ? lg.styles : (def.styles || {});
+                Object.keys(st).forEach(id => { if (HEADER_IDS.indexOf(id) >= 0) layout.styles[id] = clone(st[id]); });
+                const clean = sanitizeLayout(layout, profile) || clone(def);
+                window.setLocalUserSetting(PATH(profile), clean);
+                markHeaderReset();
+                renderBar();
+                if (state.editing) renderEditor();
+                return true;
             }
             // Does this profile/region differ from the built-in default?
             function surfaceCustomized(profile, kind) {
@@ -27874,6 +28076,7 @@
             };
             let details = null, summary = null, sumBody = null, region = null, sumHost = null, actWrap = null, actHost = null, parking = null, strip = null;
             let zoneTop = null, zoneMid = null, zoneTail = null, zoneBottom = null;
+            let hdrWrap = null, hdrHost = null;      // v10.05.00: the Page 2 header region (outside the section's <details>)
             // References to every original node, captured before a render replaces any host: a node that moves between regions
             // (the Loaded proposal: Actions <-> a band) must survive the old host being emptied before its new host is built.
             let renderNodes = null;
@@ -27963,8 +28166,8 @@
             // The originals carry presentation hints as data attributes and CSS custom properties; pb_style rules do the rest. Everything is
             // cleared from every original at the start of each render, so a removed style, a moved component or the failure fallback never
             // leaves a stale mark behind.
-            const NODE_ATTRS = ['data-pb-ts', 'data-pb-is', 'data-pb-ig', 'data-pb-ta', 'data-pb-dn', 'data-pb-nudge', 'data-pb-fine0', 'data-pb-ifine0', 'data-pb-fit', 'data-pb-over', 'data-pb-tnudge', 'data-pb-inudge', 'data-pb-ipos', 'data-pb-pt', 'data-pb-mi', 'data-pb-tmove', 'data-pb-imove', 'data-pb-tanchor', 'data-pb-ianchor', 'data-pb-ma', 'data-pb-label'];
-            const NODE_VARS = ['--pb-fine', '--pb-ifine', '--pb-nx', '--pb-ny', '--pb-fs0', '--pb-fit', '--pb-tnx', '--pb-tny', '--pb-inx', '--pb-iny', '--pb-h0', '--pb-tax', '--pb-tay', '--pb-iax', '--pb-iay'];
+            const NODE_ATTRS = ['data-pb-ts', 'data-pb-is', 'data-pb-ig', 'data-pb-ta', 'data-pb-dn', 'data-pb-nudge', 'data-pb-fine0', 'data-pb-ifine0', 'data-pb-fit', 'data-pb-over', 'data-pb-tnudge', 'data-pb-inudge', 'data-pb-ipos', 'data-pb-pt', 'data-pb-mi', 'data-pb-tmove', 'data-pb-imove', 'data-pb-tanchor', 'data-pb-ianchor', 'data-pb-ma', 'data-pb-label', 'data-pb-box'];
+            const NODE_VARS = ['--pb-fine', '--pb-ifine', '--pb-nx', '--pb-ny', '--pb-fs0', '--pb-fit', '--pb-tnx', '--pb-tny', '--pb-inx', '--pb-iny', '--pb-h0', '--pb-tax', '--pb-tay', '--pb-iax', '--pb-iay', '--pb-box'];
             function clearNodeStyle(n) {
                 NODE_ATTRS.forEach(a => n.removeAttribute(a));
                 NODE_VARS.forEach(v => n.style.removeProperty(v));
@@ -28019,12 +28222,14 @@
             function applyStyles(layout) {
                 COMPONENT_IDS.forEach(id => { const n = nodeOf(id); if (n) { if (n.__pbCustom) restoreLabel(n, COMPONENTS[id]); clearNodeStyle(n); } });
                 const styles = layout.styles || {};
+                HEADER_TEXT_IDS.forEach(id => { const n = nodeOf(id); if (!n) return; const t = (styles[id] && styles[id].customText) || ''; if (n.textContent !== t) n.textContent = t; });   // custom text: always set as text, never as markup
                 Object.keys(styles).forEach(id => {
                     const n = nodeOf(id), st = styles[id], def = COMPONENTS[id];
                     const slot = n && n.closest ? n.closest('.pb-slot') : null;
                     if (!slot || !def) return;
                     slot.setAttribute('data-pb-styled', '1');
                     if (st.vAlign) slot.setAttribute('data-pb-va', st.vAlign);
+                    if (st.boxSize) { n.setAttribute('data-pb-box', def.sizeKind === 'logo' ? 'logo' : '1'); n.style.setProperty('--pb-box', st.boxSize + 'px'); }
                     if (st.textSize) n.setAttribute('data-pb-ts', st.textSize);
                     if (st.textFine) {
                         n.style.setProperty('--pb-fine', String(st.textFine));
@@ -28153,6 +28358,7 @@
             function naturalHeight(kind, bandIdx) {
                 try {
                     if (kind === 'actions') return Math.round(actHost.getBoundingClientRect().height);
+                    if (kind === 'header') return hdrHost ? Math.round(hdrHost.getBoundingClientRect().height) : 0;
                     if (kind === 'band') { const el = document.querySelector('.pb-band[data-pb-band="' + bandIdx + '"]'); return el ? Math.round(el.getBoundingClientRect().height) : 0; }
                 } catch (e) { /* not rendered */ }
                 return 0;
@@ -28168,6 +28374,14 @@
                     COMPONENT_IDS.forEach(id => { renderNodes[id] = nodeFor(id); });
                     parkAll(placed);                       // unmapped originals stay in the document, parked and hidden
                     if (strip) strip.style.display = 'none';   // the old fixed Smart Injector strip no longer lays anything out
+                    if (hdrHost) {
+                        const hh = layout.surfaces.header.height;
+                        buildSurface('header', layout.surfaces.header, hdrHost, { height: hh });
+                        hdrHost.style.minHeight = hh > 0 ? hh + 'px' : '';
+                        hdrHost.setAttribute('data-pb-profile', profile);
+                        const lh = $('page2-header-layout'); if (lh) lh.style.display = 'none';      // the legacy shared-grid target stays empty
+                        window.__pbHeaderActive = true;
+                    }
                     buildSurface('summary', layout.surfaces.summary, sumHost, { height: 0 });
                     const ah = layout.surfaces.actions.height;
                     buildSurface('actions', layout.surfaces.actions, actHost, { height: ah });
@@ -28215,6 +28429,13 @@
                     clearAvailability();
                     COMPONENT_IDS.forEach(id => { const n = nodeOf(id); if (n) clearNodeStyle(n); });
                     COMPONENT_IDS.forEach(id => { const n = nodeOf(id); if (n && !INJECTOR_SET.has(id)) { n.inert = false; parking.appendChild(n); } });
+                    // v10.05.00: the header goes back to the legacy shared-grid header (its originals return to the source bank it draws from)
+                    window.__pbHeaderActive = false;
+                    const bank = $('page2-header-native-source-bank');
+                    HEADER_IDS.forEach(id => { const n = nodeOf(id); if (n && bank) bank.appendChild(n); });
+                    if (hdrHost) hdrHost.replaceChildren();
+                    const lh = $('page2-header-layout'); if (lh) lh.style.display = '';
+                    try { if (typeof window.renderPage2HeaderLayout === 'function') window.renderPage2HeaderLayout(); } catch (e2) { console.error(e2); }
                     if (strip) {                            // the Smart Injector controls go back into their original strip, in their original order
                         INJECTOR_IDS.forEach(id => { const n = nodeOf(id); if (n) { n.inert = false; strip.appendChild(n); } });
                         strip.style.display = '';
@@ -28578,6 +28799,11 @@
                         if (cell && cell.mapping === 'empty') cell.mapping = id;
                     });
                 } else layout.surfaces[kind] = clone(def.surfaces[kind]);
+                if (kind === 'header') {      // the region's components go back to their built-in appearance and text as well, and a legacy header is no longer applied
+                    HEADER_IDS.forEach(id => { delete layout.styles[id]; });
+                    Object.keys(def.styles || {}).forEach(id => { if (HEADER_IDS.indexOf(id) >= 0) layout.styles[id] = clone(def.styles[id]); });
+                    markHeaderReset();
+                }
                 const clean = sanitizeLayout(layout, profile) || clone(def);
                 try { window.setLocalUserSetting(PATH(profile), clean); } catch (err) { console.error(err); state.saveError = String(err && err.message || err); }
             }
@@ -28728,7 +28954,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.04.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.05.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -28794,6 +29020,7 @@
                 const parts = arg.split(':'), sign = parts[1] === '+' ? 1 : -1, step = coarse ? 2 : 1;
                 if (act === 'ts') { if (TEXT_SIZES.indexOf(arg) >= 0) st.textSize = arg; }
                 else if (act === 'tf') st.textFine = clampInt((st.textFine || 0) + sign * step, LIM.fine);
+                else if (act === 'bs') { const d0 = COMPONENTS[id]; if (d0.sizeDef) st.boxSize = Math.max(d0.sizeMin, Math.min(d0.sizeMax, (st.boxSize || d0.sizeDef) + sign * (coarse ? 8 : 2))); }
                 else if (act === 'is') { if (ICON_SIZES.indexOf(arg) >= 0) st.iconSize = arg; }
                 else if (act === 'if') st.iconFine = clampInt((st.iconFine || 0) + sign * step, LIM.fine);
                 else if (act === 'ig') { if (ICON_GAPS.indexOf(arg) >= 0) st.iconGap = arg; }
@@ -28802,7 +29029,7 @@
                 else if (act === 'dn') { if (DENSITIES.indexOf(arg) >= 0) st.density = arg; }
                 else if (act === 'nx' || act === 'ny' || act === 'tx' || act === 'ty' || act === 'ix' || act === 'iy') {
                     // component / text / icon offsets: 1 px per click, Shift 5 px; +/-100 px (+/-40 px for the compact Summary components)
-                    const lim = COMPONENTS[id].fill === 'natural' ? LIM.nudgeNatural : LIM.nudge, d = sign * (coarse ? LIM.nudgeCoarse : 1);
+                    const lim = COMPONENTS[id].nudgeLim || (COMPONENTS[id].fill === 'natural' ? LIM.nudgeNatural : LIM.nudge), d = sign * (coarse ? LIM.nudgeCoarse : 1);
                     const key = { nx: 'nudgeX', ny: 'nudgeY', tx: 'textNudgeX', ty: 'textNudgeY', ix: 'iconNudgeX', iy: 'iconNudgeY' }[act];
                     st[key] = clampInt((st[key] || 0) + d, lim);
                 }
@@ -28859,6 +29086,9 @@
                     if (def.labelTarget) h += lab('Label text') + '<div class="flex gap-1"><input type="text" data-pb-label="1" maxlength="' + LIM.labelMax + '" value="' + esc(st.customLabel || def.defaultLabel) + '" aria-label="Label text" class="flex-1 min-w-0 bg-slate-950 border border-slate-700 rounded p-1.5 text-xs text-white">' +
                         '<button type="button" data-pb-act="lreset" title="Back to the built-in label" class="px-2 text-[10px] font-bold uppercase rounded bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">Reset</button></div>' +
                         '<div class="text-[9px] text-slate-500 leading-relaxed">Built-in label: ' + esc(def.defaultLabel) + '. Only the visible words change, never what the control does. Saved per layout (Desktop and Mobile separately).</div>';
+                    if (def.textSlot) h += lab('Text (shown in the header)') + '<input type="text" data-pb-textslot="1" maxlength="200" value="' + esc(st.customText || '') + '" placeholder="Enter custom text..." aria-label="Custom text" class="w-full bg-slate-950 border border-slate-700 rounded p-1.5 text-xs text-white">' +
+                        '<div class="text-[9px] text-slate-500 leading-relaxed">Plain text, saved with this layout (Desktop and Mobile separately). Empty shows nothing.</div>';
+                    if (has('size')) h += stepper(def.sizeKind === 'logo' ? 'Logo height' : 'Control size', (st.boxSize || def.sizeDef) + ' px', 'bs', 'size');
                     if (has('text')) h += lab('Text size') + seg('ts', TEXT_SIZES, TEXT_SIZE_LABEL, st.textSize || 'auto') + stepper('Text fine tune', signed(st.textFine || 0), 'tf', 'text');
                     const grp = def.textTarget || def.icon ? 'Content group' : 'Text';
                     if (has('textAlign')) h += lab(grp + ' alignment') + seg('ta', TEXT_ALIGNS, TALIGN_LABEL, st.textAlign || 'auto');
@@ -28928,7 +29158,7 @@
                 }
                 // Region-level controls
                 let regionHtml = '';
-                const distributable = kind === 'actions' ? layout.surfaces.actions.height > 0 : isBand ? band.height > 0 : false;
+                const distributable = kind === 'actions' || kind === 'header' ? layout.surfaces[kind].height > 0 : isBand ? band.height > 0 : false;
                 if (isBand) {
                     const sameGroup = layout.bands.map((b, i) => ({ b: b, i: i })).filter(x => x.b.position === band.position);
                     const gi = sameGroup.findIndex(x => x.i === state.band);
@@ -28944,9 +29174,9 @@
                         '<div class="text-[9px] text-slate-500 leading-relaxed">' + (band.height > 0 ? 'Minimum height: the band grows if its content needs more, and its stacks share the height by their Stack Height Ratios. Steps of 5 px (Shift+click 20 px); stepping below the minimum returns to Auto.' : 'Auto: the band is as tall as its content (a one-line message stays one line). The first + starts at that natural height. The ~ value is only a readout and is never saved.') + '</div>' +
                         '<div class="text-[9px] text-slate-500">When the section is collapsed</div><div class="flex gap-1">' + VISIBILITIES.map(k => toggleBtn('bvis', k, VIS_LABEL[k], band.visibility === k)).join('') + '</div>');
                 } else {
-                    regionHtml += sect('Region', stepper('Containers', surf.containers.length, 'cnt', 'containers') + (kind === 'actions' ?
-                        stepper('Overall height', heightLabel(layout.surfaces.actions.height, layout.surfaces.actions.height > 0 ? 0 : naturalHeight('actions')), 'ah', 'actions') +
-                        '<div class="text-[9px] text-slate-500 leading-relaxed">' + (layout.surfaces.actions.height > 0 ? 'Minimum height: stacks share it by their Stack Height Ratios (the section grows if content needs more). Steps of 5 px (Shift+click 20 px); stepping below the minimum returns to Auto.' : 'Auto: natural height. The first + starts at that natural height; the ~ value is only a readout and is never saved. A set height is divided between stacks by ratio.') + '</div>' : ''));
+                    regionHtml += sect('Region', stepper('Containers', surf.containers.length, 'cnt', 'containers') + (kind === 'actions' || kind === 'header' ?
+                        stepper('Overall height', heightLabel(layout.surfaces[kind].height, layout.surfaces[kind].height > 0 ? 0 : naturalHeight(kind)), 'ah', kind) +
+                        '<div class="text-[9px] text-slate-500 leading-relaxed">' + (layout.surfaces[kind].height > 0 ? 'Minimum height: stacks share it by their Stack Height Ratios (the section grows if content needs more). Steps of 5 px (Shift+click 20 px); stepping below the minimum returns to Auto.' : 'Auto: natural height. The first + starts at that natural height; the ~ value is only a readout and is never saved. A set height is divided between stacks by ratio.') + '</div>' : ''));
                 }
                 const posLine = isBand ? 'Band ' + (state.band + 1) + ' · Stack ' + (state.sel.s + 1) + ' · Split ' + (state.sel.p + 1)
                     : 'Container ' + (state.sel.c + 1) + ' · Stack ' + (state.sel.s + 1) + ' · Split ' + (state.sel.p + 1);
@@ -29081,7 +29311,7 @@
                 }
                 if (act === 'bvis') { const bd = layout.bands[state.band]; if (bd && VISIBILITIES.indexOf(arg) >= 0) { bd.visibility = arg; commit(profile, layout); } return; }
                 if (act === 'bh') { const bd = layout.bands[state.band]; if (bd) { bd.height = stepHeight(bd.height, arg.split(':')[1] === '+' ? 1 : -1, coarse, bd.height === 0 ? naturalHeight('band', state.band) : 0); commit(profile, layout); } return; }
-                if (act === 'ah') { const a = layout.surfaces.actions; a.height = stepHeight(a.height, arg.split(':')[1] === '+' ? 1 : -1, coarse, a.height === 0 ? naturalHeight('actions') : 0); commit(profile, layout); return; }
+                if (act === 'ah') { const rk = arg.split(':')[0] === 'header' ? 'header' : 'actions'; const a = layout.surfaces[rk]; a.height = stepHeight(a.height, arg.split(':')[1] === '+' ? 1 : -1, coarse, a.height === 0 ? naturalHeight(rk) : 0); commit(profile, layout); return; }
                 if (act === 'styleResetAll') { layout.styles = {}; commit(profile, layout); return; }
                 // ---- container / stack / split edits in the selected region ----
                 const surf = surfOf(layout);
@@ -29121,6 +29351,23 @@
             }
             function onPanelChange(e) {
                 if (!state.editProfile) return;
+                const ti = e.target.closest ? e.target.closest('input[data-pb-textslot]') : null;
+                if (ti) {      // v10.05.00: the text of a header custom-text slot
+                    state.notice = null;
+                    const layout = editLayout();
+                    clampBand(layout);
+                    const surf = surfOf(layout);
+                    if (!surf) return;
+                    clampSel(surf);
+                    const id = surf.containers[state.sel.c].stacks[state.sel.s].splits[state.sel.p].mapping;
+                    if (COMPONENTS[id] && COMPONENTS[id].textSlot) {
+                        if (!isObj(layout.styles)) layout.styles = {};
+                        const st = isObj(layout.styles[id]) ? layout.styles[id] : (layout.styles[id] = {});
+                        st.customText = ti.value;
+                        commit(state.editProfile, layout);
+                    }
+                    return;
+                }
                 const li = e.target.closest ? e.target.closest('input[data-pb-label]') : null;
                 if (li) {
                     state.notice = null;
@@ -29185,6 +29432,7 @@
                     state.editProfile = state.editProfile || currentMode();
                     state.previewProfile = state.editProfile;
                     details.classList.add('pb-editing');
+                    if (hdrWrap) hdrWrap.classList.add('pb-editing');
                     state.detailsWasOpen = details.open;     // the action grid must be on screen to be edited; the runtime state is restored on close
                     details.open = true;
                     renderBar(); renderEditor();
@@ -29196,6 +29444,7 @@
                     state.previewProfile = null;
                     state.moveMode = null; state.notice = null;
                     details.classList.remove('pb-editing');
+                    if (hdrWrap) hdrWrap.classList.remove('pb-editing');
                     if (state.detailsWasOpen !== null) details.open = state.detailsWasOpen;
                     state.detailsWasOpen = null;
                     renderBar();
@@ -29212,7 +29461,7 @@
                     return;
                 }
                 e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-                const kind = hostEl === sumHost ? 'summary' : hostEl === actHost ? 'actions' : 'band';
+                const kind = hostEl === hdrHost ? 'header' : hostEl === sumHost ? 'summary' : hostEl === actHost ? 'actions' : 'band';
                 const bi = kind === 'band' ? +hostEl.getAttribute('data-pb-band') : 0;
                 const slot = e.target.closest('.pb-slot'), stack = e.target.closest('.pb-stack'), cont = e.target.closest('.pb-container');
                 const t = slot || stack || cont;
@@ -29275,6 +29524,15 @@
                 sumBody.appendChild(zoneMid);
                 sumBody.appendChild(zoneTail);
                 summary.appendChild(sumBody);
+                hdrWrap = $('pb-hdr-wrap');      // v10.05.00: the Page 2 header region (it lives above the section, so it needs its own host and click handler)
+                if (hdrWrap) {
+                    hdrHost = document.createElement('div');
+                    hdrHost.id = 'pb-hdr-host';
+                    hdrHost.className = 'pb-host';
+                    hdrHost.setAttribute('data-editor-surface', 'proposal-bar-header');
+                    hdrWrap.appendChild(hdrHost);
+                    hdrWrap.addEventListener('click', onSectionClick, true);
+                }
                 actWrap.appendChild(actHost);
                 actWrap.appendChild(zoneBottom);
                 details.addEventListener('click', onSectionClick, true);   // capture: while editing, nothing inside may run its normal action
@@ -29286,7 +29544,7 @@
                 window.addEventListener('resize', queueFit, { passive: true });
                 if (typeof ResizeObserver === 'function') {
                     const ro = new ResizeObserver(entries => { entries.forEach(en => { const w = Math.round(en.contentRect.width); if (en.target.__pbW !== w) { en.target.__pbW = w; queueFit(); } }); });
-                    [sumHost, actHost].forEach(h => { if (h) ro.observe(h); });
+                    [sumHost, actHost, hdrHost].forEach(h => { if (h) ro.observe(h); });
                     state.ro = ro;
                 }
                 details.addEventListener('click', onUnavailableClick, true);
@@ -29319,6 +29577,8 @@
                 // Open the editor through the existing settings modal.
                 const prevOpen = window.openPage2Settings;
                 window.openPage2Settings = function (scope) {
+                    // v10.05.00: the header gear (and the old 'page2' scope) opens this editor on the Header region; the legacy header editor is kept only as the fallback
+                    if (scope === 'page2' && hdrHost && state.ready && !state.failed) { scope = 'proposal-bar'; state.editSurface = 'header'; }
                     if (scope !== 'proposal-bar') {
                         if (panel) panel.classList.add('hidden');
                         return typeof prevOpen === 'function' ? prevOpen.apply(this, arguments) : undefined;
@@ -29353,7 +29613,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.04.01',
+                version: 'v10.05.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29391,7 +29651,14 @@
                 scrollerOf: scrollerOf,
                 openEditor: function () { window.openPage2Settings('proposal-bar'); },
                 resetSurface: function (profile, kind) { resetSurface(profile, kind); renderBar(); if (state.editing) renderEditor(); },
-                resetProfile: function (profile) { window.resetLocalUserSetting(PATH(profile)); renderBar(); if (state.editing) renderEditor(); }
+                resetProfile: function (profile) { window.resetLocalUserSetting(PATH(profile)); markHeaderReset(); renderBar(); if (state.editing) renderEditor(); },
+                // v10.05.00 (Page 2 header region)
+                headerActive: function () { return !!hdrHost && state.ready && !state.failed; },
+                headerComponents: HEADER_IDS.slice(),
+                capturableLayout: capturableLayout,
+                applyLegacyHeader: applyLegacyHeader,
+                convertLegacyHeader: convertLegacyHeader,
+                legacyHeaderOverride: legacyHeaderOverride
             };
             init();
         })();
@@ -29423,7 +29690,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.04.01';
+            const APP_VERSION = 'v10.05.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
@@ -29477,6 +29744,9 @@
             // to store (null means "built-in default") or undefined to skip. Future migrated surfaces register here; the profile plumbing is untouched.
             const REG = [];
             const REG_BY_ID = new Map();
+            // v10.05.00: what the profile being applied carries, so the legacy page2.header unit knows where its header belongs (a mobile profile -> the Mobile layout, otherwise Desktop)
+            // and does not overwrite a header that the same profile's Builder layout already carries.
+            let applyCtx = { target: 'mixed', hdrIn: { desktop: false, mobile: false } };
             function register(def) {
                 if (!isObj(def) || typeof def.id !== 'string' || !/^[A-Za-z][A-Za-z0-9]*(\.[A-Za-z][A-Za-z0-9]*)*$/.test(def.id)) return false;
                 if (typeof def.capture !== 'function' || typeof def.validate !== 'function' || typeof def.apply !== 'function') return false;
@@ -29577,6 +29847,9 @@
                 const v = validateProfile(raw);
                 if (!v.ok) return v;
                 const applied = [], failed = [], skipped = [];
+                const rbRaw = isObj(raw.design) && isObj(raw.design.proposalBuilder) ? raw.design.proposalBuilder : {};
+                const hasHdr = k => isObj(rbRaw[k]) && isObj(rbRaw[k].surfaces) && isObj(rbRaw[k].surfaces.header);
+                applyCtx = { target: v.profile.targetClass, hdrIn: { desktop: hasHdr('desktop'), mobile: hasHdr('mobile') } };
                 REG.forEach(ns => {
                     const u = getPath(v.profile.design, ns.id);
                     if (!u.found) { skipped.push(ns.id); return; }
@@ -29594,6 +29867,7 @@
                     id: 'proposalBuilder.' + p, title: 'Proposal Builder ' + TARGET_LABEL[p] + ' layout', surface: 'proposalBuilder', targets: [p, 'mixed'],
                     capture: function () {
                         if (!window.proposalBar || typeof window.getLocalUserSetting !== 'function') return undefined;
+                        if (typeof window.proposalBar.capturableLayout === 'function') return window.proposalBar.capturableLayout(p);      // v10.05.00: includes the header region (a not-yet-saved legacy header too)
                         const stored = window.getLocalUserSetting(path);
                         if (stored === undefined) return null;
                         return window.proposalBar.sanitizeLayout(stored, p) || null;
@@ -29639,7 +29913,8 @@
                     setPropWidth(v.mode);
                 }
             });
-            // Page 2 header: the existing header layout object, serialized as it is (no migration, no behavior change). Every field is range-checked.
+            // Page 2 header: LEGACY unit (v10.05.00). The header now lives inside the Proposal Builder Desktop / Mobile layouts, so new profiles do not capture this unit any more;
+            // an OLD profile that carries it is still read (every field range-checked), kept as the legacy header object (rollback compatibility) and converted into the Builder header.
             const HDR_NUM = { logoHeight: [8, 200, 36], titleFontSize: [6, 48, 12], versionBadgeFontSize: [6, 48, 11], buttonSize: [16, 96, 32], buttonGap: [0, 64, 6], headerHeight: [20, 400, 88],
                 headerOuterPadding: [0, 64, 8], containerGap: [0, 64, 8], stackGap: [0, 64, 4], splitGap: [0, 64, 4], cellPadding: [0, 64, 2] };
             const HDR_BOOL = ['showMic', 'showTheme', 'showFullscreen'];
@@ -29700,11 +29975,7 @@
             }
             register({
                 id: 'page2.header', title: 'Page 2 header layout', surface: 'page2', targets: TARGETS.slice(),
-                capture: function () {
-                    if (typeof propSettings === 'undefined' || !propSettings.page2Header) return undefined;
-                    const r = cleanHeader(clone(propSettings.page2Header));
-                    return r.ok ? r.value : undefined;
-                },
+                capture: function () { return undefined; },      // v10.05.00: the header is captured inside proposalBuilder.desktop / .mobile
                 validate: cleanHeader,
                 apply: function (v) {
                     propSettings.page2Header = clone(v);
@@ -29713,6 +29984,10 @@
                     window.page2HeaderSelectedContainer = 0; window.page2HeaderSelectedStack = 0; window.page2HeaderSelectedSplit = 0;
                     if (window.sharedGridState) { window.sharedGridState.selectedContainer = 0; window.sharedGridState.selectedStack = 0; window.sharedGridState.selectedSplit = 0; }
                     if (typeof applyPage2HeaderSettings === 'function') applyPage2HeaderSettings();
+                    try {      // v10.05.00: convert the legacy header into the Proposal Builder header of the profile's target (nothing is discarded)
+                        const tgt = applyCtx.target === 'mobile' ? 'mobile' : 'desktop';
+                        if (window.proposalBar && typeof window.proposalBar.applyLegacyHeader === 'function' && !applyCtx.hdrIn[tgt]) window.proposalBar.applyLegacyHeader(tgt, v);
+                    } catch (e) { console.error('Design profile: the legacy header could not be converted.', e); }
                     try { if (window.activePage2SettingsScope === 'page2' && typeof window.renderPage2HeaderSettingsContent === 'function') window.renderPage2HeaderSettingsContent(); } catch (e) { /* the settings dialog is closed */ }
                 }
             });
