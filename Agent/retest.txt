@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.03.01 | Managed Proposal Type-Switch Update Warning -->
+﻿<!-- Retest Prototype v10.04.00 | Custom Proposal Intent, Scope and Wording -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.03.01</title>
+    <title>Changeout Lookup v10.04.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -672,7 +672,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.03.01</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.04.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1621,7 +1621,7 @@
                                     <span id="page2-version-badge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.03.01</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.04.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6488,7 +6488,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.03.01',
+                appVersion: 'v10.04.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6682,7 +6682,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.03.01_${stamp}.json`;
+                `platts_config_v10.04.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -11143,7 +11143,7 @@
         // A second proposal type next to System Changeout. The state lives INSIDE proposalAppState, so Create, Update, the working draft and managed
         // Load carry it with no backend change:
         //   proposalAppState.proposalType    'system' | 'custom'   (absent = 'system': every older proposal is a System proposal)
-        //   proposalAppState.customProposal  { schemaVersion, intent, scopeTerms, presentation, packageTitle, items[] }
+        //   proposalAppState.customProposal  { schemaVersion, intent, scopeTerms, otherScope, presentation, packageTitle, items[] }   (intent, scopeTerms and otherScope: v10.04.00, Phase 1B)
         // Each item owns its values (no catalog reference is needed to reload a saved proposal). Prices are typed numbers; the System pricing
         // engine, site profiles, Smart Scope pricing and the pricing snapshot are never used for a custom proposal. Custom output is built as
         // blocks with their own targets (Custom Intro, Custom Package, Custom Item N, Custom Option N, Custom Total, Custom Closing) that can
@@ -11153,17 +11153,45 @@
         // prototype keys never survive) and keeps text as DATA: custom text is shown through an escaping path, never as markup.
         const CP_PRESENTATIONS = ['combined', 'itemized', 'options'];
         const CP_PRESENTATION_LABEL = { combined: 'Combined Package', itemized: 'Itemized', options: 'Customer Options' };
-        const CP_ACTIONS = ['', 'replace', 'install', 'addUpgrade', 'repairModify'];
-        const CP_ACTION_LABEL = { '': 'Not specified', replace: 'Replace', install: 'Install New', addUpgrade: 'Add / Upgrade', repairModify: 'Repair / Modify' };
-        const CP_GENERIC_TYPES = [['', 'Not specified'], ['bathFan', 'Bath Fan'], ['dehumidifier', 'Whole-Home Dehumidifier'], ['erv', 'ERV / Fresh Air Ventilator'], ['miniSplit', 'Mini-Split'],
-            ['thermostat', 'Thermostat'], ['iaqDevice', 'IAQ Device'], ['uvLight', 'UV Light'], ['ductwork', 'Ductwork'], ['dryerVent', 'Dryer Vent'], ['condensatePump', 'Condensate Pump'],
-            ['exhaustFan', 'Exhaust Fan'], ['other', 'Other / Custom']];
+        // v10.04.00 (Phase 1B): ONE vocabulary of job intents / item actions (the same four values for both) and ONE vocabulary of generic scope terms /
+        // item types. Phase 1A stored 'addUpgrade' and 'repairModify' for the action and 'iaqDevice' and 'uvLight' for the type; the sanitizer maps those
+        // old values to 'upgrade', 'repair', 'iaq' and 'uvAir' so a v10.03.00 / v10.03.01 proposal loads unchanged.
+        const CP_ACTIONS = ['', 'replace', 'install', 'upgrade', 'repair'];
+        const CP_ACTION_LABEL = { '': 'Not specified', replace: 'Replace', install: 'Install New', upgrade: 'Add / Upgrade', repair: 'Repair / Modify' };
+        const CP_ACTION_LEGACY = { addUpgrade: 'upgrade', repairModify: 'repair' };
+        const CP_TYPE_LEGACY = { iaqDevice: 'iaq', uvLight: 'uvAir' };
+        // id, label, noun phrase used by the intro composer, mass noun (no article), IAQ-related
+        const CP_SCOPE = [
+            { id: 'bathFan', label: 'Bath Fan', noun: 'bath fan', mass: false, iaq: false },
+            { id: 'dehumidifier', label: 'Whole-Home Dehumidifier', noun: 'whole-home dehumidifier', mass: false, iaq: true },
+            { id: 'erv', label: 'ERV', noun: 'ERV', mass: false, iaq: true },
+            { id: 'miniSplit', label: 'Mini-Split', noun: 'mini-split system', mass: false, iaq: false },
+            { id: 'thermostat', label: 'Thermostat', noun: 'thermostat', mass: false, iaq: false },
+            { id: 'iaq', label: 'Indoor Air Quality', noun: 'indoor air quality equipment', mass: true, iaq: true },
+            { id: 'uvAir', label: 'UV / Air Treatment', noun: 'UV air treatment system', mass: false, iaq: true },
+            { id: 'ductwork', label: 'Ductwork', noun: 'ductwork', mass: true, iaq: false },
+            { id: 'dryerVent', label: 'Dryer Vent', noun: 'dryer vent', mass: false, iaq: false },
+            { id: 'condensatePump', label: 'Condensate Pump', noun: 'condensate pump', mass: false, iaq: false },
+            { id: 'exhaustFan', label: 'Exhaust Fan', noun: 'exhaust fan', mass: false, iaq: false },
+            { id: 'other', label: 'Other / Custom', noun: '', mass: true, iaq: false }
+        ];
+        const CP_GENERIC_TYPES = [['', 'Not specified']].concat(CP_SCOPE.map(t => [t.id, t.label]));
         const CP_GENERIC_IDS = CP_GENERIC_TYPES.map(t => t[0]);
+        const CP_SCOPE_BY_ID = {}; CP_SCOPE.forEach(t => { CP_SCOPE_BY_ID[t.id] = t; });
+        const cpHasOwn = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+        // known value (or a Phase 1A value) -> the current value; anything else -> ''
+        function cpAction(v) { return typeof v === 'string' ? (CP_ACTIONS.indexOf(v) >= 0 ? v : (cpHasOwn(CP_ACTION_LEGACY, v) ? CP_ACTION_LEGACY[v] : '')) : ''; }
+        // item type: a known id (or a Phase 1A id) -> the current id; any other non-empty text -> 'other'; blank / not text -> ''
+        function cpType(v) {
+            if (typeof v !== 'string' || !v) return '';
+            const x = cpHasOwn(CP_TYPE_LEGACY, v) ? CP_TYPE_LEGACY[v] : v;
+            return CP_GENERIC_IDS.indexOf(x) >= 0 ? x : 'other';
+        }
         const CP_ROLES = ['package', 'line', 'option'];
         const CP_MARKERS = ['none', 'selection'];
         const CP_ROLE_FOR = { combined: 'package', itemized: 'line', options: 'option' };
         const CP_MARKER_FOR = { combined: 'none', itemized: 'none', options: 'selection' };
-        const CP_LIM = { items: 40, terms: 12, title: 120, name: 160, description: 4000, brand: 80, model: 80, term: 60, price: 10000000 };
+        const CP_LIM = { items: 40, terms: 12, title: 120, name: 160, description: 4000, brand: 80, model: 80, term: 60, otherScope: 80, price: 10000000 };
         const CP_LS_RE = new RegExp('[' + String.fromCharCode(0x2028, 0x2029) + ']', 'g');
         const cpIsObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
         function normalizeProposalType(v) { return v === 'custom' ? 'custom' : 'system'; }
@@ -11171,7 +11199,7 @@
             const pas = window.proposalAppState;
             return pas && typeof pas === 'object' && pas.proposalType === 'custom' ? 'custom' : 'system';
         }
-        function emptyCustomProposal() { return { schemaVersion: 1, intent: '', scopeTerms: [], presentation: 'combined', packageTitle: '', items: [] }; }
+        function emptyCustomProposal() { return { schemaVersion: 1, intent: '', scopeTerms: [], otherScope: '', presentation: 'combined', packageTitle: '', items: [] }; }
         // Text as data: control characters removed, line breaks normalized, length capped. NOT trimmed (the editor must be able to hold a trailing space while typing).
         function cpText(v, max, multiline) {
             if (typeof v !== 'string') return '';
@@ -11193,11 +11221,10 @@
             let id = typeof raw.id === 'string' && /^CI_[A-Za-z0-9_-]{1,48}$/.test(raw.id) && !used.has(raw.id) ? raw.id : '';
             if (!id) { let k = 1; while (used.has('CI_x' + k)) k++; id = 'CI_x' + k; }
             used.add(id);
-            const gt = typeof raw.genericType === 'string' ? raw.genericType : '';
             return {
                 id: id,
-                genericType: CP_GENERIC_IDS.indexOf(gt) >= 0 ? gt : (gt ? 'other' : ''),
-                action: CP_ACTIONS.indexOf(raw.action) >= 0 ? raw.action : '',
+                genericType: cpType(raw.genericType),
+                action: cpAction(raw.action),
                 name: cpText(raw.name, CP_LIM.name, false),
                 description: cpText(raw.description, CP_LIM.description, true),
                 brand: cpText(raw.brand, CP_LIM.brand, false),
@@ -11218,15 +11245,17 @@
             const rawItems = Array.isArray(raw.items) ? raw.items : [];
             if (rawItems.length > CP_LIM.items) notes.push('Only the first ' + CP_LIM.items + ' custom items were kept.');
             rawItems.slice(0, CP_LIM.items).forEach((r, i) => { const it = cpSanitizeItem(r, used, presentation, notes, i); if (it) items.push(it); });
-            const terms = [];
-            (Array.isArray(raw.scopeTerms) ? raw.scopeTerms : []).slice(0, CP_LIM.terms).forEach(t => {
-                if (!cpIsObj(t)) return;
-                const termId = typeof t.termId === 'string' && /^[A-Za-z0-9_-]{1,40}$/.test(t.termId) ? t.termId : '';
-                const label = cpText(t.label, CP_LIM.term, false).trim();
-                if (termId && label) terms.push({ termId: termId, label: label, action: CP_ACTIONS.indexOf(t.action) >= 0 ? t.action : '' });
+            // scopeTerms: a list of known scope ids, kept in the vocabulary's order and without repeats (a Phase 1A entry { termId } is read by its id;
+            // an unknown id is dropped). otherScope is the optional text for the Other / Custom term.
+            const picked = {};
+            (Array.isArray(raw.scopeTerms) ? raw.scopeTerms : []).slice(0, CP_LIM.terms * 4).forEach(t => {
+                let id = typeof t === 'string' ? t : (cpIsObj(t) && typeof t.termId === 'string' ? t.termId : '');
+                if (cpHasOwn(CP_TYPE_LEGACY, id)) id = CP_TYPE_LEGACY[id];
+                if (id && cpHasOwn(CP_SCOPE_BY_ID, id)) picked[id] = true;
             });
+            const terms = CP_SCOPE.filter(t => picked[t.id]).map(t => t.id);
             return {
-                value: { schemaVersion: 1, intent: CP_ACTIONS.indexOf(raw.intent) >= 0 ? raw.intent : '', scopeTerms: terms, presentation: presentation, packageTitle: cpText(raw.packageTitle, CP_LIM.title, false), items: items },
+                value: { schemaVersion: 1, intent: cpAction(raw.intent), scopeTerms: terms, otherScope: cpText(raw.otherScope, CP_LIM.otherScope, false), presentation: presentation, packageTitle: cpText(raw.packageTitle, CP_LIM.title, false), items: items },
                 notes: notes
             };
         }
@@ -11242,9 +11271,47 @@
             return pas.customProposal;
         }
         const cpMoney = n => '$' + (Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        // v10.04.00: item heading. The Display Name is the customer-facing heading and is kept exactly as typed; brand / model are appended only for the part
+        // the name does not already say. With no name, the brand / model lead, with a restrained "Action Type" phrase (for example "Replace Bath Fan") as
+        // support only when the brand / model do not already name the type. With neither, the "Action Type" phrase is the heading (a type alone, or an
+        // action and a type; an action alone or "Other / Custom" is not a heading), else "Item". The description is always printed below the heading.
+        const cpNorm = v => String(v).toLowerCase().replace(/\s+/g, ' ').trim();
+        const cpSays = (hay, needle) => !!needle && cpNorm(hay).indexOf(cpNorm(needle)) >= 0;
+        function cpTypeLabel(it) { return it.genericType && it.genericType !== 'other' && cpHasOwn(CP_SCOPE_BY_ID, it.genericType) ? CP_SCOPE_BY_ID[it.genericType].label : ''; }
+        function cpContext(it) {
+            const t = cpTypeLabel(it);
+            return t ? (it.action ? CP_ACTION_LABEL[it.action] + ' ' + t : t) : '';
+        }
         function cpHeading(it) {
-            const nm = it.name.trim(), bm = [it.brand.trim(), it.model.trim()].filter(Boolean).join(' ');
-            return (nm || bm || 'Item') + (nm && bm ? ' (' + bm + ')' : '');
+            const nm = it.name.trim(), brand = it.brand.trim(), model = it.model.trim();
+            if (nm) {
+                const extra = [brand, model].filter(p => p && !cpSays(nm, p));
+                return nm + (extra.length ? ' (' + extra.join(' ') + ')' : '');
+            }
+            const bm = [brand, model].filter(Boolean).join(' '), ctx = cpContext(it), tl = cpTypeLabel(it);
+            if (bm) return bm + (ctx && !cpSays(bm, tl) ? ' (' + ctx + ')' : '');
+            return ctx || 'Item';
+        }
+        // v10.04.00: the intro, composed deterministically (no free-form generation) from the job intent, the scope terms and the Other / Custom text.
+        // Incomplete input (no usable scope) -> the safe fallback. Scope terms are listed in the vocabulary's order.
+        const CP_INTRO_LEAD = 'We are pleased to provide this proposal for ';
+        const cpList = a => a.length < 2 ? (a[0] || '') : (a.length === 2 ? a[0] + ' and ' + a[1] : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1]);
+        function composeCustomIntro(cp) {
+            const phrases = [];
+            (Array.isArray(cp.scopeTerms) ? cp.scopeTerms : []).forEach(id => {
+                if (!cpHasOwn(CP_SCOPE_BY_ID, id)) return;
+                if (id === 'other') { const t = cpText(cp.otherScope, CP_LIM.otherScope, false).trim().replace(/[\s.,;:!]+$/, ''); if (t) phrases.push({ noun: t, mass: true, iaq: false }); }
+                else phrases.push(CP_SCOPE_BY_ID[id]);
+            });
+            if (!phrases.length) return CP_INTRO_LEAD + 'the following work.';
+            const names = phrases.map(p => p.noun);
+            let what;
+            if (cp.intent === 'replace') what = 'replacement of the existing ' + cpList(names);
+            else if (cp.intent === 'install') what = 'installation of ' + cpList(phrases.map(p => (p.mass ? 'new ' : 'a new ') + p.noun));
+            else if (cp.intent === 'upgrade') what = phrases.every(p => p.iaq) ? 'the following indoor air quality improvements' : 'the addition or upgrade of the ' + cpList(names);
+            else if (cp.intent === 'repair') what = 'modifications to the existing ' + cpList(names);
+            else what = 'work involving the ' + cpList(names);
+            return CP_INTRO_LEAD + what + '.';
         }
         function cpDescription(it, indent) {
             const d = it.description.trim();
@@ -11270,7 +11337,7 @@
             }
             // custom text is DATA: flagged plain so the terminal escapes it (the copy / Create text stays exactly as typed)
             const push = (target, text) => blocks.push({ target: target, text: typeof ov[target] === 'string' && ov[target].trim() ? ov[target] : text, plain: true });
-            push('Custom Intro', 'We are pleased to offer you a quote for the following work.');
+            push('Custom Intro', composeCustomIntro(cp));
             const items = cp.items.filter(cpItemRenderable);
             const priced = items.filter(it => it.price !== null);
             const sum = priced.reduce((a, it) => a + it.price, 0);
@@ -11365,7 +11432,7 @@
                 else if (field === 'brand') it.brand = cpText(value, CP_LIM.brand, false);
                 else if (field === 'model') it.model = cpText(value, CP_LIM.model, false);
                 else if (field === 'genericType') it.genericType = CP_GENERIC_IDS.indexOf(value) >= 0 ? value : '';
-                else if (field === 'action') it.action = CP_ACTIONS.indexOf(value) >= 0 ? value : '';
+                else if (field === 'action') it.action = cpAction(value);
                 else if (field === 'price') {
                     const s = typeof value === 'string' ? value.replace(/[$,\s]/g, '') : value;
                     it.price = s === '' || s === null || s === undefined ? null : cpPrice(typeof s === 'number' ? s : (/^\d*\.?\d+$/.test(s) || /^\d+\.?$/.test(s) ? Number(s) : NaN));
@@ -11382,8 +11449,26 @@
                 const cp = cpState(); if (!cp) return false;
                 cp.packageTitle = cpText(v, CP_LIM.title, false); cpCommit(fromPanel === true); return true;
             },
+            // v10.04.00 (Phase 1B): job intent, scope terms and the Other / Custom text
+            setIntent: function (v, fromPanel) {
+                const cp = cpState(); if (!cp) return false;
+                cp.intent = cpAction(v); cpCommit(fromPanel === true); return true;
+            },
+            setScopeTerms: function (ids, fromPanel) {
+                const cp = cpState(); if (!cp) return false;
+                cp.scopeTerms = sanitizeCustomProposal({ scopeTerms: Array.isArray(ids) ? ids : [] }).scopeTerms; cpCommit(fromPanel === true); return true;
+            },
+            toggleScopeTerm: function (id, on, fromPanel) {
+                const cp = cpState(); if (!cp || typeof id !== 'string' || !cpHasOwn(CP_SCOPE_BY_ID, id)) return false;
+                const ids = cp.scopeTerms.filter(x => x !== id); if (on) ids.push(id);
+                return customProposalApi.setScopeTerms(ids, fromPanel);
+            },
+            setOtherScope: function (v, fromPanel) {
+                const cp = cpState(); if (!cp) return false;
+                cp.otherScope = cpText(v, CP_LIM.otherScope, false); cpCommit(fromPanel === true); return true;
+            },
             panelOwnsEdit: () => cpPanelOwnsEdit,
-            presentations: CP_PRESENTATIONS.slice(), presentationLabels: CP_PRESENTATION_LABEL, actions: CP_ACTIONS.slice(), actionLabels: CP_ACTION_LABEL, genericTypes: CP_GENERIC_TYPES.map(t => t.slice()),
+            presentations: CP_PRESENTATIONS.slice(), presentationLabels: CP_PRESENTATION_LABEL, actions: CP_ACTIONS.slice(), actionLabels: CP_ACTION_LABEL, genericTypes: CP_GENERIC_TYPES.map(t => t.slice()), scopeTerms: CP_SCOPE.map(t => [t.id, t.label]),
             limits: CP_LIM
         };
         window.normalizeProposalType = normalizeProposalType;
@@ -11393,6 +11478,7 @@
         window.sanitizeCustomProposalDetailed = sanitizeCustomProposalDetailed;
         window.customProposalHasContent = customProposalHasContent;
         window.customProposalSummary = customProposalSummary;
+        window.composeCustomIntro = composeCustomIntro;
         window.buildCustomProposalBlocks = buildCustomProposalBlocks;
         window.proposalFileCustomerPart = proposalFileCustomerPart;
         // v10.03.01: Update of a loaded managed proposal whose Proposal Type changed since it was loaded or last saved needs an explicit confirmation.
@@ -16970,7 +17056,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.03.01',
+                appVersion: 'v10.04.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -16979,7 +17065,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.03.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.04.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -16998,7 +17084,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.03.01',
+                appVersion: 'v10.04.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17007,7 +17093,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.03.01_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.04.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -26509,7 +26595,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.03.01';
+            const APP_VERSION = 'v10.04.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26805,7 +26891,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.03.01';
+            const APP_VERSION = 'v10.04.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -28642,7 +28728,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.03.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.04.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29267,7 +29353,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.03.01',
+                version: 'v10.04.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29337,7 +29423,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.03.01';
+            const APP_VERSION = 'v10.04.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
@@ -29974,7 +30060,11 @@
                 '#custom-proposal-builder button.cp-add{background:#047857;border-color:#10b981;color:#fff;align-self:flex-start}' +
                 '#custom-proposal-builder button.cp-del{color:#fca5a5;border-color:#7f1d1d}' +
                 '#custom-proposal-builder .cp-help{font-size:10.5px;color:#94a3b8;line-height:1.45}' +
-                '@media (max-width:640px){#custom-proposal-builder input,#custom-proposal-builder select,#custom-proposal-builder textarea{font-size:16px}}';
+                '#custom-proposal-builder .cp-chips{display:flex;flex-wrap:wrap;gap:6px}' +
+                '#custom-proposal-builder label.cp-chip{display:inline-flex;flex-direction:row;align-items:center;gap:5px;border:1px solid #475569;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:600;color:#cbd5e1;background:#0f172a;cursor:pointer;text-transform:none;letter-spacing:0}' +
+                '#custom-proposal-builder label.cp-chip input{width:auto;min-height:0;padding:0;margin:0}' +
+                '#custom-proposal-builder label.cp-chip:has(input:checked){border-color:#10b981;color:#ecfdf5;background:rgba(4,120,87,.35)}' +
+                '@media (max-width:640px){#custom-proposal-builder input,#custom-proposal-builder select,#custom-proposal-builder textarea{font-size:16px}#custom-proposal-builder label.cp-chip{padding:8px 12px;font-size:12px}}';
             function style() {
                 if ($('custom-proposal-style')) return;
                 const st = document.createElement('style'); st.id = 'custom-proposal-style'; st.textContent = CSS; document.head.appendChild(st);
@@ -29997,7 +30087,7 @@
                 head.appendChild(btns); card.appendChild(head);
                 const f = (name, control) => { control.setAttribute('data-cp-field', name); return control; };
                 const row1 = el('div', { className: 'cp-row' });
-                row1.appendChild(field('Generic type', f('genericType', selectOf(api().genericTypes, it.genericType)), 'cp-grow'));
+                row1.appendChild(field('Type', f('genericType', selectOf(api().genericTypes, it.genericType)), 'cp-grow'));
                 row1.appendChild(field('Action', f('action', selectOf(Object.keys(api().actionLabels).map(k => [k, api().actionLabels[k]]), it.action)), 'cp-grow'));
                 card.appendChild(row1);
                 card.appendChild(field('Proposal / display name', f('name', el('input', { type: 'text', value: it.name, maxLength: api().limits.name, placeholder: 'For example: Aprilaire E100 Whole-Home Dehumidifier', autocomplete: 'off' }))));
@@ -30015,6 +30105,20 @@
                 style();
                 const pres = selectOf(api().presentations.map(k => [k, api().presentationLabels[k]]), 'combined', { id: 'cp-presentation' });
                 const title = el('input', { type: 'text', id: 'cp-title', maxLength: api().limits.title, placeholder: 'Optional heading for the package', autocomplete: 'off' });
+                // v10.04.00: job intent, scope terms (generic words that only shape the introduction) and the Other / Custom text
+                const intent = selectOf(api().actions.map(k => [k, api().actionLabels[k]]), '', { id: 'cp-intent' });
+                const jobRow = el('div', { className: 'cp-row' });
+                jobRow.appendChild(field('Job intent', intent, 'cp-grow'));
+                body.appendChild(jobRow);
+                const chips = el('div', { className: 'cp-chips', id: 'cp-scope' });
+                api().scopeTerms.forEach(t => {
+                    const cb = el('input', { type: 'checkbox', value: t[0] }); cb.setAttribute('data-cp-scope', t[0]);
+                    chips.appendChild(el('label', { className: 'cp-chip' }, [cb, t[1]]));
+                });
+                body.appendChild(field('Scope (describes the overall job; the intro is written from it)', chips));
+                const other = el('input', { type: 'text', id: 'cp-other', maxLength: api().limits.otherScope, placeholder: 'For example: attic fan', autocomplete: 'off' });
+                body.appendChild(field('Other / Custom scope', other)).id = 'cp-other-wrap';
+                body.appendChild(el('div', { className: 'cp-help', textContent: 'Job intent and scope only shape the introduction (they are not items and carry no prices). With no usable scope the introduction reads: "We are pleased to provide this proposal for the following work."' }));
                 const top = el('div', { className: 'cp-row' });
                 top.appendChild(field('Presentation', pres, 'cp-grow')); top.appendChild(field('Package title (Combined Package)', title, 'cp-grow'));
                 body.appendChild(top);
@@ -30024,6 +30128,9 @@
                 body.appendChild(add);
                 body.appendChild(el('div', { className: 'cp-help', textContent: 'Notes, fees, enhancements and spacers still go through the Smart Injector below the proposal controls; items here are the proposal itself.' }));
                 pres.addEventListener('change', () => api().setPresentation(pres.value, true));
+                intent.addEventListener('change', () => api().setIntent(intent.value, true));
+                chips.addEventListener('change', e => { const t = e.target; const id = t && t.getAttribute ? t.getAttribute('data-cp-scope') : null; if (id) api().toggleScopeTerm(id, !!t.checked, true); });
+                other.addEventListener('input', () => api().setOtherScope(other.value, true));
                 title.addEventListener('input', () => api().setPackageTitle(title.value, true));
                 add.addEventListener('click', () => { const id = api().addItem(); const c = id && document.querySelector('#cp-items [data-cp-id="' + id + '"] [data-cp-field="name"]'); if (c) c.focus(); });
                 body.addEventListener('input', onField); body.addEventListener('change', onField);
@@ -30069,7 +30176,11 @@
                 if (!owns) {
                     const pres = $('cp-presentation'); if (pres) pres.value = cp.presentation;
                     const title = $('cp-title'); if (title) title.value = cp.packageTitle;
+                    const intent = $('cp-intent'); if (intent) intent.value = cp.intent;
+                    const other = $('cp-other'); if (other) other.value = cp.otherScope;
+                    document.querySelectorAll('#cp-scope [data-cp-scope]').forEach(cb => { cb.checked = cp.scopeTerms.indexOf(cb.getAttribute('data-cp-scope')) >= 0; });
                 }
+                const otherWrap = $('cp-other-wrap'); if (otherWrap) otherWrap.style.display = cp.scopeTerms.indexOf('other') >= 0 ? '' : 'none';
                 const sum = window.customProposalSummary({ proposalAppState: { proposalType: 'custom', customProposal: cp } });
                 const line = $('cp-summary-line');
                 if (line && sum) line.textContent = sum.items + (sum.items === 1 ? ' item' : ' items') + ' · ' + sum.presentationLabel + ' · ' + sum.total;
