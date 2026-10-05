@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.05.02 | Header Usability and Appearance Hardening -->
+﻿<!-- Retest Prototype v10.07.01 | Systems Sorter Text-Overflow Hardening -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.05.02</title>
+    <title>Changeout Lookup v10.07.01</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -661,6 +661,24 @@
         #proposal-bar-settings-panel[data-pbe-density="compact"] .pbe-box { padding: 4px; }
         #proposal-bar-settings-panel[data-pbe-density="roomy"] .pbe-root > * + * { margin-top: 20px; }
         #proposal-bar-settings-panel[data-pbe-density="roomy"] .pbe-box { padding: 14px; }
+        /* Systems Sorter body (v10.07.00; text overflow v10.07.01). The row skeleton is built by window.sorterBodyHtml for the real rows AND for the Sorter settings preview, so these rules are the single
+           geometry source. Width stays a pure ratio (min-width 0, clipped, a long word breaks only in a cell wide enough for that); height never shrinks below the content (nothing is clipped vertically, a row grows). */
+        .srt-clip { overflow: hidden; min-width: 0; }
+        @supports (overflow: clip) { .srt-clip { overflow-x: clip; overflow-y: visible; } }
+        .srt-cell { container: srt-cell / inline-size; }
+        /* v10.07.01: a word wider than its cell breaks inside the cell only when the cell is at least 8em wide (a 40-letter value then takes about five lines); in a narrower cell the
+           word stays whole and is clipped at the cell edge (as before v10.07.00) instead of wrapping letter by letter into a tall column. Ordinary text wraps at spaces in every cell.
+           The cell is its own query container, so the em is the cell's own text size; the rule is on its content and is inherited by everything inside it. */
+        @container srt-cell (min-width: 8em) { .srt-cell > * { overflow-wrap: anywhere; } }
+        /* editor-only marks on the Sorter settings preview: outlines, never a size */
+        #sorter-preview .srt-container { outline: 1px dashed #475569; outline-offset: -1px; cursor: pointer; }
+        #sorter-preview .srt-stack { outline: 1px dashed #334155; outline-offset: -1px; cursor: pointer; }
+        #sorter-preview .srt-cell { outline: 1px dotted #64748b; outline-offset: -1px; cursor: pointer; }
+        #sorter-preview .srt-sel-c { outline: 2px solid #3b82f6; }
+        #sorter-preview .srt-sel-s { outline: 2px solid #10b981; }
+        #sorter-preview .srt-sel-p { outline: 2px solid #60a5fa; background: rgba(59, 130, 246, 0.18); }
+        #sorter-preview .srt-ph { color: #cbd5e1; }
+        #sorter-preview .srt-ph-off { color: #64748b; font-style: italic; }
 </style>
 </head>
 
@@ -691,7 +709,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.05.02</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.07.01</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1643,7 +1661,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.05.02</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.07.01</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -2238,10 +2256,10 @@
             </div>
             <!-- Cart Configurator List (Injected by JS) -->
             <div id="cart-configurator-list" class="flex flex-col gap-3"></div>
-            <!-- Add New Stack Button -->
-            <button onclick="addCartStack()"
+            <!-- Add Container Button (stacks and splits are added from the inspector, inside the selected container / stack) -->
+            <button onclick="addCartContainer()"
                 class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition-colors text-xs uppercase tracking-widest flex items-center justify-center gap-2">
-                <i data-lucide="plus" class="w-4 h-4"></i> Add New Stack
+                <i data-lucide="plus" class="w-4 h-4"></i> Add Container
             </button>
         </div>
     </div>
@@ -3733,6 +3751,36 @@
             <p class="font-mono">Schema Compliance: 20-Column HVAC Matrix Specification</p>
         </div>
     </footer>
+
+    <!-- SHARED GRID PRIMITIVES (v10.06.00) -->
+    <script>
+        // === SHARED GRID PRIMITIVES (v10.06.00) ===
+        // The few leaf rules every container -> stack -> split layout shares: a weight is a relative SHARE (clamped, never an absolute size),
+        // a share becomes a flex rule, an enumerated value falls back to a known default, an offset is a clamped whole number. The Proposal Builder engine and the Systems Sorter
+        // body both use them, so the two stop carrying private copies. Deliberately NOT here: the Builder's singleton component placement and
+        // its DOM renderer (the Sorter renders one template once per system), the Page 1 results grid, and the structural validators (the
+        // Builder rejects an unusable region, the Sorter repairs it: different failure rules).
+        window.GridPrimitives = Object.freeze({
+            WEIGHT_MIN: 0.1,
+            // the ratio and nudge limits of the Page 2 grid editor (weights 0.1 to 12 in steps of 0.1, Shift 0.5; nudge +/-100 px, Shift 5 px)
+            WEIGHT: Object.freeze({ min: 0.1, max: 12, step: 0.1, coarse: 0.5 }),
+            NUDGE: Object.freeze({ max: 100, coarse: 5 }),
+            // v: any value; fallback: used when v is not a finite number; opts: { min, max, scale } (scale 100 rounds to hundredths)
+            weight: function (v, fallback, opts) {
+                opts = opts || {};
+                const n = Number(v);
+                if (!isFinite(n)) return fallback;
+                const r = opts.scale > 0 ? Math.round(n * opts.scale) / opts.scale : n;
+                return Math.min(opts.max === undefined ? Infinity : opts.max, Math.max(opts.min === undefined ? 0.1 : opts.min, r));
+            },
+            // v when it is one of list, else fallback
+            pick: function (v, list, fallback) { return list.indexOf(v) >= 0 ? v : fallback; },
+            // the flex rule of a weighted share: weight, may shrink, basis (0% = an equal-footing share of the free space)
+            flexShare: function (weight, basis) { return weight + ' 1 ' + (basis === undefined ? '0%' : basis); },
+            // a whole number clamped to -lim .. +lim (0 when v is not a number)
+            clampInt: function (v, lim) { const n = Math.round(Number(v)); return isFinite(n) ? Math.max(-lim, Math.min(lim, n)) : 0; }
+        });
+    </script>
 
     <!-- LIVE DATA & APP LOGIC -->
     <script>
@@ -6515,7 +6563,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.05.02',
+                appVersion: 'v10.07.01',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6709,7 +6757,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.05.02_${stamp}.json`;
+                `platts_config_v10.07.01_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12285,18 +12333,7 @@
                 let baseStr = `<span class="text-slate-400 text-sm ${(totalDeductions > 0 || visibleAdditions > 0 || stealthTotal > 0) ? 'line-through' : ''}">$${basePrice.toLocaleString()}</span>`;
 
                 // Scan Sorter Settings to dynamically inherit Adjustments column alignment
-                let adjustmentsAlign = 'right'; // Fallback default
-                if (window.sorterSettings && window.sorterSettings.containers) {
-                    window.sorterSettings.containers.forEach(container => {
-                        container.stacks.forEach(stack => {
-                            stack.splits.forEach(split => {
-                                if (split.mapping === 'adjustments') {
-                                    adjustmentsAlign = split.align || 'right';
-                                }
-                            });
-                        });
-                    });
-                }
+                let adjustmentsAlign = window.getSorterMappingAlign('adjustments', 'right');   // v10.06.00: the lookup lives with the Sorter template
                 let adjAlignClass = adjustmentsAlign === 'center' ? 'items-center text-center' : adjustmentsAlign === 'left' ? 'items-start text-left' : 'items-end text-right';
                 let adjBorderClass = adjustmentsAlign === 'center' ? '' : adjustmentsAlign === 'left' ? 'ml-4 pl-4 border-l border-slate-700/50' : 'mr-4 pr-4 border-r border-slate-700/50';
 
@@ -12393,137 +12430,12 @@
                 let cleanBaseStr = baseStr.replace(sizeRegex, '');
                 let cleanModStr = modifierStr.replace(sizeRegex, '');
 
-                // Execute Smart Pod Layout Engine (v3 Containers -> Stacks -> Splits)
-                let containersHtml = '';
-
-                window.sorterSettings.containers.forEach(container => {
-                    if (container.widthWeight <= 0) return;
-                    let stacksHtml = '';
-
-                    container.stacks.forEach(stack => {
-                        if (stack.heightWeight <= 0) return;
-                        let splitsHtml = '';
-
-                        stack.splits.forEach(split => {
-                            if (split.widthWeight <= 0) return;
-
-                            // If End Cap is enabled, totalPrice and otdPrice normally render on the right, skip here
-                            if ((split.mapping === 'totalPrice' || split.mapping === 'otdPrice') && window.sorterSettings.enableEndCap) return;
-
-                            let content = '';
-                            let alignClass = split.align === 'center' ? 'items-center text-center justify-center' : split.align === 'right' ? 'items-end text-right justify-center' : 'items-start text-left justify-center';
-
-
-                            let SorterContext = {
-                                brand: brand,
-                                capacity: capacity,
-                                systemType: sysType,
-                                seriesTier: series,
-                                mechanicalStage: mechStage,
-                                applicationStyle: printStyle,
-                                seer2: seer2,
-                                eer2: item.eer2,
-                                hspf2: item.hspf2,
-                                ahri: String(ahri || '').toUpperCase(),
-                                coolingBtu: item.coolingBtu,
-                                heatingBtu: item.heatingBtu,
-                                site: site
-                            };
-
-                            if (split.mapping === 'composite' || ['capacity', 'systemType', 'mechanicalStage', 'applicationStyle', 'seriesTier', 'seer2', 'eer2', 'hspf2', 'coolingBtu', 'heatingBtu'].includes(split.mapping)) {
-                                content = window.renderSorterCompositeContent(split, SorterContext);
-                            }
-                            else if (split.mapping === 'desc') {
-                                let stColor = window.getSystemTypeColorClass(sysType);
-                                let msColor = window.getStageColorClass(mechStage);
-                                content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span></span>`;
-                            }
-                            else if (split.mapping === 'ahri') {
-                                content = `<span class="font-bold whitespace-nowrap"><span class="text-slate-500 mr-1">AHRI</span><span class="text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSystemDetails(window.selectedProposalRows[${index}])">${ahri || 'N/A'}</span></span>`;
-                            }
-                            else if (split.mapping === 'brandLogo') {
-                                if (brand.toUpperCase() === 'CARRIER') {
-                                    content = `<img src="./carrier.png" alt="Carrier" class="object-contain" style="max-height: 1.5em;" />`;
-                                } else if (brand.toUpperCase() === 'COMFORTMAKER') {
-                                    content = `<img src="./comfortmaker.png" alt="Comfortmaker" class="object-contain" style="max-height: 2em;" />`;
-                                } else if (brand.toUpperCase() === 'DURASTAR') {
-                                    content = `<img src="./durastar.png" alt="Durastar" class="object-contain" style="max-height: 1.5em;" />`;
-                                } else {
-                                    content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
-                                }
-                            }
-                            else if (split.mapping === 'brandName') {
-                                content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
-                            }
-                            else if (split.mapping === 'brand') {
-                                let asColor = window.getApplicationStyleColorClass(printStyle);
-                                let serColor = window.getSeriesTierColorClass(series);
-
-                                let dispSeries = series;
-                                if (series === 'MAIN LINE' || series === 'MAINLINE') dispSeries = 'Mainline';
-                                else if (series === 'PERFORMER') dispSeries = 'Performer';
-                                else if (series === 'PERFORMANCE') dispSeries = 'Performance';
-                                else if (series === 'COMFORT') dispSeries = 'Comfort';
-                                else if (series === 'STANDARD') dispSeries = 'Standard';
-                                else if (series === 'BUILDER') dispSeries = 'Builder';
-                                else if (series === 'INFINITY') dispSeries = 'Infinity';
-
-                                let dispStyle = printStyle;
-                                if (printStyle.toUpperCase() === 'STANDARD') dispStyle = 'Standard';
-                                else if (printStyle.toUpperCase() === 'COASTAL') dispStyle = 'Coastal';
-
-                                let seriesHtml = ` <span class="${serColor}">${dispSeries}</span>`;
-                                const upSeries = dispSeries.toUpperCase();
-                                if (upSeries === dispStyle.toUpperCase() || !dispSeries || upSeries === "N/A" || upSeries === "NA" || upSeries === "NULL" || upSeries === "UNDEFINED") {
-                                    seriesHtml = '';
-                                }
-
-                                let coastalSuffix = (sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0) ? ` <span class="text-cyan-400">(Coastal Match)</span>` : '';
-                                let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
-                                let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
-
-                                let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
-                                content = rawContent.replace(/\s+/g, ' ').trim();
-                            }
-                            else if (split.mapping === 'basePrice') content = cleanBaseStr;
-                            else if (split.mapping === 'adjustments') content = cleanModStr;
-                            else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
-                            else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
-                            else if (split.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
-
-                            splitsHtml += `<div class="flex flex-col ${alignClass} overflow-hidden" style="flex: ${split.widthWeight} 1 0%; font-size: ${split.fontSize}px;">${content}</div>`;
-                        });
-
-                        stacksHtml += `<div class="flex flex-row w-full gap-3 overflow-hidden" style="flex: ${stack.heightWeight} 1 0%;">${splitsHtml}</div>`;
-                    });
-
-                    containersHtml += `<div class="flex flex-col h-full gap-1 overflow-hidden" style="flex: ${container.widthWeight} 1 0%;">${stacksHtml}</div>`;
+                // v10.06.00: the repeating Systems Sorter row is its own renderer (window.renderSorterRow in the Sorter layout engine): one system in, one row out.
+                html += window.renderSorterRow({
+                    index: index, item: item, sp: sp, brand: brand, series: series, capacity: capacity, seer2: seer2, ahri: ahri, site: site, mechStage: mechStage, sysType: sysType,
+                    printStyle: printStyle, hasAuditMismatch: hasAuditMismatch, auditState: auditState, isNativeOceana: isNativeOceana, overrideBorder: overrideBorder,
+                    emojiHtml: emojiHtml, cleanBaseStr: cleanBaseStr, cleanModStr: cleanModStr, finalSorterPrice: finalSorterPrice, otdFinalPrice: otdFinalPrice
                 });
-
-                // Split Sorter layout horizontally if End Cap is checked
-                let rowContentHtml = `<div class="flex flex-row w-full gap-3 overflow-hidden h-full">${containersHtml}</div>`;
-
-                if (window.sorterSettings.enableEndCap) {
-                    let endCapContent = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-black proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex flex-col items-center justify-center cursor-pointer text-center" style="font-size: ${window.sorterSettings.endCapFontSize}px; line-height: 1.1;"><span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Total (OTD)</span>$${otdFinalPrice.toLocaleString()}</button>`;
-
-                    rowContentHtml = `
-                        <div class="flex flex-row w-full gap-3 overflow-hidden h-full">
-                            <div class="flex flex-row flex-1 gap-3 overflow-hidden h-full">
-                                ${containersHtml}
-                            </div>
-                            <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2 h-full">
-                                ${endCapContent}
-                            </div>
-                        </div>`;
-                }
-
-                html += `<div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-900 border ${overrideBorder} px-1.5 py-2.5 rounded-lg flex gap-2 cursor-grab active:cursor-grabbing hover:border-blue-500 transition-colors shadow-sm mb-2" style="min-height: ${window.sorterSettings.rowHeight}px; height: auto;">
-            <div class="flex flex-col justify-between items-center shrink-0 border-r border-slate-700/30 pr-1.5">
-                <i data-lucide="grip-vertical" class="w-5 h-5 text-slate-500 cursor-grab"></i>
-                <div onclick="removeSystemFromProposal(${index})" class="text-rose-400 hover:text-rose-300 transition-colors cursor-pointer" title="Remove System"><i data-lucide="x-circle" class="w-4 h-4"></i></div>
-            </div>
-            ${rowContentHtml}
-        </div>`;
 
                 let optionEnhancementLines = [];
                 let optionProtectionLines = [];
@@ -17083,7 +16995,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.05.02',
+                appVersion: 'v10.07.01',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17092,7 +17004,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.05.02_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.07.01_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17111,7 +17023,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.05.02',
+                appVersion: 'v10.07.01',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17120,7 +17032,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.05.02_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.07.01_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -21428,15 +21340,18 @@
             } else {
                 window.sorterSettings.rowHeight = Math.max(60, Math.min(300, window.sorterSettings.rowHeight || 120));
                 window.sorterSettings.containers.forEach(cont => {
-                    cont.widthWeight = Math.max(0.1, cont.widthWeight || 1.0);
+                    cont.widthWeight = window.GridPrimitives.weight(cont.widthWeight || 1.0, 1.0);
                     if (!cont.stacks || cont.stacks.length === 0) cont.stacks = [window.createEmptySorterStack()];
                     cont.stacks.forEach(stack => {
-                        stack.heightWeight = Math.max(0.1, stack.heightWeight || 1.0);
+                        stack.heightWeight = window.GridPrimitives.weight(stack.heightWeight || 1.0, 1.0);
                         if (!stack.splits || stack.splits.length === 0) stack.splits = [window.createEmptySorterSplit()];
                         stack.splits.forEach(split => {
-                            split.widthWeight = Math.max(0.1, split.widthWeight || 1.0);
+                            split.widthWeight = window.GridPrimitives.weight(split.widthWeight || 1.0, 1.0);
                             if (!split.mapping) split.mapping = 'empty';
-                            if (!split.align) split.align = 'left';
+                            split.align = window.GridPrimitives.pick(split.align, ['left', 'center', 'right'], 'left');
+                            // v10.07.00: optional appearance (vertical alignment top / bottom, nudge in px); absent = the old look, nothing is added to a layout that does not use them
+                            if (window.GridPrimitives.pick(split.vAlign, ['top', 'bottom'], '')) { /* kept */ } else delete split.vAlign;
+                            ['nudgeX', 'nudgeY'].forEach(k => { const n = window.GridPrimitives.clampInt(split[k], window.GridPrimitives.NUDGE.max); if (n) split[k] = n; else delete split[k]; });
                             if (!split.fontSize) split.fontSize = 12;
                         });
                     });
@@ -21462,73 +21377,111 @@
             window.saveSorterSettings();
         };
 
+        // Row-template operations (v10.07.00: scoped by explicit indexes and selection-aware). They edit the ONE template every selected system is rendered with; the order of the
+        // selected systems themselves (row drag and drop, selectedProposalRows) is a different thing and is not touched here. An index that does not point at an existing
+        // container / stack / split is ignored, so no control can act on a parent it cannot identify (the old global "Add New Stack" button had no container).
+        window.sorterEditorSel = { c: 0, s: 0, p: 0 };
+        const sorterNode = function (c, s, p) {
+            const C = Number.isInteger(c) ? window.sorterSettings.containers[c] : undefined;
+            const S = C && Number.isInteger(s) ? C.stacks[s] : undefined;
+            const P = S && Number.isInteger(p) ? S.splits[p] : undefined;
+            return { C: C, S: S, P: P };
+        };
+        const sorterSelect = function (c, s, p) { window.sorterEditorSel = { c: c, s: s, p: p }; };
+        const sorterWeight = function (val) { return window.GridPrimitives.weight(parseFloat(val), 1, { min: window.GridPrimitives.WEIGHT.min, scale: 100 }); };
+
         // Container Mutators
         window.addCartContainer = function () {
             window.sorterSettings.containers.push(window.createEmptySorterContainer());
+            sorterSelect(window.sorterSettings.containers.length - 1, 0, 0);
             window.saveSorterSettings();
         };
         window.removeCartContainer = function (cIdx) {
-            if (window.sorterSettings.containers.length <= 1) return;
+            if (!sorterNode(cIdx).C || window.sorterSettings.containers.length <= 1) return;
             window.sorterSettings.containers.splice(cIdx, 1);
+            sorterSelect(Math.min(cIdx, window.sorterSettings.containers.length - 1), 0, 0);
             window.saveSorterSettings();
         };
         window.moveCartContainer = function (cIdx, direction) {
             const arr = window.sorterSettings.containers;
             const targetIdx = cIdx + direction;
-            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            if (!sorterNode(cIdx).C || targetIdx < 0 || targetIdx >= arr.length) return;
             const temp = arr[cIdx];
             arr[cIdx] = arr[targetIdx];
             arr[targetIdx] = temp;
+            const sel = window.sorterEditorSel;
+            if (sel.c === cIdx) sel.c = targetIdx; else if (sel.c === targetIdx) sel.c = cIdx;
             window.saveSorterSettings();
         };
         window.updateCartContainerWt = function (cIdx, val) {
-            window.sorterSettings.containers[cIdx].widthWeight = parseFloat(val);
+            const n = sorterNode(cIdx);
+            if (!n.C) return;
+            n.C.widthWeight = sorterWeight(val);
             window.saveSorterSettings();
         };
 
         // Stack Mutators
         window.addCartStack = function (cIdx) {
-            window.sorterSettings.containers[cIdx].stacks.push(window.createEmptySorterStack());
+            const n = sorterNode(cIdx);
+            if (!n.C) return;
+            n.C.stacks.push(window.createEmptySorterStack());
+            sorterSelect(cIdx, n.C.stacks.length - 1, 0);
             window.saveSorterSettings();
         };
         window.removeCartStack = function (cIdx, sIdx) {
-            if (window.sorterSettings.containers[cIdx].stacks.length <= 1) return;
-            window.sorterSettings.containers[cIdx].stacks.splice(sIdx, 1);
+            const n = sorterNode(cIdx, sIdx);
+            if (!n.S || n.C.stacks.length <= 1) return;
+            n.C.stacks.splice(sIdx, 1);
+            sorterSelect(cIdx, Math.min(sIdx, n.C.stacks.length - 1), 0);
             window.saveSorterSettings();
         };
         window.moveCartStack = function (cIdx, sIdx, direction) {
-            const arr = window.sorterSettings.containers[cIdx].stacks;
+            const n = sorterNode(cIdx, sIdx);
             const targetIdx = sIdx + direction;
-            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            if (!n.S || targetIdx < 0 || targetIdx >= n.C.stacks.length) return;
+            const arr = n.C.stacks;
             const temp = arr[sIdx];
             arr[sIdx] = arr[targetIdx];
             arr[targetIdx] = temp;
+            const sel = window.sorterEditorSel;
+            if (sel.c === cIdx) { if (sel.s === sIdx) sel.s = targetIdx; else if (sel.s === targetIdx) sel.s = sIdx; }
             window.saveSorterSettings();
         };
         window.updateCartStackWt = function (cIdx, sIdx, val) {
-            window.sorterSettings.containers[cIdx].stacks[sIdx].heightWeight = parseFloat(val);
+            const n = sorterNode(cIdx, sIdx);
+            if (!n.S) return;
+            n.S.heightWeight = sorterWeight(val);
             window.saveSorterSettings();
         };
 
         // Split Mutators
         window.addCartSplit = function (cIdx, sIdx) {
-            window.sorterSettings.containers[cIdx].stacks[sIdx].splits.push(window.createEmptySorterSplit());
+            const n = sorterNode(cIdx, sIdx);
+            if (!n.S) return;
+            n.S.splits.push(window.createEmptySorterSplit());
+            sorterSelect(cIdx, sIdx, n.S.splits.length - 1);
             window.saveSorterSettings();
         };
         window.removeCartSplit = function (cIdx, sIdx, pIdx) {
-            if (window.sorterSettings.containers[cIdx].stacks[sIdx].splits.length <= 1) return;
-            window.sorterSettings.containers[cIdx].stacks[sIdx].splits.splice(pIdx, 1);
+            const n = sorterNode(cIdx, sIdx, pIdx);
+            if (!n.P || n.S.splits.length <= 1) return;
+            n.S.splits.splice(pIdx, 1);
+            sorterSelect(cIdx, sIdx, Math.min(pIdx, n.S.splits.length - 1));
             window.saveSorterSettings();
         };
         window.moveCartSplit = function (cIdx, sIdx, pIdx, direction) {
-            const arr = window.sorterSettings.containers[cIdx].stacks[sIdx].splits;
+            const n = sorterNode(cIdx, sIdx, pIdx);
             const targetIdx = pIdx + direction;
-            if (targetIdx < 0 || targetIdx >= arr.length) return;
+            if (!n.P || targetIdx < 0 || targetIdx >= n.S.splits.length) return;
+            const arr = n.S.splits;
             const temp = arr[pIdx];
             arr[pIdx] = arr[targetIdx];
             arr[targetIdx] = temp;
+            const sel = window.sorterEditorSel;
+            if (sel.c === cIdx && sel.s === sIdx) { if (sel.p === pIdx) sel.p = targetIdx; else if (sel.p === targetIdx) sel.p = pIdx; }
             window.saveSorterSettings();
         };
+
         window.updateCartMap = function (cIdx, sIdx, pIdx, key, val, isFloat) {
             let split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (isFloat) split[key] = parseFloat(val);
@@ -21556,6 +21509,23 @@
             if (typeof window.updateProposalCartUI === 'function') window.updateProposalCartUI();
         };
 
+
+        // The vertical alignment (top / bottom; middle is the default and is not stored) and the nudge of a cell. Everything else goes through updateCartMap.
+        window.setSorterCellStyle = function (cIdx, sIdx, pIdx, key, val) {
+            const n = sorterNode(cIdx, sIdx, pIdx);
+            if (!n.P) return;
+            const GP = window.GridPrimitives;
+            if (key === 'vAlign') {
+                if (GP.pick(val, ['top', 'bottom'], '')) n.P.vAlign = val; else delete n.P.vAlign;
+            } else if (key === 'nudgeX' || key === 'nudgeY') {
+                const v = GP.clampInt(val, GP.NUDGE.max);
+                if (v) n.P[key] = v; else delete n.P[key];
+            } else return;
+            window.saveSorterSettings();
+        };
+
+        // The canonical field id of a Sorter pill / composite token (the catalog record key, see FIELD_DEFINITIONS), safe for an attribute: it only identifies the token, it changes nothing visible.
+        window.sorterFieldId = function (field) { return String(field === undefined || field === null ? '' : field).replace(/[^A-Za-z0-9_.-]/g, ''); };
 
         window.getSorterCompositeFieldValue = function (fieldKey, context) {
             let val = context[fieldKey];
@@ -21594,7 +21564,7 @@
                 if (split.mapping === 'hspf2') lbl = 'HSPF2 ';
                 if (split.mapping === 'coolingBtu') lbl = 'Cooling ';
                 if (split.mapping === 'heatingBtu') lbl = 'Heating ';
-                return `<span class="font-semibold tracking-wide flex items-center gap-1 leading-tight"><span class="text-slate-400">${lbl}</span>${v}</span>`;
+                return `<span class="font-semibold tracking-wide flex items-center gap-1 leading-tight" data-field="${window.sorterFieldId(split.mapping)}"><span class="text-slate-400">${lbl}</span>${v}</span>`;
             }
 
             if (!split.compositeFields || split.compositeFields.length === 0) {
@@ -21619,7 +21589,7 @@
                         else if (f.field === 'heatingBtu') lbl = 'Heating ';
                         else lbl = f.field.charAt(0).toUpperCase() + f.field.slice(1) + ' ';
                     }
-                    pieces.push(`<span class="inline-flex items-center"><span class="text-slate-400">${lbl}</span>${v}</span>`);
+                    pieces.push(`<span class="inline-flex items-center" data-field="${window.sorterFieldId(f.field)}"><span class="text-slate-400">${lbl}</span>${v}</span>`);
                 }
             });
 
@@ -21632,6 +21602,209 @@
 
             let finalHtml = pieces.join(`<span class="text-slate-600 mx-1.5">${sepStr.trim()}</span>`);
             return `<span class="font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
+        };
+
+        // === SYSTEMS SORTER BODY: SPECIALIZED REPEATING-ROW RENDERER (Stage 1 v10.06.00; shared geometry and template editor Stage 2 v10.07.00) ===
+        // One configured row template (window.sorterSettings: containers -> stacks -> splits) is applied to ONE system and returns that system's complete row;
+        // updateProposalCartUI calls it once per selected system. It is deliberately not the Proposal Builder renderer: the Builder moves singleton nodes into
+        // slots, the Sorter builds fresh markup per record and any canonical field may appear in any number of splits.
+        // Stage 2: the nested container / stack / split skeleton lives in ONE function (window.sorterBodyHtml) that the real rows and the template editor's preview both
+        // call, so the preview follows the same ratios, flex rules, clipping and minimum-size rules as the rows. The weight / flex / enum / integer rules come from
+        // window.GridPrimitives. Geometry rule (like the Builder's header, adapted to rows that repeat): a stack and a cell never shrink below their content HEIGHT
+        // (nothing is clipped vertically; a row grows when its content needs more than its share), while WIDTH stays a pure ratio (min-width 0, clipped horizontally,
+        // a word wider than its cell breaks inside it only in a cell at least 8em wide, v10.07.01) so a narrow phone screen never gets a wider row. The pricing math, the icon cluster and the audit state stay with the
+        // proposal path: everything the row shows is passed in `row`:
+        //   index, item (the catalog record), sp (the system scratchpad), brand / series / capacity / seer2 / ahri / site / mechStage / sysType / printStyle (display values),
+        //   hasAuditMismatch, auditState, isNativeOceana, overrideBorder, emojiHtml, cleanBaseStr, cleanModStr, finalSorterPrice, otdFinalPrice.
+        // Every mapping id the dropdown offers (the order and the words of the old dropdown; none is dropped, the legacy ones included):
+        window.SORTER_MAPPINGS = [
+            ['desc', 'System Desc'], ['composite', 'Custom Description'], ['capacity', 'Capacity'], ['systemType', 'System Type'], ['mechanicalStage', 'Mechanical Stage'],
+            ['applicationStyle', 'Application / Style'], ['seriesTier', 'Series / Tier'], ['seer2', 'SEER2'], ['eer2', 'EER2'], ['hspf2', 'HSPF2'], ['ahri', 'AHRI'],
+            ['coolingBtu', 'Cooling BTU'], ['heatingBtu', 'Heating BTU'], ['brandLogo', 'Brand Logo'], ['brandName', 'Brand Name'], ['brand', 'Brand / Style / Series'],
+            ['basePrice', 'Base Price'], ['adjustments', 'Adjustments'], ['totalPrice', 'Total Price'], ['otdPrice', 'Out the Door (OTD)'], ['icons', 'Icons/Flags'], ['empty', 'Empty']
+        ];
+        // Cell appearance. Horizontal alignment (left / center / right, an unknown value renders as left) plus the new optional vertical alignment (top / bottom; the
+        // default middle is not stored) in the same flex-column cell; text size stays an absolute px size (a row's cells are sized by the ratios, not by container queries);
+        // the optional nudge is a geometry-neutral transform of the cell.
+        window.sorterCellAlign = function (split) {
+            const h = split.align === 'center' ? 'items-center text-center' : split.align === 'right' ? 'items-end text-right' : 'items-start text-left';
+            const v = split.vAlign === 'top' ? 'justify-start' : split.vAlign === 'bottom' ? 'justify-end' : 'justify-center';
+            return h + ' ' + v;
+        };
+        window.sorterCellStyle = function (split, fontPx) {
+            let st = 'flex: ' + window.GridPrimitives.flexShare(split.widthWeight) + '; font-size: ' + (fontPx || split.fontSize) + 'px;';
+            const nx = Number(split.nudgeX) || 0, ny = Number(split.nudgeY) || 0;
+            if (nx || ny) st += ' transform: translate(' + nx + 'px, ' + ny + 'px);';
+            return st;
+        };
+        // The row skeleton: containers -> stacks -> splits, then the optional End Cap column. cellFn(split, skipped) gives a cell's inner markup; opts: endCapContent (the
+        // End Cap column's inner markup), showSkipped (the editor preview also draws the total / OTD splits that an enabled End Cap skips), fontPx (override of every cell's
+        // text size), container / stack / cell (editor hooks returning { cls, attr } to add to that level's element: the real rows pass none).
+        window.sorterBodyHtml = function (settings, cellFn, opts) {
+            opts = opts || {};
+            const GP = window.GridPrimitives;
+            const hook = (f, a, b, c, d, e) => (f ? f(a, b, c, d, e) : { cls: '', attr: '' });
+            let containersHtml = '';
+            settings.containers.forEach((container, cIdx) => {
+                if (container.widthWeight <= 0) return;
+                let stacksHtml = '';
+                container.stacks.forEach((stack, sIdx) => {
+                    if (stack.heightWeight <= 0) return;
+                    let splitsHtml = '';
+                    stack.splits.forEach((split, pIdx) => {
+                        if (split.widthWeight <= 0) return;
+                        // If End Cap is enabled, totalPrice and otdPrice normally render on the right, skip here
+                        const skipped = (split.mapping === 'totalPrice' || split.mapping === 'otdPrice') && settings.enableEndCap;
+                        if (skipped && !opts.showSkipped) return;
+                        const x = hook(opts.cell, cIdx, sIdx, pIdx, split, skipped);
+                        splitsHtml += `<div class="flex flex-col ${window.sorterCellAlign(split)} srt-clip srt-cell${x.cls}" style="${window.sorterCellStyle(split, opts.fontPx)}"${x.attr}>${cellFn(split, skipped)}</div>`;
+                    });
+                    const xs = hook(opts.stack, cIdx, sIdx);
+                    stacksHtml += `<div class="flex flex-row w-full gap-3 srt-clip srt-stack${xs.cls}" style="flex: ${GP.flexShare(stack.heightWeight)};"${xs.attr}>${splitsHtml}</div>`;
+                });
+                const xc = hook(opts.container, cIdx);
+                containersHtml += `<div class="flex flex-col h-full gap-1 srt-clip srt-container${xc.cls}" style="flex: ${GP.flexShare(container.widthWeight)};"${xc.attr}>${stacksHtml}</div>`;
+            });
+
+            // Split Sorter layout horizontally if End Cap is checked
+            let rowContentHtml = `<div class="flex flex-row w-full gap-3 srt-clip srt-body h-full">${containersHtml}</div>`;
+
+            if (settings.enableEndCap) {
+                rowContentHtml = `
+                        <div class="flex flex-row w-full gap-3 srt-clip srt-body h-full">
+                            <div class="flex flex-row flex-1 gap-3 srt-clip h-full">
+                                ${containersHtml}
+                            </div>
+                            <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2 h-full">
+                                ${opts.endCapContent || ''}
+                            </div>
+                        </div>`;
+            }
+            return rowContentHtml;
+        };
+
+        // The AHRI link of a Sorter row: opens the system details of THAT row's catalog record (the row is found through the same selected-rows list and scratchpad the row was
+        // built from). Stage 1 recorded that the old inline handler read window.selectedProposalRows, which does not exist (the list is a lexical let), and passed a row id where
+        // the details view expects the record: the click threw. Repaired here because the AHRI cell lives in the body that Stage 2 migrates.
+        window.openSorterSystemDetails = function (index) {
+            const rowIndex = selectedProposalRows[index];
+            if (rowIndex === undefined) return;
+            const sp = window.systemScratchpads[rowIndex];
+            const item = HVAC_DATABASE[sp ? sp.absoluteIndex : rowIndex];
+            if (item) openSystemDetails(item);
+        };
+
+        window.renderSorterRow = function (row) {
+            const { index, item, sp, brand, series, capacity, seer2, ahri, site, mechStage, sysType, printStyle, hasAuditMismatch, auditState, isNativeOceana, overrideBorder,
+                emojiHtml, cleanBaseStr, cleanModStr, finalSorterPrice, otdFinalPrice } = row;
+            const SorterContext = {
+                brand: brand,
+                capacity: capacity,
+                systemType: sysType,
+                seriesTier: series,
+                mechanicalStage: mechStage,
+                applicationStyle: printStyle,
+                seer2: seer2,
+                eer2: item.eer2,
+                hspf2: item.hspf2,
+                ahri: String(ahri || '').toUpperCase(),
+                coolingBtu: item.coolingBtu,
+                heatingBtu: item.heatingBtu,
+                site: site
+            };
+            // What one split shows for this system (the mapping chain is the one the inline code always had)
+            const cellContent = function (split) {
+                let content = '';
+                if (split.mapping === 'composite' || ['capacity', 'systemType', 'mechanicalStage', 'applicationStyle', 'seriesTier', 'seer2', 'eer2', 'hspf2', 'coolingBtu', 'heatingBtu'].includes(split.mapping)) {
+                    content = window.renderSorterCompositeContent(split, SorterContext);
+                }
+                else if (split.mapping === 'desc') {
+                    let stColor = window.getSystemTypeColorClass(sysType);
+                    let msColor = window.getStageColorClass(mechStage);
+                    content = `<span class="font-semibold tracking-wide" style="line-height: 1.2;">${capacity} <span class="${stColor}">${sysType}</span> <span class="${msColor}">${mechStage}</span></span>`;
+                }
+                else if (split.mapping === 'ahri') {
+                    content = `<span class="font-bold whitespace-nowrap"><span class="text-slate-500 mr-1">AHRI</span><span class="text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSorterSystemDetails(${index})">${ahri || 'N/A'}</span></span>`;
+                }
+                else if (split.mapping === 'brandLogo') {
+                    if (brand.toUpperCase() === 'CARRIER') {
+                        content = `<img src="./carrier.png" alt="Carrier" class="object-contain" style="max-height: 1.5em;" />`;
+                    } else if (brand.toUpperCase() === 'COMFORTMAKER') {
+                        content = `<img src="./comfortmaker.png" alt="Comfortmaker" class="object-contain" style="max-height: 2em;" />`;
+                    } else if (brand.toUpperCase() === 'DURASTAR') {
+                        content = `<img src="./durastar.png" alt="Durastar" class="object-contain" style="max-height: 1.5em;" />`;
+                    } else {
+                        content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
+                    }
+                }
+                else if (split.mapping === 'brandName') {
+                    content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
+                }
+                else if (split.mapping === 'brand') {
+                    let asColor = window.getApplicationStyleColorClass(printStyle);
+                    let serColor = window.getSeriesTierColorClass(series);
+
+                    let dispSeries = series;
+                    if (series === 'MAIN LINE' || series === 'MAINLINE') dispSeries = 'Mainline';
+                    else if (series === 'PERFORMER') dispSeries = 'Performer';
+                    else if (series === 'PERFORMANCE') dispSeries = 'Performance';
+                    else if (series === 'COMFORT') dispSeries = 'Comfort';
+                    else if (series === 'STANDARD') dispSeries = 'Standard';
+                    else if (series === 'BUILDER') dispSeries = 'Builder';
+                    else if (series === 'INFINITY') dispSeries = 'Infinity';
+
+                    let dispStyle = printStyle;
+                    if (printStyle.toUpperCase() === 'STANDARD') dispStyle = 'Standard';
+                    else if (printStyle.toUpperCase() === 'COASTAL') dispStyle = 'Coastal';
+
+                    let seriesHtml = ` <span class="${serColor}">${dispSeries}</span>`;
+                    const upSeries = dispSeries.toUpperCase();
+                    if (upSeries === dispStyle.toUpperCase() || !dispSeries || upSeries === "N/A" || upSeries === "NA" || upSeries === "NULL" || upSeries === "UNDEFINED") {
+                        seriesHtml = '';
+                    }
+
+                    let coastalSuffix = (sp.coastalMatch === true && Number(sp.coastalPriceOverride) > 0) ? ` <span class="text-cyan-400">(Coastal Match)</span>` : '';
+                    let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
+                    let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
+
+                    let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
+                    content = rawContent.replace(/\s+/g, ' ').trim();
+                }
+                else if (split.mapping === 'basePrice') content = cleanBaseStr;
+                else if (split.mapping === 'adjustments') content = cleanModStr;
+                else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
+                else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
+                else if (split.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
+                return content;
+            };
+            let endCapContent = '';
+            if (window.sorterSettings.enableEndCap) {
+                endCapContent = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-black proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex flex-col items-center justify-center cursor-pointer text-center" style="font-size: ${window.sorterSettings.endCapFontSize}px; line-height: 1.1;"><span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Total (OTD)</span>$${otdFinalPrice.toLocaleString()}</button>`;
+            }
+            const rowContentHtml = window.sorterBodyHtml(window.sorterSettings, cellContent, { endCapContent: endCapContent });
+
+            return `<div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-900 border ${overrideBorder} px-1.5 py-2.5 rounded-lg flex gap-2 cursor-grab active:cursor-grabbing hover:border-blue-500 transition-colors shadow-sm mb-2" style="min-height: ${window.sorterSettings.rowHeight}px; height: auto;">
+            <div class="flex flex-col justify-between items-center shrink-0 border-r border-slate-700/30 pr-1.5">
+                <i data-lucide="grip-vertical" class="w-5 h-5 text-slate-500 cursor-grab"></i>
+                <div onclick="removeSystemFromProposal(${index})" class="text-rose-400 hover:text-rose-300 transition-colors cursor-pointer" title="Remove System"><i data-lucide="x-circle" class="w-4 h-4"></i></div>
+            </div>
+            ${rowContentHtml}
+        </div>`;
+        };
+
+        // The alignment of the (last) split mapped to `mapping`, or `fallback` when none is: the Adjustments block reads it to place its divider.
+        window.getSorterMappingAlign = function (mapping, fallback) {
+            let align = fallback;
+            if (window.sorterSettings && window.sorterSettings.containers) {
+                window.sorterSettings.containers.forEach(container => {
+                    container.stacks.forEach(stack => {
+                        stack.splits.forEach(split => {
+                            if (split.mapping === mapping) align = split.align || fallback;
+                        });
+                    });
+                });
+            }
+            return align;
         };
 
         window.addSorterCompositeField = function (cIdx, sIdx, pIdx, field) {
@@ -21763,126 +21936,108 @@
             </div>`;
         };
 
+        // === SORTER SETTINGS: ROW TEMPLATE EDITOR (v10.07.00) ===
+        // The dialog edits the ONE row template every selected system is rendered with. A schematic preview of the row (the same window.sorterBodyHtml as the real rows: the same ratios,
+        // flex rules, clipping and minimum-size rules, with the cell's mapping name instead of data) selects a CONTAINER -> STACK -> SPLIT path, and the inspector below edits exactly
+        // that path with the same labels and steps as the Page 2 grid editor (ratios step 0.10, Shift 0.50, 0.10 to 12). Editor-only marks are outlines on the preview, never on the rows.
+        // Preview versus rows: the proportions are exact (same ratios and rules); the text is a placeholder at 9 px, the preview is 70% of the row height (56 to 200 px) and has no grip column.
+        const sorterEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        window.sorterEditorCurrent = function () {
+            const cs = window.sorterSettings.containers, sel = window.sorterEditorSel;
+            const c = Math.max(0, Math.min(cs.length - 1, sel.c | 0));
+            const ss = cs[c].stacks, s = Math.max(0, Math.min(ss.length - 1, sel.s | 0));
+            const ps = ss[s].splits, p = Math.max(0, Math.min(ps.length - 1, sel.p | 0));
+            window.sorterEditorSel = { c: c, s: s, p: p };
+            return { c: c, s: s, p: p, container: cs[c], stack: ss[s], split: ps[p] };
+        };
+        window.selectSorterCell = function (c, s, p) {
+            if (!sorterNode(c, s, p).P) return;
+            sorterSelect(c, s, p);
+            window.renderCartConfigurator();
+        };
+        window.stepSorterWeight = function (kind, sign, ev) {
+            const cur = window.sorterEditorCurrent(), GP = window.GridPrimitives, W = GP.WEIGHT;
+            const node = kind === 'container' ? cur.container : kind === 'stack' ? cur.stack : cur.split;
+            const key = kind === 'stack' ? 'heightWeight' : 'widthWeight';
+            node[key] = GP.weight(node[key] + sign * (ev && ev.shiftKey ? W.coarse : W.step), 1, { min: W.min, max: W.max, scale: 100 });
+            window.saveSorterSettings();
+        };
+        window.stepSorterFont = function (sign, ev) {
+            const cur = window.sorterEditorCurrent();
+            window.updateCartMap(cur.c, cur.s, cur.p, 'fontSize', Math.max(8, Math.min(60, cur.split.fontSize + sign * (ev && ev.shiftKey ? 2 : 1))), false);
+        };
+        window.sorterNudge = function (dir, ev) {
+            const cur = window.sorterEditorCurrent(), GP = window.GridPrimitives;
+            if (dir === 'center') {
+                window.setSorterCellStyle(cur.c, cur.s, cur.p, 'nudgeX', 0);
+                window.setSorterCellStyle(cur.c, cur.s, cur.p, 'nudgeY', 0);
+                return;
+            }
+            const d = ev && ev.shiftKey ? GP.NUDGE.coarse : 1;
+            if (dir === 'left' || dir === 'right') window.setSorterCellStyle(cur.c, cur.s, cur.p, 'nudgeX', (Number(cur.split.nudgeX) || 0) + (dir === 'right' ? d : -d));
+            else window.setSorterCellStyle(cur.c, cur.s, cur.p, 'nudgeY', (Number(cur.split.nudgeY) || 0) + (dir === 'down' ? d : -d));
+        };
+        window.renderSorterPreview = function () {
+            const settings = window.sorterSettings, sel = window.sorterEditorSel;
+            const labelOf = id => { const m = window.SORTER_MAPPINGS.find(x => x[0] === id); return m ? m[1] : id; };
+            const body = window.sorterBodyHtml(settings, function (split, skipped) {
+                const name = split.mapping === 'empty' ? 'Empty' : labelOf(split.mapping);
+                return '<span class="srt-ph font-semibold leading-tight' + (skipped ? ' srt-ph-off' : '') + '">' + sorterEsc(name) + '</span>' + (skipped ? '<span class="srt-ph srt-ph-off leading-tight">End Cap</span>' : '');
+            }, {
+                showSkipped: true, fontPx: 9,
+                endCapContent: '<span class="srt-ph font-semibold leading-tight text-center">Total (OTD)</span><span class="srt-ph leading-tight text-center">End Cap</span>',
+                container: c => ({ cls: sel.c === c ? ' srt-sel-c' : '', attr: ' data-c="' + c + '" onclick="selectSorterCell(' + c + ',0,0)"' }),
+                stack: (c, s) => ({ cls: sel.c === c && sel.s === s ? ' srt-sel-s' : '', attr: ' data-c="' + c + '" data-s="' + s + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',0)"' }),
+                cell: (c, s, p) => ({ cls: sel.c === c && sel.s === s && sel.p === p ? ' srt-sel-p' : '', attr: ' data-c="' + c + '" data-s="' + s + '" data-p="' + p + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',' + p + ')"' })
+            });
+            const h = Math.max(56, Math.min(200, Math.round(settings.rowHeight * 0.7)));
+            return '<div id="sorter-preview" class="bg-slate-900 border border-slate-700 px-1.5 py-2.5 rounded-lg flex gap-2" style="min-height: ' + h + 'px; height: auto;">' + body + '</div>';
+        };
         window.renderCartConfigurator = function () {
             const rhDisp = document.getElementById('disp-cart-rowHeight');
             if (rhDisp) rhDisp.innerText = window.sorterSettings.rowHeight + 'px';
             const ecToggle = document.getElementById('cart-endcap-toggle');
             if (ecToggle) ecToggle.checked = !!window.sorterSettings.enableEndCap;
-
-            let html = '';
-            window.sorterSettings.containers.forEach((container, cIdx) => {
-                html += `<div class="bg-slate-950 border-2 border-emerald-900/50 p-2 rounded relative mb-3">
-                    <!-- Container Header -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3 border-b-2 border-emerald-900/50 pb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[12px] text-emerald-400 font-extrabold uppercase">Container ${cIdx + 1}</span>
-                            <button onclick="removeCartContainer(${cIdx})" class="text-rose-500 hover:text-rose-400 ${window.sorterSettings.containers.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                            <button onclick="moveCartContainer(${cIdx}, -1)" class="text-slate-400 hover:text-white ${cIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Left"><i data-lucide="arrow-left" class="w-3 h-3"></i></button>
-                            <button onclick="moveCartContainer(${cIdx}, 1)" class="text-slate-400 hover:text-white ${cIdx === window.sorterSettings.containers.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Right"><i data-lucide="arrow-right" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="flex items-center gap-2 bg-slate-900 rounded border border-emerald-800/80 px-1 self-start sm:self-auto">
-                            <span class="text-[8px] text-emerald-500 font-bold">WIDTH WT</span>
-                            <button onclick="updateCartContainerWt(${cIdx}, ${Math.max(0.1, container.widthWeight - 0.5)})" class="text-slate-400 hover:text-white px-1">-</button>
-                            <span class="text-[10px] text-white font-bold w-4 text-center">${container.widthWeight.toFixed(1)}</span>
-                            <button onclick="updateCartContainerWt(${cIdx}, ${container.widthWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
-                        </div>
-                    </div>`;
-
-                container.stacks.forEach((stack, sIdx) => {
-                    html += `<div class="bg-slate-900 border border-slate-700 p-2 rounded relative mb-2">
-                        <!-- Stack Header -->
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2 border-b border-slate-700/50 pb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] text-blue-400 font-bold uppercase">Stack ${sIdx + 1}</span>
-                                <button onclick="removeCartStack(${cIdx}, ${sIdx})" class="text-rose-500 hover:text-rose-400 ${container.stacks.length <= 1 ? 'opacity-30 pointer-events-none' : ''}"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                                <button onclick="moveCartStack(${cIdx}, ${sIdx}, -1)" class="text-slate-400 hover:text-white ${sIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Up"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
-                                <button onclick="moveCartStack(${cIdx}, ${sIdx}, 1)" class="text-slate-400 hover:text-white ${sIdx === container.stacks.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Down"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
-                            </div>
-                            <div class="flex items-center gap-2 bg-slate-800 rounded border border-slate-600 px-1 self-start sm:self-auto">
-                                <span class="text-[8px] text-slate-400 font-bold">HEIGHT WT</span>
-                                <button onclick="updateCartStackWt(${cIdx}, ${sIdx}, ${Math.max(0.1, stack.heightWeight - 0.5)})" class="text-slate-400 hover:text-white px-1">-</button>
-                                <span class="text-[10px] text-white font-bold w-4 text-center">${stack.heightWeight.toFixed(1)}</span>
-                                <button onclick="updateCartStackWt(${cIdx}, ${sIdx}, ${stack.heightWeight + 0.5})" class="text-slate-400 hover:text-white px-1">+</button>
-                            </div>
-                        </div>`;
-
-                    stack.splits.forEach((split, pIdx) => {
-                        html += `<div class="grid grid-cols-2 gap-2.5 bg-slate-800 p-2 rounded mb-2 border border-slate-600">
-                            <!-- Top Left: Content & Remove -->
-                            <div class="flex flex-col gap-1 relative w-full">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Split ${pIdx + 1}</span>
-                                        <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, -1)" class="text-slate-500 hover:text-white ${pIdx === 0 ? 'opacity-30 pointer-events-none' : ''}" title="Move Left"><i data-lucide="arrow-left" class="w-3 h-3"></i></button>
-                                        <button onclick="moveCartSplit(${cIdx}, ${sIdx}, ${pIdx}, 1)" class="text-slate-500 hover:text-white ${pIdx === stack.splits.length - 1 ? 'opacity-30 pointer-events-none' : ''}" title="Move Right"><i data-lucide="arrow-right" class="w-3 h-3"></i></button>
-                                    </div>
-                                    <button onclick="removeCartSplit(${cIdx}, ${sIdx}, ${pIdx})" class="text-rose-500 hover:text-rose-400 leading-none ${stack.splits.length <= 1 ? 'opacity-30 pointer-events-none' : ''}" title="Remove Split"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-                                </div>
-                                <select onchange="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'mapping', this.value, false)" class="bg-slate-900 text-[10px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
-                                    <option value="desc" ${split.mapping === 'desc' ? 'selected' : ''}>System Desc</option>
-                                    <option value="composite" ${split.mapping === 'composite' ? 'selected' : ''}>Custom Description</option>
-                                    <option value="capacity" ${split.mapping === 'capacity' ? 'selected' : ''}>Capacity</option>
-                                    <option value="systemType" ${split.mapping === 'systemType' ? 'selected' : ''}>System Type</option>
-                                    <option value="mechanicalStage" ${split.mapping === 'mechanicalStage' ? 'selected' : ''}>Mechanical Stage</option>
-                                    <option value="applicationStyle" ${split.mapping === 'applicationStyle' ? 'selected' : ''}>Application / Style</option>
-                                    <option value="seriesTier" ${split.mapping === 'seriesTier' ? 'selected' : ''}>Series / Tier</option>
-                                    <option value="seer2" ${split.mapping === 'seer2' ? 'selected' : ''}>SEER2</option>
-                                    <option value="eer2" ${split.mapping === 'eer2' ? 'selected' : ''}>EER2</option>
-                                    <option value="hspf2" ${split.mapping === 'hspf2' ? 'selected' : ''}>HSPF2</option>
-                                    <option value="ahri" ${split.mapping === 'ahri' ? 'selected' : ''}>AHRI</option>
-                                    <option value="coolingBtu" ${split.mapping === 'coolingBtu' ? 'selected' : ''}>Cooling BTU</option>
-                                    <option value="heatingBtu" ${split.mapping === 'heatingBtu' ? 'selected' : ''}>Heating BTU</option>
-                                    <option value="brandLogo" ${split.mapping === 'brandLogo' ? 'selected' : ''}>Brand Logo</option>
-                                    <option value="brandName" ${split.mapping === 'brandName' ? 'selected' : ''}>Brand Name</option>
-                                    <option value="brand" ${split.mapping === 'brand' ? 'selected' : ''}>Brand / Style / Series</option>
-                                    <option value="basePrice" ${split.mapping === 'basePrice' ? 'selected' : ''}>Base Price</option>
-                                    <option value="adjustments" ${split.mapping === 'adjustments' ? 'selected' : ''}>Adjustments</option>
-                                    <option value="totalPrice" ${split.mapping === 'totalPrice' ? 'selected' : ''}>Total Price</option>
-                                    <option value="otdPrice" ${split.mapping === 'otdPrice' ? 'selected' : ''}>Out the Door (OTD)</option>
-                                    <option value="icons" ${split.mapping === 'icons' ? 'selected' : ''}>Icons/Flags</option>
-                                    <option value="empty" ${split.mapping === 'empty' ? 'selected' : ''}>Empty</option>
-                                </select>
-                            </div>
-                            <!-- Top Right: Align -->
-                            <div class="flex flex-col gap-1 w-full">
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider h-[14px] flex items-center">Align</span>
-                                <select onchange="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'align', this.value, false)" class="bg-slate-900 text-[10px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5 h-[22px]">
-                                    <option value="left" ${split.align === 'left' ? 'selected' : ''}>Left</option>
-                                    <option value="center" ${split.align === 'center' ? 'selected' : ''}>Center</option>
-                                    <option value="right" ${split.align === 'right' ? 'selected' : ''}>Right</option>
-                                </select>
-                            </div>
-                            <!-- Bottom Left: Weight -->
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Width Weight</span>
-                                <div class="flex items-center bg-slate-900 rounded border border-slate-700 overflow-hidden w-fit h-[20px]">
-                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'widthWeight', ${Math.max(0.1, split.widthWeight - 0.5)}, true)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">-</button>
-                                    <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${split.widthWeight.toFixed(1)}</span>
-                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'widthWeight', ${split.widthWeight + 0.5}, true)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">+</button>
-                                </div>
-                            </div>
-                            <!-- Bottom Right: Font Size -->
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Font Size</span>
-                                <div class="flex items-center bg-slate-900 rounded border border-slate-700 overflow-hidden w-fit h-[20px]">
-                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'fontSize', ${Math.max(8, split.fontSize - 1)}, false)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">-</button>
-                                    <span class="text-[10px] text-white font-bold w-6 text-center leading-none flex items-center justify-center">${split.fontSize}</span>
-                                    <button onclick="updateCartMap(${cIdx}, ${sIdx}, ${pIdx}, 'fontSize', ${split.fontSize + 1}, false)" class="text-slate-400 hover:text-white hover:bg-slate-700 px-2 flex items-center justify-center transition-colors h-full">+</button>
-                                </div>
-                            </div>
-                            ${split.mapping === 'composite' ? window.renderCartCompositeControls(cIdx, sIdx, pIdx, split) : ''}
-                        </div>`;
-                    });
-                    html += `<button onclick="addCartSplit(${cIdx}, ${sIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded border border-dashed border-slate-600 transition-colors text-[9px] uppercase tracking-widest">+ Add Split</button></div>`;
-                });
-
-                html += `<button onclick="addCartStack(${cIdx})" class="w-full mt-1 py-1 bg-slate-800 hover:bg-slate-700 text-blue-400 font-bold rounded border border-blue-900/50 transition-colors text-[10px] uppercase tracking-widest">+ Add Stack</button></div>`;
-            });
             const cl = document.getElementById('cart-configurator-list');
-            if (cl) cl.innerHTML = html;
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        };
+            if (!cl) return;
 
+            const cur = window.sorterEditorCurrent(), GP = window.GridPrimitives, W = GP.WEIGHT;
+            const cs = window.sorterSettings.containers, c = cur.c, s = cur.s, p = cur.p, split = cur.split;
+            const BTN = 'px-2 py-1 rounded border text-[10px] font-bold leading-none transition-colors ';
+            const OFF = 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700';
+            const ON = 'bg-blue-600 text-white border-blue-500';
+            const btn = (label, onclick, title, disabled, on) => '<button type="button" onclick="' + onclick + '" title="' + title + '" aria-label="' + title + '" class="' + BTN + (on ? ON : OFF) + (disabled ? ' opacity-30 pointer-events-none' : '') + '">' + label + '</button>';
+            const label = t => '<span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
+            const rowOf = (l, inner) => '<div class="flex items-center justify-between gap-2">' + label(l) + '<div class="flex items-center gap-1">' + inner + '</div></div>';
+            const stepper = (l, value, dec, inc, hint) => rowOf(l, btn('&minus;', dec, 'Decrease (Shift+click: bigger step)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value + '</span>' + btn('+', inc, 'Increase (Shift+click: bigger step)')) + (hint ? '<div class="text-[9px] text-slate-500 leading-snug">' + hint + '</div>' : '');
+            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-[10px] font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
+
+            const containerSec = section('border-blue-900/60', '<span class="text-blue-400">Container ' + (c + 1) + ' of ' + cs.length + '</span>',
+                stepper('Container width ratio', cur.container.widthWeight.toFixed(2), 'stepSorterWeight(\'container\',-1,event)', 'stepSorterWeight(\'container\',1,event)', 'Share of the row width, relative to the other containers.') +
+                rowOf('Container', btn('&larr;', 'moveCartContainer(' + c + ',-1)', 'Move container left', c === 0) + btn('&rarr;', 'moveCartContainer(' + c + ',1)', 'Move container right', c === cs.length - 1) +
+                    btn('Remove', 'removeCartContainer(' + c + ')', 'Remove this container', cs.length <= 1) + btn('+ Add stack', 'addCartStack(' + c + ')', 'Add a stack to container ' + (c + 1))));
+            const stackSec = section('border-emerald-900/60', '<span class="text-emerald-400">Stack ' + (s + 1) + ' of ' + cur.container.stacks.length + '</span><span class="text-slate-500 normal-case font-semibold"> in container ' + (c + 1) + '</span>',
+                stepper('Stack height ratio', cur.stack.heightWeight.toFixed(2), 'stepSorterWeight(\'stack\',-1,event)', 'stepSorterWeight(\'stack\',1,event)', 'Share of the free height beyond each stack content, relative to the other stacks in this container. A stack never gets shorter than its content.') +
+                rowOf('Stack', btn('&uarr;', 'moveCartStack(' + c + ',' + s + ',-1)', 'Move stack up', s === 0) + btn('&darr;', 'moveCartStack(' + c + ',' + s + ',1)', 'Move stack down', s === cur.container.stacks.length - 1) +
+                    btn('Remove', 'removeCartStack(' + c + ',' + s + ')', 'Remove this stack', cur.container.stacks.length <= 1) + btn('+ Add split', 'addCartSplit(' + c + ',' + s + ')', 'Add a split to stack ' + (s + 1) + ' of container ' + (c + 1))));
+            const mapOpts = window.SORTER_MAPPINGS.map(m => '<option value="' + m[0] + '"' + (split.mapping === m[0] ? ' selected' : '') + '>' + sorterEsc(m[1]) + '</option>').join('');
+            const knownMap = window.SORTER_MAPPINGS.some(m => m[0] === split.mapping);
+            const splitSec = section('border-slate-600', '<span class="text-slate-200">Split ' + (p + 1) + ' of ' + cur.stack.splits.length + '</span><span class="text-slate-500 normal-case font-semibold"> in stack ' + (s + 1) + '</span>',
+                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="updateCartMap(' + c + ',' + s + ',' + p + ',\'mapping\',this.value,false)" class="bg-slate-900 text-[11px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + (knownMap ? '' : '<option value="' + sorterEsc(split.mapping) + '" selected>' + sorterEsc(split.mapping) + '</option>') + mapOpts + '</select></div>' +
+                stepper('Split width ratio', split.widthWeight.toFixed(2), 'stepSorterWeight(\'split\',-1,event)', 'stepSorterWeight(\'split\',1,event)', 'Share of the stack width, relative to the other splits.') +
+                rowOf('Split', btn('&larr;', 'moveCartSplit(' + c + ',' + s + ',' + p + ',-1)', 'Move split left', p === 0) + btn('&rarr;', 'moveCartSplit(' + c + ',' + s + ',' + p + ',1)', 'Move split right', p === cur.stack.splits.length - 1) +
+                    btn('Remove', 'removeCartSplit(' + c + ',' + s + ',' + p + ')', 'Remove this split', cur.stack.splits.length <= 1)) +
+                rowOf('Text size', btn('&minus;', 'stepSorterFont(-1,event)', 'Smaller text (Shift+click: 2 px)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + split.fontSize + ' px</span>' + btn('+', 'stepSorterFont(1,event)', 'Larger text (Shift+click: 2 px)')) +
+                rowOf('Horizontal', ['left', 'center', 'right'].map(a => btn(a.charAt(0).toUpperCase() + a.slice(1), 'updateCartMap(' + c + ',' + s + ',' + p + ',\'align\',\'' + a + '\',false)', 'Align ' + a, false, (split.align || 'left') === a)).join('')) +
+                rowOf('Vertical', [['top', 'Top'], ['middle', 'Middle'], ['bottom', 'Bottom']].map(v => btn(v[1], 'setSorterCellStyle(' + c + ',' + s + ',' + p + ',\'vAlign\',\'' + v[0] + '\')', 'Align ' + v[0], false, (split.vAlign || 'middle') === v[0])).join('')) +
+                (typeof window.renderNudgePad === 'function' ? window.renderNudgePad({ label: 'Nudge', x: Number(split.nudgeX) || 0, y: Number(split.nudgeY) || 0, unit: 'px', coarse: GP.NUDGE.coarse, attrs: dir => 'onclick="sorterNudge(\'' + dir + '\', event)"' }) : '') +
+                (split.mapping === 'composite' ? window.renderCartCompositeControls(c, s, p, split) : ''));
+
+            cl.innerHTML = '<div class="flex flex-col gap-1">' + label('Row template preview') + window.renderSorterPreview() +
+                '<div class="text-[9px] text-slate-500 leading-snug">Click a cell to edit it. Same ratios and rules as the real rows; the text is a placeholder. Every selected system uses this one template.</div></div>' +
+                '<div class="text-[10px] text-slate-300 font-bold">Editing: Container ' + (c + 1) + ' &rsaquo; Stack ' + (s + 1) + ' &rsaquo; Split ' + (p + 1) + '</div>' +
+                containerSec + stackSec + splitSec;
+        };
         window.openSorterSettings = function () {
             const modal = document.getElementById('sorter-settings-modal');
             if (modal) {
@@ -26623,7 +26778,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.05.02';
+            const APP_VERSION = 'v10.07.01';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -26919,7 +27074,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.05.02';
+            const APP_VERSION = 'v10.07.01';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -27419,6 +27574,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            const GP = window.GridPrimitives;      // v10.06.00: the weight / flex / enum rules shared with the Systems Sorter body
             const SCHEMA = 3;
             const PROFILES = ['desktop', 'mobile'];
             const PROFILE_LABEL = { desktop: 'Desktop', mobile: 'Mobile' };
@@ -27435,7 +27591,7 @@
             const VISIBILITIES = ['expanded', 'always'];
             const VIS_LABEL = { expanded: 'Expanded only', always: 'Always visible' };
             const PATH = profile => 'proposalBar.layouts.' + profile;
-            const LIM = { containers: 6, stacks: 10, splits: 8, bands: 8, wMin: 0.1, wMax: 12, wStep: 0.1, wCoarse: 0.5, hMin: 10, hMax: 1000, hStep: 5, hCoarse: 20, hFallback: 20, fine: 8, nudge: 100, nudgeNatural: 40, nudgeCoarse: 5, labelMax: 80 };
+            const LIM = { containers: 6, stacks: 10, splits: 8, bands: 8, wMin: GP.WEIGHT.min, wMax: GP.WEIGHT.max, wStep: GP.WEIGHT.step, wCoarse: GP.WEIGHT.coarse, hMin: 10, hMax: 1000, hStep: 5, hCoarse: 20, hFallback: 20, fine: 8, nudge: GP.NUDGE.max, nudgeNatural: 40, nudgeCoarse: GP.NUDGE.coarse, labelMax: 80 };
             // Data revision inside schema 3. Revision 2 = the Smart Injector components exist: a saved layout older than that (v10.01.7 and
             // older) gets them in a default band once, and a component the user deliberately left unplaced stays unplaced afterwards.
             // Revision 3 (v10.02.00) = layouts may carry component appearance (`styles`). It is purely additive: a revision 2 layout loads
@@ -27570,7 +27726,7 @@
             const DENSITIES = ['compact', 'normal', 'roomy'];
             const DENSITY_LABEL = { compact: 'Compact', normal: 'Normal', roomy: 'Roomy' };
             const STYLE_ACTS = ['ts', 'tf', 'is', 'if', 'ig', 'va', 'ta', 'dn', 'nx', 'ny', 'nreset', 'tx', 'ty', 'treset', 'ix', 'iy', 'ireset', 'ipos', 'tax', 'tay', 'iax', 'iay', 'lreset', 'bs', 'styleReset'];
-            const clampInt = (v, lim) => { const n = Math.round(Number(v)); return isFinite(n) ? Math.max(-lim, Math.min(lim, n)) : 0; };
+            const clampInt = GP.clampInt;
             function sanitizeStyle(raw, def) {
                 if (!isObj(raw)) return null;
                 const has = k => def.style.indexOf(k) >= 0;
@@ -27649,11 +27805,7 @@
             // `revision` is a data revision inside schema 3 (2 = the Smart Injector components exist); see REVISION.
             // containers -> stacks -> splits -> {widthWeight, mapping, hAlign}; a band is stacks -> splits (the band itself
             // already spans the section width). height 0 = Auto; otherwise a minimum height in px.
-            const clampW = (v, d, min) => {
-                const n = Number(v);
-                if (!isFinite(n)) return d;
-                return Math.min(LIM.wMax, Math.max(min === undefined ? LIM.wMin : min, Math.round(n * 100) / 100));
-            };
+            const clampW = (v, d, min) => GP.weight(v, d, { min: min === undefined ? LIM.wMin : min, max: LIM.wMax, scale: 100 });
             const clampH = v => {
                 const n = Math.round(Number(v));
                 if (!isFinite(n) || n <= 0) return 0;
@@ -27698,7 +27850,7 @@
                             let mapping = typeof p.mapping === 'string' ? p.mapping : 'empty';
                             if (mapping !== 'empty' && (!allowedOn(mapping, kind) || used.has(mapping))) mapping = 'empty';
                             if (mapping !== 'empty') used.add(mapping);
-                            splits.push({ widthWeight: clampW(p.widthWeight, 1), mapping: mapping, hAlign: ALIGNS.indexOf(p.hAlign) >= 0 ? p.hAlign : 'start' });
+                            splits.push({ widthWeight: clampW(p.widthWeight, 1), mapping: mapping, hAlign: GP.pick(p.hAlign, ALIGNS, 'start') });
                         }
                         stacks.push({ heightWeight: clampW(s.heightWeight, 1, 0), splits: splits });
                     }
@@ -28119,7 +28271,7 @@
                 surf.containers.forEach((c, ci) => {
                     const cEl = document.createElement('div');
                     cEl.className = 'pb-container';
-                    cEl.style.flex = c.widthWeight + ' 1 0%';
+                    cEl.style.flex = GP.flexShare(c.widthWeight);
                     cEl.setAttribute('data-editor-cell', (kind === 'band' ? 'b' + bi : 'c' + ci));
                     cEl.setAttribute('data-pb-c', ci);
                     if (kind === 'band') cEl.setAttribute('data-pb-b', bi);
@@ -28127,7 +28279,7 @@
                     c.stacks.forEach((s, si) => {
                         const sEl = document.createElement('div');
                         sEl.className = 'pb-stack';
-                        sEl.style.flex = explicit ? (s.heightWeight > 0 ? s.heightWeight + ' 1 0%' : '0 0 auto') : s.heightWeight + ' 1 auto';
+                        sEl.style.flex = explicit ? (s.heightWeight > 0 ? GP.flexShare(s.heightWeight) : '0 0 auto') : GP.flexShare(s.heightWeight, 'auto');
                         sEl.setAttribute('data-editor-cell', 'c' + ci + '-s' + si);
                         sEl.setAttribute('data-pb-c', ci);
                         sEl.setAttribute('data-pb-s', si);
@@ -28136,7 +28288,7 @@
                         s.splits.forEach((p, pi) => {
                             const slot = document.createElement('div');
                             slot.className = 'pb-slot';
-                            slot.style.flex = p.widthWeight + ' 1 0%';
+                            slot.style.flex = GP.flexShare(p.widthWeight);
                             slot.setAttribute('data-h-align', p.hAlign);
                             slot.setAttribute('data-addr', addrText({ k: kind, b: bi, c: ci, s: si, p: pi }));
                             slot.setAttribute('data-editor-cell', 'c' + ci + '-s' + si + '-p' + pi);
@@ -28964,7 +29116,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.05.02 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.07.01 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29630,7 +29782,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.05.02',
+                version: 'v10.07.01',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29707,7 +29859,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.05.02';
+            const APP_VERSION = 'v10.07.01';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
