@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.11.00 | Systems Sorter Legacy Description Normalization -->
+﻿<!-- Retest Prototype v10.12.00 | Systems Sorter Header Migration -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.11.00</title>
+    <title>Changeout Lookup v10.12.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -679,6 +679,15 @@
         #sorter-preview .srt-sel-p { outline: 2px solid #60a5fa; background: rgba(59, 130, 246, 0.18); }
         #sorter-preview .srt-ph { color: #cbd5e1; }
         #sorter-preview .srt-ph-off { color: #64748b; font-style: italic; }
+        /* Sorter header (v10.12.00): a cell never shrinks below its component, so nothing is clipped; the same marks as the body preview on the editor's header preview */
+        .srt-hcell { min-width: min-content; }
+        #sorter-hdr-preview { background: #0f172a; padding: 6px; border: 1px solid #334155; border-radius: 6px; }
+        #sorter-hdr-preview .srt-hcont { outline: 1px dashed #475569; outline-offset: -1px; cursor: pointer; }
+        #sorter-hdr-preview .srt-hstack { outline: 1px dashed #334155; outline-offset: -1px; cursor: pointer; }
+        #sorter-hdr-preview .srt-hcell { outline: 1px dotted #64748b; outline-offset: -1px; cursor: pointer; min-height: 24px; color: #cbd5e1; font-size: 9px; font-weight: 700; }
+        #sorter-hdr-preview .srt-sel-c { outline: 2px solid #3b82f6; }
+        #sorter-hdr-preview .srt-sel-s { outline: 2px solid #10b981; }
+        #sorter-hdr-preview .srt-sel-p { outline: 2px solid #60a5fa; background: rgba(59, 130, 246, 0.18); }
 </style>
 </head>
 
@@ -709,7 +718,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.11.00</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.12.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1661,7 +1670,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.11.00</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.12.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -2051,19 +2060,22 @@
                 open>
                 <summary
                     class="flex items-center justify-between border-b border-slate-700/50 pb-2 mb-3 w-full px-3 pt-3 bg-slate-900 rounded-t-lg cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                    <h3 onclick="event.preventDefault(); event.stopPropagation(); document.body.classList.toggle('global-customer-view')"
+                    <!-- v10.12.00: the header is a grid-backed host (window.renderSorterHeader). The three components below are singletons that the renderer moves into their cells; they live in the stash until then. -->
+                    <div id="sorter-header-host" class="flex flex-row w-full min-w-0 gap-3">
+                        <div id="sorter-header-stash" class="flex flex-row w-full gap-3 items-center">
+                    <h3 id="sorter-title" onclick="event.preventDefault(); event.stopPropagation(); document.body.classList.toggle('global-customer-view')"
                         class="text-slate-100 font-black tracking-widest leading-none text-lg flex flex-col cursor-pointer hover:text-blue-400 transition-colors shrink-0">
                         <span>SYSTEMS</span>
                         <span>SORTER</span>
                     </h3>
                     <div id="sorter-action-badges"
-                        class="flex items-center justify-center gap-1.5 ml-4 flex-wrap flex-1"></div>
-                    <div class="flex items-center gap-4 ml-auto">
-                        <button onclick="event.preventDefault(); event.stopPropagation(); openSorterSettings()"
+                        class="flex items-center justify-center gap-1.5 flex-wrap flex-1 w-full"></div>
+                        <button id="sorter-gear-btn" onclick="event.preventDefault(); event.stopPropagation(); openSorterSettings()"
                             class="text-slate-500 hover:text-blue-400 transition-colors shrink-0 z-10 relative"
                             title="Sorter Layout Settings">
                             <i data-lucide="settings" class="w-5 h-5"></i>
                         </button>
+                        </div>
                     </div>
                 </summary>
                 <div id="proposal-sorter-list" class="p-4 flex flex-col gap-2 min-h-[120px] bg-slate-800">
@@ -2261,6 +2273,11 @@
                 class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition-colors text-xs uppercase tracking-widest flex items-center justify-center gap-2">
                 <i data-lucide="plus" class="w-4 h-4"></i> Add Container
             </button>
+            <!-- Sorter HEADER layout editor (v10.12.00, injected by JS) -->
+            <details class="bg-slate-950 border border-slate-700 rounded p-2" id="sorter-header-editor-details">
+                <summary class="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider cursor-pointer select-none">Header layout</summary>
+                <div id="sorter-header-editor" class="flex flex-col gap-3 mt-2"></div>
+            </details>
         </div>
     </div>
     <!-- Proposal Settings Modal (Free-Floating, Draggable) -->
@@ -6563,7 +6580,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.11.00',
+                appVersion: 'v10.12.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6757,7 +6774,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.11.00_${stamp}.json`;
+                `platts_config_v10.12.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -16995,7 +17012,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.11.00',
+                appVersion: 'v10.12.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17004,7 +17021,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.11.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.12.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17023,7 +17040,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.11.00',
+                appVersion: 'v10.12.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17032,7 +17049,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.11.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.12.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -21320,7 +21337,7 @@
             return v3;
         };
 
-        // v10.08.01: a composite is an ordered list of tokens in `compositeFields`. A FIELD token is { field, showLabel } (the only kind before v10.11.00, unchanged); a STATIC TEXT token is
+        // v10.08.01: a composite is an ordered list of tokens in `compositeFields`. A FIELD token is { field, showLabel } (the only kind before v10.12.00, unchanged); a STATIC TEXT token is
         // { type: 'text', text } (plain text, never HTML, at most SORTER_TEXT_MAX characters). The list stays in the same array, so old saved layouts load as they were and need no migration.
         window.SORTER_TEXT_MAX = 40;
         window.sorterCompositeIsText = function (f) { return !!f && typeof f === 'object' && f.type === 'text' && !f.field; };
@@ -22141,11 +22158,250 @@
                 (typeof window.renderNudgePad === 'function' ? window.renderNudgePad({ label: 'Nudge', x: Number(split.nudgeX) || 0, y: Number(split.nudgeY) || 0, unit: 'px', coarse: GP.NUDGE.coarse, attrs: dir => 'onclick="sorterNudge(\'' + dir + '\', event)"' }) : '') +
                 (split.mapping === 'composite' ? window.renderCartCompositeControls(c, s, p, split) : ''));
 
+            if (typeof window.renderSorterHeaderEditor === 'function') window.renderSorterHeaderEditor();
             cl.innerHTML = '<div class="flex flex-col gap-1">' + label('Row template preview') + window.renderSorterPreview() +
                 '<div class="text-[9px] text-slate-500 leading-snug">Click a cell to edit it. Same ratios and rules as the real rows; the text is a placeholder. Every selected system uses this one template.</div></div>' +
                 '<div class="text-[10px] text-slate-300 font-bold">Editing: Container ' + (c + 1) + ' &rsaquo; Stack ' + (s + 1) + ' &rsaquo; Split ' + (p + 1) + '</div>' +
                 containerSec + stackSec + splitSec;
         };
+
+        // === SYSTEMS SORTER HEADER: GRID-BACKED LAYOUT (v10.12.00) ===
+        // The header uses the same container -> stack -> split model and the same GridPrimitives (weight, flex share, pick) as the Sorter body, with its own small component registry:
+        // title, badges (the live #sorter-action-badges HOST, never its individual badges), gear. The three components are singleton nodes that renderSorterHeader MOVES into their
+        // cells (the badge host keeps its id, so updateProposalCartUI keeps writing into it). Own storage key (additive); the body layout and its key are not touched.
+        // One layout for desktop and mobile (no profile split); not part of Design Profiles yet.
+        window.SORTER_HEADER_KEY = 'changeout_sorter_header_v1';
+        window.SORTER_HEADER_COMPONENTS = [['title', 'Sorter Title'], ['badges', 'Action Badges'], ['gear', 'Settings Gear'], ['empty', 'Empty']];
+        window.SORTER_HEADER_LIMITS = { containers: 3, stacks: 3, splits: 4 };
+        window.sorterHeaderDefault = function () {
+            return { schemaVersion: 1, containers: [{ widthWeight: 1, stacks: [{ heightWeight: 1, splits: [
+                { widthWeight: 1.5, component: 'title', align: 'left' },
+                { widthWeight: 6, component: 'badges', align: 'center' },
+                { widthWeight: 0.6, component: 'gear', align: 'right' }] }] }] };
+        };
+        // Whatever was saved becomes a valid layout or the default: every level is kept inside the limits, ratios and enums are cleaned, a component appears at most once
+        // (a later duplicate becomes empty) and a missing component is added back so the title, the badge host and the settings gear can never be lost.
+        window.sanitizeSorterHeader = function (raw) {
+            const GP = window.GridPrimitives, W = GP.WEIGHT, L = window.SORTER_HEADER_LIMITS;
+            const ids = window.SORTER_HEADER_COMPONENTS.map(c => c[0]);
+            const w = v => GP.weight(v, 1, { min: W.min, max: W.max, scale: 100 });
+            if (!raw || typeof raw !== 'object' || !Array.isArray(raw.containers) || raw.containers.length === 0) return window.sorterHeaderDefault();
+            const seen = {};
+            const containers = [];
+            raw.containers.slice(0, L.containers).forEach(c => {
+                if (!c || typeof c !== 'object' || !Array.isArray(c.stacks)) return;
+                const stacks = [];
+                c.stacks.slice(0, L.stacks).forEach(st => {
+                    if (!st || typeof st !== 'object' || !Array.isArray(st.splits)) return;
+                    const splits = [];
+                    st.splits.slice(0, L.splits).forEach(sp => {
+                        if (!sp || typeof sp !== 'object') return;
+                        let comp = GP.pick(sp.component, ids, 'empty');
+                        if (comp !== 'empty') { if (seen[comp]) comp = 'empty'; else seen[comp] = true; }
+                        const o = { widthWeight: w(sp.widthWeight), component: comp, align: GP.pick(sp.align, ['left', 'center', 'right'], 'left') };
+                        if (GP.pick(sp.vAlign, ['top', 'bottom'], '')) o.vAlign = sp.vAlign;
+                        splits.push(o);
+                    });
+                    if (splits.length) stacks.push({ heightWeight: w(st.heightWeight), splits: splits });
+                });
+                if (stacks.length) containers.push({ widthWeight: w(c.widthWeight), stacks: stacks });
+            });
+            if (!containers.length) return window.sorterHeaderDefault();
+            ['title', 'badges', 'gear'].forEach(id => {
+                if (seen[id]) return;
+                const first = containers[0].stacks[0].splits;
+                const spare = first.find(sp => sp.component === 'empty');
+                if (spare) spare.component = id;
+                else first.push({ widthWeight: 1, component: id, align: id === 'gear' ? 'right' : id === 'badges' ? 'center' : 'left' });
+            });
+            return { schemaVersion: 1, containers: containers };
+        };
+        try {
+            const savedHdr = localStorage.getItem(window.SORTER_HEADER_KEY);
+            window.sorterHeader = window.sanitizeSorterHeader(savedHdr ? JSON.parse(savedHdr) : null);
+        } catch (e) { window.sorterHeader = window.sorterHeaderDefault(); }
+        window.saveSorterHeader = function () {
+            try { localStorage.setItem(window.SORTER_HEADER_KEY, JSON.stringify(window.sorterHeader)); } catch (e) { }
+        };
+        window.sorterHeaderSel = { c: 0, s: 0, p: 0 };
+
+        // the skeleton (the live header and the editor preview share it): cellFn(split) = a cell's inner markup; hooks.{container,stack,cell} add { cls, attr } to that level
+        window.sorterHeaderHtml = function (layout, cellFn, hooks) {
+            hooks = hooks || {};
+            const GP = window.GridPrimitives;
+            const hook = (f, a, b, c) => (f ? f(a, b, c) : { cls: '', attr: '' });
+            let out = '';
+            layout.containers.forEach((container, cIdx) => {
+                let stacksHtml = '';
+                container.stacks.forEach((stack, sIdx) => {
+                    let splitsHtml = '';
+                    stack.splits.forEach((split, pIdx) => {
+                        const x = hook(hooks.cell, cIdx, sIdx, pIdx);
+                        splitsHtml += `<div class="flex flex-col ${window.sorterCellAlign(split)} srt-hcell${x.cls}" data-hdr-comp="${split.component}" style="flex: ${GP.flexShare(split.widthWeight)};"${x.attr}>${cellFn(split)}</div>`;
+                    });
+                    const xs = hook(hooks.stack, cIdx, sIdx);
+                    stacksHtml += `<div class="flex flex-row w-full gap-3 srt-hstack${xs.cls}" style="flex: ${GP.flexShare(stack.heightWeight)};"${xs.attr}>${splitsHtml}</div>`;
+                });
+                const xc = hook(hooks.container, cIdx);
+                out += `<div class="flex flex-col gap-1 srt-hcont${xc.cls}" style="flex: ${GP.flexShare(container.widthWeight)}; min-width: min-content;"${xc.attr}>${stacksHtml}</div>`;
+            });
+            return out;
+        };
+
+        window.renderSorterHeader = function () {
+            const host = document.getElementById('sorter-header-host');
+            const stash = document.getElementById('sorter-header-stash');
+            if (!host || !stash) return;
+            const nodes = { title: document.getElementById('sorter-title'), badges: document.getElementById('sorter-action-badges'), gear: document.getElementById('sorter-gear-btn') };
+            Object.keys(nodes).forEach(k => { if (nodes[k] && nodes[k].parentNode !== stash) stash.appendChild(nodes[k]); });
+            // rebuild the cells (the stash is the first child and is kept)
+            Array.prototype.slice.call(host.children).forEach(ch => { if (ch !== stash) host.removeChild(ch); });
+            const holder = document.createElement('div');
+            holder.className = 'flex flex-row w-full min-w-0 gap-3';
+            holder.id = 'sorter-header-grid';
+            holder.innerHTML = window.sorterHeaderHtml(window.sorterHeader, () => '');
+            host.appendChild(holder);
+            holder.querySelectorAll('[data-hdr-comp]').forEach(cell => {
+                const n = nodes[cell.getAttribute('data-hdr-comp')];
+                if (!n) return;
+                const align = /items-end/.test(cell.className) ? 'flex-end' : /items-center/.test(cell.className) ? 'center' : 'flex-start';
+                if (n === nodes.badges) n.style.justifyContent = align;
+                cell.appendChild(n);
+            });
+            stash.style.display = 'none';
+        };
+
+        // --- editor (inside the Sorter Settings modal, "Header layout") ---
+        window.sorterHeaderCur = function () {
+            const cs = window.sorterHeader.containers, sel = window.sorterHeaderSel;
+            const c = Math.max(0, Math.min(cs.length - 1, sel.c | 0)), ss = cs[c].stacks, s = Math.max(0, Math.min(ss.length - 1, sel.s | 0));
+            const ps = ss[s].splits, p = Math.max(0, Math.min(ps.length - 1, sel.p | 0));
+            window.sorterHeaderSel = { c: c, s: s, p: p };
+            return { c: c, s: s, p: p, container: cs[c], stack: ss[s], split: ps[p] };
+        };
+        window.sorterHeaderMsg = '';
+        window.sorterHeaderCommit = function (msg) {
+            window.sorterHeaderMsg = msg || '';
+            window.sorterHeader = window.sanitizeSorterHeader(window.sorterHeader);
+            window.saveSorterHeader();
+            window.renderSorterHeader();
+            window.renderSorterHeaderEditor();
+        };
+        window.sorterHeaderSelect = function (c, s, p) {
+            const cs = window.sorterHeader.containers;
+            if (!cs[c] || !cs[c].stacks[s] || !cs[c].stacks[s].splits[p]) return;
+            window.sorterHeaderSel = { c: c, s: s, p: p };
+            window.sorterHeaderMsg = '';
+            window.renderSorterHeaderEditor();
+        };
+        window.sorterHeaderStep = function (kind, sign, ev) {
+            const cur = window.sorterHeaderCur(), GP = window.GridPrimitives, W = GP.WEIGHT;
+            const node = kind === 'container' ? cur.container : kind === 'stack' ? cur.stack : cur.split;
+            const key = kind === 'stack' ? 'heightWeight' : 'widthWeight';
+            node[key] = GP.weight(node[key] + sign * (ev && ev.shiftKey ? W.coarse : W.step), 1, { min: W.min, max: W.max, scale: 100 });
+            window.sorterHeaderCommit();
+        };
+        window.sorterHeaderAdd = function (kind) {
+            const cur = window.sorterHeaderCur(), L = window.SORTER_HEADER_LIMITS, h = window.sorterHeader;
+            const empty = () => ({ widthWeight: 1, component: 'empty', align: 'left' });
+            if (kind === 'container') {
+                if (h.containers.length >= L.containers) return window.sorterHeaderCommit('At most ' + L.containers + ' containers.');
+                h.containers.push({ widthWeight: 1, stacks: [{ heightWeight: 1, splits: [empty()] }] });
+                window.sorterHeaderSel = { c: h.containers.length - 1, s: 0, p: 0 };
+            } else if (kind === 'stack') {
+                if (cur.container.stacks.length >= L.stacks) return window.sorterHeaderCommit('At most ' + L.stacks + ' stacks per container.');
+                cur.container.stacks.push({ heightWeight: 1, splits: [empty()] });
+                window.sorterHeaderSel = { c: cur.c, s: cur.container.stacks.length - 1, p: 0 };
+            } else {
+                if (cur.stack.splits.length >= L.splits) return window.sorterHeaderCommit('At most ' + L.splits + ' splits per stack.');
+                cur.stack.splits.push(empty());
+                window.sorterHeaderSel = { c: cur.c, s: cur.s, p: cur.stack.splits.length - 1 };
+            }
+            window.sorterHeaderCommit();
+        };
+        window.sorterHeaderRemove = function (kind) {
+            const cur = window.sorterHeaderCur(), h = window.sorterHeader;
+            const node = kind === 'container' ? cur.container : kind === 'stack' ? cur.stack : cur.split;
+            const list = kind === 'container' ? h.containers : kind === 'stack' ? cur.container.stacks : cur.stack.splits;
+            if (list.length <= 1) return window.sorterHeaderCommit('The last ' + kind + ' cannot be removed.');
+            if (/"component":"(title|badges|gear)"/.test(JSON.stringify(node)) || (kind === 'split' && node.component !== 'empty')) return window.sorterHeaderCommit('Move the component out of this ' + kind + ' first (give its cell to another one).');
+            list.splice(list.indexOf(node), 1);
+            window.sorterHeaderCommit();
+        };
+        window.sorterHeaderMove = function (kind, dir) {
+            const cur = window.sorterHeaderCur(), h = window.sorterHeader;
+            const node = kind === 'container' ? cur.container : kind === 'stack' ? cur.stack : cur.split;
+            const list = kind === 'container' ? h.containers : kind === 'stack' ? cur.container.stacks : cur.stack.splits;
+            const i = list.indexOf(node), t = i + dir;
+            if (t < 0 || t >= list.length) return;
+            list[i] = list[t]; list[t] = node;
+            if (kind === 'container') window.sorterHeaderSel = { c: t, s: cur.s, p: cur.p };
+            else if (kind === 'stack') window.sorterHeaderSel = { c: cur.c, s: t, p: cur.p };
+            else window.sorterHeaderSel = { c: cur.c, s: cur.s, p: t };
+            window.sorterHeaderCommit();
+        };
+        // a component moves to the selected cell; the cell that had it takes this cell's previous component (a swap), and a component cannot be dropped by emptying its only cell
+        window.sorterHeaderSetComponent = function (comp) {
+            const cur = window.sorterHeaderCur(), h = window.sorterHeader;
+            if (!window.SORTER_HEADER_COMPONENTS.some(c => c[0] === comp)) return;
+            const old = cur.split.component;
+            if (comp === old) return;
+            if (comp === 'empty') return window.sorterHeaderCommit('A component cannot be removed: pick the cell where it should go instead (the two cells swap).');
+            h.containers.forEach(c => c.stacks.forEach(st => st.splits.forEach(sp => { if (sp !== cur.split && sp.component === comp) sp.component = old; })));
+            cur.split.component = comp;
+            window.sorterHeaderCommit();
+        };
+        window.sorterHeaderSetAlign = function (key, val) {
+            const cur = window.sorterHeaderCur(), GP = window.GridPrimitives;
+            if (key === 'align') cur.split.align = GP.pick(val, ['left', 'center', 'right'], 'left');
+            else if (GP.pick(val, ['top', 'bottom'], '')) cur.split.vAlign = val; else delete cur.split.vAlign;
+            window.sorterHeaderCommit();
+        };
+        window.sorterHeaderReset = function () {
+            window.sorterHeader = window.sorterHeaderDefault();
+            window.sorterHeaderSel = { c: 0, s: 0, p: 0 };
+            window.sorterHeaderCommit('Header layout reset to the default.');
+        };
+        window.renderSorterHeaderEditor = function () {
+            const el = document.getElementById('sorter-header-editor');
+            if (!el) return;
+            const cur = window.sorterHeaderCur(), W = window.GridPrimitives.WEIGHT, L = window.SORTER_HEADER_LIMITS;
+            const sel = window.sorterHeaderSel, h = window.sorterHeader;
+            const BTN = 'px-2 py-1 rounded border text-[10px] font-bold leading-none transition-colors ';
+            const OFF = 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700', ON = 'bg-blue-600 text-white border-blue-500';
+            const btn = (label, onclick, title, disabled, on) => '<button type="button" onclick="' + onclick + '" title="' + title + '" aria-label="' + title + '" class="' + BTN + (on ? ON : OFF) + (disabled ? ' opacity-30 pointer-events-none' : '') + '">' + label + '</button>';
+            const label = t => '<span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
+            const rowOf = (l, inner) => '<div class="flex items-center justify-between gap-2">' + label(l) + '<div class="flex items-center gap-1 flex-wrap justify-end">' + inner + '</div></div>';
+            const stepper = (l, value, kind) => rowOf(l, btn('&minus;', 'sorterHeaderStep(\'' + kind + '\',-1,event)', 'Decrease (Shift+click: bigger step)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value.toFixed(2) + '</span>' + btn('+', 'sorterHeaderStep(\'' + kind + '\',1,event)', 'Increase (Shift+click: bigger step)'));
+            const names = {}; window.SORTER_HEADER_COMPONENTS.forEach(c => { names[c[0]] = c[1]; });
+            const preview = '<div id="sorter-hdr-preview">' + window.sorterHeaderHtml(h, sp => sp.component === 'empty' ? '<span style="color:#64748b;font-style:italic">Empty</span>' : '<span>' + names[sp.component] + '</span>', {
+                container: c => ({ cls: sel.c === c ? ' srt-sel-c' : '', attr: ' onclick="sorterHeaderSelect(' + c + ',0,0)"' }),
+                stack: (c, s) => ({ cls: sel.c === c && sel.s === s ? ' srt-sel-s' : '', attr: ' onclick="event.stopPropagation(); sorterHeaderSelect(' + c + ',' + s + ',0)"' }),
+                cell: (c, s, p) => ({ cls: sel.c === c && sel.s === s && sel.p === p ? ' srt-sel-p' : '', attr: ' onclick="event.stopPropagation(); sorterHeaderSelect(' + c + ',' + s + ',' + p + ')"' })
+            }) + '</div>';
+            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-[10px] font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
+            const cont = section('border-blue-900/60', '<span class="text-blue-400">Container ' + (cur.c + 1) + ' of ' + h.containers.length + '</span>',
+                stepper('Width ratio', cur.container.widthWeight, 'container') +
+                rowOf('Container', btn('&larr;', 'sorterHeaderMove(\'container\',-1)', 'Move container left', cur.c === 0) + btn('&rarr;', 'sorterHeaderMove(\'container\',1)', 'Move container right', cur.c === h.containers.length - 1) +
+                    btn('Remove', 'sorterHeaderRemove(\'container\')', 'Remove this container') + btn('+ Container', 'sorterHeaderAdd(\'container\')', 'Add a container', h.containers.length >= L.containers)));
+            const stk = section('border-emerald-900/60', '<span class="text-emerald-400">Stack ' + (cur.s + 1) + ' of ' + cur.container.stacks.length + '</span>',
+                stepper('Height ratio', cur.stack.heightWeight, 'stack') +
+                rowOf('Stack', btn('&uarr;', 'sorterHeaderMove(\'stack\',-1)', 'Move stack up', cur.s === 0) + btn('&darr;', 'sorterHeaderMove(\'stack\',1)', 'Move stack down', cur.s === cur.container.stacks.length - 1) +
+                    btn('Remove', 'sorterHeaderRemove(\'stack\')', 'Remove this stack') + btn('+ Stack', 'sorterHeaderAdd(\'stack\')', 'Add a stack', cur.container.stacks.length >= L.stacks)));
+            const opts = window.SORTER_HEADER_COMPONENTS.map(c => '<option value="' + c[0] + '"' + (cur.split.component === c[0] ? ' selected' : '') + '>' + c[1] + '</option>').join('');
+            const spl = section('border-slate-600', '<span class="text-slate-200">Cell ' + (cur.p + 1) + ' of ' + cur.stack.splits.length + '</span>',
+                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="sorterHeaderSetComponent(this.value)" class="bg-slate-900 text-[11px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + opts + '</select></div>' +
+                stepper('Width ratio', cur.split.widthWeight, 'split') +
+                rowOf('Cell', btn('&larr;', 'sorterHeaderMove(\'split\',-1)', 'Move cell left', cur.p === 0) + btn('&rarr;', 'sorterHeaderMove(\'split\',1)', 'Move cell right', cur.p === cur.stack.splits.length - 1) +
+                    btn('Remove', 'sorterHeaderRemove(\'split\')', 'Remove this cell') + btn('+ Cell', 'sorterHeaderAdd(\'split\')', 'Add a cell', cur.stack.splits.length >= L.splits)) +
+                rowOf('Horizontal', ['left', 'center', 'right'].map(a => btn(a.charAt(0).toUpperCase() + a.slice(1), 'sorterHeaderSetAlign(\'align\',\'' + a + '\')', 'Align ' + a, false, (cur.split.align || 'left') === a)).join('')) +
+                rowOf('Vertical', [['top', 'Top'], ['middle', 'Middle'], ['bottom', 'Bottom']].map(v => btn(v[1], 'sorterHeaderSetAlign(\'vAlign\',\'' + v[0] + '\')', 'Align ' + v[0], false, (cur.split.vAlign || 'middle') === v[0])).join('')));
+            el.innerHTML = '<div class="text-[9px] text-slate-500 leading-snug">Click a cell to edit it. The title, the action-badge area and the settings gear each appear once; choosing one for a cell swaps it with the cell that had it. One layout for desktop and mobile.</div>' + preview +
+                '<div class="text-[10px] text-slate-300 font-bold">Editing: Container ' + (cur.c + 1) + ' &rsaquo; Stack ' + (cur.s + 1) + ' &rsaquo; Cell ' + (cur.p + 1) + '</div>' +
+                (window.sorterHeaderMsg ? '<div id="sorter-header-msg" class="text-[10px] text-amber-400 font-semibold">' + window.sorterHeaderMsg + '</div>' : '') +
+                cont + stk + spl + '<div>' + btn('Reset header to default', 'sorterHeaderReset()', 'Reset the header layout') + '</div>';
+        };
+        window.renderSorterHeader();
         window.openSorterSettings = function () {
             const modal = document.getElementById('sorter-settings-modal');
             if (modal) {
@@ -26886,7 +27142,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.11.00';
+            const APP_VERSION = 'v10.12.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27182,7 +27438,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.11.00';
+            const APP_VERSION = 'v10.12.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -29224,7 +29480,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.11.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.12.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29890,7 +30146,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.11.00',
+                version: 'v10.12.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -29967,7 +30223,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.11.00';
+            const APP_VERSION = 'v10.12.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
