@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.12.05 | Systems Sorter Icons/Flags Size Normalization -->
+﻿<!-- Retest Prototype v10.12.08 | Sorter and Smart Scope Rendering Security Repair -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.12.05</title>
+    <title>Changeout Lookup v10.12.08</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -726,7 +726,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.12.05</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.12.08</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1678,7 +1678,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.12.05</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.12.08</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -6598,7 +6598,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.12.05',
+                appVersion: 'v10.12.08',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6792,7 +6792,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.12.05_${stamp}.json`;
+                `platts_config_v10.12.08_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -7002,7 +7002,7 @@
                 let labelColor = item.label.includes('Coastal') ? 'text-blue-300' : 'text-slate-300';
                 let disabledClass = isLocked ? 'opacity-50 cursor-not-allowed' : '';
 
-                let displayLabel = item.label.replace('Heresite', 'HereShield');
+                let displayLabel = window.escapePage2HeaderHtml(item.label).replace('Heresite', 'HereShield');      // v10.12.08: escaped first; the AC / HP colour spans below are the app's own
                 if (activePropTab === 'warranty' || displayLabel.includes('Labor')) {
                     displayLabel = displayLabel.replace(/\bAC\b/g, '<span class="text-blue-400 font-bold">AC</span>');
                     displayLabel = displayLabel.replace(/\bHP\b/g, '<span class="text-rose-400 font-bold">HP</span>');
@@ -7021,7 +7021,7 @@
                     class="smart-scope-route-select w-full bg-slate-900 text-slate-300 border border-slate-600 rounded px-2 py-1 text-[9px] font-bold outline-none"
                     title="Proposal placement"
                     onclick="event.stopPropagation()"
-                    onchange="event.stopPropagation(); setProposalItemRoute('${item.label}', this.value)"
+                    data-label="${window.escapePage2HeaderHtml(item.label)}" onchange="event.stopPropagation(); setProposalItemRoute(this.dataset.label, this.value)"
                 >
                     <option value="installation-scope" ${proposalRoute === 'installation-scope' ? 'selected' : ''}>
                         Installation Scope
@@ -7060,7 +7060,7 @@
                     class="smart-scope-pricing-treatment-select w-full bg-slate-900 text-slate-300 border border-slate-600 rounded px-2 py-1 text-[9px] font-bold outline-none"
                     title="Default pricing treatment for all System Options"
                     onclick="event.stopPropagation()"
-                    onchange="event.stopPropagation(); window.setGlobalAddonPricingTreatment('${item.label}', this.value)"
+                    data-label="${window.escapePage2HeaderHtml(item.label)}" onchange="event.stopPropagation(); window.setGlobalAddonPricingTreatment(this.dataset.label, this.value)"
                 >
                     <option
                         value="customer-optional"
@@ -7117,7 +7117,7 @@
                 let noteIconHtml = '';
                 if (isInternalNote) {
                     noteIconHtml = `
-                <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal('${item.label}')" class="ml-1.5 text-amber-500 hover:text-amber-400 transition-colors" title="Internal note attached">
+                <button type="button" data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal(this.dataset.label)" class="ml-1.5 text-amber-500 hover:text-amber-400 transition-colors" title="Internal note attached">
                     <i data-lucide="notebook-pen" class="w-3.5 h-3.5 inline-block"></i>
                 </button>
             `;
@@ -7128,7 +7128,7 @@
                     else if (allowanceState.scopePlacement === 'separate') placementDesc = "Proposal note: Separate Scope Line";
 
                     noteIconHtml = `
-                <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal('${item.label}')" class="ml-1.5 text-emerald-500 hover:text-emerald-400 transition-colors" title="${placementDesc}">
+                <button type="button" data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal(this.dataset.label)" class="ml-1.5 text-emerald-500 hover:text-emerald-400 transition-colors" title="${placementDesc}">
                     <i data-lucide="notebook-pen" class="w-3.5 h-3.5 inline-block"></i>
                 </button>
             `;
@@ -7141,11 +7141,11 @@
                     <span 
                         class="smart-scope-label font-semibold ${labelColor} cursor-pointer hover:underline decoration-dotted underline-offset-2" 
                         style="font-size: ${propSettings.brandFont || 12}px"
-                        onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal('${item.label}')"
+                        data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal(this.dataset.label)"
                     >
                         ${displayLabel}
                     </span>
-                    <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal('${item.label}')" class="ml-1.5 text-slate-400 hover:text-white transition-colors" title="Configure Scope">
+                    <button type="button" data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openIncludedAllowanceScopeModal(this.dataset.label)" class="ml-1.5 text-slate-400 hover:text-white transition-colors" title="Configure Scope">
                         <i data-lucide="settings-2" class="w-3.5 h-3.5 inline-block"></i>
                     </button>
                     ${noteIconHtml}
@@ -7175,7 +7175,7 @@
                             class="smart-scope-label font-semibold ${labelColor} text-left hover:underline decoration-dotted underline-offset-2 cursor-pointer"
                             style="font-size: ${propSettings.brandFont || 12}px"
                             title="Configure pricing and proposal placement"
-                            onclick="event.preventDefault(); event.stopPropagation(); window.openSmartScopeItemConfig('${item.label}', ${item.price})"
+                            data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openSmartScopeItemConfig(this.dataset.label, ${item.price})"
                         >
                             ${displayLabel}
                         </button>
@@ -7185,7 +7185,7 @@
                                 type="button"
                                 class="text-[10px] text-slate-400 hover:text-blue-300 text-left leading-tight mt-0.5 cursor-pointer"
                                 title="Open Smart Scope configuration"
-                                onclick="event.preventDefault(); event.stopPropagation(); window.openSmartScopeItemConfig('${item.label}', ${item.price})"
+                                data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); window.openSmartScopeItemConfig(this.dataset.label, ${item.price})"
                             >
                                 ${configStatus}
                             </button>
@@ -7208,7 +7208,7 @@
                     html += `
         ${rowOpenTag}
             <div class="flex items-start gap-2 ${propSettings.align === 'right' ? 'flex-row-reverse ml-auto' : ''}">
-                <input type="checkbox" onchange="handleSmartScopeToggle(this, '${item.label}', ${item.price})" ${isChecked ? 'checked' : ''} ${isLocked ? 'disabled' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 mt-0.5 ${disabledClass}">
+                <input type="checkbox" data-label="${window.escapePage2HeaderHtml(item.label)}" onchange="handleSmartScopeToggle(this, this.dataset.label, ${item.price})" ${isChecked ? 'checked' : ''} ${isLocked ? 'disabled' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 mt-0.5 ${disabledClass}">
                 <div class="flex flex-col ${propSettings.align === 'center' ? 'items-center' : propSettings.align === 'right' ? 'items-end' : 'items-start'}">
                     ${labelHtml}
                     ${coastalNote}
@@ -7220,7 +7220,7 @@
                 class="smart-scope-price ${priceColor} font-bold whitespace-nowrap ${propSettings.align === 'center' ? 'ml-4' : propSettings.align === 'right' ? 'mr-auto order-first' : 'ml-2'} hover:brightness-125 transition-all"
                 style="font-size: ${propSettings.priceFont || 16}px"
                 title="${isChecked ? 'Included in system price' : 'Click to change allowance treatment'}"
-                onclick="event.preventDefault(); event.stopPropagation(); if (!${isChecked}) { window.openIncludedAllowanceFinancialModal('${item.label}'); }"
+                data-label="${window.escapePage2HeaderHtml(item.label)}" onclick="event.preventDefault(); event.stopPropagation(); if (!${isChecked}) { window.openIncludedAllowanceFinancialModal(this.dataset.label); }"
             >
                 ${priceText}
             </button>
@@ -7236,7 +7236,7 @@
         ${modifiedRowOpenTag}
             <div class="flex items-start justify-between gap-3 w-full">
                 <div class="flex items-start gap-2 ${propSettings.align === 'right' ? 'flex-row-reverse ml-auto' : ''}">
-                    <input type="checkbox" onchange="handleSmartScopeToggle(this, '${item.label}', ${item.price})" ${isChecked ? 'checked' : ''} ${isLocked ? 'disabled' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 mt-0.5 ${disabledClass}">
+                    <input type="checkbox" data-label="${window.escapePage2HeaderHtml(item.label)}" onchange="handleSmartScopeToggle(this, this.dataset.label, ${item.price})" ${isChecked ? 'checked' : ''} ${isLocked ? 'disabled' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 mt-0.5 ${disabledClass}">
                     <div class="flex flex-col ${propSettings.align === 'center' ? 'items-center' : propSettings.align === 'right' ? 'items-end' : 'items-start'}">
                         ${labelHtml}
                         ${coastalNote}
@@ -7645,7 +7645,7 @@
             overlay.innerHTML = `
         <div class="bg-slate-800 border border-slate-600 rounded-lg shadow-2xl w-full max-w-sm p-6 transform transition-all">
             <h3 class="text-lg font-bold text-white mb-1">Allowance Treatment</h3>
-            <div class="text-sm text-slate-400 mb-4 font-semibold">${label}</div>
+            <div class="text-sm text-slate-400 mb-4 font-semibold">${window.escapePage2HeaderHtml(label)}</div>
             
             <div class="grid grid-cols-2 gap-4 mb-5 text-sm">
                 <div class="bg-slate-900/50 p-2.5 rounded border border-slate-700/50">
@@ -7684,7 +7684,7 @@
 
             <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-slate-700">
                 <button type="button" onclick="window.closeIncludedAllowanceModal()" class="px-4 py-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">Cancel</button>
-                <button type="button" onclick="window.applyIncludedAllowanceFinancial('${label}')" class="px-4 py-2 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors shadow-lg shadow-blue-500/20">Apply</button>
+                <button type="button" data-label="${window.escapePage2HeaderHtml(label)}" onclick="window.applyIncludedAllowanceFinancial(this.dataset.label)" class="px-4 py-2 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors shadow-lg shadow-blue-500/20">Apply</button>
             </div>
         </div>
     `;
@@ -7739,7 +7739,7 @@
             overlay.innerHTML = `
         <div class="bg-slate-800 border border-slate-600 rounded-lg shadow-2xl w-full max-w-md p-6 my-auto transform transition-all">
             <h3 class="text-lg font-bold text-white mb-1">Scope Configuration</h3>
-            <div class="text-sm text-slate-400 mb-5 font-semibold">${label}</div>
+            <div class="text-sm text-slate-400 mb-5 font-semibold">${window.escapePage2HeaderHtml(label)}</div>
             
             <div class="space-y-4">
                 <div>
@@ -7766,7 +7766,7 @@
 
                 <div>
                     <label class="block text-[11px] uppercase font-bold text-slate-400 tracking-wider mb-1.5">Custom Note</label>
-                    <textarea id="ia_scope_note" rows="2" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded px-3 py-2 outline-none focus:border-blue-500" placeholder="Optional details...">${state.customNote || ''}</textarea>
+                    <textarea id="ia_scope_note" rows="2" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded px-3 py-2 outline-none focus:border-blue-500" placeholder="Optional details...">${window.escapePage2HeaderHtml(state.customNote || '')}</textarea>
                 </div>
 
                 <div>
@@ -7814,7 +7814,7 @@
 
             <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-slate-700">
                 <button type="button" onclick="window.closeIncludedAllowanceModal()" class="px-4 py-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">Cancel</button>
-                <button type="button" onclick="window.saveIncludedAllowanceScope('${label}')" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded transition-colors shadow-lg shadow-emerald-500/20">Save</button>
+                <button type="button" data-label="${window.escapePage2HeaderHtml(label)}" onclick="window.saveIncludedAllowanceScope(this.dataset.label)" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded transition-colors shadow-lg shadow-emerald-500/20">Save</button>
             </div>
         </div>
     `;
@@ -7986,12 +7986,12 @@
 
                     contentHtml += `
                 <div class="bg-slate-900/50 p-4 rounded border border-slate-700 relative group">
-                    <button type="button" onclick="window.closeJobNotesModal(); window.openIncludedAllowanceScopeModal('${note.label}')" class="absolute top-3 right-3 text-slate-500 hover:text-blue-400 transition-colors flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest bg-slate-800 px-2 py-1 rounded">
+                    <button type="button" data-label="${window.escapePage2HeaderHtml(note.label)}" onclick="window.closeJobNotesModal(); window.openIncludedAllowanceScopeModal(this.dataset.label)" class="absolute top-3 right-3 text-slate-500 hover:text-blue-400 transition-colors flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest bg-slate-800 px-2 py-1 rounded">
                         <i data-lucide="settings-2" class="w-3 h-3"></i> Edit
                     </button>
                     
                     <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">Source / Item</div>
-                    <div class="text-sm font-bold text-blue-300 mb-3">${note.label}</div>
+                    <div class="text-sm font-bold text-blue-300 mb-3">${window.escapePage2HeaderHtml(note.label)}</div>
                     
                     <div class="grid grid-cols-2 gap-3 mb-4">
                         <div>
@@ -8013,7 +8013,7 @@
                     </div>
                     
                     <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1 border-t border-slate-700 pt-3">Note</div>
-                    <div class="text-sm text-slate-200 whitespace-pre-wrap">${note.note}</div>
+                    <div class="text-sm text-slate-200 whitespace-pre-wrap">${window.escapePage2HeaderHtml(note.note)}</div>
                 </div>
             `;
                 });
@@ -10214,7 +10214,7 @@
                     </span>
 
                     <select
-                        onchange="setProposalItemRoute('${label}', this.value)"
+                        data-label="${window.escapePage2HeaderHtml(label)}" onchange="setProposalItemRoute(this.dataset.label, this.value)"
                         class="bg-slate-900 text-slate-300 border border-slate-700 rounded p-1.5 text-[9px] font-bold outline-none shrink-0"
                     >
                         <option value="installation-scope" ${route === 'installation-scope' ? 'selected' : ''}>
@@ -11482,7 +11482,11 @@
             const text = ov || (typeof getTerminalTemplateValue === 'function' ? String(getTerminalTemplateValue('customClosing') || '').trim() : '');
             return text ? { target: 'Custom Closing', text: text, plain: true } : null;
         }
-        function escapeProposalBlockHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        // v10.12.06: the terminal's one text escaper (block text is plain text everywhere; b.text itself is never encoded, only the HTML built from it)
+        function escapeProposalBlockHtml(s) {
+            const t = String(s);
+            return typeof window.escapePage2HeaderHtml === 'function' ? window.escapePage2HeaderHtml(t) : t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
         // Used by the managed Load confirmation and the Load toast: null for a System proposal.
         function customProposalSummary(bs) {
             const pas = cpIsObj(bs) && cpIsObj(bs.proposalAppState) ? bs.proposalAppState : null;
@@ -12429,7 +12433,7 @@
                     let sName = shieldLabel.replace('Heresite', 'HereShield');
                     let dedupeKey = 'shield:' + shieldLabel;
                     if (!addedIcons.has(dedupeKey)) {
-                        emojiCluster.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(shieldLabel, 'srt-flag-svg')}</span>`);
+                        emojiCluster.push(`<span title="Salt Shield (${window.escapePage2HeaderHtml(sName)})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(shieldLabel, 'srt-flag-svg')}</span>`);
                         addedIcons.add(dedupeKey);
                     }
                 });
@@ -12995,7 +12999,7 @@
             // Inject Custom Lines (Notes/Spacers)
             if (window.proposalAppState.lineInjections) {
                 window.proposalAppState.lineInjections.forEach((inj, i) => {
-                    let tid = inj.id || `INJ_${i}`;
+                    let tid = inj.id ? String(inj.id) : `INJ_${i}`;
                     window.lastRenderedBlocks.push({ target: tid, text: inj.text, isInjection: true, index: i });
                 });
             }
@@ -13142,20 +13146,22 @@
                     }
                 }
 
-                let actionButtons = `<button onclick="setInsertTarget('${b.target}')" class="text-slate-400 hover:text-emerald-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Insert Below"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>`;
-                actionButtons += `<button onclick="openFocusEditor('${b.target}')" class="text-slate-400 hover:text-blue-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Edit Block"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>`;
+                // v10.12.06: no identifier is ever placed inside JavaScript source: the target travels as an attribute-escaped data attribute and the delegated listener below reads it back
+                const tAttr = escapeProposalBlockHtml(b.target);
+                let actionButtons = `<button data-pb-act="insert" data-pb-target="${tAttr}" class="text-slate-400 hover:text-emerald-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Insert Below"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>`;
+                actionButtons += `<button data-pb-act="edit" data-pb-target="${tAttr}" class="text-slate-400 hover:text-blue-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Edit Block"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>`;
 
                 if (b.isInjection) {
-                    actionButtons += `<button onclick="deleteInjection(${b.index})" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>`;
+                    actionButtons += `<button data-pb-act="delete" data-pb-index="${Number(b.index) || 0}" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Delete"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>`;
                 } else if (window.proposalAppState.textOverrides[b.target]) {
-                    actionButtons += `<button onclick="revertBlockOverride('${b.target}')" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Revert to Default"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i></button>`;
+                    actionButtons += `<button data-pb-act="revert" data-pb-target="${tAttr}" class="text-slate-400 hover:text-rose-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Revert to Default"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i></button>`;
                 }
 
                 html += `
-        <div draggable="true" ondragstart="dragBlockStart(event, '${b.target}')" ondragover="dragBlockOver(event)" ondrop="dragBlockDrop(event, '${b.target}')" class="proposal-output-block relative group bg-slate-900 border border-slate-800 py-1 px-1 rounded shadow-sm hover:border-blue-500/50 transition-colors min-h-[28px] flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1 min-w-0">
+        <div draggable="true" data-pb-block="${tAttr}" class="proposal-output-block relative group bg-slate-900 border border-slate-800 py-1 px-1 rounded shadow-sm hover:border-blue-500/50 transition-colors min-h-[28px] flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1 min-w-0">
             <div class="flex items-start sm:items-center w-full min-w-0">
                 <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-blue-400 px-1 py-0.5 shrink-0"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></div>
-                <div class="whitespace-pre-wrap break-words text-emerald-400 pr-2 sm:pr-24 w-full min-w-0">${b.plain ? escapeProposalBlockHtml(b.text) : b.text}</div>
+                <div class="whitespace-pre-wrap break-words text-emerald-400 pr-2 sm:pr-24 w-full min-w-0">${escapeProposalBlockHtml(b.text)}</div>
             </div>
             <div class="z-10 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5 bg-slate-900 sm:bg-slate-900/90 sm:pl-2 rounded self-end sm:self-auto sm:absolute sm:top-1 sm:right-2 mt-1 sm:mt-0 pb-1 sm:pb-0">
                 ${actionButtons}
@@ -13165,9 +13171,32 @@
 
             html += '</div>';
             terminal.innerHTML = html;
+            bindTerminalControls(terminal);
             if (typeof lucide !== 'undefined') lucide.createIcons();
             if (typeof applyTerminalSettings === 'function') applyTerminalSettings();
         };
+
+        // v10.12.06: the terminal's block controls (Insert Below, Edit Block, Revert, Delete, drag and drop) are handled by ONE set of delegated listeners, bound once per terminal element
+        // (a re-render replaces the cards, not the listeners, so repeated renders never stack handlers). The identifiers come from data attributes, so no block id is parsed as JavaScript.
+        function bindTerminalControls(terminal) {
+            if (terminal.__pbControls) return;
+            terminal.__pbControls = true;
+            const elOf = e => (e.target && e.target.nodeType === 1 ? e.target : (e.target && e.target.parentElement)) || null;
+            const blockOf = e => { const el = elOf(e); const b = el && el.closest ? el.closest('[data-pb-block]') : null; return b && terminal.contains(b) ? b : null; };
+            terminal.addEventListener('click', e => {
+                const el = elOf(e);
+                const btn = el && el.closest ? el.closest('[data-pb-act]') : null;
+                if (!btn || !terminal.contains(btn)) return;
+                const act = btn.getAttribute('data-pb-act'), target = btn.getAttribute('data-pb-target');
+                if (act === 'insert') window.setInsertTarget(target);
+                else if (act === 'edit') window.openFocusEditor(target);
+                else if (act === 'revert') window.revertBlockOverride(target);
+                else if (act === 'delete') window.deleteInjection(Number(btn.getAttribute('data-pb-index')));
+            });
+            terminal.addEventListener('dragstart', e => { const b = blockOf(e); if (b) window.dragBlockStart(e, b.getAttribute('data-pb-block')); });
+            terminal.addEventListener('dragover', e => { if (blockOf(e)) window.dragBlockOver(e); });
+            terminal.addEventListener('drop', e => { const b = blockOf(e); if (b) window.dragBlockDrop(e, b.getAttribute('data-pb-block')); });
+        }
 
         window.activeEditTarget = null;
         window.openFocusEditor = function (target) {
@@ -15264,6 +15293,7 @@
         }
 
         function openSystemDetails(itemObj, suppliedAuditState) {
+            const esc = window.escapePage2HeaderHtml;      // v10.12.07: catalog / audit text is escaped where it enters the details HTML (app-generated markup stays as it is)
             const content = document.getElementById("systemDetailsContent");
             content.innerHTML = "";
 
@@ -15309,12 +15339,12 @@
                             }
                         }
 
-                        changesList += `<div>&bull; ${fName}: <span class="text-slate-400">${oldVal}</span> &rarr; <span class="font-bold ${c.field === 'price' ? 'text-blue-300' : 'text-amber-400'}">${newVal}</span>${deltaStr}</div>`;
+                        changesList += `<div>&bull; ${esc(fName)}: <span class="text-slate-400">${esc(oldVal)}</span> &rarr; <span class="font-bold ${c.field === 'price' ? 'text-blue-300' : 'text-amber-400'}">${esc(newVal)}</span>${deltaStr}</div>`;
                     });
                 }
 
                 if (auditState.messages && auditState.messages.length > 0) {
-                    changesList += `<div class="text-cyan-300 mt-1">${auditState.messages.join("<br/>")}</div>`;
+                    changesList += `<div class="text-cyan-300 mt-1">${auditState.messages.map(m => esc(m)).join("<br/>")}</div>`;
                 }
 
                 if (changesList !== '') {
@@ -15349,9 +15379,9 @@
                     <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
                         <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">AHRI CHANGED</div>
                         <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
-                            <span class="line-through opacity-75">${auditState.oldAhri}</span>
+                            <span class="line-through opacity-75">${esc(auditState.oldAhri)}</span>
                             &rarr;
-                            <span class="text-amber-400 font-bold">${auditState.newAhri || itemObj.ahri}</span>
+                            <span class="text-amber-400 font-bold">${esc(auditState.newAhri || itemObj.ahri)}</span>
                         </div>
                     </div>`;
                 }
@@ -15378,9 +15408,9 @@
                     <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
                         <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">SEER2 CHANGED</div>
                         <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
-                            <span class="line-through opacity-75">${auditState.oldSeer2}</span>
+                            <span class="line-through opacity-75">${esc(auditState.oldSeer2)}</span>
                             &rarr;
-                            <span class="text-amber-400 font-bold">${auditState.newSeer2}</span>
+                            <span class="text-amber-400 font-bold">${esc(auditState.newSeer2)}</span>
                         </div>
                     </div>`;
                 }
@@ -15390,9 +15420,9 @@
                     <div class="mb-2 bg-slate-900/40 p-2 rounded border border-slate-700/50">
                         <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">COOLING BTU CHANGED</div>
                         <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
-                            <span class="line-through opacity-75">${auditState.oldCoolingBtu}</span>
+                            <span class="line-through opacity-75">${esc(auditState.oldCoolingBtu)}</span>
                             &rarr;
-                            <span class="text-amber-400 font-bold">${auditState.newCoolingBtu}</span>
+                            <span class="text-amber-400 font-bold">${esc(auditState.newCoolingBtu)}</span>
                         </div>
                     </div>`;
                 }
@@ -15402,9 +15432,9 @@
                     <div class="bg-slate-900/40 p-2 rounded border border-slate-700/50">
                         <div class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">HEATING BTU CHANGED</div>
                         <div class="flex items-center gap-1.5 text-[10px] font-mono tracking-tight text-slate-300">
-                            <span class="line-through opacity-75">${auditState.oldHeatingBtu}</span>
+                            <span class="line-through opacity-75">${esc(auditState.oldHeatingBtu)}</span>
                             &rarr;
-                            <span class="text-amber-400 font-bold">${auditState.newHeatingBtu}</span>
+                            <span class="text-amber-400 font-bold">${esc(auditState.newHeatingBtu)}</span>
                         </div>
                     </div>`;
                 }
@@ -15412,7 +15442,7 @@
                 if (!auditState.isNew && !auditState.isMissing && !auditState.priceChanged && !auditState.ahriChanged && !auditState.seer2Changed && !auditState.coolingBtuChanged && !auditState.heatingBtuChanged && auditState.messages.length > 0) {
                     auditRows += `
                      <div class="bg-slate-900/40 p-2 rounded border border-slate-700/50 text-[10px] font-mono text-cyan-300">
-                         ${auditState.messages.join("<br/>")}
+                         ${auditState.messages.map(m => esc(m)).join("<br/>")}
                      </div>`;
                 }
 
@@ -15429,7 +15459,7 @@
                 `;
             }
 
-            content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 mb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">AHRI</span><span class="font-semibold text-[13px] sm:text-sm text-slate-100 text-right shrink-0 break-words">${itemObj.ahri || 'N/A'}</span></div>`;
+            content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 mb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">AHRI</span><span class="font-semibold text-[13px] sm:text-sm text-slate-100 text-right shrink-0 break-words">${esc(itemObj.ahri || 'N/A')}</span></div>`;
 
             Object.entries(itemObj).forEach(([key, val]) => {
                 if (key.toLowerCase() === 'ahri') return;
@@ -15500,13 +15530,13 @@
                         flagBanner = `
                   <div class="mb-3 p-3 border-l-4 ${bColor} ${bgBox} rounded shadow-sm flex flex-col gap-1.5">
                     <div class="font-bold ${tColor} text-[10px] tracking-widest uppercase">System Audit Flag</div>
-                    <div class="${tColor} text-xs font-mono font-semibold break-words">${cleanDisplayVal.replace(/->/g, '→')}</div>
+                    <div class="${tColor} text-xs font-mono font-semibold break-words">${esc(cleanDisplayVal.replace(/->/g, '→'))}</div>
                   </div>`;
                     }
                     return; // Skip adding flag to the bottom of the list
                 }
 
-                content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">${niceKey}</span><span class="font-semibold text-[13px] sm:text-sm ${valColorClass} text-right shrink-0 max-w-[65%] break-words" style="overflow-wrap: anywhere;">${displayVal}</span></div>`;
+                content.innerHTML += `<div class="flex justify-between items-center border-b border-slate-700/50 pb-2 gap-2"><span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider min-w-0 flex-1 break-words pr-2">${esc(niceKey)}</span><span class="font-semibold text-[13px] sm:text-sm ${valColorClass} text-right shrink-0 max-w-[65%] break-words" style="overflow-wrap: anywhere;">${esc(displayVal)}</span></div>`;
             });
 
             let prependHtml = '';
@@ -17030,7 +17060,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.12.05',
+                appVersion: 'v10.12.08',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17039,7 +17069,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.12.05_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.12.08_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17058,7 +17088,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.12.05',
+                appVersion: 'v10.12.08',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17067,7 +17097,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.12.05_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.12.08_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17742,7 +17772,10 @@
                 targetSelect.innerHTML += '<optgroup label="Custom Injections">';
                 window.proposalAppState.lineInjections.forEach((inj, index) => {
                     let shortText = inj.text.length > 25 ? inj.text.substring(0, 25) + "..." : inj.text;
-                    targetSelect.innerHTML += `<option value="INJ_${index}">Line ${inj.line}: ${shortText}</option>`;
+                    const injOpt = document.createElement('option');      // v10.12.08: note text is option TEXT, never parsed as HTML
+                    injOpt.value = 'INJ_' + index;
+                    injOpt.textContent = 'Line ' + inj.line + ': ' + shortText;
+                    targetSelect.appendChild(injOpt);
                 });
                 targetSelect.innerHTML += '</optgroup>';
             }
@@ -18967,6 +19000,7 @@
         };
 
         function openReceiptModal(index) {
+            const esc = window.escapePage2HeaderHtml;      // v10.12.07: catalog / state text is escaped where it enters the receipt HTML; handler arguments travel as data attributes (this.dataset), never inside JavaScript source
             const rowIndex = selectedProposalRows[index];
             let sp = window.systemScratchpads[rowIndex];
 
@@ -19149,7 +19183,7 @@
             <div class="flex justify-between items-center bg-slate-900/50 p-1.5 rounded border border-slate-700/50">
                 <div class="flex flex-col text-xs font-mono text-slate-400 leading-tight">
                     <span class="mb-1 text-[11px]">Custom Price</span>
-                    <input type="number" id="receipt-base-price-input-${index}" placeholder="$" value="${sp.manualRawBasePriceOverride || ''}" class="bg-slate-950 border border-slate-600 focus:border-blue-500 text-white px-2 py-0.5 rounded w-24 text-[13px] font-bold outline-none" inputmode="numeric">
+                    <input type="number" id="receipt-base-price-input-${index}" placeholder="$" value="${esc(sp.manualRawBasePriceOverride || '')}" class="bg-slate-950 border border-slate-600 focus:border-blue-500 text-white px-2 py-0.5 rounded w-24 text-[13px] font-bold outline-none" inputmode="numeric">
                 </div>
                 <button onclick="window.applyPriceResolutionMode(${index}, 'custom')" class="${sp.priceResolutionMode === 'custom' || (!sp.priceResolutionMode && resolution.source === 'custom') ? 'bg-emerald-600 text-white font-bold shadow-sm border border-emerald-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600 hover:bg-slate-600 hover:text-slate-200'} px-3 py-1.5 rounded transition font-bold tracking-wider text-[10px] w-28 text-center shrink-0">USE CUSTOM</button>
             </div>
@@ -19165,12 +19199,12 @@
                     <div class="flex justify-between items-center text-slate-300">
                         <span class="font-semibold uppercase tracking-wide text-[13px]">AHRI Resolution</span>
                         <div class="flex items-center gap-1 shrink-0">
-                            <button onclick="window.applyAhriOverride(${index}, '${ahriMismatch.oldValue}')" class="${isOverrideOld ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Database</button>
-                            <button onclick="window.applyAhriOverride(${index}, '${ahriMismatch.newValue}')" class="${isOverrideNew ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Updated</button>
+                            <button data-ahri="${esc(String(ahriMismatch.oldValue))}" onclick="window.applyAhriOverride(${index}, this.dataset.ahri)" class="${isOverrideOld ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Database</button>
+                            <button data-ahri="${esc(String(ahriMismatch.newValue))}" onclick="window.applyAhriOverride(${index}, this.dataset.ahri)" class="${isOverrideNew ? 'bg-amber-600/50 text-white shadow-sm border border-amber-500/50' : 'bg-slate-700 text-slate-400 border border-slate-600'} px-2 py-0.5 rounded text-[10px] font-bold transition-colors">Use Updated</button>
                         </div>
                     </div>
-                    <div class="text-[10px] ${isOverrideOld ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Database AHRI:</span> <span>${ahriMismatch.oldValue}</span></div>
-                    <div class="text-[10px] ${isOverrideNew ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Updated AHRI:</span> <span>${ahriMismatch.newValue}</span></div>
+                    <div class="text-[10px] ${isOverrideOld ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Database AHRI:</span> <span>${esc(ahriMismatch.oldValue)}</span></div>
+                    <div class="text-[10px] ${isOverrideNew ? 'text-amber-400 font-bold' : 'text-slate-400'} text-left font-mono mt-0.5 w-full flex justify-between"><span>Updated AHRI:</span> <span>${esc(ahriMismatch.newValue)}</span></div>
                 </div>`;
             }
 
@@ -19267,9 +19301,9 @@
                     subtotal += val;
                     currentTotalDeductions += Math.abs(val);
                     html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0">
-                <span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${receiptLabel}</span>
+                <span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${esc(receiptLabel)}</span>
                 <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="removeLocalItem(${index}, 'deductions', '${name}')" class="text-rose-400 hover:text-rose-300 cursor-pointer"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
+                    <button data-name="${esc(name)}" onclick="removeLocalItem(${index}, 'deductions', this.dataset.name)" class="text-rose-400 hover:text-rose-300 cursor-pointer"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
                     <span class="text-rose-400 text-xs font-bold line-item-price w-16 text-right">-$${Math.abs(val).toLocaleString()}</span>
                     <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 hidden customer-check"></i>
                 </div>
@@ -19315,7 +19349,7 @@
                     controlsHtml = `<span class="text-[9px] bg-slate-800 text-emerald-400 border border-emerald-500/30 rounded px-1.5 py-1 font-bold uppercase tracking-wider">${statusText}</span>`;
                 } else {
                     controlsHtml = `
-                <select class="text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold" onchange="updateOverrideState(${index}, '${name}', this.value)">
+                <select class="text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold" data-name="${esc(name)}" onchange="updateOverrideState(${index}, this.dataset.name, this.value)">
                    <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>🌐 Universal</option>
                    <option value="tagged" ${isTagged ? 'selected' : ''}>🏷️ Tagged</option>
                    <option value="removed" ${isRemoved ? 'selected' : ''}>❌ Removed</option>
@@ -19323,7 +19357,7 @@
                 }
 
                 return `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1.5 border-b border-slate-700/50 last:border-0 gap-1 sm:gap-0">
-            <span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${receiptLabel}</span>
+            <span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${esc(receiptLabel)}</span>
             <div class="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                 ${controlsHtml}
                 <span class="${priceClass} text-xs font-bold line-item-price w-16 text-right">${priceDisplay}</span>
@@ -19393,7 +19427,7 @@
                 Object.entries(necessaryFees).forEach(([name, val]) => {
                     if (name.toLowerCase().includes('crane') && craneHandled) return;
                     necessaryTotal += val;
-                    necessaryFeesHtml += `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1.5 border-b border-slate-700/50 last:border-0 gap-1 sm:gap-0"><span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${name}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide shrink-0 self-end sm:self-auto">+$${val.toLocaleString()}</span></div>`;
+                    necessaryFeesHtml += `<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1.5 border-b border-slate-700/50 last:border-0 gap-1 sm:gap-0"><span class="text-slate-300 text-xs min-w-0 flex-1 pr-2 break-words">${esc(name)}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide shrink-0 self-end sm:self-auto">+$${val.toLocaleString()}</span></div>`;
                 });
             }
 
@@ -19455,7 +19489,7 @@
                             : 'Customer Optional';
 
                     pricingDropdownHtml = `
-                <select class="w-full min-w-0 text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold" onchange="window.setAddonPricingTreatment(${index}, '${name}', this.value)">
+                <select class="w-full min-w-0 text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold" data-name="${esc(name)}" onchange="window.setAddonPricingTreatment(${index}, this.dataset.name, this.value)">
                     <option
                         value="use-global"
                         ${localPricingTreatment === 'use-global' ? 'selected' : ''}
@@ -19491,7 +19525,7 @@
                     applicabilityDropdownHtml = `
                 <select
                     class="w-full min-w-0 text-[10px] bg-slate-800 border-slate-600 text-slate-300 rounded p-1 outline-none font-bold"
-                    onchange="updateOverrideState(${index}, '${name}', this.value)"
+                    data-name="${esc(name)}" onchange="updateOverrideState(${index}, this.dataset.name, this.value)"
                 >
                    <option value="universal" ${!isTagged && !isRemoved ? 'selected' : ''}>🌐 Universal</option>
                    <option value="tagged" ${isTagged ? 'selected' : ''}>🏷️ Tagged</option>
@@ -19509,7 +19543,7 @@
         <div class="flex items-start gap-2 min-w-0 flex-1">
             ${checkboxHtml}
             <span class="text-slate-300 text-xs select-none break-words min-w-0 flex-1">
-                ${receiptLabel}
+                ${esc(receiptLabel)}
             </span>
         </div>
 
@@ -19580,7 +19614,7 @@
                     optionalEnhancementsHtml += `<div class="flex justify-between items-center py-2 border-b border-slate-700/50 last:border-0 px-1 rounded">
                 <div class="flex items-center gap-2">
                     <input type="checkbox" data-price="0" disabled checked class="w-4 h-4 rounded border-slate-600 bg-emerald-900/50 text-emerald-500 cursor-not-allowed">
-                    <span class="text-slate-300 text-xs select-none">${itemName}</span>
+                    <span class="text-slate-300 text-xs select-none">${esc(itemName)}</span>
                 </div>
                 <span class="text-emerald-400 font-bold text-xs">(INFUSED) $0</span>
             </div>`;
@@ -19598,23 +19632,23 @@
             const msColor = window.getStageColorClass(mechStageStr);
 
             let p1 = [];
-            if (capacity && capacity !== 'N/A' && capacity !== 'UNDEFINED') p1.push(`<span class="text-blue-300">${capacity}</span>`);
-            if (sysTypeStr && sysTypeStr !== 'N/A' && sysTypeStr !== 'UNDEFINED') p1.push(`<span class="${stColor}">${sysTypeStr}</span>`);
-            if (mechStageStr && mechStageStr !== 'N/A' && mechStageStr !== 'UNDEFINED') p1.push(`<span class="${msColor}">${mechStageStr}</span>`);
+            if (capacity && capacity !== 'N/A' && capacity !== 'UNDEFINED') p1.push(`<span class="text-blue-300">${esc(capacity)}</span>`);
+            if (sysTypeStr && sysTypeStr !== 'N/A' && sysTypeStr !== 'UNDEFINED') p1.push(`<span class="${stColor}">${esc(sysTypeStr)}</span>`);
+            if (mechStageStr && mechStageStr !== 'N/A' && mechStageStr !== 'UNDEFINED') p1.push(`<span class="${msColor}">${esc(mechStageStr)}</span>`);
             let line1 = p1.join(' &bull; ');
 
             let p2Raw = [];
             let p2 = [];
             if (brandStr && brandStr !== 'N/A' && brandStr !== 'UNDEFINED') {
-                p2.push(`<span class="text-white">${brandStr}</span>`);
+                p2.push(`<span class="text-white">${esc(brandStr)}</span>`);
                 p2Raw.push(brandStr);
             }
             if (appStyle && appStyle !== 'N/A' && appStyle !== 'UNDEFINED' && !p2Raw.includes(appStyle)) {
-                p2.push(`<span class="${asColor}">${appStyle}</span>`);
+                p2.push(`<span class="${asColor}">${esc(appStyle)}</span>`);
                 p2Raw.push(appStyle);
             }
             if (seriesTierStr && seriesTierStr !== 'N/A' && seriesTierStr !== 'UNDEFINED' && !p2Raw.includes(seriesTierStr)) {
-                p2.push(`<span class="${serColor}">${seriesTierStr}</span>`);
+                p2.push(`<span class="${serColor}">${esc(seriesTierStr)}</span>`);
                 p2Raw.push(seriesTierStr);
             }
             let line2 = p2.join(' &bull; ');
@@ -19632,7 +19666,7 @@
                 activeShields.forEach(sLabel => {
                     if (!renderedShields.has(sLabel)) {
                         let sName = sLabel.replace('Heresite', 'HereShield');
-                        modalBadges.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[2px]">${window.getSaltShieldIconSvg(sLabel, 'w-4 h-4')}</span>`);
+                        modalBadges.push(`<span title="Salt Shield (${window.escapePage2HeaderHtml(sName)})" class="inline-flex items-center justify-center translate-y-[2px]">${window.getSaltShieldIconSvg(sLabel, 'w-4 h-4')}</span>`);
                         renderedShields.add(sLabel);
                     }
                 });
@@ -19665,7 +19699,7 @@
                 ${badgesHtml}
             </div>
             <div class="text-right flex flex-col justify-center items-end gap-1.5 shrink-0 ml-1 border-l border-slate-700/50 pl-4 py-1 h-full min-w-max">
-                <div class="text-[10px] font-mono text-slate-400 tracking-tight flex items-center">AHRI: <span class="text-white font-bold ml-1.5 text-xs">${effectiveAhri}</span>${ahriBadge}</div>
+                <div class="text-[10px] font-mono text-slate-400 tracking-tight flex items-center">AHRI: <span class="text-white font-bold ml-1.5 text-xs">${esc(effectiveAhri)}</span>${ahriBadge}</div>
                 <div class="text-[10px] font-mono text-slate-400 tracking-tight flex items-center">Base Price: <span class="text-emerald-400 font-bold ml-1.5 text-xs">$${resolution.effectiveRawBasePrice.toLocaleString()}</span>${priceBadge}</div>
             </div>
         </div>
@@ -19720,13 +19754,14 @@
         }
 
         function openQuickSummaryModal() {
+            const esc = window.escapePage2HeaderHtml;      // v10.12.08: item names, site / travel text and custom note text are escaped where they enter the summary HTML
             const content = document.getElementById('quick-summary-content');
             if (!content) return;
 
             let outHtml = '', inHtml = '', warHtml = '';
 
             // Updated to accept and format the price value
-            const makeRow = (name, val, isDeduct = false) => `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${name}</span><span class="${isDeduct ? 'text-rose-400' : 'text-emerald-400'} text-[11px] font-bold tracking-wide">${isDeduct ? '-' : '+'}$${Math.abs(val).toLocaleString()}</span></div>`;
+            const makeRow = (name, val, isDeduct = false) => `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(name)}</span><span class="${isDeduct ? 'text-rose-400' : 'text-emerald-400'} text-[11px] font-bold tracking-wide">${isDeduct ? '-' : '+'}$${Math.abs(val).toLocaleString()}</span></div>`;
 
             let craneHandled = false;
             if (window.proposalAppState.activeSite && Number(window.proposalAppState.activeSite.craneFee) > 0) {
@@ -19748,9 +19783,9 @@
             }
             if (window.proposalAppState.customLines) {
                 window.proposalAppState.customLines.forEach(line => {
-                    let row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${line.text}</span><span class="${line.price >= 0 ? 'text-emerald-400' : 'text-rose-400'} text-[11px] font-bold tracking-wide">${line.price >= 0 ? '+' : ''}$${Math.abs(line.price).toLocaleString()}</span></div>`;
+                    let row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(line.text)}</span><span class="${line.price >= 0 ? 'text-emerald-400' : 'text-rose-400'} text-[11px] font-bold tracking-wide">${line.price >= 0 ? '+' : ''}$${Math.abs(line.price).toLocaleString()}</span></div>`;
                     if (line.category === 'note') {
-                        row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${line.text}</span><span class="text-slate-500 text-[10px] font-bold">Note</span></div>`;
+                        row = `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(line.text)}</span><span class="text-slate-500 text-[10px] font-bold">Note</span></div>`;
                     }
                     if (line.category === 'note' || line.category === 'enhancement' || line.category === 'fee') {
                         outHtml += row;
@@ -19802,18 +19837,18 @@
                 if (placement.universal.size > 0) {
                     placement.universal.forEach((opts, price) => {
                         let optStr = opts.length === selectedProposalRows.length ? '' : ` (Opt ${opts.join(', ')})`;
-                        html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${label}${optStr}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide">+$${price.toLocaleString()}</span></div>`;
+                        html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(label)}${optStr}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide">+$${price.toLocaleString()}</span></div>`;
                     });
                 }
 
                 if (placement.tagged.length > 0) {
                     let optStr = ` (Opt ${placement.tagged.join(', ')})`;
-                    html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${label}${optStr}</span><span class="text-blue-400 text-[11px] font-bold tracking-wide">TAGGED</span></div>`;
+                    html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(label)}${optStr}</span><span class="text-blue-400 text-[11px] font-bold tracking-wide">TAGGED</span></div>`;
                 }
 
                 if (placement.included.length > 0) {
                     let optStr = ` (Opt ${placement.included.join(', ')})`;
-                    html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${label}${optStr}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide">INCLUDED</span></div>`;
+                    html += `<div class="flex justify-between items-center py-1.5 border-b border-slate-700/50 last:border-0"><span class="text-slate-300 text-xs">${esc(label)}${optStr}</span><span class="text-emerald-400 text-[11px] font-bold tracking-wide">INCLUDED</span></div>`;
                 }
 
                 return html;
@@ -21583,6 +21618,7 @@
         window.sorterFieldId = function (field) { return String(field === undefined || field === null ? '' : field).replace(/[^A-Za-z0-9_.-]/g, ''); };
 
         window.getSorterCompositeFieldValue = function (fieldKey, context) {
+            const esc = window.escapePage2HeaderHtml;      // v10.12.08: the returned string is display HTML: the value text is escaped, the colour spans are the app's own
             let val = context[fieldKey];
             if (val === undefined || val === null || val === '' || val === 'N/A' || val === 'NA' || val === 'NULL' || val === 'UNDEFINED') return null;
             val = String(val).trim();
@@ -21590,23 +21626,23 @@
 
             if (fieldKey === 'systemType') {
                 const sysColor = window.getSystemTypeColorClass(val.toUpperCase());
-                return `<span class="${sysColor}">${val.toUpperCase()}</span>`;
+                return `<span class="${sysColor}">${esc(val.toUpperCase())}</span>`;
             } else if (fieldKey === 'capacity') {
-                return val.toUpperCase();
+                return esc(val.toUpperCase());
             } else if (fieldKey === 'mechanicalStage') {
                 const stageColor = window.getStageColorClass(val.toLowerCase());
-                return `<span class="${stageColor}">${val.toLowerCase()}</span>`;
+                return `<span class="${stageColor}">${esc(val.toLowerCase())}</span>`;
             } else if (fieldKey === 'applicationStyle') {
                 const styleColor = window.getApplicationStyleColorClass(val);
-                return `<span class="${styleColor}">${val}</span>`;
+                return `<span class="${styleColor}">${esc(val)}</span>`;
             } else if (fieldKey === 'seriesTier') {
                 const serColor = window.getSeriesTierColorClass(val.toUpperCase());
-                return `<span class="${serColor}">${val}</span>`;
+                return `<span class="${serColor}">${esc(val)}</span>`;
             } else if (fieldKey === 'coolingBtu' || fieldKey === 'heatingBtu') {
                 let num = parseInt(val.replace(/[^0-9]/g, ''));
                 if (!isNaN(num) && num > 0) return num.toLocaleString() + ' BTU';
             }
-            return val;
+            return esc(val);
         };
 
         window.renderSorterCompositeContent = function (split, context) {
@@ -21619,7 +21655,7 @@
                 if (split.mapping === 'hspf2') lbl = 'HSPF2 ';
                 if (split.mapping === 'coolingBtu') lbl = 'Cooling ';
                 if (split.mapping === 'heatingBtu') lbl = 'Heating ';
-                return `<span class="srt-token font-semibold tracking-wide flex items-center gap-1 leading-tight" data-field="${window.sorterFieldId(split.mapping)}"><span class="srt-token-label text-slate-400">${lbl}</span><span class="srt-token-value">${v}</span></span>`;
+                return `<span class="srt-token font-semibold tracking-wide flex items-center gap-1 leading-tight" data-field="${window.sorterFieldId(split.mapping)}"><span class="srt-token-label text-slate-400">${window.escapePage2HeaderHtml(lbl)}</span><span class="srt-token-value">${v}</span></span>`;
             }
 
             if (!split.compositeFields || split.compositeFields.length === 0) {
@@ -21647,7 +21683,7 @@
                         else if (f.field === 'heatingBtu') lbl = 'Heating ';
                         else lbl = f.field.charAt(0).toUpperCase() + f.field.slice(1) + ' ';
                     }
-                    return `<span class="srt-token inline-flex items-center" data-field="${window.sorterFieldId(f.field)}"><span class="srt-token-label text-slate-400">${lbl}</span><span class="srt-token-value">${v}</span></span>`;
+                    return `<span class="srt-token inline-flex items-center" data-field="${window.sorterFieldId(f.field)}"><span class="srt-token-label text-slate-400">${window.escapePage2HeaderHtml(lbl)}</span><span class="srt-token-value">${v}</span></span>`;
                 }
             };
 
@@ -21792,6 +21828,7 @@
         };
 
         window.renderSorterRow = function (row) {
+            const esc = window.escapePage2HeaderHtml;      // v10.12.08: catalog text inserted directly by a mapping is escaped (the colour / token spans are the app's own markup)
             const { index, item, sp, brand, series, capacity, seer2, ahri, site, mechStage, sysType, printStyle, hasAuditMismatch, auditState, isNativeOceana, overrideBorder,
                 emojiHtml, cleanBaseStr, cleanModStr, finalSorterPrice, otdFinalPrice } = row;
             const SorterContext = {
@@ -21821,7 +21858,7 @@
                     // v10.11.00: the legacy System Desc is still one fixed convenience cell (capacity, system type, mechanical stage, same words and colours) but each part is now its
                     // canonical field token (data-field); a blank part (the Sorter's blank rule) is left out with its space, and nothing at all is N/A
                     const blank = f => !window.getSorterCompositeFieldValue(f, SorterContext);
-                    const part = (f, text, cls) => blank(f) ? '' : `<span class="srt-token" data-field="${f}"><span class="srt-token-value${cls ? ' ' + cls : ''}">${text}</span></span>`;
+                    const part = (f, text, cls) => blank(f) ? '' : `<span class="srt-token" data-field="${f}"><span class="srt-token-value${cls ? ' ' + cls : ''}">${esc(text)}</span></span>`;
                     const parts = [
                         part('capacity', capacity, ''),
                         part('systemType', sysType, window.getSystemTypeColorClass(sysType)),
@@ -21833,7 +21870,7 @@
                 }
                 else if (split.mapping === 'ahri') {
                     // v10.10.00: the canonical `ahri` field token (label + value spans, same look); the click stays on this standalone value only
-                    content = `<span class="srt-token font-bold whitespace-nowrap" data-field="ahri"><span class="srt-token-label text-slate-500 mr-1">AHRI</span><span class="srt-token-value text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSorterSystemDetails(${index})">${ahri || 'N/A'}</span></span>`;
+                    content = `<span class="srt-token font-bold whitespace-nowrap" data-field="ahri"><span class="srt-token-label text-slate-500 mr-1">AHRI</span><span class="srt-token-value text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSorterSystemDetails(${index})">${esc(ahri || 'N/A')}</span></span>`;
                 }
                 else if (split.mapping === 'brandLogo') {
                     if (brand.toUpperCase() === 'CARRIER') {
@@ -21843,7 +21880,7 @@
                     } else if (brand.toUpperCase() === 'DURASTAR') {
                         content = `<img src="./durastar.png" alt="Durastar" class="object-contain" style="max-height: 1.5em;" />`;
                     } else {
-                        content = `<span class="font-bold text-blue-400 tracking-widest">${brand}</span>`;
+                        content = `<span class="font-bold text-blue-400 tracking-widest">${esc(brand)}</span>`;
                     }
                 }
                 else if (split.mapping === 'brandName') {
@@ -21868,7 +21905,7 @@
                     if (printStyle.toUpperCase() === 'STANDARD') dispStyle = 'Standard';
                     else if (printStyle.toUpperCase() === 'COASTAL') dispStyle = 'Coastal';
 
-                    let seriesHtml = ` <span class="${serColor}">${dispSeries}</span>`;
+                    let seriesHtml = ` <span class="${serColor}">${esc(dispSeries)}</span>`;
                     const upSeries = dispSeries.toUpperCase();
                     if (upSeries === dispStyle.toUpperCase() || !dispSeries || upSeries === "N/A" || upSeries === "NA" || upSeries === "NULL" || upSeries === "UNDEFINED") {
                         seriesHtml = '';
@@ -21878,7 +21915,7 @@
                     let oceanaBadge = isNativeOceana ? ` <span class="inline-flex items-center rounded border border-cyan-400/70 bg-cyan-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-cyan-300 ml-1" title="Native Oceana-priced equipment record">OCEANA</span>` : '';
                     let auditWarning = hasAuditMismatch ? ` <span class="inline-flex items-center rounded border border-amber-500/70 bg-amber-950/60 px-1.5 py-0.5 text-[8px] font-black tracking-widest text-amber-300 ml-1" title="${auditState.changes.length} Audit Change(s)">&#9888; AUDIT UPDATE</span>` : '';
 
-                    let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${brand}</span> <span class="${asColor}">${dispStyle}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
+                    let rawContent = `<span class="font-bold tracking-widest"><span class="text-blue-400">${esc(brand)}</span> <span class="${asColor}">${esc(dispStyle)}</span>${coastalSuffix}${seriesHtml}${oceanaBadge}${auditWarning}</span>`;
                     content = rawContent.replace(/\s+/g, ' ').trim();
                 }
                 else if (split.mapping === 'basePrice') content = cleanBaseStr;
@@ -25960,11 +25997,12 @@
                     window.plattsProposalFoldersLoaded = true;
 
                     selectEl.innerHTML = "";
-                    let html = "";
-                    window.plattsProposalFolders.forEach(f => {
-                        html += `<option value="${f.id}">${f.name}</option>`;
+                    window.plattsProposalFolders.forEach(f => {      // v10.12.07: folder names are text, ids are values (no HTML parsing of Drive names)
+                        const opt = document.createElement('option');
+                        opt.value = String(f.id);
+                        opt.textContent = String(f.name);
+                        selectEl.appendChild(opt);
                     });
-                    selectEl.innerHTML = html;
 
                     // Selection logic
                     const savedId = localStorage.getItem("plattsProposalDestinationFolderId");
@@ -26168,7 +26206,8 @@
                 if (typeof window.describeManagedCreateConflict === 'function') {
                     failMessage = window.describeManagedCreateConflict(failMessage, destId) || failMessage;
                 }
-                statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> ${failMessage}`;
+                statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> `;
+                statusEl.appendChild(document.createTextNode(String(failMessage)));      // v10.12.07: the backend / network message is text, never HTML
                 statusEl.classList.remove("hidden", "text-emerald-400");
                 statusEl.classList.add("text-rose-400");
                 if (originalLucide && window.lucide.createIcons) {
@@ -26362,7 +26401,7 @@
                 if (!lp || !lp.baseName || lp.destinationFolderId !== destinationFolderId ||
                     typeof message !== 'string' || message.indexOf('already exists in this destination folder') === -1 ||
                     message.indexOf('"' + lp.baseName + '"') === -1) return null;
-                const safe = String(lp.baseName).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safe = String(lp.baseName);      // v10.12.07: plain text (the Create banner renders it as text, so it must not be pre-escaped)
                 return '"' + safe + '" is already loaded. Use Update to save your changes as Rev ' + (lp.currentRevision + 1) + '.';
             };
 
@@ -27190,7 +27229,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.12.05';
+            const APP_VERSION = 'v10.12.08';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27486,7 +27525,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.12.05';
+            const APP_VERSION = 'v10.12.08';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -29528,7 +29567,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.12.05 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.12.08 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -30194,7 +30233,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.12.05',
+                version: 'v10.12.08',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -30271,7 +30310,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.12.05';
+            const APP_VERSION = 'v10.12.08';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
