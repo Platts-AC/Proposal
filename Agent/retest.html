@@ -1,4 +1,4 @@
-﻿<!-- Retest Prototype v10.12.00 | Systems Sorter Header Migration -->
+﻿<!-- Retest Prototype v10.12.05 | Systems Sorter Icons/Flags Size Normalization -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Changeout Lookup v10.12.00</title>
+    <title>Changeout Lookup v10.12.05</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -663,9 +663,17 @@
         #proposal-bar-settings-panel[data-pbe-density="roomy"] .pbe-box { padding: 14px; }
         /* Systems Sorter body (v10.07.00; text overflow v10.07.01). The row skeleton is built by window.sorterBodyHtml for the real rows AND for the Sorter settings preview, so these rules are the single
            geometry source. Width stays a pure ratio (min-width 0, clipped, a long word breaks only in a cell wide enough for that); height never shrinks below the content (nothing is clipped vertically, a row grows). */
-        .srt-clip { overflow: hidden; min-width: 0; }
+        .srt-clip { overflow: hidden; min-width: 0; min-height: 0; }
         @supports (overflow: clip) { .srt-clip { overflow-x: clip; overflow-y: visible; } }
         .srt-cell { container: srt-cell / inline-size; }
+        /* v10.12.02 fixed geometry: Master Row Height is the row's height (not a minimum) and CONTENT DOES NOT RESIZE THE GRID. Body, containers and stacks may shrink to their share (min-height 0, so no content
+           floor defeats the weights); each cell clips its own content in both directions (overflow: clip does not make a scroll container, no scrolling and no overlap with a neighbour). */
+        .srt-body, .srt-container, .srt-stack { min-height: 0; }
+        .srt-cell { min-height: 0; overflow: hidden; }
+        /* v10.12.05 Icons/Flags: the SVG flags (Salt Shield, Labor Warranty) were fixed 20 / 16 px while the emoji flags scale with the split's Font Size, so the shield looked small at any size above ~13 px. They are em-sized now (1.25em / 1.2em boxes; the artwork fills ~2/3 x 5/6 of its box, so the ink is about 1.04em tall, like the emoji's ~1em), so one Font Size scales every flag together. */
+        .srt-flag-svg { width: 1.25em; height: 1.25em; flex: none; }
+        .srt-flag-lucide { width: 1.2em; height: 1.2em; flex: none; }
+        @supports (overflow: clip) { .srt-cell { overflow: clip; } }
         /* v10.07.01: a word wider than its cell breaks inside the cell only when the cell is at least 8em wide (a 40-letter value then takes about five lines); in a narrower cell the
            word stays whole and is clipped at the cell edge (as before v10.07.00) instead of wrapping letter by letter into a tall column. Ordinary text wraps at spaces in every cell.
            The cell is its own query container, so the em is the cell's own text size; the rule is on its content and is inherited by everything inside it. */
@@ -718,7 +726,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.12.00</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.12.05</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1670,7 +1678,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.12.00</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.12.05</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -2223,14 +2231,14 @@
     </div>
     <!-- Sorter Settings Modal (Free-Floating) -->
     <div id="sorter-settings-modal"
-        class="fixed bg-slate-900 border border-slate-700 w-[92vw] md:w-80 rounded-xl shadow-2xl flex flex-col overflow-hidden hidden max-h-[85vh]"
+        class="fixed bg-slate-900 border border-slate-700 w-[92vw] md:w-[30rem] md:max-w-[92vw] rounded-xl shadow-2xl flex flex-col overflow-hidden hidden max-h-[85vh]"
         style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100;">
 
         <!-- RESTORED DRAGGABLE HEADER -->
         <div id="sorter-settings-header"
             class="flex justify-between items-center px-4 py-3 border-b border-slate-800 bg-slate-950 shrink-0 cursor-grab active:cursor-grabbing select-none"
             style="touch-action: none;">
-            <h2 class="text-xs font-bold text-white uppercase tracking-wider">Sorter Controls</h2>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Sorter Controls</h2>
             <div class="flex items-center gap-3">
                 <button onclick="toggleSorterModalSize()" id="sorter-size-btn"
                     class="text-slate-400 hover:text-white transition cursor-pointer" title="Minimize/Maximize">
@@ -2246,10 +2254,19 @@
         <!-- CART LAYOUT STUDIO BODY -->
         <div
             class="p-3 pr-4 bg-slate-900 flex flex-col gap-3 flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar w-full">
+            <!-- v10.12.01: two tabs. Both panels stay in the DOM (renderCartConfigurator fills both); only visibility changes. -->
+            <div role="tablist" aria-label="Sorter layout editor" class="flex gap-1 shrink-0 border-b border-slate-700">
+                <button type="button" role="tab" id="sorter-tab-btn-body" aria-selected="true" aria-controls="sorter-tab-body" onclick="setSorterEditorTab('body')"
+                    class="flex-1 px-2 py-2 text-xs font-bold uppercase tracking-wider rounded-t border border-b-0 transition-colors bg-blue-600 text-white border-blue-500">Sorter Body Layout</button>
+                <button type="button" role="tab" id="sorter-tab-btn-header" aria-selected="false" aria-controls="sorter-tab-header" onclick="setSorterEditorTab('header')"
+                    class="flex-1 px-2 py-2 text-xs font-bold uppercase tracking-wider rounded-t border border-b-0 transition-colors bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700">Sorter Header Layout</button>
+            </div>
+            <div id="sorter-tab-body" role="tabpanel" class="flex flex-col gap-3">
+            <div class="text-xs text-slate-300 leading-snug">Edits the layout of each system row in the Sorter. Every selected system uses this one template.</div>
             <!-- Master Row Height & End Cap Toggle -->
             <div class="bg-slate-950 border border-slate-700 rounded p-2 flex flex-col gap-3">
                 <div>
-                    <label class="text-[10px] text-slate-500 font-bold uppercase tracking-widest block mb-2">Master Row
+                    <label class="text-xs text-slate-300 font-bold uppercase tracking-widest block mb-2">Master Row
                         Height</label>
                     <div class="flex w-full justify-between items-center">
                         <button onclick="adjustSorterRowHeight(-5)"
@@ -2260,7 +2277,7 @@
                     </div>
                 </div>
                 <div class="border-t border-slate-800/80 pt-2 flex items-center justify-between select-none">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Enable End Cap
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Enable End Cap
                         (Price)</span>
                     <input type="checkbox" id="cart-endcap-toggle" onchange="toggleCartEndCap(this.checked)"
                         class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-500 focus:ring-0 cursor-pointer">
@@ -2268,16 +2285,17 @@
             </div>
             <!-- Cart Configurator List (Injected by JS) -->
             <div id="cart-configurator-list" class="flex flex-col gap-3"></div>
-            <!-- Add Container Button (stacks and splits are added from the inspector, inside the selected container / stack) -->
+            <!-- Add Container Button (v10.12.04: inserts after the selected container; stacks and splits are added from the inspector, inside the selected container / stack) -->
             <button onclick="addCartContainer()"
                 class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition-colors text-xs uppercase tracking-widest flex items-center justify-center gap-2">
-                <i data-lucide="plus" class="w-4 h-4"></i> Add Container
+                <i data-lucide="plus" class="w-4 h-4"></i> Add Container After Selected
             </button>
-            <!-- Sorter HEADER layout editor (v10.12.00, injected by JS) -->
-            <details class="bg-slate-950 border border-slate-700 rounded p-2" id="sorter-header-editor-details">
-                <summary class="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider cursor-pointer select-none">Header layout</summary>
-                <div id="sorter-header-editor" class="flex flex-col gap-3 mt-2"></div>
-            </details>
+            </div>
+            <div id="sorter-tab-header" role="tabpanel" class="hidden flex flex-col gap-3">
+                <div class="text-xs text-slate-300 leading-snug">Edits the title bar above the Sorter rows (title, action badges, settings gear).</div>
+                <!-- Sorter HEADER layout editor (v10.12.00, injected by JS) -->
+                <div id="sorter-header-editor" class="flex flex-col gap-3"></div>
+            </div>
         </div>
     </div>
     <!-- Proposal Settings Modal (Free-Floating, Draggable) -->
@@ -6580,7 +6598,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.12.00',
+                appVersion: 'v10.12.05',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6774,7 +6792,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.12.00_${stamp}.json`;
+                `platts_config_v10.12.05_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12411,7 +12429,7 @@
                     let sName = shieldLabel.replace('Heresite', 'HereShield');
                     let dedupeKey = 'shield:' + shieldLabel;
                     if (!addedIcons.has(dedupeKey)) {
-                        emojiCluster.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(shieldLabel, 'w-5 h-5')}</span>`);
+                        emojiCluster.push(`<span title="Salt Shield (${sName})" class="inline-flex items-center justify-center translate-y-[1px]">${window.getSaltShieldIconSvg(shieldLabel, 'srt-flag-svg')}</span>`);
                         addedIcons.add(dedupeKey);
                     }
                 });
@@ -12438,7 +12456,7 @@
                     activeLaborWarranties = window.getEffectiveLaborWarranties(sp).some(w => !(sp.removedGlobals && sp.removedGlobals.includes(w)));
                 }
                 if (activeLaborWarranties && !addedIcons.has('warranty')) {
-                    emojiCluster.push('<span title="Labor Warranty" class="inline-flex items-center justify-center translate-y-[2px]"><i data-lucide="file-check" class="w-4 h-4 text-emerald-400"></i></span>');
+                    emojiCluster.push('<span title="Labor Warranty" class="inline-flex items-center justify-center translate-y-[2px]"><i data-lucide="file-check" class="srt-flag-lucide text-emerald-400"></i></span>');
                     addedIcons.add('warranty');
                 }
                 let emojiHtml = emojiCluster.length > 0 ? `<div class="flex items-center gap-1.5">${emojiCluster.join('')}</div>` : '';
@@ -17012,7 +17030,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.12.00',
+                appVersion: 'v10.12.05',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17021,7 +17039,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.12.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.12.05_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17040,7 +17058,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.12.00',
+                appVersion: 'v10.12.05',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17049,7 +17067,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.12.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.12.05_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -21425,9 +21443,12 @@
         const sorterWeight = function (val) { return window.GridPrimitives.weight(parseFloat(val), 1, { min: window.GridPrimitives.WEIGHT.min, scale: 100 }); };
 
         // Container Mutators
+        // v10.12.04: a new empty container goes immediately AFTER the selected one (a missing / invalid selection appends at the end) and is selected; no existing container is touched
         window.addCartContainer = function () {
-            window.sorterSettings.containers.push(window.createEmptySorterContainer());
-            sorterSelect(window.sorterSettings.containers.length - 1, 0, 0);
+            const arr = window.sorterSettings.containers, sel = window.sorterEditorSel;
+            const at = sel && sorterNode(sel.c).C ? sel.c + 1 : arr.length;
+            arr.splice(at, 0, window.createEmptySorterContainer());
+            sorterSelect(at, 0, 0);
             window.saveSorterSettings();
         };
         window.removeCartContainer = function (cIdx) {
@@ -21739,19 +21760,19 @@
                     stacksHtml += `<div class="flex flex-row w-full gap-3 srt-clip srt-stack${xs.cls}" style="flex: ${GP.flexShare(stack.heightWeight)};"${xs.attr}>${splitsHtml}</div>`;
                 });
                 const xc = hook(opts.container, cIdx);
-                containersHtml += `<div class="flex flex-col h-full gap-1 srt-clip srt-container${xc.cls}" style="flex: ${GP.flexShare(container.widthWeight)};"${xc.attr}>${stacksHtml}</div>`;
+                containersHtml += `<div class="flex flex-col gap-1 srt-clip srt-container${xc.cls}" style="flex: ${GP.flexShare(container.widthWeight)};"${xc.attr}>${stacksHtml}</div>`;
             });
 
             // Split Sorter layout horizontally if End Cap is checked
-            let rowContentHtml = `<div class="flex flex-row w-full gap-3 srt-clip srt-body h-full">${containersHtml}</div>`;
+            let rowContentHtml = `<div class="flex flex-row w-full gap-3 srt-clip srt-body">${containersHtml}</div>`;
 
             if (settings.enableEndCap) {
                 rowContentHtml = `
-                        <div class="flex flex-row w-full gap-3 srt-clip srt-body h-full">
-                            <div class="flex flex-row flex-1 gap-3 srt-clip h-full">
+                        <div class="flex flex-row w-full gap-3 srt-clip srt-body">
+                            <div class="flex flex-row flex-1 gap-3 srt-clip">
                                 ${containersHtml}
                             </div>
-                            <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2 h-full">
+                            <div class="w-24 shrink-0 border-l border-slate-800 flex flex-col items-center justify-center pl-2">
                                 ${opts.endCapContent || ''}
                             </div>
                         </div>`;
@@ -21791,6 +21812,8 @@
             // What one split shows for this system (the mapping chain is the one the inline code always had)
             const cellContent = function (split) {
                 let content = '';
+                // v10.12.03: the price buttons fill the cell (the whole cell stays the click target) but place the price with the cell's own alignment classes (horizontal items-* + text-*, vertical justify-*) instead of inheriting the cell's vertical justify-content into their horizontal flex
+                const priceAlign = window.sorterCellAlign(split);
                 if (split.mapping === 'composite' || ['capacity', 'systemType', 'mechanicalStage', 'applicationStyle', 'seriesTier', 'seer2', 'eer2', 'hspf2', 'coolingBtu', 'heatingBtu'].includes(split.mapping)) {
                     content = window.renderSorterCompositeContent(split, SorterContext);
                 }
@@ -21860,8 +21883,8 @@
                 }
                 else if (split.mapping === 'basePrice') content = cleanBaseStr;
                 else if (split.mapping === 'adjustments') content = cleanModStr;
-                else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${finalSorterPrice.toLocaleString()}</button>`;
-                else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full h-full flex items-center cursor-pointer" style="justify-content: inherit;">$${otdFinalPrice.toLocaleString()}</button>`;
+                else if (split.mapping === 'totalPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full flex flex-col ${priceAlign} cursor-pointer" style="flex: 1 1 auto;">$${finalSorterPrice.toLocaleString()}</button>`;
+                else if (split.mapping === 'otdPrice') content = `<button onclick="openReceiptModal(${index})" class="text-emerald-400 font-bold proposal-price-text hover:text-emerald-300 transition-colors w-full flex flex-col ${priceAlign} cursor-pointer" style="flex: 1 1 auto;">$${otdFinalPrice.toLocaleString()}</button>`;
                 else if (split.mapping === 'icons') content = emojiHtml || `<span class="text-slate-500 font-bold">•</span>`;
                 return content;
             };
@@ -21871,7 +21894,7 @@
             }
             const rowContentHtml = window.sorterBodyHtml(window.sorterSettings, cellContent, { endCapContent: endCapContent });
 
-            return `<div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-900 border ${overrideBorder} px-1.5 py-2.5 rounded-lg flex gap-2 cursor-grab active:cursor-grabbing hover:border-blue-500 transition-colors shadow-sm mb-2" style="min-height: ${window.sorterSettings.rowHeight}px; height: auto;">
+            return `<div draggable="true" data-index="${index}" ondragstart="handleCartDragStart(event, ${index})" ondragover="handleCartDragOver(event)" ondrop="handleCartDrop(event, ${index})" ondragend="handleCartDragEnd(event)" class="bg-slate-900 border ${overrideBorder} px-1.5 py-2.5 rounded-lg flex gap-2 cursor-grab active:cursor-grabbing hover:border-blue-500 transition-colors shadow-sm mb-2" style="height: ${window.sorterSettings.rowHeight}px;">
             <div class="flex flex-col justify-between items-center shrink-0 border-r border-slate-700/30 pr-1.5">
                 <i data-lucide="grip-vertical" class="w-5 h-5 text-slate-500 cursor-grab"></i>
                 <div onclick="removeSystemFromProposal(${index})" class="text-rose-400 hover:text-rose-300 transition-colors cursor-pointer" title="Remove System"><i data-lucide="x-circle" class="w-4 h-4"></i></div>
@@ -21969,7 +21992,7 @@
                     if (window.sorterCompositeIsText(f)) {
                         const tv = String(f.text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
                         fieldsHtml += `<div class="flex items-center justify-between gap-2 bg-slate-900 border border-amber-900/40 rounded px-2 py-1 mb-1 shadow-sm">
-                        <input type="text" maxlength="${window.SORTER_TEXT_MAX}" value="${tv}" placeholder="Text" aria-label="Static text" onchange="setSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 text-[10px] rounded px-1.5 py-0.5 outline-none flex-1 min-w-0 focus:border-amber-500">
+                        <input type="text" maxlength="${window.SORTER_TEXT_MAX}" value="${tv}" placeholder="Text" aria-label="Static text" onchange="setSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded px-1.5 py-0.5 outline-none flex-1 min-w-0 focus:border-amber-500">
                         <div class="flex items-center gap-2">
                             <div class="flex border border-slate-700 rounded overflow-hidden">
                                 <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, -1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors ${fIdx === 0 ? 'opacity-30 pointer-events-none' : ''}">↑</button>
@@ -21994,11 +22017,11 @@
                     else dispName = dispName.charAt(0).toUpperCase() + dispName.slice(1);
 
                     fieldsHtml += `<div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded px-2 py-1 mb-1 shadow-sm">
-                        <span class="text-[10px] text-slate-300 w-24 truncate font-semibold">${dispName}</span>
+                        <span class="text-xs text-slate-300 w-28 truncate font-semibold">${dispName}</span>
                         <div class="flex items-center gap-2">
                             <label class="flex items-center gap-1 cursor-pointer hover:bg-slate-800 px-1 rounded transition-colors">
-                                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Label</span>
-                                <input type="checkbox" onchange="setSorterCompositeFieldLabel(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.checked)" ${f.showLabel ? 'checked' : ''} class="w-3 h-3 accent-emerald-500 rounded-sm">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">Label</span>
+                                <input type="checkbox" onchange="setSorterCompositeFieldLabel(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, this.checked)" ${f.showLabel ? 'checked' : ''} class="w-4 h-4 accent-emerald-500 rounded-sm">
                             </label>
                             <div class="flex border border-slate-700 rounded overflow-hidden">
                                 <button onclick="moveSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, ${fIdx}, -1)" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-1.5 transition-colors ${fIdx === 0 ? 'opacity-30 pointer-events-none' : ''}">↑</button>
@@ -22036,18 +22059,18 @@
             let sep = split.compositeSeparator || 'space';
 
             return `<div class="col-span-2 bg-slate-950 p-2 rounded-md border border-blue-900/40 mt-1 shadow-inner">
-                <div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <div class="text-xs text-blue-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
                     <i data-lucide="text-cursor-input" class="w-3 h-3"></i> Custom Description Fields
                 </div>
                 ${fieldsHtml}
                 <div class="flex items-center gap-2 mt-2">
-                    <select onchange="if(this.value) { addSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, this.value); this.value=''; }" class="bg-slate-900 border border-emerald-900/50 text-slate-300 font-semibold text-[10px] rounded px-1.5 py-1 outline-none flex-1 focus:border-emerald-500 transition-colors">
+                    <select onchange="if(this.value) { addSorterCompositeField(${cIdx}, ${sIdx}, ${pIdx}, this.value); this.value=''; }" class="bg-slate-900 border border-emerald-900/50 text-slate-300 font-semibold text-xs rounded px-2 py-1.5 outline-none flex-1 focus:border-emerald-500 transition-colors">
                         ${fieldOpts}
                     </select>
-                    <button type="button" onclick="addSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx})" class="shrink-0 bg-slate-900 border border-amber-900/50 text-slate-300 font-semibold text-[10px] rounded px-1.5 py-1 hover:border-amber-500 transition-colors">+ Add Text</button>
+                    <button type="button" onclick="addSorterCompositeText(${cIdx}, ${sIdx}, ${pIdx})" class="shrink-0 bg-slate-900 border border-amber-900/50 text-slate-300 font-semibold text-xs rounded px-1.5 py-1 hover:border-amber-500 transition-colors">+ Add Text</button>
                     <div class="flex items-center gap-1.5 shrink-0 bg-slate-900 border border-slate-700/80 rounded px-1.5">
-                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Separator</span>
-                        <select onchange="setSorterCompositeSeparator(${cIdx}, ${sIdx}, ${pIdx}, this.value)" class="bg-transparent text-slate-300 font-semibold text-[10px] outline-none py-1 w-16">
+                        <span class="text-xs text-slate-500 font-bold uppercase tracking-widest">Separator</span>
+                        <select onchange="setSorterCompositeSeparator(${cIdx}, ${sIdx}, ${pIdx}, this.value)" class="bg-transparent text-slate-300 font-semibold text-xs outline-none py-1 w-20">
                             <option value="space" ${sep === 'space' ? 'selected' : ''}>Space</option>
                             <option value="bullet" ${sep === 'bullet' ? 'selected' : ''}>Bullet</option>
                             <option value="slash" ${sep === 'slash' ? 'selected' : ''}>Slash</option>
@@ -22115,8 +22138,8 @@
                 stack: (c, s) => ({ cls: sel.c === c && sel.s === s ? ' srt-sel-s' : '', attr: ' data-c="' + c + '" data-s="' + s + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',0)"' }),
                 cell: (c, s, p) => ({ cls: sel.c === c && sel.s === s && sel.p === p ? ' srt-sel-p' : '', attr: ' data-c="' + c + '" data-s="' + s + '" data-p="' + p + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',' + p + ')"' })
             });
-            const h = Math.max(56, Math.min(200, Math.round(settings.rowHeight * 0.7)));
-            return '<div id="sorter-preview" class="bg-slate-900 border border-slate-700 px-1.5 py-2.5 rounded-lg flex gap-2" style="min-height: ' + h + 'px; height: auto;">' + body + '</div>';
+            const h = settings.rowHeight;      // v10.12.02: the preview's height is the row's height (a definite height, like the row), so its stacks divide it exactly as the row's do
+            return '<div id="sorter-preview" class="bg-slate-900 border border-slate-700 px-1.5 py-2.5 rounded-lg flex gap-2" style="height: ' + h + 'px;">' + body + '</div>';
         };
         window.renderCartConfigurator = function () {
             const rhDisp = document.getElementById('disp-cart-rowHeight');
@@ -22128,31 +22151,38 @@
 
             const cur = window.sorterEditorCurrent(), GP = window.GridPrimitives, W = GP.WEIGHT;
             const cs = window.sorterSettings.containers, c = cur.c, s = cur.s, p = cur.p, split = cur.split;
-            const BTN = 'px-2 py-1 rounded border text-[10px] font-bold leading-none transition-colors ';
+            const BTN = 'px-2.5 py-1.5 rounded border text-xs font-bold leading-none transition-colors ';
             const OFF = 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700';
             const ON = 'bg-blue-600 text-white border-blue-500';
             const btn = (label, onclick, title, disabled, on) => '<button type="button" onclick="' + onclick + '" title="' + title + '" aria-label="' + title + '" class="' + BTN + (on ? ON : OFF) + (disabled ? ' opacity-30 pointer-events-none' : '') + '">' + label + '</button>';
-            const label = t => '<span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
-            const rowOf = (l, inner) => '<div class="flex items-center justify-between gap-2">' + label(l) + '<div class="flex items-center gap-1">' + inner + '</div></div>';
-            const stepper = (l, value, dec, inc, hint) => rowOf(l, btn('&minus;', dec, 'Decrease (Shift+click: bigger step)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value + '</span>' + btn('+', inc, 'Increase (Shift+click: bigger step)')) + (hint ? '<div class="text-[9px] text-slate-500 leading-snug">' + hint + '</div>' : '');
-            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-[10px] font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
+            const label = t => '<span class="text-xs text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
+            const rowOf = (l, inner) => '<div class="flex items-center justify-between gap-2">' + label(l) + '<div class="flex items-center gap-1 flex-wrap justify-end">' + inner + '</div></div>';
+            const stepper = (l, value, dec, inc, hint) => rowOf(l, btn('&minus;', dec, 'Decrease (Shift+click: bigger step)') + '<span class="min-w-[5.5rem] px-1 whitespace-nowrap text-center text-xs text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value + '</span>' + btn('+', inc, 'Increase (Shift+click: bigger step)')) + (hint ? '<div class="text-xs text-slate-400 leading-snug">' + hint + '</div>' : '');
+            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-xs font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
 
+            // v10.12.04: read-only shares of the SIBLINGS' current saved weights (same normalization as the saved layout); nothing is stored
+            const shareOf = (nodes, key, node) => {
+                const nw = x => GP.weight(x[key], 1, { min: W.min, max: W.max, scale: 100 });
+                const sum = nodes.reduce((t, x) => t + nw(x), 0), pc = sum > 0 ? nw(node) / sum * 100 : 100;
+                return Math.abs(pc - Math.round(pc)) < 1e-9 ? String(Math.round(pc)) + '%' : pc.toFixed(1) + '%';
+            };
+            const wBtn = (label, onclick, title, disabled) => '<button type="button" onclick="' + onclick + '" title="' + title + '" aria-label="' + title + '" class="flex-1 px-2 py-2 rounded border text-xs font-bold leading-tight transition-colors bg-slate-700 hover:bg-slate-600 text-white border-slate-500' + (disabled ? ' opacity-30 pointer-events-none' : '') + '">' + label + '</button>';
             const containerSec = section('border-blue-900/60', '<span class="text-blue-400">Container ' + (c + 1) + ' of ' + cs.length + '</span>',
-                stepper('Container width ratio', cur.container.widthWeight.toFixed(2), 'stepSorterWeight(\'container\',-1,event)', 'stepSorterWeight(\'container\',1,event)', 'Share of the row width, relative to the other containers.') +
-                rowOf('Container', btn('&larr;', 'moveCartContainer(' + c + ',-1)', 'Move container left', c === 0) + btn('&rarr;', 'moveCartContainer(' + c + ',1)', 'Move container right', c === cs.length - 1) +
-                    btn('Remove', 'removeCartContainer(' + c + ')', 'Remove this container', cs.length <= 1) + btn('+ Add stack', 'addCartStack(' + c + ')', 'Add a stack to container ' + (c + 1))));
-            const stackSec = section('border-emerald-900/60', '<span class="text-emerald-400">Stack ' + (s + 1) + ' of ' + cur.container.stacks.length + '</span><span class="text-slate-500 normal-case font-semibold"> in container ' + (c + 1) + '</span>',
-                stepper('Stack height ratio', cur.stack.heightWeight.toFixed(2), 'stepSorterWeight(\'stack\',-1,event)', 'stepSorterWeight(\'stack\',1,event)', 'Share of the free height beyond each stack content, relative to the other stacks in this container. A stack never gets shorter than its content.') +
+                stepper('Container width ratio', cur.container.widthWeight.toFixed(2) + ' (' + shareOf(cs, 'widthWeight', cur.container) + ')', 'stepSorterWeight(\'container\',-1,event)', 'stepSorterWeight(\'container\',1,event)', 'Share of the usable row width, relative to the other containers.') +
+                '<div class="flex gap-2">' + wBtn('&larr; Move Container Left', 'moveCartContainer(' + c + ',-1)', 'Move Container Left', c === 0) + wBtn('Move Container Right &rarr;', 'moveCartContainer(' + c + ',1)', 'Move Container Right', c === cs.length - 1) + '</div>' +
+                rowOf('Container', btn('Remove Container', 'removeCartContainer(' + c + ')', 'Remove this container', cs.length <= 1) + btn('+ Add Stack', 'addCartStack(' + c + ')', 'Add a stack to container ' + (c + 1))));
+            const stackSec = section('border-emerald-900/60', '<span class="text-emerald-400">Stack ' + (s + 1) + ' of ' + cur.container.stacks.length + '</span><span class="text-slate-400 normal-case font-semibold"> in container ' + (c + 1) + '</span>',
+                stepper('Stack height ratio', cur.stack.heightWeight.toFixed(2) + ' (' + shareOf(cur.container.stacks, 'heightWeight', cur.stack) + ')', 'stepSorterWeight(\'stack\',-1,event)', 'stepSorterWeight(\'stack\',1,event)', 'Share of the container\'s fixed height, relative to the other stacks in this container. Content that does not fit its cell is clipped: adjust the ratio, text size or mapping.') +
                 rowOf('Stack', btn('&uarr;', 'moveCartStack(' + c + ',' + s + ',-1)', 'Move stack up', s === 0) + btn('&darr;', 'moveCartStack(' + c + ',' + s + ',1)', 'Move stack down', s === cur.container.stacks.length - 1) +
-                    btn('Remove', 'removeCartStack(' + c + ',' + s + ')', 'Remove this stack', cur.container.stacks.length <= 1) + btn('+ Add split', 'addCartSplit(' + c + ',' + s + ')', 'Add a split to stack ' + (s + 1) + ' of container ' + (c + 1))));
+                    btn('Remove Stack', 'removeCartStack(' + c + ',' + s + ')', 'Remove this stack', cur.container.stacks.length <= 1) + btn('+ Add Split', 'addCartSplit(' + c + ',' + s + ')', 'Add a split to stack ' + (s + 1) + ' of container ' + (c + 1))));
             const mapOpts = window.SORTER_MAPPINGS.map(m => '<option value="' + m[0] + '"' + (split.mapping === m[0] ? ' selected' : '') + '>' + sorterEsc(m[1]) + '</option>').join('');
             const knownMap = window.SORTER_MAPPINGS.some(m => m[0] === split.mapping);
-            const splitSec = section('border-slate-600', '<span class="text-slate-200">Split ' + (p + 1) + ' of ' + cur.stack.splits.length + '</span><span class="text-slate-500 normal-case font-semibold"> in stack ' + (s + 1) + '</span>',
-                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="updateCartMap(' + c + ',' + s + ',' + p + ',\'mapping\',this.value,false)" class="bg-slate-900 text-[11px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + (knownMap ? '' : '<option value="' + sorterEsc(split.mapping) + '" selected>' + sorterEsc(split.mapping) + '</option>') + mapOpts + '</select></div>' +
-                stepper('Split width ratio', split.widthWeight.toFixed(2), 'stepSorterWeight(\'split\',-1,event)', 'stepSorterWeight(\'split\',1,event)', 'Share of the stack width, relative to the other splits.') +
+            const splitSec = section('border-slate-600', '<span class="text-slate-200">Split ' + (p + 1) + ' of ' + cur.stack.splits.length + '</span><span class="text-slate-400 normal-case font-semibold"> in stack ' + (s + 1) + '</span>',
+                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="updateCartMap(' + c + ',' + s + ',' + p + ',\'mapping\',this.value,false)" class="bg-slate-900 text-[13px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + (knownMap ? '' : '<option value="' + sorterEsc(split.mapping) + '" selected>' + sorterEsc(split.mapping) + '</option>') + mapOpts + '</select></div>' +
+                stepper('Split width ratio', split.widthWeight.toFixed(2) + ' (' + shareOf(cur.stack.splits, 'widthWeight', split) + ')', 'stepSorterWeight(\'split\',-1,event)', 'stepSorterWeight(\'split\',1,event)', 'Share of the stack width, relative to the other splits. Content that does not fit is clipped.') +
                 rowOf('Split', btn('&larr;', 'moveCartSplit(' + c + ',' + s + ',' + p + ',-1)', 'Move split left', p === 0) + btn('&rarr;', 'moveCartSplit(' + c + ',' + s + ',' + p + ',1)', 'Move split right', p === cur.stack.splits.length - 1) +
-                    btn('Remove', 'removeCartSplit(' + c + ',' + s + ',' + p + ')', 'Remove this split', cur.stack.splits.length <= 1)) +
-                rowOf('Text size', btn('&minus;', 'stepSorterFont(-1,event)', 'Smaller text (Shift+click: 2 px)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + split.fontSize + ' px</span>' + btn('+', 'stepSorterFont(1,event)', 'Larger text (Shift+click: 2 px)')) +
+                    btn('Remove Split', 'removeCartSplit(' + c + ',' + s + ',' + p + ')', 'Remove this split', cur.stack.splits.length <= 1)) +
+                rowOf('Text size', btn('&minus;', 'stepSorterFont(-1,event)', 'Smaller text (Shift+click: 2 px)') + '<span class="w-14 text-center text-xs text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + split.fontSize + ' px</span>' + btn('+', 'stepSorterFont(1,event)', 'Larger text (Shift+click: 2 px)')) +
                 rowOf('Horizontal', ['left', 'center', 'right'].map(a => btn(a.charAt(0).toUpperCase() + a.slice(1), 'updateCartMap(' + c + ',' + s + ',' + p + ',\'align\',\'' + a + '\',false)', 'Align ' + a, false, (split.align || 'left') === a)).join('')) +
                 rowOf('Vertical', [['top', 'Top'], ['middle', 'Middle'], ['bottom', 'Bottom']].map(v => btn(v[1], 'setSorterCellStyle(' + c + ',' + s + ',' + p + ',\'vAlign\',\'' + v[0] + '\')', 'Align ' + v[0], false, (split.vAlign || 'middle') === v[0])).join('')) +
                 (typeof window.renderNudgePad === 'function' ? window.renderNudgePad({ label: 'Nudge', x: Number(split.nudgeX) || 0, y: Number(split.nudgeY) || 0, unit: 'px', coarse: GP.NUDGE.coarse, attrs: dir => 'onclick="sorterNudge(\'' + dir + '\', event)"' }) : '') +
@@ -22160,8 +22190,9 @@
 
             if (typeof window.renderSorterHeaderEditor === 'function') window.renderSorterHeaderEditor();
             cl.innerHTML = '<div class="flex flex-col gap-1">' + label('Row template preview') + window.renderSorterPreview() +
-                '<div class="text-[9px] text-slate-500 leading-snug">Click a cell to edit it. Same ratios and rules as the real rows; the text is a placeholder. Every selected system uses this one template.</div></div>' +
-                '<div class="text-[10px] text-slate-300 font-bold">Editing: Container ' + (c + 1) + ' &rsaquo; Stack ' + (s + 1) + ' &rsaquo; Split ' + (p + 1) + '</div>' +
+                '<div class="text-xs text-slate-400 leading-snug">Click a cell to edit it. Same ratios and rules as the real rows; the text is a placeholder. Every selected system uses this one template.</div></div>' +
+                '<div class="text-[13px] text-white font-bold bg-blue-900/30 border border-blue-800 rounded px-2 py-1.5"><span class="text-blue-300 text-xs uppercase tracking-wider">Selected:</span> Container ' + (c + 1) + ' &rsaquo; Stack ' + (s + 1) + ' &rsaquo; Split ' + (p + 1) + '</div>' +
+                '<div class="text-xs text-slate-400 leading-snug">Percentages are calculated, relative shares of the usable parent space (excluding padding, gaps and fixed controls). Only the ratios are saved.</div>' +
                 containerSec + stackSec + splitSec;
         };
 
@@ -22367,47 +22398,64 @@
             if (!el) return;
             const cur = window.sorterHeaderCur(), W = window.GridPrimitives.WEIGHT, L = window.SORTER_HEADER_LIMITS;
             const sel = window.sorterHeaderSel, h = window.sorterHeader;
-            const BTN = 'px-2 py-1 rounded border text-[10px] font-bold leading-none transition-colors ';
+            const BTN = 'px-2.5 py-1.5 rounded border text-xs font-bold leading-none transition-colors ';
             const OFF = 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700', ON = 'bg-blue-600 text-white border-blue-500';
             const btn = (label, onclick, title, disabled, on) => '<button type="button" onclick="' + onclick + '" title="' + title + '" aria-label="' + title + '" class="' + BTN + (on ? ON : OFF) + (disabled ? ' opacity-30 pointer-events-none' : '') + '">' + label + '</button>';
-            const label = t => '<span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
+            const label = t => '<span class="text-xs text-slate-400 font-bold uppercase tracking-wider">' + t + '</span>';
             const rowOf = (l, inner) => '<div class="flex items-center justify-between gap-2">' + label(l) + '<div class="flex items-center gap-1 flex-wrap justify-end">' + inner + '</div></div>';
-            const stepper = (l, value, kind) => rowOf(l, btn('&minus;', 'sorterHeaderStep(\'' + kind + '\',-1,event)', 'Decrease (Shift+click: bigger step)') + '<span class="w-12 text-center text-[10px] text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value.toFixed(2) + '</span>' + btn('+', 'sorterHeaderStep(\'' + kind + '\',1,event)', 'Increase (Shift+click: bigger step)'));
+            const stepper = (l, value, kind) => rowOf(l, btn('&minus;', 'sorterHeaderStep(\'' + kind + '\',-1,event)', 'Decrease (Shift+click: bigger step)') + '<span class="w-14 text-center text-xs text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value.toFixed(2) + '</span>' + btn('+', 'sorterHeaderStep(\'' + kind + '\',1,event)', 'Increase (Shift+click: bigger step)'));
             const names = {}; window.SORTER_HEADER_COMPONENTS.forEach(c => { names[c[0]] = c[1]; });
             const preview = '<div id="sorter-hdr-preview">' + window.sorterHeaderHtml(h, sp => sp.component === 'empty' ? '<span style="color:#64748b;font-style:italic">Empty</span>' : '<span>' + names[sp.component] + '</span>', {
                 container: c => ({ cls: sel.c === c ? ' srt-sel-c' : '', attr: ' onclick="sorterHeaderSelect(' + c + ',0,0)"' }),
                 stack: (c, s) => ({ cls: sel.c === c && sel.s === s ? ' srt-sel-s' : '', attr: ' onclick="event.stopPropagation(); sorterHeaderSelect(' + c + ',' + s + ',0)"' }),
                 cell: (c, s, p) => ({ cls: sel.c === c && sel.s === s && sel.p === p ? ' srt-sel-p' : '', attr: ' onclick="event.stopPropagation(); sorterHeaderSelect(' + c + ',' + s + ',' + p + ')"' })
             }) + '</div>';
-            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-[10px] font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
+            const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-xs font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
             const cont = section('border-blue-900/60', '<span class="text-blue-400">Container ' + (cur.c + 1) + ' of ' + h.containers.length + '</span>',
                 stepper('Width ratio', cur.container.widthWeight, 'container') +
                 rowOf('Container', btn('&larr;', 'sorterHeaderMove(\'container\',-1)', 'Move container left', cur.c === 0) + btn('&rarr;', 'sorterHeaderMove(\'container\',1)', 'Move container right', cur.c === h.containers.length - 1) +
-                    btn('Remove', 'sorterHeaderRemove(\'container\')', 'Remove this container') + btn('+ Container', 'sorterHeaderAdd(\'container\')', 'Add a container', h.containers.length >= L.containers)));
+                    btn('Remove Container', 'sorterHeaderRemove(\'container\')', 'Remove this container') + btn('+ Add Container', 'sorterHeaderAdd(\'container\')', 'Add a container', h.containers.length >= L.containers)));
             const stk = section('border-emerald-900/60', '<span class="text-emerald-400">Stack ' + (cur.s + 1) + ' of ' + cur.container.stacks.length + '</span>',
                 stepper('Height ratio', cur.stack.heightWeight, 'stack') +
                 rowOf('Stack', btn('&uarr;', 'sorterHeaderMove(\'stack\',-1)', 'Move stack up', cur.s === 0) + btn('&darr;', 'sorterHeaderMove(\'stack\',1)', 'Move stack down', cur.s === cur.container.stacks.length - 1) +
-                    btn('Remove', 'sorterHeaderRemove(\'stack\')', 'Remove this stack') + btn('+ Stack', 'sorterHeaderAdd(\'stack\')', 'Add a stack', cur.container.stacks.length >= L.stacks)));
+                    btn('Remove Stack', 'sorterHeaderRemove(\'stack\')', 'Remove this stack') + btn('+ Add Stack', 'sorterHeaderAdd(\'stack\')', 'Add a stack', cur.container.stacks.length >= L.stacks)));
             const opts = window.SORTER_HEADER_COMPONENTS.map(c => '<option value="' + c[0] + '"' + (cur.split.component === c[0] ? ' selected' : '') + '>' + c[1] + '</option>').join('');
             const spl = section('border-slate-600', '<span class="text-slate-200">Cell ' + (cur.p + 1) + ' of ' + cur.stack.splits.length + '</span>',
-                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="sorterHeaderSetComponent(this.value)" class="bg-slate-900 text-[11px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + opts + '</select></div>' +
+                '<div class="flex flex-col gap-1">' + label('Shows') + '<select onchange="sorterHeaderSetComponent(this.value)" class="bg-slate-900 text-[13px] text-slate-200 rounded border border-slate-700 w-full outline-none py-1 px-1.5">' + opts + '</select></div>' +
                 stepper('Width ratio', cur.split.widthWeight, 'split') +
                 rowOf('Cell', btn('&larr;', 'sorterHeaderMove(\'split\',-1)', 'Move cell left', cur.p === 0) + btn('&rarr;', 'sorterHeaderMove(\'split\',1)', 'Move cell right', cur.p === cur.stack.splits.length - 1) +
-                    btn('Remove', 'sorterHeaderRemove(\'split\')', 'Remove this cell') + btn('+ Cell', 'sorterHeaderAdd(\'split\')', 'Add a cell', cur.stack.splits.length >= L.splits)) +
+                    btn('Remove Cell', 'sorterHeaderRemove(\'split\')', 'Remove this cell') + btn('+ Add Cell', 'sorterHeaderAdd(\'split\')', 'Add a cell', cur.stack.splits.length >= L.splits)) +
                 rowOf('Horizontal', ['left', 'center', 'right'].map(a => btn(a.charAt(0).toUpperCase() + a.slice(1), 'sorterHeaderSetAlign(\'align\',\'' + a + '\')', 'Align ' + a, false, (cur.split.align || 'left') === a)).join('')) +
                 rowOf('Vertical', [['top', 'Top'], ['middle', 'Middle'], ['bottom', 'Bottom']].map(v => btn(v[1], 'sorterHeaderSetAlign(\'vAlign\',\'' + v[0] + '\')', 'Align ' + v[0], false, (cur.split.vAlign || 'middle') === v[0])).join('')));
-            el.innerHTML = '<div class="text-[9px] text-slate-500 leading-snug">Click a cell to edit it. The title, the action-badge area and the settings gear each appear once; choosing one for a cell swaps it with the cell that had it. One layout for desktop and mobile.</div>' + preview +
-                '<div class="text-[10px] text-slate-300 font-bold">Editing: Container ' + (cur.c + 1) + ' &rsaquo; Stack ' + (cur.s + 1) + ' &rsaquo; Cell ' + (cur.p + 1) + '</div>' +
-                (window.sorterHeaderMsg ? '<div id="sorter-header-msg" class="text-[10px] text-amber-400 font-semibold">' + window.sorterHeaderMsg + '</div>' : '') +
+            el.innerHTML = '<div class="text-xs text-slate-400 leading-snug">Click a cell to edit it. The title, the action-badge area and the settings gear each appear once; choosing one for a cell swaps it with the cell that had it. One layout for desktop and mobile.</div>' + preview +
+                '<div class="text-[13px] text-white font-bold bg-blue-900/30 border border-blue-800 rounded px-2 py-1.5"><span class="text-blue-300 text-xs uppercase tracking-wider">Selected:</span> Container ' + (cur.c + 1) + ' &rsaquo; Stack ' + (cur.s + 1) + ' &rsaquo; Cell ' + (cur.p + 1) + '</div>' +
+                (window.sorterHeaderMsg ? '<div id="sorter-header-msg" class="text-xs text-amber-400 font-semibold">' + window.sorterHeaderMsg + '</div>' : '') +
                 cont + stk + spl + '<div>' + btn('Reset header to default', 'sorterHeaderReset()', 'Reset the header layout') + '</div>';
         };
         window.renderSorterHeader();
+        // v10.12.01: Body / Header tab (view state only: not stored, nothing else reads it)
+        window.sorterEditorTab = 'body';
+        window.setSorterEditorTab = function (tab) {
+            tab = tab === 'header' ? 'header' : 'body';
+            window.sorterEditorTab = tab;
+            const on = 'bg-blue-600 text-white border-blue-500', off = 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700';
+            ['body', 'header'].forEach(function (t) {
+                const panel = document.getElementById('sorter-tab-' + t), b = document.getElementById('sorter-tab-btn-' + t);
+                if (panel) panel.classList.toggle('hidden', t !== tab);
+                if (b) {
+                    b.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+                    (on + ' ' + off).split(' ').forEach(function (k) { b.classList.remove(k); });
+                    (t === tab ? on : off).split(' ').forEach(function (k) { b.classList.add(k); });
+                }
+            });
+        };
         window.openSorterSettings = function () {
             const modal = document.getElementById('sorter-settings-modal');
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 window.renderCartConfigurator();
+                window.setSorterEditorTab(window.sorterEditorTab);
                 if (typeof window.initDraggableModal === 'function') {
                     window.initDraggableModal('sorter-settings-modal', 'sorter-settings-header');
                 }
@@ -27142,7 +27190,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.12.00';
+            const APP_VERSION = 'v10.12.05';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27438,7 +27486,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.12.00';
+            const APP_VERSION = 'v10.12.05';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -29480,7 +29528,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.12.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.12.05 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -30146,7 +30194,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.12.00',
+                version: 'v10.12.05',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -30223,7 +30271,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.12.00';
+            const APP_VERSION = 'v10.12.05';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
