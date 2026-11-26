@@ -1,4 +1,4 @@
-<!-- Retest Prototype v10.13.02 | Version badge shows page + script version; test build support -->
+<!-- Retest Prototype v10.14.00 | Condo quick path: floors of travel refrigerant for any condo -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -35,7 +35,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>TEST Changeout Lookup v10.13.02</title>
+    <title>TEST Changeout Lookup v10.14.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -754,7 +754,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.13.02</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.14.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -1721,7 +1721,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.13.02</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.14.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -4070,6 +4070,9 @@
                 condenserFloor: null,
                 verticalTravel: 0,
                 floorAllowance: 0,
+                floorAllowanceManual: false,
+                condenserLocation: null,
+                topFloor: null,
                 condoRequired: false,
                 craneFee: 0,
                 craneSource: 'none',
@@ -4086,6 +4089,12 @@
             if (!window.proposalAppState.activeSite) {
                 window.proposalAppState.activeSite = createDefaultActiveSite();
             }
+
+            // v10.14.00: a custom condo saved before the quick path had its $ typed by hand: keep it as MANUAL, so no saved quote changes
+            // (a quick-path site always has a condenser location; an older one has none, even after defaults were filled in)
+            const a = window.proposalAppState.activeSite;
+            if (a.floorAllowanceManual === undefined) a.floorAllowanceManual = false;
+            if ((a.profileId === 'custom' || a.isCustom) && !a.condenserLocation && Number(a.floorAllowance) > 0) a.floorAllowanceManual = true;
 
             return window.proposalAppState.activeSite;
         }
@@ -4302,17 +4311,27 @@
                 html += `<input type="hidden" id="setup-floor-val" value="${selectedFloor || ''}">`;
                 html += `<div class="mt-2 text-xs text-slate-500">Condenser Location: Roof / Floor 11</div></div>`;
             } else if (val === 'custom') {
+                // v10.14.00 (no. 13): condo quick path: two questions, refrigerant from the floors of travel (still editable)
                 const active = window.proposalAppState.activeSite;
+                const wasCustom = active.profileId === 'custom';
+                const loc = wasCustom ? (active.condenserLocation || (active.condenserFloor ? 'floor' : '')) : '';
+                const num = v => (Number(v) >= 1 ? String(Math.round(Number(v))) : '');
+                const btn = (id, key, label) => `<button type="button" id="${id}" onclick="setQuickCondenserLocation('${key}')" class="setup-cond-btn flex-1 px-2 py-2 rounded border text-sm font-bold transition-colors ${loc === key ? 'bg-blue-600 border-blue-400 text-white' : 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600'}" data-loc="${key}">${label}</button>`;
                 html += `
-        <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Job Name</label><input type="text" id="setup-custom-name" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${active.name === 'Standard' ? '' : active.name}"></div>
-        <div class="flex gap-4">
-            <div class="flex-1"><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Equip Floor</label><input type="number" id="setup-custom-efloor" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${active.equipmentFloor || ''}" oninput="updateSiteSetupPreview()"></div>
-            <div class="flex-1"><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Cond Floor</label><input type="number" id="setup-custom-cfloor" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${active.condenserFloor || ''}" oninput="updateSiteSetupPreview()"></div>
+        <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Job Name (optional)</label><input type="text" id="setup-custom-name" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${wasCustom && active.name !== 'Standard' ? window.escapePage2HeaderHtml ? window.escapePage2HeaderHtml(active.name) : '' : ''}"></div>
+        <div class="mt-2"><label class="block text-sm font-bold text-slate-200 mb-1">Where are the condensers?</label>
+            <div class="flex gap-2">${btn('setup-cond-roof', 'roof', 'Roof')}${btn('setup-cond-ground', 'ground', 'Ground')}${btn('setup-cond-floor', 'floor', 'On a floor')}</div>
+            <input type="hidden" id="setup-cond-loc" value="${loc}">
         </div>
-        <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Manual Floor Allowance ($)</label><input type="number" id="setup-custom-allowance" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${active.floorAllowance || ''}" oninput="updateSiteSetupPreview()"></div>
+        <div id="setup-row-top" class="${loc === 'roof' ? '' : 'hidden'}"><label class="block text-sm font-bold text-slate-200 mb-1">Top floor of the building?</label><input type="number" inputmode="numeric" min="1" id="setup-custom-top" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-2 text-white text-base" value="${wasCustom ? num(active.topFloor) : ''}" oninput="updateSiteSetupPreview()"></div>
+        <div id="setup-row-cfloor" class="${loc === 'floor' ? '' : 'hidden'}"><label class="block text-sm font-bold text-slate-200 mb-1">Condenser floor?</label><input type="number" inputmode="numeric" min="1" id="setup-custom-cfloor" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-2 text-white text-base" value="${wasCustom && loc === 'floor' ? num(active.condenserFloor) : ''}" oninput="updateSiteSetupPreview()"></div>
+        <div><label class="block text-sm font-bold text-slate-200 mb-1">What floor is the unit on?</label><input type="number" inputmode="numeric" min="1" id="setup-custom-efloor" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-2 text-white text-base" value="${wasCustom ? num(active.equipmentFloor) : ''}" oninput="updateSiteSetupPreview()"></div>
+        <div id="setup-travel-result" class="text-xs text-emerald-300 font-bold"></div>
+        <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1">Refrigerant charge ($)</label><input type="number" inputmode="decimal" min="0" id="setup-custom-allowance" data-manual="${wasCustom && active.floorAllowanceManual ? '1' : '0'}" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-sm" value="${wasCustom && Number(active.floorAllowance) > 0 ? Number(active.floorAllowance) : ''}" oninput="this.dataset.manual='1'; updateSiteSetupPreview()">
+            <div id="setup-amount-mode" class="text-[11px] text-slate-400 mt-1"></div></div>
         <div class="flex items-center gap-4 mt-2">
-            <label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="setup-custom-condo" ${active.condoRequired ? 'checked' : ''} onchange="updateSiteSetupPreview()"> Condo Required</label>
-            <label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="setup-custom-crane" ${active.craneFee > 0 ? 'checked' : ''} onchange="updateSiteSetupPreview()"> Crane Required</label>
+            <label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="setup-custom-condo" ${!wasCustom || active.condoRequired ? 'checked' : ''} onchange="updateSiteSetupPreview()"> Condo install ($225)</label>
+            <label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="setup-custom-crane" ${active.craneFee > 0 ? 'checked' : ''} onchange="updateSiteSetupPreview()"> Crane required</label>
         </div>
         `;
             }
@@ -4357,11 +4376,63 @@
             `;
                 }
             } else if (val === 'custom') {
-                content = '<div class="text-slate-400 italic">Custom job properties will be applied directly to pricing.</div>';
+                const q = readQuickCondoForm();
+                const res = document.getElementById('setup-travel-result');
+                const mode = document.getElementById('setup-amount-mode');
+                const box = document.getElementById('setup-custom-allowance');
+                if (box && !q.manual) box.value = q.calc ? String(q.calc.fee) : '';
+                if (res) {
+                    if (!q.calc) res.textContent = 'Answer both questions to work out the refrigerant (or type an amount below).';
+                    else res.textContent = q.calc.travel + (q.calc.travel === 1 ? ' floor' : ' floors') + ' of travel \u2192 Additional refrigerant $' + q.calc.fee + ' (baked into the price)'
+                        + (q.manual ? ' \u00b7 Manual amount used: $' + q.amount : '');
+                }
+                if (mode) {
+                    mode.innerHTML = q.manual
+                        ? 'Manual \u00b7 <button type="button" id="setup-use-computed" class="underline text-blue-300" onclick="useComputedFloorCharge()">Use computed' + (q.calc ? ' ($' + q.calc.fee + ')' : '') + '</button>'
+                        : 'Computed';
+                }
+                content = `
+            <div class="flex justify-between"><span>Condensers:</span> <span class="font-bold text-white">${q.condenserFloor ? (q.loc === 'roof' ? 'Roof = floor ' + q.condenserFloor : q.loc === 'ground' ? 'Ground = floor 1' : 'Floor ' + q.condenserFloor) : '-'}</span></div>
+            <div class="flex justify-between"><span>Unit floor:</span> <span class="font-bold text-white">${q.unit || '-'}</span></div>
+            <div class="flex justify-between"><span>Additional Refrigerant Charge:</span> <span class="font-bold text-emerald-400">+$${q.amount}${q.manual ? ' (manual)' : ''}</span></div>
+            <div class="flex justify-between"><span>Condo Install:</span> <span class="font-bold ${q.condo ? 'text-amber-400' : 'text-slate-500'}">${q.condo ? '+$225' : 'No'}</span></div>`;
             }
 
             summaryContent.innerHTML = content;
         }
+
+        // v10.14.00 (no. 13): read the condo quick-path answers. loc: roof | ground | floor
+        function readQuickCondoForm() {
+            const v = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+            const n = id => { const x = parseInt(v(id), 10); return x >= 1 ? x : null; };
+            const loc = v('setup-cond-loc');
+            const top = n('setup-custom-top');
+            const condenserFloor = loc === 'roof' ? (top ? top + 1 : null) : loc === 'ground' ? 1 : loc === 'floor' ? n('setup-custom-cfloor') : null;
+            const unit = n('setup-custom-efloor');
+            const calc = condenserFloor && unit ? floorsOfTravelCharge(condenserFloor, unit) : null;
+            const box = document.getElementById('setup-custom-allowance');
+            const manual = !!(box && box.dataset.manual === '1' && String(box.value).trim() !== '');
+            const amount = manual ? (Math.max(0, parseFloat(box.value)) || 0) : (calc ? calc.fee : 0);
+            const condoEl = document.getElementById('setup-custom-condo');
+            return { loc: loc || null, top: top, condenserFloor: condenserFloor, unit: unit, calc: calc, manual: manual, amount: amount, condo: !!(condoEl && condoEl.checked) };
+        }
+        window.setQuickCondenserLocation = function (loc) {
+            const hidden = document.getElementById('setup-cond-loc');
+            if (hidden) hidden.value = loc;
+            document.querySelectorAll('.setup-cond-btn').forEach(b => {
+                const on = b.dataset.loc === loc;
+                b.classList.toggle('bg-blue-600', on); b.classList.toggle('border-blue-400', on); b.classList.toggle('text-white', on);
+                b.classList.toggle('bg-slate-700', !on); b.classList.toggle('border-slate-600', !on);
+            });
+            const top = document.getElementById('setup-row-top'); if (top) top.classList.toggle('hidden', loc !== 'roof');
+            const cf = document.getElementById('setup-row-cfloor'); if (cf) cf.classList.toggle('hidden', loc !== 'floor');
+            updateSiteSetupPreview();
+        };
+        window.useComputedFloorCharge = function () {
+            const box = document.getElementById('setup-custom-allowance');
+            if (box) box.dataset.manual = '0';
+            updateSiteSetupPreview();
+        };
 
         function confirmSiteSetup() {
             const select = document.getElementById('site-profile-select');
@@ -4379,6 +4450,9 @@
                 active.condenserFloor = null;
                 active.verticalTravel = 0;
                 active.floorAllowance = 0;
+                active.floorAllowanceManual = false;
+                active.condenserLocation = null;
+                active.topFloor = null;
                 active.condoRequired = false;
                 if (active.craneSource === 'profile-required') {
                     active.craneFee = 0;
@@ -4399,6 +4473,9 @@
                 active.condenserFloor = 11;
                 active.verticalTravel = 11 - f;
                 active.floorAllowance = getSiteFloorAllowance(BUILT_IN_SITE_PROFILES.oceana, f);
+                active.floorAllowanceManual = false;
+                active.condenserLocation = 'roof';
+                active.topFloor = 10;
                 active.condoRequired = true;
 
                 if (active.craneFee === 0) {
@@ -4410,15 +4487,15 @@
                 active.profileId = 'custom';
                 active.name = document.getElementById('setup-custom-name').value || 'Custom Job';
                 active.isCustom = true;
-                active.equipmentFloor = parseInt(document.getElementById('setup-custom-efloor').value) || null;
-                active.condenserFloor = parseInt(document.getElementById('setup-custom-cfloor').value) || null;
-                if (active.equipmentFloor && active.condenserFloor) {
-                    active.verticalTravel = Math.abs(active.condenserFloor - active.equipmentFloor);
-                } else {
-                    active.verticalTravel = 0;
-                }
-                active.floorAllowance = parseFloat(document.getElementById('setup-custom-allowance').value) || 0;
-                active.condoRequired = document.getElementById('setup-custom-condo').checked;
+                const q = readQuickCondoForm();      // v10.14.00 (no. 13)
+                active.condenserLocation = q.loc;
+                active.topFloor = q.loc === 'roof' ? q.top : null;
+                active.equipmentFloor = q.unit;
+                active.condenserFloor = q.condenserFloor;
+                active.verticalTravel = q.calc ? q.calc.travel : 0;
+                active.floorAllowance = q.amount;
+                active.floorAllowanceManual = q.manual;
+                active.condoRequired = q.condo;
 
                 const needCrane = document.getElementById('setup-custom-crane').checked;
                 if (needCrane && active.craneFee === 0) {
@@ -4521,6 +4598,7 @@
                     condenserFloor: active.condenserFloor,
                     verticalTravel: active.verticalTravel,
                     amount: active.floorAllowance,
+                    manual: !!active.floorAllowanceManual,      // v10.14.00
                     bakedIn: true
                 };
 
@@ -6665,7 +6743,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.13.02',
+                appVersion: 'v10.14.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6859,7 +6937,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.13.02_${stamp}.json`;
+                `platts_config_v10.14.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -12534,7 +12612,7 @@
                 if ((hasManualRefrig || hasOceanaRefrig) && !addedIcons.has('arc')) {
                     let tooltip = "Additional Refrigerant Charge";
                     if (hasManualRefrig && hasOceanaRefrig) tooltip = "Additional Refrigerant Charges";
-                    else if (hasOceanaRefrig) tooltip = "Oceana Additional Refrigerant Charge";
+                    else if (hasOceanaRefrig) tooltip = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : "Oceana Additional Refrigerant Charge";      // v10.14.00
 
                     emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">❄️</span></span>`);
                     addedIcons.add('arc');
@@ -17184,7 +17262,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.13.02',
+                appVersion: 'v10.14.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17193,7 +17271,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.13.02_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.14.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17212,7 +17290,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.13.02',
+                appVersion: 'v10.14.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17221,7 +17299,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.13.02_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.14.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17842,6 +17920,23 @@
             const tier = profile.floorPricingTiers.find(t => travel >= t.minTravel && travel <= t.maxTravel);
             return tier ? tier.fee : 0;
         }
+
+        // v10.14.00 (no. 13): any condo uses the same floors-of-travel tiers as Oceana (1-3 $232, 4-6 $348, 7+ $464; same floor $0).
+        // condenserFloor: roof = top floor + 1, ground = 1. Returns { travel, fee } or null when a floor is missing.
+        function floorsOfTravelCharge(condenserFloor, unitFloor) {
+            const c = Number(condenserFloor), u = Number(unitFloor);
+            if (!(c >= 1) || !(u >= 1) || !Number.isFinite(c) || !Number.isFinite(u)) return null;
+            const travel = Math.abs(Math.round(c) - Math.round(u));
+            const tier = BUILT_IN_SITE_PROFILES.oceana.floorPricingTiers.find(t => travel >= t.minTravel && travel <= t.maxTravel);
+            return { travel: travel, fee: tier ? tier.fee : 0 };
+        }
+        window.floorsOfTravelCharge = floorsOfTravelCharge;
+        // label of a baked-in floor charge: Oceana keeps its name; other condos say the floors of travel; a typed amount says (manual)
+        window.floorChargeLabel = function (sfa) {
+            if (!sfa || sfa.profileId === 'oceana') return 'Oceana Additional Refrigerant Charge';
+            const t = Number(sfa.verticalTravel);
+            return 'Additional Refrigerant Charge' + (t >= 1 ? ' (' + t + (t === 1 ? ' floor' : ' floors') + ' of travel)' : '') + (sfa.manual ? ' (manual)' : '');
+        };
 
         function formatOrdinal(n) {
             const s = ["th", "st", "nd", "rd"], v = n % 100;
@@ -19387,7 +19482,8 @@
 
             if (sp.siteFloorAllowance && sp.siteFloorAllowance.amount > 0 && sp.siteFloorAllowance.bakedIn) {
                 stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Oceana Additional Refrigerant Charge Baked In">❄️</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.siteFloorAllowance.amount.toLocaleString()}</span></div>`;
-                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>❄️ Oceana Additional Refrigerant Charge</span><span>+$${sp.siteFloorAllowance.amount.toLocaleString()} (Baked In)</span></div>`;
+                const refrigLabel = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge';      // v10.14.00
+                breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>❄️ ${refrigLabel}</span><span>+$${sp.siteFloorAllowance.amount.toLocaleString()} (Baked In)</span></div>`;
             }
 
             if (isAttic) {
@@ -22905,7 +23001,7 @@
                         onchange="renderSiteSetupFields()">
                         <option value="Standard">Standard / No Site Profile</option>
                         <option value="oceana">Oceana</option>
-                        <option value="custom">Custom Condo Job (Active Job Only)</option>
+                        <option value="custom">Other Condo (floors)</option>
                     </select>
                 </div>
 
@@ -26923,6 +27019,7 @@
                     }
 
                     window.proposalAppState = candidateProposalAppState;
+                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // v10.14.00: older custom condo $ -> manual
                     window.systemScratchpads = candidateSystemScratchpads;
                     selectedProposalRows = candidateSelectedProposalRows;
                     redrawBuilder();
@@ -27430,7 +27527,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.13.02';
+            const APP_VERSION = 'v10.14.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27563,6 +27660,7 @@
                     ['closeSiteSetupModal', 'closePriceModal', 'closeReceiptModal'].forEach(n => { if (typeof window[n] === 'function') window[n](); });
                     currentBasePrice = 0; currentSystemObj = null;
                     window.proposalAppState = norm.state;
+                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // v10.14.00: older custom condo $ -> manual
                     window.systemScratchpads = JSON.parse(JSON.stringify(d.systemScratchpads));
                     selectedProposalRows = d.selectedProposalRows.slice();
                     redraw();
@@ -27726,7 +27824,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.13.02';
+            const APP_VERSION = 'v10.14.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -27817,7 +27915,7 @@
                 if (sp.condo && sp.condo.required && !sp.condo.includedInBase && Number(sp.condo.charge) > 0) { baked += Number(sp.condo.charge); add('baked', 'condoCharge', 'Condo Install', Number(sp.condo.charge)); }
                 if (sp.siteFloorAllowance && sp.siteFloorAllowance.bakedIn && Number(sp.siteFloorAllowance.amount) > 0) {
                     baked += Number(sp.siteFloorAllowance.amount);
-                    add('baked', 'floorAllowance', 'Oceana Additional Refrigerant Charge', Number(sp.siteFloorAllowance.amount), { profileId: sp.siteFloorAllowance.profileId, floor: sp.siteFloorAllowance.equipmentFloor });
+                    add('baked', 'floorAllowance', typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge', Number(sp.siteFloorAllowance.amount), { profileId: sp.siteFloorAllowance.profileId, floor: sp.siteFloorAllowance.equipmentFloor, condenserFloor: sp.siteFloorAllowance.condenserFloor, manual: !!sp.siteFloorAllowance.manual });      // v10.14.00
                 }
                 Object.entries(sp.deductions || {}).forEach(([name, price]) => {
                     if (removed(name)) return;
@@ -27944,6 +28042,8 @@
                     case 'condoCharge': return enhancementPrice('Condo Install');
                     case 'floorAllowance':
                         if (line.profileId === 'oceana' && typeof BUILT_IN_SITE_PROFILES !== 'undefined' && typeof getSiteFloorAllowance === 'function' && line.floor !== null && line.floor !== undefined) return getSiteFloorAllowance(BUILT_IN_SITE_PROFILES.oceana, line.floor);
+                        // v10.14.00: other condos with computed (not typed) amounts follow the same tiers
+                        if (line.profileId === 'custom' && !line.manual && typeof window.floorsOfTravelCharge === 'function') { const c = window.floorsOfTravelCharge(line.condenserFloor, line.floor); return c ? c.fee : null; }
                         return null;
                     case 'coastalOverride': return line.override - ctx.currentBase;
                     default: return null;                       // travel and refrigerant are entered per job: no current source
@@ -29769,7 +29869,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.13.02 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.14.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -30435,7 +30535,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.13.02',
+                version: 'v10.14.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -30512,7 +30612,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.13.02';
+            const APP_VERSION = 'v10.14.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
