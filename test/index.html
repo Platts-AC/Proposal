@@ -1,4 +1,4 @@
-<!-- Retest Prototype v10.14.00 | Condo quick path: floors of travel refrigerant for any condo -->
+<!-- Changeout Lookup v10.15.00 · 2026-11-27 04:03 | Price Book page: one coating price per size, real furnace tons, systems kept by Price Book ID, add-on prices from the book -->
 <!doctype html>
 <html lang="en" style="overscroll-behavior: none;">
 
@@ -35,7 +35,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>TEST Changeout Lookup v10.14.00</title>
+    <title>TEST Changeout Lookup v10.15.00</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -336,7 +336,7 @@
             /* text-indigo-300 */
         }
 
-        /* Zone A Settings Drawer Light Mode Overrides (v02.34 Fix) */
+        /* Zone A Settings Drawer Light Mode Overrides */
         body.light-theme #settingsDrawer,
         body.light-theme #sidebarContent,
         body.light-theme #sidebarContent .bg-slate-900,
@@ -478,7 +478,7 @@
                 platts-config-diff-breathe 1.8s ease-in-out infinite;
         }
 
-        /* === Proposal Builder custom grid (v10.01.4; summary/actions split and edit preview v10.01.5; protected settings gear v10.01.6; bands and ratio geometry v10.01.7; cell fill and injector components v10.01.8; stable conditional controls v10.01.09; component appearance, single-line controls, editor appearance v10.02.00) ===
+        /* === Proposal Builder custom grid (summary/actions split and edit preview; protected settings gear; bands and ratio geometry; cell fill and injector components; stable conditional controls; component appearance, single-line controls, editor appearance) ===
            CSS here is limited to shell safety, minimum control sizes, wrapping and touch use. The saved
            desktop/mobile layouts decide the structure and the flex ratios; nothing below redefines it with media rules. */
         #pb-sum-body { flex: 1 1 100%; min-width: 0; display: flex; flex-direction: column; text-transform: uppercase; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #64748b; }
@@ -575,11 +575,11 @@
         .pb-editing .pb-slot.pb-move-replace { outline: 2px dashed #f59e0b; background: rgba(245, 158, 11, 0.10); }
         .pb-editing .pb-host.pb-move-off { opacity: 0.3; }
 
-        /* ===== v10.02.00: single-line controls ===== */
+        /* ===== single-line controls ===== */
         /* Buttons and links stay on one line (component wrap: never). A narrow cell shrinks Auto text first (data-pb-fit, set by the layout engine), then
            clips the label; it never wraps into a taller row. Selects and inputs clip by themselves. */
         .pb-slot[data-wrap="never"] > button, .pb-slot[data-wrap="never"] > a { white-space: nowrap; overflow: hidden; }
-        /* === Page 2 header region (v10.05.00): the original header controls live in Proposal Builder cells; sizes are plain CSS defaults so the Builder appearance layer can act on them === */
+        /* === Page 2 header region: the original header controls live in Proposal Builder cells; sizes are plain CSS defaults so the Builder appearance layer can act on them === */
         #pb-hdr-wrap { width: 100%; }
         #pb-hdr-host { padding: 8px; box-sizing: border-box; }
         [data-pb-hdr-btn] { flex: 0 0 auto; width: 32px; height: 32px; }
@@ -588,7 +588,7 @@
         [data-pb-component="header:versionBadge"] { font-size: 11px; white-space: nowrap; }
         [data-pb-component="header:siteBadge"] { white-space: nowrap; }
         [data-pb-component="header:text1"], [data-pb-component="header:text2"] { font-size: 12px; max-width: 100%; overflow-wrap: anywhere; }
-        /* v10.05.02: header geometry. A stack or cell never shrinks below what its content needs, so a small ratio stops shrinking instead of letting the content protrude; the editor preview uses the same sizes as the runtime. */
+        /* header geometry. A stack or cell never shrinks below what its content needs, so a small ratio stops shrinking instead of letting the content protrude; the editor preview uses the same sizes as the runtime. */
         #pb-hdr-host .pb-stack { min-height: auto; }
         #pb-hdr-host .pb-slot { min-height: auto; min-width: auto; }
         .pb-editing #pb-hdr-host .pb-slot { min-height: auto; }
@@ -602,7 +602,7 @@
         .pb-slot > [data-pb-fit]:not([data-pb-is]):not([data-pb-ifine0]) :is(svg, i[data-lucide]) { width: calc(14px * var(--pb-fit, 1)); height: calc(14px * var(--pb-fit, 1)); }
         .pb-editing .pb-slot > [data-pb-over] { outline: 2px solid #f43f5e; outline-offset: -2px; }
 
-        /* ===== v10.02.00: component appearance (only slots whose component has a saved appearance carry data-pb-styled) ===== */
+        /* ===== component appearance (only slots whose component has a saved appearance carry data-pb-styled) ===== */
         /* The slot becomes an inline-size container, so cqi below is a share of the CELL width. Presets are bounded by a sane minimum and
            maximum and, when the surface has an explicit height (--pb-ch), by the cell height too: a wide but short cell never gets huge text.
            The fine step adds a relative 0.5 px per click on top of the responsive size, so "Large -1" stays "Large minus one step". */
@@ -642,7 +642,7 @@
         /* message banners: density */
         .pb-region[data-pb-dn="compact"] .pb-banner { padding: 2px 6px; margin-bottom: 3px; }
         .pb-region[data-pb-dn="roomy"] .pb-banner { padding: 9px 14px; margin-bottom: 8px; }
-        /* nudge (v10.02.02): a small VISUAL offset from the alignment anchor. It is a transform, so it never changes the width, height or margins of the
+        /* nudge: a small VISUAL offset from the alignment anchor. It is a transform, so it never changes the width, height or margins of the
            component, its cell, its stack or its siblings: the grid geometry stays authoritative. The same applies to the text and icon sub-targets. */
         .pb-slot[data-pb-styled] > [data-pb-nudge] { transform: translate(var(--pb-nx, 0px), var(--pb-ny, 0px)); }
         /* The text and the icon each move by their anchor translation (--pb-tax / --pb-tay, --pb-iax / --pb-iay: measured by the engine so the part
@@ -680,7 +680,7 @@
         #pb-host .pb-slot[data-pb-styled] > :is([data-pb-ipos="top"], [data-pb-ipos="bottom"])[data-pb-ta="left"], .pb-band .pb-slot[data-pb-styled] > :is([data-pb-ipos="top"], [data-pb-ipos="bottom"])[data-pb-ta="left"] { align-items: flex-start; }
         #pb-host .pb-slot[data-pb-styled] > :is([data-pb-ipos="top"], [data-pb-ipos="bottom"])[data-pb-ta="right"], .pb-band .pb-slot[data-pb-styled] > :is([data-pb-ipos="top"], [data-pb-ipos="bottom"])[data-pb-ta="right"] { align-items: flex-end; }
 
-        /* ===== v10.02.00: editor appearance (variables are only set when the person changed them; defaults equal the original sizes) ===== */
+        /* ===== editor appearance (variables are only set when the person changed them; defaults equal the original sizes) ===== */
         #proposal-bar-settings-panel .pbe-sect { font-size: var(--pbe-section, 9px); }
         #proposal-bar-settings-panel .pbe-label { font-size: var(--pbe-label, 12px); }
         #proposal-bar-settings-panel .pbe-readout { font-size: var(--pbe-readout, 12px); }
@@ -689,21 +689,21 @@
         #proposal-bar-settings-panel[data-pbe-density="compact"] .pbe-box { padding: 4px; }
         #proposal-bar-settings-panel[data-pbe-density="roomy"] .pbe-root > * + * { margin-top: 20px; }
         #proposal-bar-settings-panel[data-pbe-density="roomy"] .pbe-box { padding: 14px; }
-        /* Systems Sorter body (v10.07.00; text overflow v10.07.01). The row skeleton is built by window.sorterBodyHtml for the real rows AND for the Sorter settings preview, so these rules are the single
+        /* Systems Sorter body (text overflow). The row skeleton is built by window.sorterBodyHtml for the real rows AND for the Sorter settings preview, so these rules are the single
            geometry source. Width stays a pure ratio (min-width 0, clipped, a long word breaks only in a cell wide enough for that); height never shrinks below the content (nothing is clipped vertically, a row grows). */
         .srt-clip { overflow: hidden; min-width: 0; min-height: 0; }
         @supports (overflow: clip) { .srt-clip { overflow-x: clip; overflow-y: visible; } }
         .srt-cell { container: srt-cell / inline-size; }
-        /* v10.12.02 fixed geometry: Master Row Height is the row's height (not a minimum) and CONTENT DOES NOT RESIZE THE GRID. Body, containers and stacks may shrink to their share (min-height 0, so no content
+        /* fixed geometry: Master Row Height is the row's height (not a minimum) and CONTENT DOES NOT RESIZE THE GRID. Body, containers and stacks may shrink to their share (min-height 0, so no content
            floor defeats the weights); each cell clips its own content in both directions (overflow: clip does not make a scroll container, no scrolling and no overlap with a neighbour). */
         .srt-body, .srt-container, .srt-stack { min-height: 0; }
         .srt-cell { min-height: 0; overflow: hidden; }
-        /* v10.12.05 Icons/Flags: the SVG flags (Salt Shield, Labor Warranty) were fixed 20 / 16 px while the emoji flags scale with the split's Font Size, so the shield looked small at any size above ~13 px. They are em-sized now (1.25em / 1.2em boxes; the artwork fills ~2/3 x 5/6 of its box, so the ink is about 1.04em tall, like the emoji's ~1em), so one Font Size scales every flag together. */
+        /* Icons/Flags: the SVG flags (Salt Shield, Labor Warranty) were fixed 20 / 16 px while the emoji flags scale with the split's Font Size, so the shield looked small at any size above ~13 px. They are em-sized now (1.25em / 1.2em boxes; the artwork fills ~2/3 x 5/6 of its box, so the ink is about 1.04em tall, like the emoji's ~1em), so one Font Size scales every flag together. */
         .srt-flag-svg { width: 1.25em; height: 1.25em; flex: none; }
         .srt-flag-lucide { width: 1.2em; height: 1.2em; flex: none; }
         @supports (overflow: clip) { .srt-cell { overflow: clip; } }
-        /* v10.07.01: a word wider than its cell breaks inside the cell only when the cell is at least 8em wide (a 40-letter value then takes about five lines); in a narrower cell the
-           word stays whole and is clipped at the cell edge (as before v10.07.00) instead of wrapping letter by letter into a tall column. Ordinary text wraps at spaces in every cell.
+        /* a word wider than its cell breaks inside the cell only when the cell is at least 8em wide (a 40-letter value then takes about five lines); in a narrower cell the
+           word stays whole and is clipped at the cell edge (as before) instead of wrapping letter by letter into a tall column. Ordinary text wraps at spaces in every cell.
            The cell is its own query container, so the em is the cell's own text size; the rule is on its content and is inherited by everything inside it. */
         @container srt-cell (min-width: 8em) { .srt-cell > * { overflow-wrap: anywhere; } }
         /* editor-only marks on the Sorter settings preview: outlines, never a size */
@@ -715,7 +715,7 @@
         #sorter-preview .srt-sel-p { outline: 2px solid #60a5fa; background: rgba(59, 130, 246, 0.18); }
         #sorter-preview .srt-ph { color: #cbd5e1; }
         #sorter-preview .srt-ph-off { color: #64748b; font-style: italic; }
-        /* Sorter header (v10.12.00): a cell never shrinks below its component, so nothing is clipped; the same marks as the body preview on the editor's header preview */
+        /* Sorter header: a cell never shrinks below its component, so nothing is clipped; the same marks as the body preview on the editor's header preview */
         .srt-hcell { min-width: min-content; }
         #sorter-hdr-preview { background: #0f172a; padding: 6px; border: 1px solid #334155; border-radius: 6px; }
         #sorter-hdr-preview .srt-hcont { outline: 1px dashed #475569; outline-offset: -1px; cursor: pointer; }
@@ -754,7 +754,7 @@
                     Pricing Beta</h1>
                 <div class="flex items-center gap-1.5 pl-1 mt-1">
                     <span id="navbarVerBadge"
-                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.14.00</span>
+                        class="bg-blue-600/30 text-blue-300 text-[11px] font-extrabold px-2 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)]">v10.15.00</span>
                     <span id="master-match-counter"
                         class="bg-emerald-900/40 text-emerald-400 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/50 tracking-wider">...</span>
                 </div>
@@ -864,7 +864,7 @@
                     </div>
                     <span class="text-xs font-medium text-slate-300">Show Coastal Price Difference</span>
                 </label>
-                <!-- Include Crossovers (v10.13.00): Straight Cool also shows heat-pump CROSSOVER rows -->
+                <!-- Include Crossovers: Straight Cool also shows heat-pump CROSSOVER rows -->
                 <label for="chkIncludeCrossovers" class="flex items-center gap-1.5 cursor-pointer select-none ml-2"
                     title="When System Type is Straight Cool, also show crossover heat pumps (Application: CROSSOVER)">
                     <div class="relative">
@@ -1625,7 +1625,7 @@
                     </div>
                 </div>
 
-                <!-- Design Profiles (v10.02.04): the portable design / appearance profile system. Separate from the Layout Vault above and from Proposal Note Presets. -->
+                <!-- Design Profiles: the portable design / appearance profile system. Separate from the Layout Vault above and from Proposal Note Presets. -->
                 <div id="design-profiles-entry" class="space-y-2 border-t border-slate-100 pt-4">
                     <div class="flex items-center gap-1.5">
                         <i data-lucide="palette" class="w-4 h-4 text-slate-500"></i>
@@ -1697,7 +1697,7 @@
             <!-- === ZONE B HEADER INNER (3-ZONE GRID) === -->
             <!-- === ZONE B HEADER INNER (3-ZONE GRID) === -->
             <div id="zone-b-header-inner" class="w-full mx-auto">
-                <!-- v10.05.00: the Page 2 header is a Proposal Builder region (host built by the Builder); the legacy shared-grid target below stays empty and hidden -->
+                <!-- the Page 2 header is a Proposal Builder region (host built by the Builder); the legacy shared-grid target below stays empty and hidden -->
                 <div id="pb-hdr-wrap" class="w-full"></div>
                 <div id="page2-header-layout" class="w-full"></div>
 
@@ -1721,7 +1721,7 @@
                                     <span id="page2-version-badge" data-pb-component="header:versionBadge"
                                         class="bg-blue-900/40 border border-blue-500/50 text-blue-400 font-extrabold px-1.5 py-0.5 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] uppercase tracking-widest backdrop-blur-sm"
                                         ondblclick="window.handleConfigVersionBadgeDoubleClick(event)"
-                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.14.00</span>
+                                        title="Double-click: Diff Mode · Shift+Double-click: Export Configuration">v10.15.00</span>
                                     <div id="global-site-badge" data-page2-site-badge="true" data-pb-component="header:siteBadge"
                                         class="hidden items-center bg-blue-900/30 border border-blue-500/50 rounded px-2 py-1 cursor-pointer hover:bg-blue-800/40 transition-colors whitespace-nowrap"
                                         onclick="openSiteSetupModal('badge')">
@@ -2044,7 +2044,7 @@
                 </div>
             </details>
 
-            <!-- CUSTOM / STANDALONE PROPOSAL (v10.03.00): shown only when the Proposal Type is Custom; the item list is built by the Custom Proposal panel script -->
+            <!-- CUSTOM / STANDALONE PROPOSAL: shown only when the Proposal Type is Custom; the item list is built by the Custom Proposal panel script -->
             <details id="custom-proposal-builder" style="display:none" open
                 class="w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl flex flex-col overflow-hidden">
                 <summary class="bg-slate-900 border-b border-slate-700 p-3 flex justify-between items-center cursor-pointer select-none rounded-t-lg">
@@ -2111,7 +2111,7 @@
                 open>
                 <summary
                     class="flex items-center justify-between border-b border-slate-700/50 pb-2 mb-3 w-full px-3 pt-3 bg-slate-900 rounded-t-lg cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                    <!-- v10.12.00: the header is a grid-backed host (window.renderSorterHeader). The three components below are singletons that the renderer moves into their cells; they live in the stash until then. -->
+                    <!-- the header is a grid-backed host (window.renderSorterHeader). The three components below are singletons that the renderer moves into their cells; they live in the stash until then. -->
                     <div id="sorter-header-host" class="flex flex-row w-full min-w-0 gap-3">
                         <div id="sorter-header-stash" class="flex flex-row w-full gap-3 items-center">
                     <h3 id="sorter-title" onclick="event.preventDefault(); event.stopPropagation(); document.body.classList.toggle('global-customer-view')"
@@ -2297,7 +2297,7 @@
         <!-- CART LAYOUT STUDIO BODY -->
         <div
             class="p-3 pr-4 bg-slate-900 flex flex-col gap-3 flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar w-full">
-            <!-- v10.12.01: two tabs. Both panels stay in the DOM (renderCartConfigurator fills both); only visibility changes. -->
+            <!-- two tabs. Both panels stay in the DOM (renderCartConfigurator fills both); only visibility changes. -->
             <div role="tablist" aria-label="Sorter layout editor" class="flex gap-1 shrink-0 border-b border-slate-700">
                 <button type="button" role="tab" id="sorter-tab-btn-body" aria-selected="true" aria-controls="sorter-tab-body" onclick="setSorterEditorTab('body')"
                     class="flex-1 px-2 py-2 text-xs font-bold uppercase tracking-wider rounded-t border border-b-0 transition-colors bg-blue-600 text-white border-blue-500">Sorter Body Layout</button>
@@ -2328,7 +2328,7 @@
             </div>
             <!-- Cart Configurator List (Injected by JS) -->
             <div id="cart-configurator-list" class="flex flex-col gap-3"></div>
-            <!-- Add Container Button (v10.12.04: inserts after the selected container; stacks and splits are added from the inspector, inside the selected container / stack) -->
+            <!-- Add Container Button (inserts after the selected container; stacks and splits are added from the inspector, inside the selected container / stack) -->
             <button onclick="addCartContainer()"
                 class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition-colors text-xs uppercase tracking-widest flex items-center justify-center gap-2">
                 <i data-lucide="plus" class="w-4 h-4"></i> Add Container After Selected
@@ -2336,7 +2336,7 @@
             </div>
             <div id="sorter-tab-header" role="tabpanel" class="hidden flex flex-col gap-3">
                 <div class="text-xs text-slate-300 leading-snug">Edits the title bar above the Sorter rows (title, action badges, settings gear).</div>
-                <!-- Sorter HEADER layout editor (v10.12.00, injected by JS) -->
+                <!-- Sorter HEADER layout editor (injected by JS) -->
                 <div id="sorter-header-editor" class="flex flex-col gap-3"></div>
             </div>
         </div>
@@ -2539,7 +2539,7 @@
 
             </div>
 
-            <!-- v10.05.01: Page 2 layout settings: Page Width now lives beside the Page 2 header / Proposal Builder layout editor (same block, same ids, same state) -->
+            <!-- Page 2 layout settings: Page Width now lives beside the Page 2 header / Proposal Builder layout editor (same block, same ids, same state) -->
             <div id="page-layout-settings-panel" class="hidden space-y-3">
                 <div id="page-width-section" class="space-y-2 bg-slate-900 border border-slate-700 rounded-lg p-2.5">
                     <div class="text-[11px] font-black text-white uppercase tracking-widest">Page Width</div>
@@ -3830,9 +3830,9 @@
         </div>
     </footer>
 
-    <!-- SHARED GRID PRIMITIVES (v10.06.00) -->
+    <!-- SHARED GRID PRIMITIVES -->
     <script>
-        // === SHARED GRID PRIMITIVES (v10.06.00) ===
+        // === SHARED GRID PRIMITIVES ===
         // The few leaf rules every container -> stack -> split layout shares: a weight is a relative SHARE (clamped, never an absolute size),
         // a share becomes a flex rule, an enumerated value falls back to a known default, an offset is a clamped whole number. The Proposal Builder engine and the Systems Sorter
         // body both use them, so the two stop carrying private copies. Deliberately NOT here: the Builder's singleton component placement and
@@ -3867,6 +3867,58 @@
         let HVAC_DATABASE = [];
         window.HVAC_ENHANCEMENTS = [];
 
+        // Price Book (no. 21): add-on prices come from the book by its ID (the TEST script sends id + sizeBand with every
+        // Static_Enhancements row); today's numbers stay as the backup when a book row is missing or a script sends no ids.
+        window.bookPrice = function (id, backup) {
+            const list = Array.isArray(window.HVAC_ENHANCEMENTS) ? window.HVAC_ENHANCEMENTS : [];
+            const rows = list.filter(e => e && String(e.id || '').trim() === id);
+            const row = rows.find(e => String(e.name || '').indexOf(' | ') < 0) || rows[0];      // the book's own row, not a page-name copy
+            if (!row || row.price === '' || row.price === null || row.price === undefined) return backup;
+            const n = Number(row.price);
+            return Number.isFinite(n) ? n : backup;
+        };
+        // the add-on lists (dummyEnhancements) take the book's prices; the labels stay as the page names them
+        const BOOK_ADDON_IDS = {
+            'Crane Services': 'ADD-021', 'Condo Install': 'ADD-012', 'Overhead Copper Run': 'ADD-008', '100 ft Copper Line Set': 'ADD-006',
+            'Attic Installation': 'ADD-009', 'No Pad': 'ADD-016', 'Ground Rod': 'ADD-007', 'No Copper': 'ADD-014', 'No Thermostat': 'ADD-015',
+            'UV Coil Bulb System': 'ADD-001', 'Whole House Sanitizer': 'ADD-002', '4-inch Merv 11 Filter Kit': 'ADD-003', 'Condensate Pump': 'ADD-010',
+            'Duct Sealing (Per Drop)': 'ADD-011', 'Emerson Wi-Fi Thermostat': 'ADD-004', 'Wi-Fi Thermostat Upgrade': 'ADD-005',
+            '10-Year Labor Warranty (Standard AC)': 'ADD-017', '10-Year Labor Warranty (Standard HP)': 'ADD-018'
+        };
+        // a coastal labor warranty = the standard warranty + the book's Coastal Add (straight cool ADD-019, heat pump ADD-020)
+        const BOOK_COASTAL_WARRANTY = { '10-Year Labor Warranty (Coastal AC)': ['ADD-017', 'ADD-019'], '10-Year Labor Warranty (Coastal HP)': ['ADD-018', 'ADD-020'] };
+        const BOOK_BACKUP = {};
+        window.applyBookAddonPrices = function () {
+            if (typeof dummyEnhancements === 'undefined') return 0;
+            let changed = 0;
+            ['outdoor', 'indoor', 'warranty'].forEach(g => (dummyEnhancements[g] || []).forEach(it => {
+                if (BOOK_BACKUP[it.label] === undefined) BOOK_BACKUP[it.label] = it.price;
+                const backup = BOOK_BACKUP[it.label];
+                let p = backup;
+                if (BOOK_ADDON_IDS[it.label]) p = window.bookPrice(BOOK_ADDON_IDS[it.label], backup);
+                else if (BOOK_COASTAL_WARRANTY[it.label]) {
+                    const w = window.bookPrice(BOOK_COASTAL_WARRANTY[it.label][0], NaN), add = window.bookPrice(BOOK_COASTAL_WARRANTY[it.label][1], NaN);
+                    if (Number.isFinite(w) && Number.isFinite(add)) p = w + add;
+                }
+                if (p !== it.price) { it.price = p; changed++; }
+            }));
+            return changed;
+        };
+        // a 3.5-ton gas furnace row that is the same unit (same AHRI) as a 4-ton row is Randy's "for 3.5 ton use 4 ton
+        // 2 stage / variable speed" listing (D-10): the grid shows that note under its size
+        let FURNACE_LISTING_AHRIS = null;
+        window.furnaceListingNote = function (item) {
+            if (!item || !/FURNACE/i.test(String(item.systemType || '')) || String(item.capacity || '').trim().toUpperCase() !== '3.5 TON') return '';
+            if (!FURNACE_LISTING_AHRIS) {
+                FURNACE_LISTING_AHRIS = new Set();
+                (Array.isArray(HVAC_DATABASE) ? HVAC_DATABASE : []).forEach(it => {
+                    if (/FURNACE/i.test(String(it.systemType || '')) && String(it.capacity || '').trim().toUpperCase() === '4 TON' && String(it.ahri || '').trim())
+                        FURNACE_LISTING_AHRIS.add(String(it.ahri).trim());
+                });
+            }
+            return FURNACE_LISTING_AHRIS.has(String(item.ahri || '').trim()) ? '4-ton system; Randy: for 3.5 ton use 4 ton 2 stage / variable speed' : '';
+        };
+
         const API_URL = "https://script.google.com/macros/s/AKfycbyUvj3IU3Y-nTyzkj0XDdL3UmkO3YHELtp724v0k1Cb7DIRYGvTuyVyHHFWZT7ZJda6/exec";
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -3874,8 +3926,8 @@
             if (typeof renderPage1SiteControl === 'function') renderPage1SiteControl();
         });
 
-        // v10.13.02: the version badges show page + script version. The script reports it in its doGet reply as
-        // scriptVersion (only scripts from v16.52.1-test on); a script without it is shown as 'script \u2264v16.52.1' (amber).
+        // the version badges show page + script version. The script reports it in its doGet reply as
+        // scriptVersion (only scripts from-test on); a script without it is shown as 'script \u2264v16.52.1' (amber).
         // Only a short plain version text is accepted: badge text is copied into layout HTML elsewhere.
         window.CHANGEOUT_SCRIPT_VERSION = null;
         window.renderVersionBadges = function () {
@@ -3923,6 +3975,8 @@
                         }));
                         // Render grid now that data is loaded
                         window.HVAC_ENHANCEMENTS = Array.isArray(result.enhancements) ? result.enhancements : [];
+                        FURNACE_LISTING_AHRIS = null;
+                        window.applyBookAddonPrices();
                         window.HVAC_ALERTS = result.alerts || null;
                         renderGrid();
                         processAuditFlags();
@@ -3950,7 +4004,7 @@
         });
         // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-        // Intentional placeholder: HVAC_MOCK_DATABASE removed in v01.02.
+        // Intentional placeholder: HVAC_MOCK_DATABASE removed in.
 
 
         // Mapping of raw schema fields to Human Friendly Names
@@ -3996,7 +4050,7 @@
                     ? badge
                     : badge.querySelector('span') || badge;
 
-                if (!active || !active.confirmed || !active.profileId || String(active.profileId).toLowerCase() === 'standard') {      // v10.13.01 (R1-15)
+                if (!active || !active.confirmed || !active.profileId || String(active.profileId).toLowerCase() === 'standard') {      // (R1-15)
                     badge.classList.add('hidden');
                     badge.setAttribute('aria-hidden', 'true');
                 } else {
@@ -4042,7 +4096,7 @@
 
             if (requiredCount === 0) {
                 if (window.proposalAppState?.addons?.['Condo Install']) {
-                    return { active: true, source: 'manual', charge: 225, mix: false };
+                    return { active: true, source: 'manual', charge: window.bookPrice('ADD-012', 225), mix: false };
                 }
                 return { active: false };
             }
@@ -4090,7 +4144,7 @@
                 window.proposalAppState.activeSite = createDefaultActiveSite();
             }
 
-            // v10.14.00: a custom condo saved before the quick path had its $ typed by hand: keep it as MANUAL, so no saved quote changes
+            // a custom condo saved before the quick path had its $ typed by hand: keep it as MANUAL, so no saved quote changes
             // (a quick-path site always has a condenser location; an older one has none, even after defaults were filled in)
             const a = window.proposalAppState.activeSite;
             if (a.floorAllowanceManual === undefined) a.floorAllowanceManual = false;
@@ -4311,7 +4365,7 @@
                 html += `<input type="hidden" id="setup-floor-val" value="${selectedFloor || ''}">`;
                 html += `<div class="mt-2 text-xs text-slate-500">Condenser Location: Roof / Floor 11</div></div>`;
             } else if (val === 'custom') {
-                // v10.14.00 (no. 13): condo quick path: two questions, refrigerant from the floors of travel (still editable)
+                // (no. 13): condo quick path: two questions, refrigerant from the floors of travel (still editable)
                 const active = window.proposalAppState.activeSite;
                 const wasCustom = active.profileId === 'custom';
                 const loc = wasCustom ? (active.condenserLocation || (active.condenserFloor ? 'floor' : '')) : '';
@@ -4395,13 +4449,13 @@
             <div class="flex justify-between"><span>Condensers:</span> <span class="font-bold text-white">${q.condenserFloor ? (q.loc === 'roof' ? 'Roof = floor ' + q.condenserFloor : q.loc === 'ground' ? 'Ground = floor 1' : 'Floor ' + q.condenserFloor) : '-'}</span></div>
             <div class="flex justify-between"><span>Unit floor:</span> <span class="font-bold text-white">${q.unit || '-'}</span></div>
             <div class="flex justify-between"><span>Additional Refrigerant Charge:</span> <span class="font-bold text-emerald-400">+$${q.amount}${q.manual ? ' (manual)' : ''}</span></div>
-            <div class="flex justify-between"><span>Condo Install:</span> <span class="font-bold ${q.condo ? 'text-amber-400' : 'text-slate-500'}">${q.condo ? '+$225' : 'No'}</span></div>`;
+            <div class="flex justify-between"><span>Condo Install:</span> <span class="font-bold ${q.condo ? 'text-amber-400' : 'text-slate-500'}">${q.condo ? '+$' + window.bookPrice('ADD-012', 225).toLocaleString() : 'No'}</span></div>`;
             }
 
             summaryContent.innerHTML = content;
         }
 
-        // v10.14.00 (no. 13): read the condo quick-path answers. loc: roof | ground | floor
+        // (no. 13): read the condo quick-path answers. loc: roof | ground | floor
         function readQuickCondoForm() {
             const v = id => { const e = document.getElementById(id); return e ? e.value : ''; };
             const n = id => { const x = parseInt(v(id), 10); return x >= 1 ? x : null; };
@@ -4479,7 +4533,7 @@
                 active.condoRequired = true;
 
                 if (active.craneFee === 0) {
-                    active.craneFee = 900;
+                    active.craneFee = window.bookPrice('ADD-021', 900);
                     active.craneSource = 'profile-required';
                 }
                 active.confirmed = true;
@@ -4487,7 +4541,7 @@
                 active.profileId = 'custom';
                 active.name = document.getElementById('setup-custom-name').value || 'Custom Job';
                 active.isCustom = true;
-                const q = readQuickCondoForm();      // v10.14.00 (no. 13)
+                const q = readQuickCondoForm();      // (no. 13)
                 active.condenserLocation = q.loc;
                 active.topFloor = q.loc === 'roof' ? q.top : null;
                 active.equipmentFloor = q.unit;
@@ -4499,7 +4553,7 @@
 
                 const needCrane = document.getElementById('setup-custom-crane').checked;
                 if (needCrane && active.craneFee === 0) {
-                    active.craneFee = 900;
+                    active.craneFee = window.bookPrice('ADD-021', 900);
                     active.craneSource = 'profile-required';
                 } else if (!needCrane && active.craneSource === 'profile-required') {
                     active.craneFee = 0;
@@ -4526,7 +4580,7 @@
 
                 // Ensure native site properties exist
                 if (sp.nativeSite === undefined) {
-                    const item = HVAC_DATABASE[(sp.absoluteIndex !== undefined && sp.absoluteIndex !== null) ? sp.absoluteIndex : rowIndex];      // v10.13.01 (R1-8)
+                    const item = HVAC_DATABASE[(sp.absoluteIndex !== undefined && sp.absoluteIndex !== null) ? sp.absoluteIndex : rowIndex];      // (R1-8)
                     sp.nativeSite = (item && item.site) ? item.site : 'Standard';
                 }
 
@@ -4545,7 +4599,7 @@
                     } else {
                         sp.condo.required = true;
                         sp.condo.includedInBase = false;
-                        sp.condo.charge = 225;
+                        sp.condo.charge = window.bookPrice('ADD-012', 225);
                         sp.condo.locked = true;
                         sp.condo.source = 'site-profile-required';
                     }
@@ -4560,7 +4614,7 @@
                         if (active.condoRequired) {
                             sp.condo.required = true;
                             sp.condo.includedInBase = false;
-                            sp.condo.charge = 225;
+                            sp.condo.charge = window.bookPrice('ADD-012', 225);
                             sp.condo.locked = true;
                             sp.condo.source = 'site-profile-required';
                         } else {
@@ -4598,7 +4652,7 @@
                     condenserFloor: active.condenserFloor,
                     verticalTravel: active.verticalTravel,
                     amount: active.floorAllowance,
-                    manual: !!active.floorAllowanceManual,      // v10.14.00
+                    manual: !!active.floorAllowanceManual,
                     bakedIn: true
                 };
 
@@ -4682,7 +4736,7 @@
                     }
                     applyActiveSiteToSelectedOptions();
                 } else {
-                    // v10.13.01 (R1-7): re-checked system: keep its own add-ons, but re-apply the CURRENT site so stale
+                    // (R1-7): re-checked system: keep its own add-ons, but re-apply the CURRENT site so stale
                     // floor allowance / condo charges from an earlier site profile are not carried into this quote.
                     const spBack = window.systemScratchpads[rowIndex];
                     checkSiteSetupTriggers(spBack.nativeSite || 'Standard');
@@ -6743,7 +6797,7 @@
             return {
                 format: 'platts-proposal-config',
                 schemaVersion: 1,
-                appVersion: 'v10.14.00',
+                appVersion: 'v10.15.00',
                 exportedAt:
                     new Date().toISOString(),
 
@@ -6937,7 +6991,7 @@
             link.href = url;
 
             link.download =
-                `platts_config_v10.14.00_${stamp}.json`;
+                `platts_config_v10.15.00_${stamp}.json`;
 
             document.body.appendChild(link);
 
@@ -7058,7 +7112,7 @@
                                 const sysCap = String(sys.capacity || '').toUpperCase();
                                 const sysSeer = String(sys.seer2 || '').toUpperCase();
                                 const sysStyle = String(sys.applicationStyle || sys.style || '');
-                                let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle);
+                                let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle, sys.systemType);
                                 let val = item.label.includes('Heresite') ? shields.here : shields.infi;
                                 prices.add(val);
                             }
@@ -7114,11 +7168,11 @@
                             priceColor = "text-amber-400";
                             coastalNote = `<div class="smart-scope-secondary text-amber-500 italic font-bold mt-0.5 tracking-wide" style="font-size: ${dFont}px;">Included or charged by option</div>`;
                         } else {
-                            priceText = `(Add $225)`;
+                            priceText = `(Add $${window.bookPrice('ADD-012', 225).toLocaleString()})`;
                             priceColor = "text-emerald-400";
                         }
                     } else {
-                        priceText = `(Add $225)`;
+                        priceText = `(Add $${window.bookPrice('ADD-012', 225).toLocaleString()})`;
                         priceColor = "text-emerald-400";
                     }
                 } else if (window.isIncludedAllowanceItem(item.label)) {
@@ -7147,7 +7201,7 @@
                 let labelColor = item.label.includes('Coastal') ? 'text-blue-300' : 'text-slate-300';
                 let disabledClass = isLocked ? 'opacity-50 cursor-not-allowed' : '';
 
-                let displayLabel = window.escapePage2HeaderHtml(item.label).replace('Heresite', 'HereShield');      // v10.12.08: escaped first; the AC / HP colour spans below are the app's own
+                let displayLabel = window.escapePage2HeaderHtml(item.label).replace('Heresite', 'HereShield');      // escaped first; the AC / HP colour spans below are the app's own
                 if (activePropTab === 'warranty' || displayLabel.includes('Labor')) {
                     displayLabel = displayLabel.replace(/\bAC\b/g, '<span class="text-blue-400 font-bold">AC</span>');
                     displayLabel = displayLabel.replace(/\bHP\b/g, '<span class="text-rose-400 font-bold">HP</span>');
@@ -8283,7 +8337,7 @@
                         selectedProposalRows.forEach(id => {
                             let sp = window.systemScratchpads[id];
                             if (sp) {
-                                sp.condo = { required: true, includedInBase: false, charge: 225, locked: false, source: 'manual' };
+                                sp.condo = { required: true, includedInBase: false, charge: window.bookPrice('ADD-012', 225), locked: false, source: 'manual' };
                                 if (sp.addons && sp.addons['Condo Install']) delete sp.addons['Condo Install'];
                             }
                         });
@@ -8826,7 +8880,7 @@
             savePropSettings();
         }
 
-        // v10.02.01: the Fixed width is kept between PAGE_WIDTH_MIN and PAGE_WIDTH_MAX (10 px per click, Shift+click 50 px).
+        // the Fixed width is kept between PAGE_WIDTH_MIN and PAGE_WIDTH_MAX (10 px per click, Shift+click 50 px).
         const PAGE_WIDTH_MIN = 800, PAGE_WIDTH_MAX = 2000, PAGE_WIDTH_MODES = ['compact', 'standard', 'wide', 'full', 'fixed'];
         const clampPageWidth = v => Math.max(PAGE_WIDTH_MIN, Math.min(PAGE_WIDTH_MAX, Math.round(Number(v)) || 1200));
         function adjustPropWidthVal(change) {
@@ -10486,9 +10540,9 @@
 
         window.pendingProtectionPriceConflict = null;
 
-        // v10.13.01 (R1-12): every quote has an id in proposalAppState (kept with the working draft; new on New Quote / Clear).
+        // (R1-12): every quote has an id in proposalAppState (kept with the working draft; new on New Quote / Clear).
         // A protection price override is saved with that id and only applies to the same quote, so it never carries
-        // to another customer (new tab, new session, or no New Quote). Overrides saved by v10.13.00 have no id: ignored.
+        // to another customer (new tab, new session, or no New Quote). Overrides saved by have no id: ignored.
         window.getChangeoutQuoteId = function () {
             if (!window.proposalAppState) window.proposalAppState = {};
             if (!window.proposalAppState.quoteId) {
@@ -10592,7 +10646,7 @@
             const override = overrides[label];
 
             if (override) {
-                if (override.signature === currentSignature && override.quoteId === window.getChangeoutQuoteId()) {      // v10.13.01 (R1-12)
+                if (override.signature === currentSignature && override.quoteId === window.getChangeoutQuoteId()) {      // (R1-12)
                     return;
                 } else {
                     delete overrides[label];
@@ -10726,7 +10780,7 @@
                 const rawValue = input ? String(input.value).trim() : '';
                 const value = Number(rawValue);
 
-                // v10.13.01 (R1-13): a blank or non-number price is refused (it used to save $0); a typed 0 is allowed
+                // (R1-13): a blank or non-number price is refused (it used to save $0); a typed 0 is allowed
                 if (rawValue === '' || !(value >= 0)) {
                     if (input) {
                         input.classList.add('ring-2', 'ring-rose-500');
@@ -10755,7 +10809,7 @@
                     .protectionPriceOverrides = {};
             }
 
-            override.quoteId = window.getChangeoutQuoteId();      // v10.13.01 (R1-12): every kind of override belongs to this quote
+            override.quoteId = window.getChangeoutQuoteId();      // (R1-12): every kind of override belongs to this quote
             propSettings.terminal
                 .protectionPriceOverrides[
                 conflict.label
@@ -11265,7 +11319,7 @@
                         break;
                     default: mw = '1280px'; break;
                 }
-                // v10.02.01: a phone (viewport under 640 px, the Proposal Builder's own convention) is always viewport-driven: the width mode is a desktop setting.
+                // a phone (viewport under 640 px, the Proposal Builder's own convention) is always viewport-driven: the width mode is a desktop setting.
                 if (window.innerWidth < 640) { w = '100%'; mw = 'none'; }
 
                 // The header and the body always share one width policy.
@@ -11397,13 +11451,13 @@
             return (window.proposalAppState && window.proposalAppState.laborWarranties) ? window.proposalAppState.laborWarranties : [];
         };
 
-        // v10.02.05: the "anything to render" seam. Proposal output (the terminal, the clipboard text window.pureCopyText that Create and Update send,
+        // the "anything to render" seam. Proposal output (the terminal, the clipboard text window.pureCopyText that Create and Update send,
         // the block lists) is only generated when there is renderable content. Today that means one or more selected HVAC system rows. A later
         // proposal type that can render with zero system rows (Custom / Standalone) extends THIS function only; both renderers below ask it, so
         // neither has to learn about proposal types. When it says no, the output state is reset (not just hidden) so text from a previous
         // render can never be copied, shown or sent. Only rendered/output state is reset: the proposal state, scratchpads, injected lines,
         // overrides and settings are never touched.
-        // v10.03.00: type-aware. System: one or more selected system rows. Custom: at least one custom item with a name or a description.
+        // type-aware. System: one or more selected system rows. Custom: at least one custom item with a name or a description.
         function hasRenderableProposalContent() {
             if (getProposalType() === 'custom') return customProposalHasContent(sanitizeCustomProposal((window.proposalAppState || {}).customProposal));
             return typeof selectedProposalRows !== 'undefined' && Array.isArray(selectedProposalRows) && selectedProposalRows.length > 0;
@@ -11419,11 +11473,11 @@
         window.hasRenderableProposalContent = hasRenderableProposalContent;
         window.resetProposalOutputState = resetProposalOutputState;
 
-        // === CUSTOM / STANDALONE PROPOSAL CORE (v10.03.00, Phase 1A) ===
+        // === CUSTOM / STANDALONE PROPOSAL CORE (Phase 1A) ===
         // A second proposal type next to System Changeout. The state lives INSIDE proposalAppState, so Create, Update, the working draft and managed
         // Load carry it with no backend change:
         //   proposalAppState.proposalType    'system' | 'custom'   (absent = 'system': every older proposal is a System proposal)
-        //   proposalAppState.customProposal  { schemaVersion, intent, scopeTerms, otherScope, presentation, packageTitle, items[] }   (intent, scopeTerms and otherScope: v10.04.00, Phase 1B)
+        //   proposalAppState.customProposal  { schemaVersion, intent, scopeTerms, otherScope, presentation, packageTitle, items[] }   (intent, scopeTerms and otherScope:, Phase 1B)
         // Each item owns its values (no catalog reference is needed to reload a saved proposal). Prices are typed numbers; the System pricing
         // engine, site profiles, Smart Scope pricing and the pricing snapshot are never used for a custom proposal. Custom output is built as
         // blocks with their own targets (Custom Intro, Custom Package, Custom Item N, Custom Option N, Custom Total, Custom Closing) that can
@@ -11433,9 +11487,9 @@
         // prototype keys never survive) and keeps text as DATA: custom text is shown through an escaping path, never as markup.
         const CP_PRESENTATIONS = ['combined', 'itemized', 'options'];
         const CP_PRESENTATION_LABEL = { combined: 'Combined Package', itemized: 'Itemized', options: 'Customer Options' };
-        // v10.04.00 (Phase 1B): ONE vocabulary of job intents / item actions (the same four values for both) and ONE vocabulary of generic scope terms /
+        // (Phase 1B): ONE vocabulary of job intents / item actions (the same four values for both) and ONE vocabulary of generic scope terms /
         // item types. Phase 1A stored 'addUpgrade' and 'repairModify' for the action and 'iaqDevice' and 'uvLight' for the type; the sanitizer maps those
-        // old values to 'upgrade', 'repair', 'iaq' and 'uvAir' so a v10.03.00 / v10.03.01 proposal loads unchanged.
+        // old values to 'upgrade', 'repair', 'iaq' and 'uvAir' so a / proposal loads unchanged.
         const CP_ACTIONS = ['', 'replace', 'install', 'upgrade', 'repair'];
         const CP_ACTION_LABEL = { '': 'Not specified', replace: 'Replace', install: 'Install New', upgrade: 'Add / Upgrade', repair: 'Repair / Modify' };
         const CP_ACTION_LEGACY = { addUpgrade: 'upgrade', repairModify: 'repair' };
@@ -11551,7 +11605,7 @@
             return pas.customProposal;
         }
         const cpMoney = n => '$' + (Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-        // v10.04.00: item heading. The Display Name is the customer-facing heading and is kept exactly as typed; brand / model are appended only for the part
+        // item heading. The Display Name is the customer-facing heading and is kept exactly as typed; brand / model are appended only for the part
         // the name does not already say. With no name, the brand / model lead, with a restrained "Action Type" phrase (for example "Replace Bath Fan") as
         // support only when the brand / model do not already name the type. With neither, the "Action Type" phrase is the heading (a type alone, or an
         // action and a type; an action alone or "Other / Custom" is not a heading), else "Item". The description is always printed below the heading.
@@ -11572,7 +11626,7 @@
             if (bm) return bm + (ctx && !cpSays(bm, tl) ? ' (' + ctx + ')' : '');
             return ctx || 'Item';
         }
-        // v10.04.00: the intro, composed deterministically (no free-form generation) from the job intent, the scope terms and the Other / Custom text.
+        // the intro, composed deterministically (no free-form generation) from the job intent, the scope terms and the Other / Custom text.
         // Incomplete input (no usable scope) -> the safe fallback. Scope terms are listed in the vocabulary's order.
         const CP_INTRO_LEAD = 'We are pleased to provide this proposal for ';
         const cpList = a => a.length < 2 ? (a[0] || '') : (a.length === 2 ? a[0] + ' and ' + a[1] : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1]);
@@ -11652,7 +11706,7 @@
             const text = ov || (typeof getTerminalTemplateValue === 'function' ? String(getTerminalTemplateValue('customClosing') || '').trim() : '');
             return text ? { target: 'Custom Closing', text: text, plain: true } : null;
         }
-        // v10.12.06: the terminal's one text escaper (block text is plain text everywhere; b.text itself is never encoded, only the HTML built from it)
+        // the terminal's one text escaper (block text is plain text everywhere; b.text itself is never encoded, only the HTML built from it)
         function escapeProposalBlockHtml(s) {
             const t = String(s);
             return typeof window.escapePage2HeaderHtml === 'function' ? window.escapePage2HeaderHtml(t) : t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -11733,7 +11787,7 @@
                 const cp = cpState(); if (!cp) return false;
                 cp.packageTitle = cpText(v, CP_LIM.title, false); cpCommit(fromPanel === true); return true;
             },
-            // v10.04.00 (Phase 1B): job intent, scope terms and the Other / Custom text
+            // (Phase 1B): job intent, scope terms and the Other / Custom text
             setIntent: function (v, fromPanel) {
                 const cp = cpState(); if (!cp) return false;
                 cp.intent = cpAction(v); cpCommit(fromPanel === true); return true;
@@ -11765,7 +11819,7 @@
         window.composeCustomIntro = composeCustomIntro;
         window.buildCustomProposalBlocks = buildCustomProposalBlocks;
         window.proposalFileCustomerPart = proposalFileCustomerPart;
-        // v10.03.01: Update of a loaded managed proposal whose Proposal Type changed since it was loaded or last saved needs an explicit confirmation.
+        // Update of a loaded managed proposal whose Proposal Type changed since it was loaded or last saved needs an explicit confirmation.
         // The type it was loaded / last saved with is NOT a new stored field: it is read from the runtime copy of the Builder State that the loaded
         // proposal already keeps (retestLoadedProposal.loadedBuilderState), which Load, Create and a successful Update set and New Quote clears
         // together with the loaded proposal. A state without proposalType is a System proposal. A failed Update never replaces that copy.
@@ -11794,7 +11848,7 @@
 
         function updateProposalCartUI() {
             const selectionMarker = window.getProposalSelectionMarker();
-            if (typeof window.syncCustomProposalUI === 'function') window.syncCustomProposalUI();   // v10.03.00: Proposal Type control, Custom panel, hidden System areas
+            if (typeof window.syncCustomProposalUI === 'function') window.syncCustomProposalUI();   // Proposal Type control, Custom panel, hidden System areas
 
             let stitchLines = [];
             const sorterList = document.getElementById('proposal-sorter-list');
@@ -11977,7 +12031,7 @@
                 return;
             }
 
-            if (getProposalType() === 'custom') {      // v10.03.00: the Custom proposal builds its own blocks; none of the System composer below runs for it
+            if (getProposalType() === 'custom') {      // the Custom proposal builds its own blocks; none of the System composer below runs for it
                 window.proposalBlocks = buildCustomProposalBlocks();
                 updateProposalTerminal();
                 if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -12389,7 +12443,7 @@
 
                         let nm = name.toLowerCase();
 
-                        // v10.13.01 (R1-2): a Condo Install add-on is baked into the system price, once. When the site profile
+                        // (R1-2): a Condo Install add-on is baked into the system price, once. When the site profile
                         // already handles condo (sp.condo.required: charged or included in the native price), the add-on is ignored.
                         if (nm.includes('condo')) {
                             if (sp.condo && sp.condo.required) return;
@@ -12541,7 +12595,7 @@
                 let baseStr = `<span class="text-slate-400 text-sm ${(totalDeductions > 0 || visibleAdditions > 0 || stealthTotal > 0) ? 'line-through' : ''}">$${basePrice.toLocaleString()}</span>`;
 
                 // Scan Sorter Settings to dynamically inherit Adjustments column alignment
-                let adjustmentsAlign = window.getSorterMappingAlign('adjustments', 'right');   // v10.06.00: the lookup lives with the Sorter template
+                let adjustmentsAlign = window.getSorterMappingAlign('adjustments', 'right');   // the lookup lives with the Sorter template
                 let adjAlignClass = adjustmentsAlign === 'center' ? 'items-center text-center' : adjustmentsAlign === 'left' ? 'items-start text-left' : 'items-end text-right';
                 let adjBorderClass = adjustmentsAlign === 'center' ? '' : adjustmentsAlign === 'left' ? 'ml-4 pl-4 border-l border-slate-700/50' : 'mr-4 pr-4 border-r border-slate-700/50';
 
@@ -12612,7 +12666,7 @@
                 if ((hasManualRefrig || hasOceanaRefrig) && !addedIcons.has('arc')) {
                     let tooltip = "Additional Refrigerant Charge";
                     if (hasManualRefrig && hasOceanaRefrig) tooltip = "Additional Refrigerant Charges";
-                    else if (hasOceanaRefrig) tooltip = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : "Oceana Additional Refrigerant Charge";      // v10.14.00
+                    else if (hasOceanaRefrig) tooltip = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : "Oceana Additional Refrigerant Charge";
 
                     emojiCluster.push(`<span title="${tooltip}" class="inline-flex items-center justify-center translate-y-[2px]"><span class="text-emerald-400">❄️</span></span>`);
                     addedIcons.add('arc');
@@ -12638,7 +12692,7 @@
                 let cleanBaseStr = baseStr.replace(sizeRegex, '');
                 let cleanModStr = modifierStr.replace(sizeRegex, '');
 
-                // v10.06.00: the repeating Systems Sorter row is its own renderer (window.renderSorterRow in the Sorter layout engine): one system in, one row out.
+                // the repeating Systems Sorter row is its own renderer (window.renderSorterRow in the Sorter layout engine): one system in, one row out.
                 html += window.renderSorterRow({
                     index: index, item: item, sp: sp, brand: brand, series: series, capacity: capacity, seer2: seer2, ahri: ahri, site: site, mechStage: mechStage, sysType: sysType,
                     printStyle: printStyle, hasAuditMismatch: hasAuditMismatch, auditState: auditState, isNativeOceana: isNativeOceana, overrideBorder: overrideBorder,
@@ -12770,7 +12824,7 @@
                 if (effectiveSaltShields.length > 0) {
                     const shieldItem = HVAC_DATABASE[sp.absoluteIndex] || {};
                     const appStyle = String(shieldItem.applicationStyle || shieldItem.style || '').toUpperCase();
-                    const shieldPrices = calculateSystemSaltShield(capacity, seer2, appStyle);
+                    const shieldPrices = calculateSystemSaltShield(capacity, seer2, appStyle, shieldItem.systemType);
 
                     effectiveSaltShields.forEach(label => {
                         let isInfused = sp.infusedItems && sp.infusedItems.includes(label);
@@ -13173,7 +13227,7 @@
                 });
             }
 
-            // Append Boilerplate (System) or the optional Custom Closing (Custom, v10.03.00)
+            // Append Boilerplate (System) or the optional Custom Closing (Custom)
             let bpText = "";
             if (getProposalType() === 'custom') {
                 const customClosing = customClosingBlock();
@@ -13315,7 +13369,7 @@
                     }
                 }
 
-                // v10.12.06: no identifier is ever placed inside JavaScript source: the target travels as an attribute-escaped data attribute and the delegated listener below reads it back
+                // no identifier is ever placed inside JavaScript source: the target travels as an attribute-escaped data attribute and the delegated listener below reads it back
                 const tAttr = escapeProposalBlockHtml(b.target);
                 let actionButtons = `<button data-pb-act="insert" data-pb-target="${tAttr}" class="text-slate-400 hover:text-emerald-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Insert Below"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>`;
                 actionButtons += `<button data-pb-act="edit" data-pb-target="${tAttr}" class="text-slate-400 hover:text-blue-400 flex items-center gap-1 bg-slate-800 px-2 py-1 rounded border border-slate-700 transition shadow-sm" title="Edit Block"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>`;
@@ -13345,7 +13399,7 @@
             if (typeof applyTerminalSettings === 'function') applyTerminalSettings();
         };
 
-        // v10.12.06: the terminal's block controls (Insert Below, Edit Block, Revert, Delete, drag and drop) are handled by ONE set of delegated listeners, bound once per terminal element
+        // the terminal's block controls (Insert Below, Edit Block, Revert, Delete, drag and drop) are handled by ONE set of delegated listeners, bound once per terminal element
         // (a re-render replaces the cards, not the listeners, so repeated renders never stack handlers). The identifiers come from data attributes, so no block id is parsed as JavaScript.
         function bindTerminalControls(terminal) {
             if (terminal.__pbControls) return;
@@ -15462,7 +15516,7 @@
         }
 
         function openSystemDetails(itemObj, suppliedAuditState) {
-            const esc = window.escapePage2HeaderHtml;      // v10.12.07: catalog / audit text is escaped where it enters the details HTML (app-generated markup stays as it is)
+            const esc = window.escapePage2HeaderHtml;      // catalog / audit text is escaped where it enters the details HTML (app-generated markup stays as it is)
             const content = document.getElementById("systemDetailsContent");
             content.innerHTML = "";
 
@@ -15888,7 +15942,7 @@
                 for (const [fieldName, filterVals] of Object.entries(appState.activeFilters)) {
                     const itemValue = item[fieldName];
 
-                    // v10.13.00: with 'Include Crossovers' ON, a Straight Cool filter also lets heat-pump CROSSOVER rows through
+                    // with 'Include Crossovers' ON, a Straight Cool filter also lets heat-pump CROSSOVER rows through
                     if (fieldName === 'systemType' && window.crossoverCountsAsStraightCool(item, filterVals)) continue;
 
                     // Math Interceptor Engine
@@ -16048,7 +16102,7 @@
             headerRow.className = "flex items-stretch select-none bg-slate-900 pt-3 pb-2 w-full flex-grow border-b border-slate-700/50";
             headerRow.style.gap = `${appState.colGap}px`;
 
-            // [v01.02] Left row label column removed â€” full-width layout
+            // Left row label column removed â€” full-width layout
 
             // Header cells
             for (let c = 0; c < appState.colCount; c++) {
@@ -16181,7 +16235,7 @@
                 if (isRowSelected) rowEl.style.background = 'rgba(59,130,246,0.07)';
                 rowEl.style.gap = `${appState.colGap}px`;
 
-                // [v01.03] Left row badge col removed â€” full-width layout
+                // Left row badge col removed â€” full-width layout
 
                 // Render each column cell matching the Pills/Subdivisions matrix structure!
                 for (let c = 0; c < appState.colCount; c++) {
@@ -16363,8 +16417,10 @@
                                 const stageColorClass = window.getStageColorClass(displayValue);
                                 formattedValue = `<span class="${stageColorClass} font-extrabold tracking-wide">${displayValue}</span>`;
                             } else if (sub.mapping === "capacity") {
+                                // Price Book (no. 21): a 3.5-ton furnace listing of a 4-ton unit shows the book's note (fixed text, no cell data)
+                                const listingNote = typeof window.furnaceListingNote === 'function' ? window.furnaceListingNote(item) : '';
                                 formattedValue = `
-                    <span class="text-slate-100 font-semibold tracking-tight">${displayValue}</span>
+                    <span class="text-slate-100 font-semibold tracking-tight">${displayValue}</span>${listingNote ? `<div class="furnace-listing-note text-amber-300 font-semibold leading-tight" style="font-size: 0.6em;" title="${listingNote}">4-ton unit (Randy: use for 3.5 ton)</div>` : ''}
                   `;
                             } else if (sub.mapping === "systemType" || sub.mapping === "type") {
                                 let stColor = window.getSystemTypeColorClass ? window.getSystemTypeColorClass(displayValue) : '';
@@ -16508,7 +16564,7 @@
                                     toggleProposalRow(absoluteIndex);
                                 };
                             } else if (sub.mapping === "price") {
-                                // Price pill routes directly to Proposal Cart (v04.02)
+                                // Price pill routes directly to Proposal Cart
                                 subCell.onclick = (e) => {
                                     if (e.target.closest('.micro-indicator')) return;
                                     e.stopPropagation();
@@ -16604,7 +16660,7 @@
             renderGrid();
         }
 
-        // === INCLUDE CROSSOVERS (v10.13.00) ===
+        // === INCLUDE CROSSOVERS ===
         // Crossovers are HEAT PUMP rows with Application/Style CROSSOVER. Default OFF (old behavior). Remembered in
         // localStorage 'changeout_include_crossovers_v1' ('1' / '0'), not in appState, so layouts and profiles are untouched.
         var CHANGEOUT_INCLUDE_CROSSOVERS_KEY = 'changeout_include_crossovers_v1';
@@ -17069,7 +17125,7 @@
         }
 
         // ── PROFILE MANAGER ──────────────────────────────────────────────────────────────────────────────
-        // v10.02.01: the one storage accounting (Layout Vault KB, total localStorage KB, browser origin estimate). The Layout Vault readout and any
+        // the one storage accounting (Layout Vault KB, total localStorage KB, browser origin estimate). The Layout Vault readout and any
         // later component (for example a Global / Utility storage meter) read it from here.
         window.getStorageStatusSync = function () {
             const vaultBytes = (localStorage.getItem('changeout_profiles_v1') || '{}').length * 2;
@@ -17262,7 +17318,7 @@
             const payload = {
                 format: 'platts-layout-profile',
                 schemaVersion: 1,
-                appVersion: 'v10.14.00',
+                appVersion: 'v10.15.00',
                 profileName: name,
                 exportedAt: new Date().toISOString(),
                 layoutState: profiles[name]
@@ -17271,7 +17327,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_${safeName}_v10.14.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_${safeName}_v10.15.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17290,7 +17346,7 @@
             const payload = {
                 format: 'platts-layout-vault',
                 schemaVersion: 1,
-                appVersion: 'v10.14.00',
+                appVersion: 'v10.15.00',
                 exportedAt: new Date().toISOString(),
                 profileCount: pCount,
                 profiles: profiles
@@ -17299,7 +17355,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", `platts_layout_vault_v10.14.00_${stamp}.json`);
+            dl.setAttribute("download", `platts_layout_vault_v10.15.00_${stamp}.json`);
             document.body.appendChild(dl);
             dl.click();
             dl.remove();
@@ -17606,13 +17662,13 @@
             if (text.includes("ANY COASTAL") || text.includes("ALL COASTAL")) {
                 applyMultiVal('applicationStyle', ['COASTAL', 'APARTMENT COASTAL'], 'Any Coastal');
             } else if (text.includes("APARTMENT COASTAL")) applyVal('applicationStyle', 'APARTMENT COASTAL', 'Apartment Coastal');
-            else if (/\bAPARTMENTS?\b/.test(text)) applyVal('applicationStyle', 'APARTMENT', 'Apartment');      // v10.13.00
+            else if (/\bAPARTMENTS?\b/.test(text)) applyVal('applicationStyle', 'APARTMENT', 'Apartment');
             else if (text.includes("COASTAL")) applyVal('applicationStyle', 'COASTAL', 'Coastal');
-            else if (/\bCROSS ?OVERS?\b/.test(text)) applyVal('applicationStyle', 'CROSSOVER', 'Crossover');      // v10.13.00
-            else if (/\bPACKAGED?\b|\bPACKAGES\b/.test(text)) applyVal('applicationStyle', 'PACKAGE', 'Package');      // v10.13.00
+            else if (/\bCROSS ?OVERS?\b/.test(text)) applyVal('applicationStyle', 'CROSSOVER', 'Crossover');
+            else if (/\bPACKAGED?\b|\bPACKAGES\b/.test(text)) applyVal('applicationStyle', 'PACKAGE', 'Package');
             else if (text.includes("STANDARD")) applyVal('applicationStyle', 'STANDARD', 'Standard');
 
-            // v10.13.00: 'straight cool crossover' also turns ON Include Crossovers (crossovers are heat-pump rows)
+            // 'straight cool crossover' also turns ON Include Crossovers (crossovers are heat-pump rows)
             if (!isRemove && /\bCROSS ?OVERS?\b/.test(text) && (active.systemType || []).some(v => String(v).toUpperCase() === 'STRAIGHT COOL')) {
                 intents.includeCrossovers = true;
             }
@@ -17681,7 +17737,7 @@
             let changed = false;
             let renderDurationMs = 0;
             if (intents.includeCrossovers && typeof window.isIncludeCrossoversOn === 'function' && !window.isIncludeCrossoversOn()) {
-                window.setIncludeCrossovers(true, { render: false });      // v10.13.00
+                window.setIncludeCrossovers(true, { render: false });
                 if (intents.actionLog && intents.actionLog.applied) intents.actionLog.applied.push('Include Crossovers ON');
                 if (typeof showToast === 'function') showToast('Include Crossovers turned ON: Straight Cool now also shows crossover heat pumps.');
                 changed = true;
@@ -17824,11 +17880,11 @@
                 } else if (speechResult.match(/SHOW ALL/) || speechResult.match(/CLEAR LIMIT/)) {
                     intents.limit = null;
                     intents.actionLog.cleared.push('Result Limit');
-                    // Existing grammar preservation from v07.61.2
+                    // Existing grammar preservation from
                 } else if (speechResult.match(/CLEAR SORT|CLEAR SORTING/)) {
                     intents.sort = null;
                     intents.actionLog.cleared.push('Result Sorting');
-                    // Existing grammar preservation from v07.61.2
+                    // Existing grammar preservation from
                 } else if (speechResult.match(/CLEAR EVERYTHING/)) {
                     intents.filters = {};
                     intents.sort = null;
@@ -17888,7 +17944,7 @@
         }
 
         // ============================================================
-        // ITEMIZED PRICE CALCULATOR ENGINE (v04.11)
+        // ITEMIZED PRICE CALCULATOR ENGINE
         // ============================================================
 
         // === B1 SITE SETUP STATE ===
@@ -17902,13 +17958,14 @@
                 validEquipmentFloors: [2, 3, 4, 5, 6, 7, 8, 9, 10],
                 condenserFloor: 11,
                 condoRequired: true,
+                // Price Book (no. 21): crane ADD-021 and the R454b floor allowances ADD-024 / 023 / 022 from the book; today's numbers are the backup
                 requiredUniversalFees: {
-                    'Crane Services': 900
+                    get 'Crane Services'() { return window.bookPrice('ADD-021', 900); }
                 },
                 floorPricingTiers: [
-                    { minTravel: 1, maxTravel: 3, fee: 232 },
-                    { minTravel: 4, maxTravel: 6, fee: 348 },
-                    { minTravel: 7, maxTravel: 99, fee: 464 }
+                    { minTravel: 1, maxTravel: 3, get fee() { return window.bookPrice('ADD-024', 232); } },
+                    { minTravel: 4, maxTravel: 6, get fee() { return window.bookPrice('ADD-023', 348); } },
+                    { minTravel: 7, maxTravel: 99, get fee() { return window.bookPrice('ADD-022', 464); } }
                 ]
             }
         };
@@ -17921,7 +17978,7 @@
             return tier ? tier.fee : 0;
         }
 
-        // v10.14.00 (no. 13): any condo uses the same floors-of-travel tiers as Oceana (1-3 $232, 4-6 $348, 7+ $464; same floor $0).
+        // (no. 13): any condo uses the same floors-of-travel tiers as Oceana (1-3 $232, 4-6 $348, 7+ $464 or the book's; same floor $0).
         // condenserFloor: roof = top floor + 1, ground = 1. Returns { travel, fee } or null when a floor is missing.
         function floorsOfTravelCharge(condenserFloor, unitFloor) {
             const c = Number(condenserFloor), u = Number(unitFloor);
@@ -18005,7 +18062,7 @@
                 targetSelect.innerHTML += '<optgroup label="Custom Injections">';
                 window.proposalAppState.lineInjections.forEach((inj, index) => {
                     let shortText = inj.text.length > 25 ? inj.text.substring(0, 25) + "..." : inj.text;
-                    const injOpt = document.createElement('option');      // v10.12.08: note text is option TEXT, never parsed as HTML
+                    const injOpt = document.createElement('option');      // note text is option TEXT, never parsed as HTML
                     injOpt.value = 'INJ_' + index;
                     injOpt.textContent = 'Line ' + inj.line + ': ' + shortText;
                     targetSelect.appendChild(injOpt);
@@ -18172,7 +18229,7 @@
             micBtn.classList.remove('bg-slate-700', 'text-slate-300');
 
             recognition.onresult = function (event) {
-                input.value += (input.value ? ' ' : '') + event.results[0][0].transcript;      // v10.13.01 (R1-16)
+                input.value += (input.value ? ' ' : '') + event.results[0][0].transcript;      // (R1-16)
             };
             recognition.onend = function () {
                 micBtn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
@@ -18333,7 +18390,7 @@
 
             if (mode === 'custom') {
                 window.proposalAppState.refrigerant = window.proposalAppState.refrigerant || {};
-                window.proposalAppState.refrigerant.fee = val > 15 ? Math.ceil((val - 15) / 25) * 120 : 0;
+                window.proposalAppState.refrigerant.fee = val > 15 ? Math.ceil((val - 15) / 25) * window.bookPrice('ADD-013', 120) : 0;
                 window.proposalAppState.refrigerant.feet = val;
                 window.proposalAppState.travelFee = 0;
                 window.proposalAppState.travelText = "";
@@ -18345,9 +18402,8 @@
                 let travel = totalFloors - val;
                 let fee = 0;
                 if (val > 0) {
-                    if (travel >= 1 && travel <= 3) fee = 232;
-                    else if (travel >= 4 && travel <= 6) fee = 348;
-                    else if (travel >= 7) fee = 464;
+                    const tier = BUILT_IN_SITE_PROFILES.oceana.floorPricingTiers.find(t => travel >= t.minTravel && travel <= t.maxTravel);
+                    if (tier) fee = tier.fee;
                 }
                 window.proposalAppState.travelFee = fee;
                 window.proposalAppState.travelText = val > 0 ? `${window.proposalAppState.siteData.name} ${val}th Floor` : "";
@@ -18361,70 +18417,31 @@
 
             if (typeof updateCalculatorTotal === 'function') updateCalculatorTotal();
         };
-        window.calculateSystemSaltShield = function (capacity, seer, applicationStyle = "") {
-            let capNum = parseFloat(String(capacity || '').replace(/[^0-9.]/g, '')) || 0;
-            let isLarge = capNum >= 3;
-
-            let seerNum = parseFloat(String(seer || '').replace(/[^0-9.]/g, '')) || 15;
-            if (seerNum >= 16 && seerNum < 17) seerNum = 17; // Apply 16 SEER bump rule
-
-            let sizeBucket = "";
-            const appStyleUpper = String(applicationStyle).toUpperCase().trim();
-            if (appStyleUpper === "PACKAGE") {
-                sizeBucket = "1-4 Ton Package";
-            } else {
-                sizeBucket = (capNum < 3) ? "1.5-2.5 Ton" : "3-5 Ton";
-            }
-
-            let seerBucket = "15-16 SEER2";
-            if (seerNum >= 20) seerBucket = "20+ SEER2";
-            else if (seerNum >= 18) seerBucket = "18 SEER2";
-            else if (seerNum >= 17) seerBucket = "17 SEER2";
-
-            const enhancementName = `${sizeBucket} | ${seerBucket}`;
-
-            let dynHere = null;
-            let dynInfi = null;
-
-            if (window.HVAC_ENHANCEMENTS && window.HVAC_ENHANCEMENTS.length > 0) {
-                const hereItem = window.HVAC_ENHANCEMENTS.find(e =>
-                    String(e.category).trim() === "Salt Shield Heresite" &&
-                    String(e.name).trim() === enhancementName
-                );
-                const infiItem = window.HVAC_ENHANCEMENTS.find(e =>
-                    String(e.category).trim() === "Salt Shield Infiniguard" &&
-                    String(e.name).trim() === enhancementName
-                );
-
-                if (hereItem && !isNaN(Number(hereItem.price))) dynHere = Number(hereItem.price);
-                if (infiItem && !isNaN(Number(infiItem.price))) dynInfi = Number(infiItem.price);
-            }
-
-            if (dynHere !== null && dynInfi !== null) {
-                return { here: dynHere, infi: dynInfi };
-            }
-
-            if (appStyleUpper === "PACKAGE") {
-                console.warn("Salt Shield fallback missing package data for:", capacity, seer, applicationStyle, enhancementName);
-            }
-
-            let here = 0; let infi = 0;
-
-            if (!isLarge) {
-                // 1.5 - 2.5 Ton
-                if (seerNum >= 20) { here = 819; infi = 869; }
-                else if (seerNum >= 18) { here = 799; infi = 849; }
-                else if (seerNum >= 17) { here = 769; infi = 819; }
-                else { here = 739; infi = 789; }
-            } else {
-                // 3 - 5 Ton
-                if (seerNum >= 20) { here = 829; infi = 879; }
-                else if (seerNum >= 18) { here = 809; infi = 859; }
-                else if (seerNum >= 17) { here = 779; infi = 829; }
-                else { here = 769; infi = 819; }
-            }
-
-            return { here: (dynHere !== null ? dynHere : here), infi: (dynInfi !== null ? dynInfi : infi) };
+        // Price Book (no. 21, D-10, R4-5 / R4-6): ONE coating price per size, no SEER bands. Split systems 1.5-5 ton: Heresite ADD-025
+        // ($829 backup), Infiniguard ADD-027 ($879). Package units (style PACKAGE / MOBILE HOME, or a package system type):
+        // Heresite ADD-026 ($979), Infiniguard ADD-028 ($1,059). Ductless coatings (ADD-029..036) are not used by this page yet.
+        // seer is kept in the call shape for the callers; it no longer changes the price.
+        window.isPackageSystem = function (applicationStyle, systemType) {
+            const st = String(applicationStyle || '').toUpperCase().trim();
+            return st === 'PACKAGE' || st === 'MOBILE HOME' || /PACKAGE/.test(String(systemType || '').toUpperCase());
+        };
+        window.calculateSystemSaltShield = function (capacity, seer, applicationStyle = "", systemType = "") {
+            const pkg = window.isPackageSystem(applicationStyle, systemType);
+            const band = pkg ? '1-4 Ton Package' : '1.5-5 Ton';
+            const byName = cat => {
+                const list = Array.isArray(window.HVAC_ENHANCEMENTS) ? window.HVAC_ENHANCEMENTS : [];
+                const hit = list.find(e => String(e.category).trim() === cat && String(e.name).trim() === band);
+                return hit && hit.price !== '' && Number.isFinite(Number(hit.price)) ? Number(hit.price) : null;
+            };
+            const pick = (id, cat, backup) => {
+                const v = window.bookPrice(id, null);
+                if (v !== null) return v;
+                const n = byName(cat);
+                return n !== null ? n : backup;
+            };
+            return pkg
+                ? { here: pick('ADD-026', 'Salt Shield Heresite', 979), infi: pick('ADD-028', 'Salt Shield Infiniguard', 1059) }
+                : { here: pick('ADD-025', 'Salt Shield Heresite', 829), infi: pick('ADD-027', 'Salt Shield Infiniguard', 879) };
         }
 
         function autoSelectWarranty(siteName) {
@@ -18728,9 +18745,9 @@
             window.systemScratchpads = {};
             currentBasePrice = 0;
             currentSystemObj = null;
-            if (typeof window.startNewChangeoutQuoteId === 'function') window.startNewChangeoutQuoteId();      // v10.13.01 (R1-12)
+            if (typeof window.startNewChangeoutQuoteId === 'function') window.startNewChangeoutQuoteId();      // (R1-12)
 
-            // v10.13.01 (R1-14): the old customer's note / price must not stay in the line injector
+            // (R1-14): the old customer's note / price must not stay in the line injector
             const injText = document.getElementById('inj-text');
             if (injText) injText.value = '';
             const injPrice = document.getElementById('inj-price');
@@ -18845,7 +18862,7 @@
 
 
 
-        // --- NEW OVERRIDE EDITOR FUNCTIONS (v04.02) ---
+        // --- NEW OVERRIDE EDITOR FUNCTIONS ---
         function removeLocalItem(index, type, label) {
             if ((type === 'addons' || type === 'deductions') && typeof window.isIncludedAllowanceItem === 'function' && window.isIncludedAllowanceItem(label)) {
                 const handled = window.removeIncludedAllowanceFromPriceModal(label, type);
@@ -19072,7 +19089,7 @@
                         selectedProposalRows.forEach(rowIndex => {
                             let sp = window.systemScratchpads[rowIndex];
                             if (sp) {
-                                sp.refrigerantFee = isAdding ? 120 : 0;
+                                sp.refrigerantFee = isAdding ? window.bookPrice('ADD-013', 120) : 0;
                                 sp.refrigerantFeet = isAdding ? 40 : 0;
                             }
                         });
@@ -19244,7 +19261,7 @@
         };
 
         function openReceiptModal(index) {
-            const esc = window.escapePage2HeaderHtml;      // v10.12.07: catalog / state text is escaped where it enters the receipt HTML; handler arguments travel as data attributes (this.dataset), never inside JavaScript source
+            const esc = window.escapePage2HeaderHtml;      // catalog / state text is escaped where it enters the receipt HTML; handler arguments travel as data attributes (this.dataset), never inside JavaScript source
             const rowIndex = selectedProposalRows[index];
             let sp = window.systemScratchpads[rowIndex];
 
@@ -19297,7 +19314,7 @@
             Object.entries(sp.addons).forEach(([name, val]) => {
                 let nm = name.toLowerCase();
 
-                // v10.13.01 (R1-1): an item marked Removed is not counted (same rule as the cart / proposal)
+                // (R1-1): an item marked Removed is not counted (same rule as the cart / proposal)
                 if (sp.removedGlobals && sp.removedGlobals.includes(name)) return;
 
                 if (
@@ -19309,7 +19326,7 @@
                 }
 
                 if (nm.includes('condo')) {
-                    // v10.13.01 (R1-2): counted once; when the site profile handles condo (sp.condo.required) it is shown from sp.condo
+                    // (R1-2): counted once; when the site profile handles condo (sp.condo.required) it is shown from sp.condo
                     if (sp.condo && sp.condo.required) return;
                     isCondo = true;
                     stealthTotal += Number(val) || 0;
@@ -19482,7 +19499,7 @@
 
             if (sp.siteFloorAllowance && sp.siteFloorAllowance.amount > 0 && sp.siteFloorAllowance.bakedIn) {
                 stealthIconsInner += `<div class="flex flex-col items-center leading-none"><span title="Oceana Additional Refrigerant Charge Baked In">❄️</span><span class="text-[9px] text-slate-500 font-bold salesman-math">+$${sp.siteFloorAllowance.amount.toLocaleString()}</span></div>`;
-                const refrigLabel = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge';      // v10.14.00
+                const refrigLabel = typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge';
                 breakdownHtml += `<div class="flex justify-between text-amber-400/80 mb-1"><span>❄️ ${refrigLabel}</span><span>+$${sp.siteFloorAllowance.amount.toLocaleString()} (Baked In)</span></div>`;
             }
 
@@ -19838,10 +19855,10 @@
             if (effectiveSaltShieldsRows.length > 0) {
                 const itemObj = HVAC_DATABASE[sp.absoluteIndex] || {};
                 const sysStyle = String(itemObj.applicationStyle || itemObj.style || '');
-                let shields = calculateSystemSaltShield(capacity, seer2, sysStyle);
+                let shields = calculateSystemSaltShield(capacity, seer2, sysStyle, itemObj.systemType);
                 effectiveSaltShieldsRows.forEach(shieldLabel => {
                     let sPrice = window.getQuotedDisplayPrice(sp, shieldLabel, shieldLabel.includes('Heresite') ? shields.here : shields.infi);
-                    protectionHtml += renderOptionalEnhancementRow(shieldLabel, sPrice);      // v10.13.01 (R1-4): label is made inside
+                    protectionHtml += renderOptionalEnhancementRow(shieldLabel, sPrice);      // (R1-4): label is made inside
                 });
             }
 
@@ -20004,7 +20021,7 @@
         }
 
         function openQuickSummaryModal() {
-            const esc = window.escapePage2HeaderHtml;      // v10.12.08: item names, site / travel text and custom note text are escaped where they enter the summary HTML
+            const esc = window.escapePage2HeaderHtml;      // item names, site / travel text and custom note text are escaped where they enter the summary HTML
             const content = document.getElementById('quick-summary-content');
             if (!content) return;
 
@@ -20111,7 +20128,7 @@
                         const sysCap = String(item.capacity || '').toUpperCase();
                         const sysSeer = String(item.seer2 || '').toUpperCase();
                         const sysStyle = String(item.applicationStyle || item.style || '');
-                        let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle);
+                        let shields = calculateSystemSaltShield(sysCap, sysSeer, sysStyle, item.systemType);
                         return window.getQuotedDisplayPrice(sp, shieldLabel, shieldLabel.includes('Heresite') ? Number(shields.here) : Number(shields.infi));
                     });
                     warHtml += renderQuickSummaryPlacement(shieldLabel.replace('Heresite', 'HereShield'), placement);
@@ -20499,7 +20516,7 @@
                 else mode = 'database';
             }
 
-            // v10.02.00: a loaded proposal that carries its saved quote (resolution mode 'saved') reproduces the quoted base price; an explicit
+            // a loaded proposal that carries its saved quote (resolution mode 'saved') reproduces the quoted base price; an explicit
             // USE DATABASE / USE UPDATED / USE CUSTOM choice in the Price Breakdown releases it.
             const savedBase = (sp && sp.priceResolutionMode === 'saved' && sp.quotedPricing && Number(sp.quotedPricing.basePrice) > 0) ? Math.ceil(Number(sp.quotedPricing.basePrice)) : null;
             let effectiveRawBasePrice = databasePrice;
@@ -21127,7 +21144,7 @@
             window.handleDispatchImageSelection(event, 'gallery');
         };
 
-        // v10.12.09: today's date in Eastern time as YYYY-MM-DD (toISOString() is UTC: after 7 pm Eastern it gave tomorrow).
+        // today's date in Eastern time as YYYY-MM-DD (toISOString() is UTC: after 7 pm Eastern it gave tomorrow).
         window.changeoutTodayEastern = function () {
             try {
                 const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
@@ -21138,7 +21155,7 @@
             return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
         };
 
-        // v10.12.09: an empty Proposal Date box is filled with today's Eastern date before Create / Update, so the box,
+        // an empty Proposal Date box is filled with today's Eastern date before Create / Update, so the box,
         // the proposal text and the file name all carry the same date. Returns the filled date, or '' when nothing was empty.
         window.fillEmptyProposalDate = function () {
             const box = document.getElementById('job-proposal-date');
@@ -21169,7 +21186,7 @@
             return window.proposalAppState.jobData;
         };
 
-        // v10.12.09: dates are read in these forms (any case): 2026-11-24, 11/24/2026, 11-24-2026, November 24, 2026,
+        // dates are read in these forms (any case): 2026-11-24, 11/24/2026, 11-24-2026, November 24, 2026,
         // Nov 24, 2026, Nov. 24 2026, Sept 4 2026, 2026 Nov 24, 24 Nov 2026. The answer is always YYYY-MM-DD (the date box is
         // type=date and silently drops anything else); a date that cannot be read, or does not exist (Feb 30), gives ''.
         window.parseChangeoutDate = function (value) {
@@ -21224,7 +21241,7 @@
             const trimmed = value.trim();
             if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return true;
             if (/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/.test(trimmed)) return true;
-            // v10.12.09: written-month dates (November 24, 2026 / 2026 Nov 24 / 24 Nov 2026)
+            // written-month dates (November 24, 2026 / 2026 Nov 24 / 24 Nov 2026)
             return !!window.parseChangeoutDate(trimmed);
         };
 
@@ -21524,11 +21541,11 @@
 
             window.hydrateJobDataForm();
 
-            // v10.13.01 (R1-3): the old customer's block must not stay in the proposal text / Copy / Create
+            // (R1-3): the old customer's block must not stay in the proposal text / Copy / Create
             if (Array.isArray(window.proposalBlocks)) {
                 window.proposalBlocks = window.proposalBlocks.filter(b => !b || b.target !== 'Customer Information');
             }
-            // v10.13.01 (R1-12): a cleared customer is a new quote: earlier protection price choices no longer apply
+            // (R1-12): a cleared customer is a new quote: earlier protection price choices no longer apply
             if (typeof window.startNewChangeoutQuoteId === 'function') window.startNewChangeoutQuoteId();
 
             if (typeof updateProposalTerminal === 'function') {
@@ -21681,7 +21698,7 @@
             return v3;
         };
 
-        // v10.08.01: a composite is an ordered list of tokens in `compositeFields`. A FIELD token is { field, showLabel } (the only kind before v10.12.00, unchanged); a STATIC TEXT token is
+        // a composite is an ordered list of tokens in `compositeFields`. A FIELD token is { field, showLabel } (the only kind before, unchanged); a STATIC TEXT token is
         // { type: 'text', text } (plain text, never HTML, at most SORTER_TEXT_MAX characters). The list stays in the same array, so old saved layouts load as they were and need no migration.
         window.SORTER_TEXT_MAX = 40;
         window.sorterCompositeIsText = function (f) { return !!f && typeof f === 'object' && f.type === 'text' && !f.field; };
@@ -21726,7 +21743,7 @@
                             split.widthWeight = window.GridPrimitives.weight(split.widthWeight || 1.0, 1.0);
                             if (!split.mapping) split.mapping = 'empty';
                             split.align = window.GridPrimitives.pick(split.align, ['left', 'center', 'right'], 'left');
-                            // v10.07.00: optional appearance (vertical alignment top / bottom, nudge in px); absent = the old look, nothing is added to a layout that does not use them
+                            // optional appearance (vertical alignment top / bottom, nudge in px); absent = the old look, nothing is added to a layout that does not use them
                             if (window.GridPrimitives.pick(split.vAlign, ['top', 'bottom'], '')) { /* kept */ } else delete split.vAlign;
                             ['nudgeX', 'nudgeY'].forEach(k => { const n = window.GridPrimitives.clampInt(split[k], window.GridPrimitives.NUDGE.max); if (n) split[k] = n; else delete split[k]; });
                             if (!split.fontSize) split.fontSize = 12;
@@ -21755,7 +21772,7 @@
             window.saveSorterSettings();
         };
 
-        // Row-template operations (v10.07.00: scoped by explicit indexes and selection-aware). They edit the ONE template every selected system is rendered with; the order of the
+        // Row-template operations (scoped by explicit indexes and selection-aware). They edit the ONE template every selected system is rendered with; the order of the
         // selected systems themselves (row drag and drop, selectedProposalRows) is a different thing and is not touched here. An index that does not point at an existing
         // container / stack / split is ignored, so no control can act on a parent it cannot identify (the old global "Add New Stack" button had no container).
         window.sorterEditorSel = { c: 0, s: 0, p: 0 };
@@ -21769,7 +21786,7 @@
         const sorterWeight = function (val) { return window.GridPrimitives.weight(parseFloat(val), 1, { min: window.GridPrimitives.WEIGHT.min, scale: 100 }); };
 
         // Container Mutators
-        // v10.12.04: a new empty container goes immediately AFTER the selected one (a missing / invalid selection appends at the end) and is selected; no existing container is touched
+        // a new empty container goes immediately AFTER the selected one (a missing / invalid selection appends at the end) and is selected; no existing container is touched
         window.addCartContainer = function () {
             const arr = window.sorterSettings.containers, sel = window.sorterEditorSel;
             const at = sel && sorterNode(sel.c).C ? sel.c + 1 : arr.length;
@@ -21909,7 +21926,7 @@
         window.sorterFieldId = function (field) { return String(field === undefined || field === null ? '' : field).replace(/[^A-Za-z0-9_.-]/g, ''); };
 
         window.getSorterCompositeFieldValue = function (fieldKey, context) {
-            const esc = window.escapePage2HeaderHtml;      // v10.12.08: the returned string is display HTML: the value text is escaped, the colour spans are the app's own
+            const esc = window.escapePage2HeaderHtml;      // the returned string is display HTML: the value text is escaped, the colour spans are the app's own
             let val = context[fieldKey];
             if (val === undefined || val === null || val === '' || val === 'N/A' || val === 'NA' || val === 'NULL' || val === 'UNDEFINED') return null;
             val = String(val).trim();
@@ -21954,8 +21971,8 @@
             }
 
             // One token per non-blank field, in saved order: <span class="srt-token" data-field="<canonical id>"> label span + value span (the value keeps the established
-            // field colour span). A blank field produces no token, so a separator only ever sits BETWEEN two tokens (v10.08.00).
-            // One field token (empty string when the field is blank); the markup is the v10.08.00 one.
+            // field colour span). A blank field produces no token, so a separator only ever sits BETWEEN two tokens.
+            // One field token (empty string when the field is blank); the markup is the one.
             const fieldToken = f => {
                 let v = window.getSorterCompositeFieldValue(f.field, context);
                 if (!v) return '';
@@ -21986,12 +22003,12 @@
 
             let finalHtml;
             if (!split.compositeFields.some(window.sorterCompositeIsText)) {
-                // field tokens only (every layout saved before v10.08.01): exactly the v10.08.00 output
+                // field tokens only (every layout saved before): exactly the output
                 const pieces = split.compositeFields.map(fieldToken).filter(Boolean);
                 if (pieces.length === 0) return `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
                 finalHtml = pieces.join(sepHtml);
             } else {
-                // Static text tokens (v10.08.01). Deterministic rules, no grammar: (1) the Separator goes only between two field tokens that touch; next to a static token the gap is a small plain space;
+                // Static text tokens. Deterministic rules, no grammar: (1) the Separator goes only between two field tokens that touch; next to a static token the gap is a small plain space;
                 // (2) a static token without a letter or digit (a punctuation mark such as "/", "-", "&", "(", ")") follows its field neighbours: between two fields it is a joiner, shown only
                 // when something is shown before it (not another joiner) and a non-blank field follows; touching only a field after it ("(") or before it (")", ":") it shows with that field
                 // only; with no field neighbour it always shows; (3) a static token with letters or digits ("System:", "with") is always shown; (4) when the composite has field tokens and
@@ -22028,7 +22045,7 @@
             return `<span class="srt-composite font-semibold tracking-wide flex flex-wrap items-center leading-tight">${finalHtml}</span>`;
         };
 
-        // === SYSTEMS SORTER BODY: SPECIALIZED REPEATING-ROW RENDERER (Stage 1 v10.06.00; shared geometry and template editor Stage 2 v10.07.00) ===
+        // === SYSTEMS SORTER BODY: SPECIALIZED REPEATING-ROW RENDERER (Stage 1; shared geometry and template editor Stage 2) ===
         // One configured row template (window.sorterSettings: containers -> stacks -> splits) is applied to ONE system and returns that system's complete row;
         // updateProposalCartUI calls it once per selected system. It is deliberately not the Proposal Builder renderer: the Builder moves singleton nodes into
         // slots, the Sorter builds fresh markup per record and any canonical field may appear in any number of splits.
@@ -22036,7 +22053,7 @@
         // call, so the preview follows the same ratios, flex rules, clipping and minimum-size rules as the rows. The weight / flex / enum / integer rules come from
         // window.GridPrimitives. Geometry rule (like the Builder's header, adapted to rows that repeat): a stack and a cell never shrink below their content HEIGHT
         // (nothing is clipped vertically; a row grows when its content needs more than its share), while WIDTH stays a pure ratio (min-width 0, clipped horizontally,
-        // a word wider than its cell breaks inside it only in a cell at least 8em wide, v10.07.01) so a narrow phone screen never gets a wider row. The pricing math, the icon cluster and the audit state stay with the
+        // a word wider than its cell breaks inside it only in a cell at least 8em wide) so a narrow phone screen never gets a wider row. The pricing math, the icon cluster and the audit state stay with the
         // proposal path: everything the row shows is passed in `row`:
         //   index, item (the catalog record), sp (the system scratchpad), brand / series / capacity / seer2 / ahri / site / mechStage / sysType / printStyle (display values),
         //   hasAuditMismatch, auditState, isNativeOceana, overrideBorder, emojiHtml, cleanBaseStr, cleanModStr, finalSorterPrice, otdFinalPrice.
@@ -22119,7 +22136,7 @@
         };
 
         window.renderSorterRow = function (row) {
-            const esc = window.escapePage2HeaderHtml;      // v10.12.08: catalog text inserted directly by a mapping is escaped (the colour / token spans are the app's own markup)
+            const esc = window.escapePage2HeaderHtml;      // catalog text inserted directly by a mapping is escaped (the colour / token spans are the app's own markup)
             const { index, item, sp, brand, series, capacity, seer2, ahri, site, mechStage, sysType, printStyle, hasAuditMismatch, auditState, isNativeOceana, overrideBorder,
                 emojiHtml, cleanBaseStr, cleanModStr, finalSorterPrice, otdFinalPrice } = row;
             const SorterContext = {
@@ -22140,13 +22157,13 @@
             // What one split shows for this system (the mapping chain is the one the inline code always had)
             const cellContent = function (split) {
                 let content = '';
-                // v10.12.03: the price buttons fill the cell (the whole cell stays the click target) but place the price with the cell's own alignment classes (horizontal items-* + text-*, vertical justify-*) instead of inheriting the cell's vertical justify-content into their horizontal flex
+                // the price buttons fill the cell (the whole cell stays the click target) but place the price with the cell's own alignment classes (horizontal items-* + text-*, vertical justify-*) instead of inheriting the cell's vertical justify-content into their horizontal flex
                 const priceAlign = window.sorterCellAlign(split);
                 if (split.mapping === 'composite' || ['capacity', 'systemType', 'mechanicalStage', 'applicationStyle', 'seriesTier', 'seer2', 'eer2', 'hspf2', 'coolingBtu', 'heatingBtu'].includes(split.mapping)) {
                     content = window.renderSorterCompositeContent(split, SorterContext);
                 }
                 else if (split.mapping === 'desc') {
-                    // v10.11.00: the legacy System Desc is still one fixed convenience cell (capacity, system type, mechanical stage, same words and colours) but each part is now its
+                    // the legacy System Desc is still one fixed convenience cell (capacity, system type, mechanical stage, same words and colours) but each part is now its
                     // canonical field token (data-field); a blank part (the Sorter's blank rule) is left out with its space, and nothing at all is N/A
                     const blank = f => !window.getSorterCompositeFieldValue(f, SorterContext);
                     const part = (f, text, cls) => blank(f) ? '' : `<span class="srt-token" data-field="${f}"><span class="srt-token-value${cls ? ' ' + cls : ''}">${esc(text)}</span></span>`;
@@ -22160,7 +22177,7 @@
                         : `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
                 }
                 else if (split.mapping === 'ahri') {
-                    // v10.10.00: the canonical `ahri` field token (label + value spans, same look); the click stays on this standalone value only
+                    // the canonical `ahri` field token (label + value spans, same look); the click stays on this standalone value only
                     content = `<span class="srt-token font-bold whitespace-nowrap" data-field="ahri"><span class="srt-token-label text-slate-500 mr-1">AHRI</span><span class="srt-token-value text-blue-400 font-mono tracking-tight cursor-pointer" onclick="openSorterSystemDetails(${index})">${esc(ahri || 'N/A')}</span></span>`;
                 }
                 else if (split.mapping === 'brandLogo') {
@@ -22175,7 +22192,7 @@
                     }
                 }
                 else if (split.mapping === 'brandName') {
-                    // v10.09.00: the plain Brand value as the canonical `brand` field token (same look as before; a blank Brand is N/A like the other canonical mappings)
+                    // the plain Brand value as the canonical `brand` field token (same look as before; a blank Brand is N/A like the other canonical mappings)
                     const bv = window.getSorterCompositeFieldValue('brand', SorterContext);
                     content = bv ? `<span class="srt-token font-bold text-blue-400 tracking-widest" data-field="brand"><span class="srt-token-value">${bv}</span></span>` : `<span class="text-slate-500 italic text-[11px]">N/A</span>`;
                 }
@@ -22257,7 +22274,7 @@
             if (typeof updateProposalCartUI === 'function') updateProposalCartUI();
         };
 
-        // v10.08.01: add an empty static text token (typed in the row that appears), edit it (cleaned like the loader does)
+        // add an empty static text token (typed in the row that appears), edit it (cleaned like the loader does)
         window.addSorterCompositeText = function (cIdx, sIdx, pIdx) {
             const split = window.sorterSettings.containers[cIdx].stacks[sIdx].splits[pIdx];
             if (!split.compositeFields) return;
@@ -22409,7 +22426,7 @@
             </div>`;
         };
 
-        // === SORTER SETTINGS: ROW TEMPLATE EDITOR (v10.07.00) ===
+        // === SORTER SETTINGS: ROW TEMPLATE EDITOR ===
         // The dialog edits the ONE row template every selected system is rendered with. A schematic preview of the row (the same window.sorterBodyHtml as the real rows: the same ratios,
         // flex rules, clipping and minimum-size rules, with the cell's mapping name instead of data) selects a CONTAINER -> STACK -> SPLIT path, and the inspector below edits exactly
         // that path with the same labels and steps as the Page 2 grid editor (ratios step 0.10, Shift 0.50, 0.10 to 12). Editor-only marks are outlines on the preview, never on the rows.
@@ -22453,7 +22470,7 @@
         window.renderSorterPreview = function () {
             const settings = window.sorterSettings, sel = window.sorterEditorSel;
             const labelOf = id => { const m = window.SORTER_MAPPINGS.find(x => x[0] === id); return m ? m[1] : id; };
-            // v10.08.00: a Custom Description cell is previewed with the REAL composite renderer (same tokens, order, separator, labels, colours) on sample values.
+            // a Custom Description cell is previewed with the REAL composite renderer (same tokens, order, separator, labels, colours) on sample values.
             const sample = { brand: 'Carrier', capacity: '3 Ton', systemType: 'Heat Pump', seriesTier: 'Performance', mechanicalStage: 'two-stage', applicationStyle: 'Split', seer2: '16.0', eer2: '12.5', hspf2: '8.5', ahri: '1234567', coolingBtu: '36000', heatingBtu: '34000', site: 'Main' };
             const body = window.sorterBodyHtml(settings, function (split, skipped) {
                 if (split.mapping === 'composite' && !skipped) return '<span class="srt-ph-live">' + window.renderSorterCompositeContent(split, sample) + '</span>';
@@ -22466,7 +22483,7 @@
                 stack: (c, s) => ({ cls: sel.c === c && sel.s === s ? ' srt-sel-s' : '', attr: ' data-c="' + c + '" data-s="' + s + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',0)"' }),
                 cell: (c, s, p) => ({ cls: sel.c === c && sel.s === s && sel.p === p ? ' srt-sel-p' : '', attr: ' data-c="' + c + '" data-s="' + s + '" data-p="' + p + '" onclick="event.stopPropagation(); selectSorterCell(' + c + ',' + s + ',' + p + ')"' })
             });
-            const h = settings.rowHeight;      // v10.12.02: the preview's height is the row's height (a definite height, like the row), so its stacks divide it exactly as the row's do
+            const h = settings.rowHeight;      // the preview's height is the row's height (a definite height, like the row), so its stacks divide it exactly as the row's do
             return '<div id="sorter-preview" class="bg-slate-900 border border-slate-700 px-1.5 py-2.5 rounded-lg flex gap-2" style="height: ' + h + 'px;">' + body + '</div>';
         };
         window.renderCartConfigurator = function () {
@@ -22488,7 +22505,7 @@
             const stepper = (l, value, dec, inc, hint) => rowOf(l, btn('&minus;', dec, 'Decrease (Shift+click: bigger step)') + '<span class="min-w-[5.5rem] px-1 whitespace-nowrap text-center text-xs text-white font-bold bg-slate-900 rounded border border-slate-700 py-1">' + value + '</span>' + btn('+', inc, 'Increase (Shift+click: bigger step)')) + (hint ? '<div class="text-xs text-slate-400 leading-snug">' + hint + '</div>' : '');
             const section = (tint, title, inner) => '<div class="bg-slate-950 border ' + tint + ' rounded p-2 flex flex-col gap-2"><div class="text-xs font-extrabold uppercase tracking-wider">' + title + '</div>' + inner + '</div>';
 
-            // v10.12.04: read-only shares of the SIBLINGS' current saved weights (same normalization as the saved layout); nothing is stored
+            // read-only shares of the SIBLINGS' current saved weights (same normalization as the saved layout); nothing is stored
             const shareOf = (nodes, key, node) => {
                 const nw = x => GP.weight(x[key], 1, { min: W.min, max: W.max, scale: 100 });
                 const sum = nodes.reduce((t, x) => t + nw(x), 0), pc = sum > 0 ? nw(node) / sum * 100 : 100;
@@ -22524,7 +22541,7 @@
                 containerSec + stackSec + splitSec;
         };
 
-        // === SYSTEMS SORTER HEADER: GRID-BACKED LAYOUT (v10.12.00) ===
+        // === SYSTEMS SORTER HEADER: GRID-BACKED LAYOUT ===
         // The header uses the same container -> stack -> split model and the same GridPrimitives (weight, flex share, pick) as the Sorter body, with its own small component registry:
         // title, badges (the live #sorter-action-badges HOST, never its individual badges), gear. The three components are singleton nodes that renderSorterHeader MOVES into their
         // cells (the badge host keeps its id, so updateProposalCartUI keeps writing into it). Own storage key (additive); the body layout and its key are not touched.
@@ -22761,7 +22778,7 @@
                 cont + stk + spl + '<div>' + btn('Reset header to default', 'sorterHeaderReset()', 'Reset the header layout') + '</div>';
         };
         window.renderSorterHeader();
-        // v10.12.01: Body / Header tab (view state only: not stored, nothing else reads it)
+        // Body / Header tab (view state only: not stored, nothing else reads it)
         window.sorterEditorTab = 'body';
         window.setSorterEditorTab = function (tab) {
             tab = tab === 'header' ? 'header' : 'body';
@@ -22962,9 +22979,9 @@
         </div>
     </div>
 
-    <!-- Price Calculator Removed in v04.02 for Global/Local Architecture -->
+    <!-- Price Calculator Removed in for Global/Local Architecture -->
 
-    <!-- Site Setup Modal (v06.29) -->
+    <!-- Site Setup Modal -->
     <div id="site-setup-modal"
         class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm pointer-events-none transition-opacity duration-300">
         <div class="pointer-events-auto w-[92vw] max-w-md bg-slate-800 rounded-xl shadow-2xl border border-slate-600 flex flex-col transition-all duration-300 h-[75dvh]"
@@ -25440,7 +25457,7 @@
 
 
     <script>
-        // === SHARED GRID FOUNDATION v08.07.6 ===
+        // === SHARED GRID FOUNDATION ===
 
         window.sharedGridState = {
             activeSurface: null,
@@ -25461,7 +25478,7 @@
         };
 
         window.renderSharedGrid = function (surfaceType) {
-            if (surfaceType === 'page2-header' && window.__pbHeaderActive) return;   // v10.05.00: the Page 2 header is a Proposal Builder region now (the legacy grid is kept only as the fallback)
+            if (surfaceType === 'page2-header' && window.__pbHeaderActive) return;   // the Page 2 header is a Proposal Builder region now (the legacy grid is kept only as the fallback)
             const p = window.getSharedGridData(surfaceType);
             if (!p || !p.headerLayout || !p.headerLayout.containers) return;
 
@@ -26292,7 +26309,7 @@
                     window.plattsProposalFoldersLoaded = true;
 
                     selectEl.innerHTML = "";
-                    window.plattsProposalFolders.forEach(f => {      // v10.12.07: folder names are text, ids are values (no HTML parsing of Drive names)
+                    window.plattsProposalFolders.forEach(f => {      // folder names are text, ids are values (no HTML parsing of Drive names)
                         const opt = document.createElement('option');
                         opt.value = String(f.id);
                         opt.textContent = String(f.name);
@@ -26347,7 +26364,7 @@
         }
 
         window.createProposalExportFromRetest = async function () {
-            if (typeof window.fillEmptyProposalDate === "function") window.fillEmptyProposalDate();      // v10.12.09
+            if (typeof window.fillEmptyProposalDate === "function") window.fillEmptyProposalDate();
             if (typeof window.updateJobDataFromForm === "function") {
                 window.updateJobDataFromForm();
             }
@@ -26503,7 +26520,7 @@
                     failMessage = window.describeManagedCreateConflict(failMessage, destId) || failMessage;
                 }
                 statusEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline-block mr-1"></i> `;
-                statusEl.appendChild(document.createTextNode(String(failMessage)));      // v10.12.07: the backend / network message is text, never HTML
+                statusEl.appendChild(document.createTextNode(String(failMessage)));      // the backend / network message is text, never HTML
                 statusEl.classList.remove("hidden", "text-emerald-400");
                 statusEl.classList.add("text-rose-400");
                 if (originalLucide && window.lucide.createIcons) {
@@ -26697,11 +26714,11 @@
                 if (!lp || !lp.baseName || lp.destinationFolderId !== destinationFolderId ||
                     typeof message !== 'string' || message.indexOf('already exists in this destination folder') === -1 ||
                     message.indexOf('"' + lp.baseName + '"') === -1) return null;
-                const safe = String(lp.baseName);      // v10.12.07: plain text (the Create banner renders it as text, so it must not be pre-escaped)
+                const safe = String(lp.baseName);      // plain text (the Create banner renders it as text, so it must not be pre-escaped)
                 return '"' + safe + '" is already loaded. Use Update to save your changes as Rev ' + (lp.currentRevision + 1) + '.';
             };
 
-            // --- Managed Create network-failure recovery (v10.01.3) ---
+            // --- Managed Create network-failure recovery ---
             // Read-only lookups only (listManagedProposals / getProposalState). The Create POST is never re-sent.
             window.retestCreateRecoveryConfig = {
                 pollDelayMs: 5000,     // wait between lookups while the server may still be finishing
@@ -26900,7 +26917,7 @@
                 state.siteData = Object.assign({ name: 'Standard', isCustom: false }, state.siteData);
                 state.refrigerant = Object.assign({ feet: 0, fee: 0 }, state.refrigerant);
                 state.manualTextOverrides = Object.assign({ Upgrades: false, Fees: false }, state.manualTextOverrides);
-                // v10.03.00: an older proposal has neither key and is left exactly as it was (a System proposal); when present they go through the one Custom sanitizer
+                // an older proposal has neither key and is left exactly as it was (a System proposal); when present they go through the one Custom sanitizer
                 const customNotes = [];
                 if (Object.prototype.hasOwnProperty.call(state, 'proposalType') || Object.prototype.hasOwnProperty.call(state, 'customProposal')) {
                     state.proposalType = window.normalizeProposalType(state.proposalType);
@@ -26935,6 +26952,13 @@
                 const sps = bs.systemScratchpads;
                 const rows = bs.selectedProposalRows;
                 const referenced = new Set();
+                // Price Book (no. 21): a saved option that the snapshot re-matches (by Price Book ID or identity) is checked at its NEW
+                // position, so a book that got shorter or reordered does not block a save that can be verified
+                const movedTo = {};
+                try {
+                    const idr = typeof window.resolveSavedPackages === 'function' ? window.resolveSavedPackages(bs) : null;
+                    if (idr) idr.moves.forEach(mv => { movedTo[mv.key] = mv.to; });
+                } catch (e) { /* the normal checks below still run */ }
                 if (rows.length === 0 && bs.proposalAppState.proposalType !== 'custom') warnings.push('The saved proposal has no selected options.');
 
                 rows.forEach((id, i) => {
@@ -26960,7 +26984,7 @@
                         if (!used) warnings.push(`${label}: not an object.`);
                         return;
                     }
-                    const idx = sp.absoluteIndex;
+                    const idx = movedTo[key] !== undefined ? movedTo[key] : sp.absoluteIndex;
                     let problem = null;
                     if (!Number.isInteger(idx)) problem = 'absoluteIndex is not an integer';
                     else if (idx < 0 || idx >= dbLen) problem = `absoluteIndex ${idx} is outside the current catalog (0–${dbLen - 1})`;
@@ -27019,7 +27043,7 @@
                     }
 
                     window.proposalAppState = candidateProposalAppState;
-                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // v10.14.00: older custom condo $ -> manual
+                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // older custom condo $ -> manual
                     window.systemScratchpads = candidateSystemScratchpads;
                     selectedProposalRows = candidateSelectedProposalRows;
                     redrawBuilder();
@@ -27393,7 +27417,7 @@
                     ' (' + lp.proposalId + '), creating revision ' + (lp.currentRevision + 1) +
                     '. The current revision will be archived. Create Proposal remains a separate new proposal.';
                 setStatus('', false);
-                // v10.03.01: the proposal type changed since this proposal was loaded / last saved: say so and ask for an explicit "Continue Update"
+                // the proposal type changed since this proposal was loaded / last saved: say so and ask for an explicit "Continue Update"
                 const typeChange = typeof window.managedProposalTypeChange === 'function' ? window.managedProposalTypeChange() : null;
                 const typeWarning = byId('mpu-type-warning');
                 if (typeWarning) {
@@ -27414,7 +27438,7 @@
                     setStatus('Loaded proposal changed. Close this dialog and try again.', true);
                     return;
                 }
-                if (typeof window.fillEmptyProposalDate === 'function') window.fillEmptyProposalDate();      // v10.12.09
+                if (typeof window.fillEmptyProposalDate === 'function') window.fillEmptyProposalDate();
                 if (typeof window.updateJobDataFromForm === 'function') window.updateJobDataFromForm();
                 const proposalText = window.pureCopyText || '';
                 if (!proposalText.trim()) {
@@ -27497,7 +27521,7 @@
         })();
     </script>
     <script>
-        // === PROPOSAL WORKING DRAFT + TEST DATA HELPER (v10.01.09) ===
+        // === PROPOSAL WORKING DRAFT + TEST DATA HELPER ===
         // A LOCAL working draft: the current unsaved Builder State survives a browser refresh. It is a convenience for the
         // person at this browser, not a server proposal revision and not a replacement for managed Create / Load / Update:
         //   - what is saved: the same three objects a managed proposal saves as its Builder State (proposalAppState - which already
@@ -27527,7 +27551,7 @@
             const DRAFT_KEY = 'platts_proposal_working_draft_v1';
             const TEST_KEY = 'platts_proposal_test_index_v1';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.14.00';
+            const APP_VERSION = 'v10.15.00';
             const MAX_BYTES = 768 * 1024;
             const DEBOUNCE_MS = 500, POLL_MS = 2500;
             const st = {
@@ -27558,12 +27582,15 @@
                 if (!it) return null;
                 return [it.ahri, it.brand, it.seriesTier, it.capacity, it.systemType, it.site, it.mechanicalStage].map(v => (v === undefined || v === null) ? '' : String(v)).join('|');
             }
+            // Price Book (no. 21): the draft also remembers each option's Price Book ID, so a book that reordered or added rows
+            // while the page was closed brings back the same systems (re-matched by ID, else by AHRI + brand + size; never by position).
+            const bookId = idx => (catalogOk() && window.catalogMatch) ? window.catalogMatch.bookIdOf(HVAC_DATABASE[idx]) : '';
             function capture() {
                 const sps = window.systemScratchpads || {};
-                const refs = {};
+                const refs = {}, ids = {};
                 Object.keys(sps).forEach(k => {
                     const ai = isObj(sps[k]) ? sps[k].absoluteIndex : undefined;
-                    if (Number.isInteger(ai) && refs[ai] === undefined) refs[ai] = fingerprint(ai);
+                    if (Number.isInteger(ai) && refs[ai] === undefined) { refs[ai] = fingerprint(ai); ids[ai] = bookId(ai); }
                 });
                 const lp = window.retestLoadedProposal;
                 const derived = lp && lp.proposalId ? { baseName: lp.baseName || null, revision: lp.currentRevision } : st.carried;
@@ -27573,6 +27600,7 @@
                     systemScratchpads: sps,
                     proposalAppState: window.proposalAppState || {},
                     catalogRefs: refs,
+                    catalogIds: ids,
                     derivedFrom: derived || null
                 };
             }
@@ -27582,7 +27610,7 @@
                 const jobEmpty = !['customerName', 'address', 'phone', 'email', 'jobNumber', 'advisor'].some(k => String(job[k] || '').trim());
                 const quiet = !(Array.isArray(pas.lineInjections) && pas.lineInjections.length) && !(Array.isArray(pas.customLines) && pas.customLines.length) &&
                     !Object.keys(isObj(pas.textOverrides) ? pas.textOverrides : {}).length && !(isObj(pas.activeSite) && pas.activeSite.confirmed) &&
-                    !(typeof window.customProposalHasContent === 'function' && window.customProposalHasContent(pas.customProposal));      // v10.03.00: custom items are meaningful content
+                    !(typeof window.customProposalHasContent === 'function' && window.customProposalHasContent(pas.customProposal));      // custom items are meaningful content
                 return d.selectedProposalRows.length === 0 && Object.keys(d.systemScratchpads).length === 0 && jobEmpty && quiet;
             }
 
@@ -27621,20 +27649,29 @@
                 if (!isObj(d.catalogRefs)) errors.push('The draft has no catalog fingerprints.');
                 if (typeof window.validateLoadedBuilderState !== 'function' || typeof window.normalizeLoadedProposalAppState !== 'function') errors.push('The Builder State validators are not available.');
                 if (errors.length) return { ok: false, errors: errors, warnings: warnings };
-                const check = window.validateLoadedBuilderState({ proposalAppState: d.proposalAppState, systemScratchpads: d.systemScratchpads, selectedProposalRows: d.selectedProposalRows });
-                if (!check.ok) return { ok: false, errors: check.errors, warnings: check.warnings };
-                warnings.push.apply(warnings, check.warnings);
+                if (!isObj(d.systemScratchpads) || !Array.isArray(d.selectedProposalRows)) return { ok: false, errors: ['The draft has no options list.'], warnings: warnings };
                 const used = new Set(d.selectedProposalRows.map(String));
+                const ids = isObj(d.catalogIds) ? d.catalogIds : {};
+                const moves = [];
                 Object.keys(d.systemScratchpads).forEach(k => {
                     if (!isObj(d.systemScratchpads[k])) return;
                     const ai = d.systemScratchpads[k].absoluteIndex;
                     const want = d.catalogRefs[ai];
-                    const have = fingerprint(ai);
-                    if (want === have && have !== null) return;
-                    const msg = 'Catalog position ' + ai + ' now holds different equipment than when the draft was saved.';
+                    const m = window.catalogMatch ? window.catalogMatch.matchDraftRef({ priceBookId: ids[ai], fingerprint: want }, ai) : null;
+                    if (m) { if (m.index !== ai) moves.push({ key: k, from: ai, to: m.index, by: m.by }); return; }
+                    if (!window.catalogMatch && want === fingerprint(ai) && want !== null) return;
+                    const msg = 'Catalog position ' + ai + ' now holds different equipment than when the draft was saved, and the system was not found elsewhere.';
                     if (used.has(k)) errors.push('Option ' + (d.selectedProposalRows.findIndex(r => String(r) === k) + 1) + ': ' + msg);
                     else warnings.push('Unused scratchpad ' + k + ': ' + msg);
                 });
+                if (errors.length === 0 && moves.length && window.catalogMatch) {
+                    window.catalogMatch.moveScratchpads(d.systemScratchpads, d.selectedProposalRows, moves);
+                    warnings.push('Re-matched ' + moves.length + ' system(s) to their new place in the price list (' + moves.map(mv => mv.from + ' -> ' + mv.to + ' by ' + mv.by).join(', ') + ').');
+                }
+                if (errors.length) return { ok: false, errors: errors, warnings: warnings };
+                const check = window.validateLoadedBuilderState({ proposalAppState: d.proposalAppState, systemScratchpads: d.systemScratchpads, selectedProposalRows: d.selectedProposalRows });
+                if (!check.ok) return { ok: false, errors: check.errors, warnings: check.warnings };
+                warnings.unshift.apply(warnings, check.warnings);
                 return { ok: errors.length === 0, errors: errors, warnings: warnings };
             }
             function redraw() {
@@ -27660,7 +27697,7 @@
                     ['closeSiteSetupModal', 'closePriceModal', 'closeReceiptModal'].forEach(n => { if (typeof window[n] === 'function') window[n](); });
                     currentBasePrice = 0; currentSystemObj = null;
                     window.proposalAppState = norm.state;
-                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // v10.14.00: older custom condo $ -> manual
+                    if (typeof ensureActiveSiteState === 'function') ensureActiveSiteState();      // older custom condo $ -> manual
                     window.systemScratchpads = JSON.parse(JSON.stringify(d.systemScratchpads));
                     selectedProposalRows = d.selectedProposalRows.slice();
                     redraw();
@@ -27793,7 +27830,7 @@
         })();
     </script>
     <script>
-        // === PROPOSAL PRICING SNAPSHOT + SAVED-VS-CURRENT COMPARISON (v10.02.00) ===
+        // === PROPOSAL PRICING SNAPSHOT + SAVED-VS-CURRENT COMPARISON ===
         // Philosophy for NEW managed proposals: loading one first reproduces what was actually quoted, then compares that saved pricing with
         // today's, read-only. Nothing silently re-prices a loaded customer's quote. The saved PDF/DOC remain the human-verifiable archive;
         // the structured Builder State (never the PDF) is the authoritative reload data.
@@ -27824,7 +27861,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const SNAPSHOT_VERSION = 1;
-            const APP_VERSION = 'v10.14.00';
+            const APP_VERSION = 'v10.15.00';
             const WITHDRAW_DAYS = 20;
             const num = v => { const n = Number(String(v === undefined || v === null ? '' : v).replace(/[^0-9.-]+/g, '')); return isFinite(n) ? n : 0; };
             const norm = v => String(v === undefined || v === null ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
@@ -27843,22 +27880,95 @@
                 id.nativeSite = sp && sp.nativeSite !== undefined ? String(sp.nativeSite) : id.site;
                 id.effectiveAhri = typeof window.getEffectiveAhri === 'function' ? String(window.getEffectiveAhri(item, sp) || '') : id.ahri;
                 id.absoluteIndex = sp && Number.isInteger(sp.absoluteIndex) ? sp.absoluteIndex : null;
+                id.priceBookId = bookIdOf(item);
                 return id;
             }
-            const sameIdentity = (saved, item) => !!item && ID_FIELDS.every(p => norm(saved[p[0]]) === norm(fieldOf(item, p[0])));
-            const identityDiffs = (saved, item) => ID_FIELDS.filter(p => !item || norm(saved[p[0]]) !== norm(fieldOf(item, p[0]))).map(p => ({
+            // Price Book (no. 21): every catalog row carries its Price Book ID in sourceRow (AC-001 ...). Saved options remember it and are
+            // re-matched by it first; older saves (no ID) by the full identity, then by AHRI + brand + size. Never by list position alone.
+            const PB_ID = /^(AC|HP|GF|PK|OC)-\d{3}$/;
+            const bookIdOf = item => { const s = String(item && item.sourceRow !== undefined && item.sourceRow !== null ? item.sourceRow : '').trim(); return PB_ID.test(s) ? s : ''; };
+            // gas furnace sizes before the Price Book were bands; a saved band matches the real tons it covered
+            const CAPACITY_ALIASES = { 'UP TO 3 & 3.5 TON': ['3 TON', '3.5 TON'], '4-5 TON': ['4 TON', '5 TON'] };
+            const capacityMatches = (saved, cur) => { const a = norm(saved), b = norm(cur); return a === b || (CAPACITY_ALIASES[a] || []).indexOf(b) >= 0; };
+            const fieldSame = (f, saved, item) => f === 'capacity' ? capacityMatches(saved, fieldOf(item, f)) : norm(saved) === norm(fieldOf(item, f));
+            const sameIdentity = (saved, item) => !!item && ID_FIELDS.every(p => fieldSame(p[0], saved[p[0]], item));
+            const identityDiffs = (saved, item) => ID_FIELDS.filter(p => !item || !fieldSame(p[0], saved[p[0]], item)).map(p => ({
                 field: p[0], label: p[1], saved: saved[p[0]], current: item ? String(fieldOf(item, p[0]) === undefined || fieldOf(item, p[0]) === null ? '' : fieldOf(item, p[0])) : '(no such catalog position)'
             }));
-            // exact = same position, same package; remapped = the one catalog row with that exact package; otherwise unverified.
+            // two hits where one is a 3.5-ton listing of a 4-ton furnace: the real row wins
+            const preferReal = (hits, db) => {
+                if (hits.length < 2 || typeof window.furnaceListingNote !== 'function') return hits;
+                const real = hits.filter(i => !window.furnaceListingNote(db[i]));
+                return real.length ? real : hits;
+            };
+            const indexesWhere = (db, pred) => { const out = []; db.forEach((it, i) => { if (pred(it)) out.push(i); }); return out; };
+            const looseSame = (saved, it) => !!norm(saved.ahri) && norm(saved.ahri) === norm(it.ahri) && norm(saved.brand) === norm(it.brand) && capacityMatches(saved.capacity, it.capacity);
+            // exact = same position, same package; remapped = found elsewhere (by = 'id' | 'identity' | 'ahri-brand-size'); otherwise unverified.
             function matchPackage(saved, absoluteIndex) {
                 const db = catalog();
                 const cur = Number.isInteger(absoluteIndex) ? db[absoluteIndex] : undefined;
-                if (cur && sameIdentity(saved, cur)) return { status: 'exact', index: absoluteIndex, item: cur };
-                const hits = [];
-                db.forEach((it, i) => { if (sameIdentity(saved, it)) hits.push(i); });
-                if (hits.length === 1) return { status: 'remapped', index: hits[0], item: db[hits[0]], from: absoluteIndex };
+                const at = (i, by) => ({ status: i === absoluteIndex ? 'exact' : 'remapped', index: i, item: db[i], from: absoluteIndex, by: by });
+                const pid = String(saved && saved.priceBookId || '').trim();
+                if (pid) {
+                    const byId = indexesWhere(db, it => bookIdOf(it) === pid);
+                    if (byId.length === 1) return at(byId[0], 'id');
+                }
+                if (cur && sameIdentity(saved, cur)) return at(absoluteIndex, 'identity');
+                const hits = preferReal(indexesWhere(db, it => sameIdentity(saved, it)), db);
+                if (hits.length === 1) return at(hits[0], 'identity');
+                if (hits.length === 0) {
+                    const loose = preferReal(indexesWhere(db, it => looseSame(saved, it)), db);
+                    if (loose.length === 1) return Object.assign(at(loose[0], 'ahri-brand-size'), { diffs: identityDiffs(saved, db[loose[0]]) });
+                }
                 return { status: hits.length > 1 ? 'ambiguous' : 'missing', index: null, item: null, diffs: identityDiffs(saved, cur), candidates: hits.length };
             }
+            // A working-draft reference { priceBookId, fingerprint 'ahri|brand|series|capacity|type|site|stage' } -> { index, by } or null.
+            function matchDraftRef(ref, absoluteIndex) {
+                const f = String(ref && ref.fingerprint || '').split('|');
+                const saved = { priceBookId: ref && ref.priceBookId, ahri: f[0], brand: f[1], seriesTier: f[2], capacity: f[3], systemType: f[4], site: f[5], mechanicalStage: f[6] };
+                const db = catalog();
+                const pid = String(saved.priceBookId || '').trim();
+                if (pid) {
+                    const byId = indexesWhere(db, it => bookIdOf(it) === pid);
+                    if (byId.length === 1) return { index: byId[0], by: 'id' };
+                }
+                if (!ref || !ref.fingerprint) return null;
+                const same = it => !!it && ['ahri', 'brand', 'seriesTier', 'systemType', 'site', 'mechanicalStage'].every(k => norm(saved[k]) === norm(it[k])) && capacityMatches(saved.capacity, it.capacity);
+                if (same(db[absoluteIndex])) return { index: absoluteIndex, by: 'identity' };
+                const hits = preferReal(indexesWhere(db, same), db);
+                if (hits.length === 1) return { index: hits[0], by: 'identity' };
+                if (hits.length === 0) {
+                    const loose = preferReal(indexesWhere(db, it => looseSame(saved, it)), db);
+                    if (loose.length === 1) return { index: loose[0], by: 'ahri-brand-size' };
+                }
+                return null;
+            }
+            // Move scratchpads to their new catalog positions. A row id that IS a catalog position follows its position; all moves are
+            // applied at once, so two options that swapped places stay right. Mutates sps and rows in place.
+            function moveScratchpads(sps, rows, moves) {
+                if (!moves.length) return;
+                const rename = {};
+                moves.forEach(mv => {
+                    const sp = sps[mv.key];
+                    if (!isObj(sp)) return;
+                    sp.absoluteIndex = mv.to;
+                    if (String(mv.from) === mv.key) rename[mv.key] = String(mv.to);
+                });
+                const movedAway = new Set(Object.keys(rename));
+                Object.keys(rename).forEach(k => {          // never take a key that stays in use by an option that is not moving
+                    const to = rename[k];
+                    if (Object.prototype.hasOwnProperty.call(sps, to) && !movedAway.has(to)) delete rename[k];
+                });
+                const out = {};
+                Object.keys(sps).forEach(k => { out[rename[k] || k] = sps[k]; });
+                Object.keys(sps).forEach(k => { delete sps[k]; });
+                Object.assign(sps, out);
+                if (Array.isArray(rows)) rows.forEach((r, i) => {
+                    const to = rename[String(r)];
+                    if (to !== undefined) rows[i] = typeof r === 'number' ? Number(to) : to;
+                });
+            }
+            window.catalogMatch = { bookIdOf: bookIdOf, matchDraftRef: matchDraftRef, moveScratchpads: moveScratchpads, capacityMatches: capacityMatches };
 
             // ---- the pricing engine's numbers, itemized (a faithful port of the customer-price math in updateProposalCartUI) ----
             const ROUTED = ['installation-scope', 'optional', 'protection', 'hidden'];
@@ -27878,7 +27988,7 @@
             function shieldPrices(item) {
                 const style = String((item && (item.applicationStyle || item.style)) || '').toUpperCase();
                 return typeof window.calculateSystemSaltShield === 'function'
-                    ? window.calculateSystemSaltShield(String(item.capacity || '').toUpperCase(), String(item.seer2 || '').toUpperCase(), style) : { here: 0, infi: 0 };
+                    ? window.calculateSystemSaltShield(String(item.capacity || '').toUpperCase(), String(item.seer2 || '').toUpperCase(), style, item.systemType) : { here: 0, infi: 0 };
             }
             function priceOption(sp, item, app) {
                 const res = window.getSystemBasePriceResolution(item, sp);
@@ -27893,7 +28003,7 @@
                     if (removed(name)) return;
                     const price = Number(rawPrice) || 0;
                     const nm = name.toLowerCase();
-                    if (nm.includes('condo')) { if (sp.condo && sp.condo.required) return; baked += price; add('baked', 'condoAddon', name, price); return; }      // v10.13.01 (R1-2)
+                    if (nm.includes('condo')) { if (sp.condo && sp.condo.required) return; baked += price; add('baked', 'condoAddon', name, price); return; }      // (R1-2)
                     const route = routeOf(name);
                     if (ROUTED.indexOf(route) >= 0 && treatmentOf(sp, name) === 'included-in-system-price') { baked += price; add('baked', 'enhancement', name, price); return; }
                     if (ROUTED.indexOf(route) >= 0) return;
@@ -27915,7 +28025,7 @@
                 if (sp.condo && sp.condo.required && !sp.condo.includedInBase && Number(sp.condo.charge) > 0) { baked += Number(sp.condo.charge); add('baked', 'condoCharge', 'Condo Install', Number(sp.condo.charge)); }
                 if (sp.siteFloorAllowance && sp.siteFloorAllowance.bakedIn && Number(sp.siteFloorAllowance.amount) > 0) {
                     baked += Number(sp.siteFloorAllowance.amount);
-                    add('baked', 'floorAllowance', typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge', Number(sp.siteFloorAllowance.amount), { profileId: sp.siteFloorAllowance.profileId, floor: sp.siteFloorAllowance.equipmentFloor, condenserFloor: sp.siteFloorAllowance.condenserFloor, manual: !!sp.siteFloorAllowance.manual });      // v10.14.00
+                    add('baked', 'floorAllowance', typeof window.floorChargeLabel === 'function' ? window.floorChargeLabel(sp.siteFloorAllowance) : 'Oceana Additional Refrigerant Charge', Number(sp.siteFloorAllowance.amount), { profileId: sp.siteFloorAllowance.profileId, floor: sp.siteFloorAllowance.equipmentFloor, condenserFloor: sp.siteFloorAllowance.condenserFloor, manual: !!sp.siteFloorAllowance.manual });
                 }
                 Object.entries(sp.deductions || {}).forEach(([name, price]) => {
                     if (removed(name)) return;
@@ -27931,7 +28041,7 @@
                         if (!name.toLowerCase().includes('crane')) return;
                         if (globalCrane > 0) return;
                         if (sp.addons && sp.addons[name] !== undefined) return;
-                        if (removed(name)) return;      // v10.13.01 (R1-6)
+                        if (removed(name)) return;      // (R1-6)
                         otd += Number(price) || 0;
                         add('necessary', 'crane', name, Number(price) || 0, { scope: 'global' });
                     });
@@ -27982,7 +28092,7 @@
             window.attachPricingSnapshot = function (builderState) {
                 try {
                     if (!isObj(builderState) || !Array.isArray(builderState.selectedProposalRows) || !isObj(builderState.systemScratchpads)) return false;
-                    if (isObj(builderState.proposalAppState) && builderState.proposalAppState.proposalType === 'custom') return false;      // v10.03.00: a Custom proposal's prices are typed values; there is no catalog quote to snapshot
+                    if (isObj(builderState.proposalAppState) && builderState.proposalAppState.proposalType === 'custom') return false;      // a Custom proposal's prices are typed values; there is no catalog quote to snapshot
                     if (typeof updateProposalCartUI === 'function') updateProposalCartUI();       // the printed text must reflect the state being saved
                     const printed = printedInvestments();
                     const app = builderState.proposalAppState || {};
@@ -28042,7 +28152,7 @@
                     case 'condoCharge': return enhancementPrice('Condo Install');
                     case 'floorAllowance':
                         if (line.profileId === 'oceana' && typeof BUILT_IN_SITE_PROFILES !== 'undefined' && typeof getSiteFloorAllowance === 'function' && line.floor !== null && line.floor !== undefined) return getSiteFloorAllowance(BUILT_IN_SITE_PROFILES.oceana, line.floor);
-                        // v10.14.00: other condos with computed (not typed) amounts follow the same tiers
+                        // other condos with computed (not typed) amounts follow the same tiers
                         if (line.profileId === 'custom' && !line.manual && typeof window.floorsOfTravelCharge === 'function') { const c = window.floorsOfTravelCharge(line.condenserFloor, line.floor); return c ? c.fee : null; }
                         return null;
                     case 'coastalOverride': return line.override - ctx.currentBase;
@@ -28135,19 +28245,7 @@
                 });
                 return {
                     errors: errors, moves: moves,
-                    apply: function (sps, rows) {
-                        moves.forEach(mv => {
-                            const sp = sps[mv.key];
-                            if (!sp) return;
-                            sp.absoluteIndex = mv.to;
-                            const numericKey = String(mv.from) === mv.key;            // a catalog-position row id follows its position
-                            if (numericKey && sps[String(mv.to)] === undefined && Array.isArray(rows)) {
-                                sps[String(mv.to)] = sp; delete sps[mv.key];
-                                const at = rows.findIndex(r => String(r) === mv.key);
-                                if (at >= 0) rows[at] = typeof rows[at] === 'number' ? mv.to : String(mv.to);
-                            }
-                        });
-                    }
+                    apply: function (sps, rows) { moveScratchpads(sps, rows, moves); }
                 };
             };
 
@@ -28190,7 +28288,7 @@
                     wrap.className += ' border-slate-600 bg-slate-900/50';
                     wrap.setAttribute('data-pr-status', 'legacy');
                     wrap.appendChild(el('div', 'font-bold uppercase text-[10px] tracking-wider text-slate-300', 'Pricing check'));
-                    wrap.appendChild(el('div', 'text-slate-300 leading-relaxed', 'Historical comparison is limited: this proposal was saved before pricing snapshots (v10.02.00), so there is no record of the individual prices that were quoted. It will be rebuilt from the current catalog and may differ from the saved PDF, and no exact component-level comparison can be shown. Use the saved files below as the record of what was quoted.'));
+                    wrap.appendChild(el('div', 'text-slate-300 leading-relaxed', 'Historical comparison is limited: this proposal was saved before pricing snapshots existed, so there is no record of the individual prices that were quoted. It will be rebuilt from the current catalog and may differ from the saved PDF, and no exact component-level comparison can be shown. Use the saved files below as the record of what was quoted.'));
                 } else if (ev.blocked.length) {
                     wrap.className += ' border-rose-500/60 bg-rose-900/20';
                     wrap.setAttribute('data-pr-status', 'identity');
@@ -28217,7 +28315,8 @@
                         const box = el('div', 'rounded border border-slate-700/60 bg-slate-950/40 p-2 space-y-1');
                         box.setAttribute('data-pr-option', String(opt.index + 1));
                         box.appendChild(el('div', 'text-slate-100 font-bold', 'Option ' + (opt.index + 1) + ' · ' + opt.label + (opt.ahri ? ' · AHRI ' + opt.ahri : '')));
-                        if (opt.identity.status === 'remapped') box.appendChild(el('div', 'text-sky-300 text-[10px]', 'Matched by package identity: catalog position ' + opt.identity.from + ' is now ' + opt.identity.index + '.'));
+                        if (opt.identity.status === 'remapped') box.appendChild(el('div', 'text-sky-300 text-[10px]', (opt.identity.by === 'id' ? 'Matched by Price Book ID ' + (catalog()[opt.identity.index] || {}).sourceRow
+                            : opt.identity.by === 'ahri-brand-size' ? 'Matched by AHRI + brand + size' : 'Matched by package identity') + ': catalog position ' + opt.identity.from + ' is now ' + opt.identity.index + '.'));
                         const changedLines = opt.lines.filter(l => l.comparable && Math.round(l.delta) !== 0);
                         const unchanged = opt.lines.filter(l => !(l.comparable && Math.round(l.delta) !== 0));
                         if (!opt.changed) box.appendChild(el('div', 'text-slate-400', 'No change (' + fmt(opt.investment.saved) + ').'));
@@ -28292,7 +28391,7 @@
         })();
     </script>
     <script>
-        // === PROPOSAL BUILDER CUSTOM GRID (v10.01.4; summary/actions split and edit preview v10.01.5; protected settings gear v10.01.6; bands and ratio geometry v10.01.7; cell fill, Smart Injector components and place-from-unplaced v10.01.8; stable conditional controls and collapse anchoring v10.01.09; component appearance, fine ratios and Advanced settings v10.02.00) ===
+        // === PROPOSAL BUILDER CUSTOM GRID (summary/actions split and edit preview; protected settings gear; bands and ratio geometry; cell fill, Smart Injector components and place-from-unplaced; stable conditional controls and collapse anchoring; component appearance, fine ratios and Advanced settings) ===
         // Layout shell for the "Final Proposal Output" section. One layout record per profile (desktop / mobile) holds:
         //   summary  - the persistent <summary> strip: containers -> stacks -> splits (section title, settings gear, collapse hint)
         //   actions  - the action grid at the top of the expanded <details> body: overall height + containers -> stacks -> splits
@@ -28305,18 +28404,18 @@
         // means "natural height, takes no share". Weights are never forced to total 100: 1/1/1 and 10/10/10 are the same split.
         // Future hook (not implemented): per-sibling locks would redistribute only among the unlocked siblings; every group is
         // a plain array of {widthWeight|heightWeight}, so a "locked" flag per entry can be added without a schema break.
-        // Cell ownership (v10.01.8): the split IS the component's cell. Mapped controls in Actions and bands fill it by their
+        // Cell ownership: the split IS the component's cell. Mapped controls in Actions and bands fill it by their
         // component's fill mode ('both' = width and height, 'width' = full width with natural height, 'natural' = intrinsic size,
         // used by the compact Summary). The Smart Injector strip's controls are components too (Actions or bands).
         // The original stateful nodes are MOVED into slots (never cloned), so ids, listeners, busy state, hrefs and
         // closure-captured references stay valid. Create / Load / Update / status business logic is untouched; this
         // layer is presentation and state routing.
-        // Fine tuning (v10.02.00): ratios step by 0.10 (Shift+click 0.50) and read as Container Width / Stack Height / Split Width Ratio;
+        // Fine tuning: ratios step by 0.10 (Shift+click 0.50) and read as Container Width / Stack Height / Split Width Ratio;
         // heights step by 5 px (Shift+click 20 px) and the first step from Auto starts at the region's natural height, not a fixed jump.
         // Component appearance (text size presets + fine tune, icon size/gap, text alignment, vertical position, nudge, banner density) is a
         // separate layer from cell geometry, stored per component per profile (layout.styles). Buttons and links stay on one line.
         // Advanced settings (Ctrl+Shift+click on the gear) hold the editor's own appearance and diagnostics. A UI convenience, not security.
-        // Stable runtime (v10.01.09): mapped ACTIONABLE conditional controls (Update, DOC, PDF, the note price) stay in their cell
+        // Stable runtime: mapped ACTIONABLE conditional controls (Update, DOC, PDF, the note price) stay in their cell
         // while unavailable - muted, genuinely disabled, no hole in the layout - and come alive in place when the app's own
         // hidden/href state says they are valid. Informational displays (the Loaded proposal box) still collapse when empty.
         // Expanding or collapsing the section keeps its Summary at the same viewport Y, with a temporary bottom reserve that
@@ -28327,7 +28426,7 @@
             const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
             const clone = v => JSON.parse(JSON.stringify(v));
             const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-            const GP = window.GridPrimitives;      // v10.06.00: the weight / flex / enum rules shared with the Systems Sorter body
+            const GP = window.GridPrimitives;      // the weight / flex / enum rules shared with the Systems Sorter body
             const SCHEMA = 3;
             const PROFILES = ['desktop', 'mobile'];
             const PROFILE_LABEL = { desktop: 'Desktop', mobile: 'Mobile' };
@@ -28345,13 +28444,13 @@
             const VIS_LABEL = { expanded: 'Expanded only', always: 'Always visible' };
             const PATH = profile => 'proposalBar.layouts.' + profile;
             const LIM = { containers: 6, stacks: 10, splits: 8, bands: 8, wMin: GP.WEIGHT.min, wMax: GP.WEIGHT.max, wStep: GP.WEIGHT.step, wCoarse: GP.WEIGHT.coarse, hMin: 10, hMax: 1000, hStep: 5, hCoarse: 20, hFallback: 20, fine: 8, nudge: GP.NUDGE.max, nudgeNatural: 40, nudgeCoarse: GP.NUDGE.coarse, labelMax: 80 };
-            // Data revision inside schema 3. Revision 2 = the Smart Injector components exist: a saved layout older than that (v10.01.7 and
+            // Data revision inside schema 3. Revision 2 = the Smart Injector components exist: a saved layout older than that (an early build and
             // older) gets them in a default band once, and a component the user deliberately left unplaced stays unplaced afterwards.
-            // Revision 3 (v10.02.00) = layouts may carry component appearance (`styles`). It is purely additive: a revision 2 layout loads
+            // Revision 3 = layouts may carry component appearance (`styles`). It is purely additive: a revision 2 layout loads
             // unchanged with no styles (Auto everywhere) and is not rewritten until it is edited.
-            // Revision 6 (v10.03.00) = the Proposal Type control exists: a saved layout older than that gets it once (first empty Actions cell, else a new
+            // Revision 6 = the Proposal Type control exists: a saved layout older than that gets it once (first empty Actions cell, else a new
             // Expanded-only band), and a layout that deliberately leaves it unplaced afterwards keeps it unplaced. Purely additive; not rewritten until edited.
-            // Revision 7 (v10.05.00) = the Page 2 header region exists (surfaces.header, with its own height): a saved layout older than that gets the built-in
+            // Revision 7 = the Page 2 header region exists (surfaces.header, with its own height): a saved layout older than that gets the built-in
             // header for its profile; a customized legacy Page 2 header (propSettings.page2Header) is converted into the DESKTOP header once, without touching
             // the legacy data. Purely additive; an older layout is not rewritten until it is edited.
             const REVISION = 7;
@@ -28409,7 +28508,7 @@
                 'control:injectorText': { label: 'Custom note text', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'width', style: S_TXT },
                 'utility:injectorMic': { label: 'Mic', type: 'utility', allowedSurfaces: ['actions', 'band'], fill: 'both', wrap: 'never', icon: true, style: S_ICO },
                 'control:injectorAdd': { label: 'Add', type: 'control', allowedSurfaces: ['actions', 'band'], fill: 'both', wrap: 'never', style: S_TXT },
-                // v10.05.00: Page 2 header components. The originals are moved into header cells (never cloned); 'natural' fill = their own size, placed by the cell.
+                // Page 2 header components. The originals are moved into header cells (never cloned); 'natural' fill = their own size, placed by the cell.
                 // Required: Back and the header gear (the way back to Pricing and into this editor). header:text1 / header:text2 are fixed custom-text slots (the text is
                 // saved per layout in styles[id].customText). Control size (boxSize) is the button size, or the logo height.
                 'header:logo': { label: "Platt's logo", type: 'display', allowedSurfaces: ['header'], style: ['vAlign', 'nudge', 'size'], nudgeLim: 100, sizeKind: 'logo', sizeMin: 16, sizeMax: 120, sizeDef: 36 },
@@ -28453,11 +28552,11 @@
             }
             COMPONENT_IDS.forEach(id => { const d = COMPONENTS[id]; if (!d.labelTarget) return; const n = nodeFor(id); d.defaultLabel = n ? ownLabel(n) : ''; if (!d.defaultLabel) d.labelTarget = false; });
 
-            // ---- Component appearance (v10.02.00) -----------------------------------------------------------------
+            // ---- Component appearance -----------------------------------------------------------------
             // Two separate layers: CELL GEOMETRY (ratios, heights, cell alignment: unchanged, in the layout) and COMPONENT APPEARANCE (text size,
             // icon size, text alignment, vertical placement, nudge, message density). Appearance is stored per COMPONENT inside each profile's
             // layout (layout.styles[componentId]): it follows the component when it moves, survives every structure edit, is saved separately for
-            // Desktop and Mobile (a phone often needs different sizes), and a missing entry means Auto = exactly the v10.01.09 look. Only the
+            // Desktop and Mobile (a phone often needs different sizes), and a missing entry means Auto = exactly the look. Only the
             // chosen values are saved; which controls a component offers (COMPONENTS[id].style) is runtime metadata and is never saved.
             // Responsive text: presets are a share of the CELL (container-query width, bounded by a sane minimum and maximum, and by the cell
             // height when the surface has an explicit height) plus a relative fine step, so "Large -1" stays "Large minus one step" whatever
@@ -28496,11 +28595,11 @@
                 if (has('textAlign') && TEXT_ALIGNS.indexOf(raw.textAlign) > 0) out.textAlign = raw.textAlign;
                 if (has('vAlign') && (raw.vAlign === 'top' || raw.vAlign === 'bottom')) out.vAlign = raw.vAlign;
                 if (has('density') && (raw.density === 'compact' || raw.density === 'roomy')) out.density = raw.density;
-                if (has('size')) {      // v10.05.00: header button size / logo height (px); the default size is not stored
+                if (has('size')) {      // header button size / logo height (px); the default size is not stored
                     const n = Math.round(Number(raw.boxSize));
                     if (isFinite(n)) { const v = Math.max(def.sizeMin, Math.min(def.sizeMax, n)); if (v !== def.sizeDef) out.boxSize = v; }
                 }
-                if (def.textSlot && typeof raw.customText === 'string') {      // v10.05.00: the text of a header custom-text slot: plain text, no control characters, at most 200 characters
+                if (def.textSlot && typeof raw.customText === 'string') {      // the text of a header custom-text slot: plain text, no control characters, at most 200 characters
                     const t = Array.from(raw.customText).filter(ch => ch.charCodeAt(0) >= 32 && ch.charCodeAt(0) !== 127).join('').trim().slice(0, 200);
                     if (t) out.customText = t;
                 }
@@ -28680,7 +28779,7 @@
                 ];
                 return { position: 'bottom', height: 0, visibility: 'expanded', stacks: stacks };
             };
-            // v10.03.00: one-time placement of the Proposal Type control in an older saved layout (nothing else is moved).
+            // one-time placement of the Proposal Type control in an older saved layout (nothing else is moved).
             function placeProposalType(layout) {
                 let hit = null;
                 layout.surfaces.actions.containers.forEach(c => c.stacks.forEach(s => s.splits.forEach(p => { if (!hit && p.mapping === 'empty') hit = p; })));
@@ -28689,11 +28788,11 @@
             }
             // Whole layout -> clean v3 layout. Accepts three shapes:
             //   v3 (this version): surfaces + bands.
-            //   v2 (v10.01.5/6): surfaces + messagePlacement. Summary and Actions are kept exactly; the old above/below message
+            //   v2 (early builds): surfaces + messagePlacement. Summary and Actions are kept exactly; the old above/below message
             //     setting becomes one full-width band holding the Dynamic message region ('above' -> Before Summary,
             //     otherwise -> Between Summary and Actions), always visible, Auto height; the Actions height is Auto.
-            //   v1 (v10.01.4): action grid only; Summary gets the built-in default (the hint stays removed if it was).
-            // A saved layout without revision 2 (v10.01.7 and older, v2, v1) predates the Smart Injector components: when none of
+            //   v1: action grid only; Summary gets the built-in default (the hint stays removed if it was).
+            // A saved layout without revision 2 (early builds, v2, v1) predates the Smart Injector components: when none of
             // them is placed it gets the default injector band appended once (nothing else is moved); the result carries revision 2.
             // A region that is unusable falls back to its own built-in default (the others are kept). Returns null when nothing
             // usable is found or the schema version is unknown. A layout without the required components is never returned.
@@ -28739,7 +28838,7 @@
                     if (fromV1 && !v1HadHint) clearMapping(summaryS, 'utility:collapseHint');   // the user had removed the hint before
                 }
                 if (!bands) { if (!fallback) return null; bands = clone(fallback.bands); }
-                if (!headerS) { if (!fallback) return null; headerS = clone(fallback.surfaces.header); }      // v10.05.00: an older layout (or an unusable region) gets the built-in header of its profile
+                if (!headerS) { if (!fallback) return null; headerS = clone(fallback.surfaces.header); }      // an older layout (or an unusable region) gets the built-in header of its profile
                 const layout = { schemaVersion: SCHEMA, revision: REVISION, surfaces: { summary: summaryS, actions: actions, header: headerS }, bands: bands, styles: sanitizeStyles(raw.styles) };
                 if (rev < INJECTOR_REVISION && profile && layout.bands.length < LIM.bands && INJECTOR_IDS.every(id => !findAddr(layout, id))) {
                     layout.bands.push(injectorBand(profile));   // one-time migration: deterministic area, existing components stay where they are
@@ -28753,7 +28852,7 @@
             const E = () => sp('empty');
             const SUMMARY_DEFAULT = () => ({ containers: [{ widthWeight: 1, stacks: [{ heightWeight: 0, splits: [sp('display:sectionTitle', 3, 'start'), sp('utility:settings', 0.5, 'center'), sp('utility:collapseHint', 1.6, 'end')] }] }] });
             const BANDS_DEFAULT = profile => [newBand('middle', 'always', 'region:messages'), injectorBand(profile)];
-            // v10.05.00: built-in header regions. Desktop = the old canonical header (identity left: logo / title / version + site badge, an empty middle, the six
+            // built-in header regions. Desktop = the old canonical header (identity left: logo / title / version + site badge, an empty middle, the six
             // utilities right; 88 px). Mobile = three short rows in one container (identity; the six utilities; the site badge), Auto height, so nothing is squeezed
             // into tiny weighted cells at phone width; its buttons are 38 px (a comfortable touch size) and Back and the gear are always in the utility row.
             const hb = (id, w) => sp(id, w || 1, 'center');
@@ -28823,7 +28922,7 @@
             const settingsOk = () => typeof window.setLocalUserSetting === 'function' && typeof window.getLocalUserSetting === 'function' &&
                 typeof window.resetLocalUserSetting === 'function';
 
-            // ---- Legacy Page 2 header conversion (v10.05.00) -------------------------------------------------------------------
+            // ---- Legacy Page 2 header conversion -------------------------------------------------------------------
             // The old header was propSettings.page2Header.headerLayout (changeout_prop_settings_v1): containers -> stacks -> splits with a mapping name. It is converted into the
             // Builder's header region: structure, weights, alignment (cell alignment and top / bottom vertical position), custom text (the first two custom-text cells become
             // header:text1 / header:text2; further ones are dropped), offsets (nudge, +/-100 px), text sizes (a fine step of 0.5 px, +/-4 px around the default), icon sizes (+/-8 px
@@ -28991,7 +29090,7 @@
             };
             let details = null, summary = null, sumBody = null, region = null, sumHost = null, actWrap = null, actHost = null, parking = null, strip = null;
             let zoneTop = null, zoneMid = null, zoneTail = null, zoneBottom = null;
-            let hdrWrap = null, hdrHost = null;      // v10.05.00: the Page 2 header region (outside the section's <details>)
+            let hdrWrap = null, hdrHost = null;      // the Page 2 header region (outside the section's <details>)
             // References to every original node, captured before a render replaces any host: a node that moves between regions
             // (the Loaded proposal: Actions <-> a band) must survive the old host being emptied before its new host is built.
             let renderNodes = null;
@@ -29077,7 +29176,7 @@
                 hostEl.classList.toggle('pb-host-active', editingThis);
                 hostEl.classList.toggle('pb-move-off', !!(state.editing && state.moveMode && !allowedOn(state.moveMode.id, kind)));   // regions that can never take it
             }
-            // ---- Apply component appearance to the rendered nodes (v10.02.00) ----------------------------------------------
+            // ---- Apply component appearance to the rendered nodes ----------------------------------------------
             // The originals carry presentation hints as data attributes and CSS custom properties; pb_style rules do the rest. Everything is
             // cleared from every original at the start of each render, so a removed style, a moved component or the failure fallback never
             // leaves a stale mark behind.
@@ -29104,7 +29203,7 @@
                 sp.appendChild(tn);
                 if (m[3]) n.insertBefore(document.createTextNode(m[3]), sp.nextSibling);
             }
-            // Custom visible label (v10.02.03). Only the words change, never the control's action. It is applied while the control shows its built-in
+            // Custom visible label. Only the words change, never the control's action. It is applied while the control shows its built-in
             // label (or already the custom one); a temporary operational text such as "Creating..." is left alone and the custom label comes back by
             // itself when the app puts the built-in label back.
             function applyLabel(n, def, custom) {
@@ -29344,7 +29443,7 @@
                     clearAvailability();
                     COMPONENT_IDS.forEach(id => { const n = nodeOf(id); if (n) clearNodeStyle(n); });
                     COMPONENT_IDS.forEach(id => { const n = nodeOf(id); if (n && !INJECTOR_SET.has(id)) { n.inert = false; parking.appendChild(n); } });
-                    // v10.05.00: the header goes back to the legacy shared-grid header (its originals return to the source bank it draws from)
+                    // the header goes back to the legacy shared-grid header (its originals return to the source bank it draws from)
                     window.__pbHeaderActive = false;
                     const bank = $('page2-header-native-source-bank');
                     HEADER_IDS.forEach(id => { const n = nodeOf(id); if (n && bank) bank.appendChild(n); });
@@ -29370,7 +29469,7 @@
                 ['proposal-doc-link', 'proposal-pdf-link'].forEach(id => { const a = $(id); if (a && a.classList.contains('pb-link-off') !== off) a.classList.toggle('pb-link-off', off); });
             }
 
-            // ---- Runtime availability of conditional controls (v10.01.09) --------------------------------------
+            // ---- Runtime availability of conditional controls --------------------------------------
             // The existing code shows or hides these originals with a hidden class (Update, note price) or with the shared links
             // container plus the anchor's href (DOC, PDF). This layer only READS that state: an unavailable actionable control
             // stays in its cell (so the layout has no holes), muted, genuinely disabled and inert; when the app makes it valid it
@@ -29432,7 +29531,7 @@
                 if (t && !state.editing) { e.preventDefault(); e.stopPropagation(); }
             }
 
-            // ---- Stable collapse / expand (v10.01.09) ------------------------------------------------------------
+            // ---- Stable collapse / expand ------------------------------------------------------------
             // Goal: the Summary the user just clicked stays at the same viewport Y while the body expands or collapses under it.
             // Collapsing shortens the document; at the bottom of the page the browser then has to clamp the scroll offset, which
             // drags the Summary down the screen. So BEFORE the section collapses, a bottom reserve (padding on the scroll content)
@@ -29742,7 +29841,7 @@
                 return tot > 0 ? ' · ' + Math.round(weights[i] / tot * 100) + '%' : '';
             };
             const heightLabel = (h, natural) => h > 0 ? h + ' px' : (natural > 0 ? 'Auto (~' + natural + ' px)' : 'Auto');
-            // ---- Editor appearance + Advanced settings (v10.02.00) -----------------------------------------------------
+            // ---- Editor appearance + Advanced settings -----------------------------------------------------
             // Editor appearance: a restrained set of looks for this editor's own settings dialog (not for proposal output). Device-local, sparse
             // (user-settings path proposalBar.editor, only changed values are saved). It generalizes the Dispatch settings appearance idea (modal
             // width/height, title size, section/label/readout sizes, control size) on the same shared dialog elements, applied the same way
@@ -29794,7 +29893,7 @@
                 applyEditorAppearance();
                 renderEditor();
             }
-            // v10.02.04: the same save for a caller that is not inside the editor (Design Profiles): errors are thrown, the editor is redrawn only if open.
+            // the same save for a caller that is not inside the editor (Design Profiles): errors are thrown, the editor is redrawn only if open.
             function saveEditorAppearanceQuiet(obj) {
                 window.setLocalUserSetting(EDITOR_PATH, sanitizeEditorAppearance(obj));
                 applyEditorAppearance();
@@ -29869,7 +29968,7 @@
                         if (el) el.textContent = st && st.origin ? st.origin.usedMb + ' MB / ' + st.origin.quotaMb + ' MB (' + st.origin.percent + '%)' : 'not reported by this browser';
                     }).catch(() => { /* leave the placeholder */ });
                     return '<div class="text-[10px] font-mono space-y-0.5" data-pb-diagnostics="1">' +
-                        row('Engine', 'v10.14.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
+                        row('Engine', 'v10.15.00 · schema ' + SCHEMA + ' rev ' + REVISION) + row('Editing profile', PROFILE_LABEL[state.editProfile] + ' (screen uses ' + PROFILE_LABEL[currentMode()] + ')') +
                         row('Components placed / total', placed.size + ' / ' + COMPONENT_IDS.length) + row('Not placed', unplaced.length ? unplaced.length + ': ' + unplaced.map(id => COMPONENTS[id].label).join(', ') : 'none') +
                         row('Bands', String(lay.bands.length)) + row('Components with an appearance override', styled.length + (styled.length ? ' (' + styled.map(id => COMPONENTS[id].label).join(', ') + ')' : '')) +
                         row('Saved layout, Desktop / Mobile', size(PATH('desktop')) + ' / ' + size(PATH('mobile')) + ' chars') + row('Saved editor appearance', size(EDITOR_PATH) + ' chars') +
@@ -29909,7 +30008,7 @@
             }
 
             // ---- Component appearance editing (one component, one profile) ---------------------------------------------
-            // Reusable arrow pad for a small X / Y offset (v10.02.01). It only draws; the caller owns the state and the click handling:
+            // Reusable arrow pad for a small X / Y offset. It only draws; the caller owns the state and the click handling:
             //   cfg = { label, x, y, unit, coarse, attrs: dir => 'data-... attributes' }  with dir in up | down | left | right | center.
             // Arrows are -1 / +1 steps (Shift+click: cfg.coarse), the center resets both offsets. Also exposed as window.renderNudgePad for other surfaces.
             function nudgePadHtml(cfg) {
@@ -30271,7 +30370,7 @@
             function onPanelChange(e) {
                 if (!state.editProfile) return;
                 const ti = e.target.closest ? e.target.closest('input[data-pb-textslot]') : null;
-                if (ti) {      // v10.05.00: the text of a header custom-text slot
+                if (ti) {      // the text of a header custom-text slot
                     state.notice = null;
                     const layout = editLayout();
                     clampBand(layout);
@@ -30443,7 +30542,7 @@
                 sumBody.appendChild(zoneMid);
                 sumBody.appendChild(zoneTail);
                 summary.appendChild(sumBody);
-                hdrWrap = $('pb-hdr-wrap');      // v10.05.00: the Page 2 header region (it lives above the section, so it needs its own host and click handler)
+                hdrWrap = $('pb-hdr-wrap');      // the Page 2 header region (it lives above the section, so it needs its own host and click handler)
                 if (hdrWrap) {
                     hdrHost = document.createElement('div');
                     hdrHost.id = 'pb-hdr-host';
@@ -30478,7 +30577,7 @@
                     if (el) watch.observe(el, { attributes: true, attributeFilter: w[1] });
                 });
                 const panel = $('proposal-bar-settings-panel');
-                const layoutPanel = $('page-layout-settings-panel');      // v10.05.01: Page Width (moved here from Proposal Output Settings)
+                const layoutPanel = $('page-layout-settings-panel');      // Page Width (moved here from Proposal Output Settings)
                 if (panel) { panel.addEventListener('click', onPanelClick); panel.addEventListener('change', onPanelChange); }
                 state.ready = true;
                 renderBar();
@@ -30497,7 +30596,7 @@
                 // Open the editor through the existing settings modal.
                 const prevOpen = window.openPage2Settings;
                 window.openPage2Settings = function (scope) {
-                    // v10.05.00: the header gear (and the old 'page2' scope) opens this editor on the Header region; the legacy header editor is kept only as the fallback
+                    // the header gear (and the old 'page2' scope) opens this editor on the Header region; the legacy header editor is kept only as the fallback
                     if (scope === 'page2' && hdrHost && state.ready && !state.failed) { scope = 'proposal-bar'; state.editSurface = 'header'; }
                     if (scope !== 'proposal-bar') {
                         if (panel) panel.classList.add('hidden');
@@ -30535,7 +30634,7 @@
             }
 
             window.proposalBar = {
-                version: 'v10.14.00',
+                version: 'v10.15.00',
                 revision: REVISION,
                 injectorComponents: INJECTOR_IDS.slice(),
                 schemaVersion: SCHEMA,
@@ -30561,7 +30660,7 @@
                 naturalHeight: naturalHeight,
                 stepHeight: stepHeight,
                 editorAppearance: editorAppearance,
-                // v10.02.04: used by Design Profiles (the same sanitizer / saver / re-render the editor itself uses).
+                // used by Design Profiles (the same sanitizer / saver / re-render the editor itself uses).
                 sanitizeEditorAppearance: sanitizeEditorAppearance,
                 setEditorAppearance: function (obj) { saveEditorAppearanceQuiet(obj); },
                 refreshAll: function () { renderBar(); applyEditorAppearance(); if (state.editing) renderEditor(); },
@@ -30574,7 +30673,7 @@
                 openEditor: function () { window.openPage2Settings('proposal-bar'); },
                 resetSurface: function (profile, kind) { resetSurface(profile, kind); renderBar(); if (state.editing) renderEditor(); },
                 resetProfile: function (profile) { window.resetLocalUserSetting(PATH(profile)); markHeaderReset(); renderBar(); if (state.editing) renderEditor(); },
-                // v10.05.00 (Page 2 header region)
+                // (Page 2 header region)
                 headerActive: function () { return !!hdrHost && state.ready && !state.failed; },
                 headerComponents: HEADER_IDS.slice(),
                 capturableLayout: capturableLayout,
@@ -30586,7 +30685,7 @@
         })();
     </script>
     <script>
-        // === UNIVERSAL DESIGN PROFILES v10.02.04 ===
+        // === UNIVERSAL DESIGN PROFILES ===
         // A DESIGN PROFILE is a named, portable bundle of visual / layout overrides. It is not a proposal, not a working draft and not business state.
         //
         // Hierarchy:   built-in source defaults  ->  design profile (named override bundle)  ->  current device (loads / applies one)
@@ -30612,7 +30711,7 @@
             const FORMAT = 'platts-design-profile';
             const VAULT_FORMAT = 'platts-design-profile-vault';
             const SCHEMA = 1;
-            const APP_VERSION = 'v10.14.00';
+            const APP_VERSION = 'v10.15.00';
             const TARGETS = ['desktop', 'mobile', 'mixed'];
             const TARGET_LABEL = { desktop: 'Desktop', mobile: 'Mobile', mixed: 'Mixed' };
             const LIM = { name: 60, notes: 500, file: 2 * 1024 * 1024, profileBytes: 600 * 1024, profiles: 100, customText: 200, ignoredShown: 12 };
@@ -30666,7 +30765,7 @@
             // to store (null means "built-in default") or undefined to skip. Future migrated surfaces register here; the profile plumbing is untouched.
             const REG = [];
             const REG_BY_ID = new Map();
-            // v10.05.00: what the profile being applied carries, so the legacy page2.header unit knows where its header belongs (a mobile profile -> the Mobile layout, otherwise Desktop)
+            // what the profile being applied carries, so the legacy page2.header unit knows where its header belongs (a mobile profile -> the Mobile layout, otherwise Desktop)
             // and does not overwrite a header that the same profile's Builder layout already carries.
             let applyCtx = { target: 'mixed', hdrIn: { desktop: false, mobile: false } };
             function register(def) {
@@ -30789,7 +30888,7 @@
                     id: 'proposalBuilder.' + p, title: 'Proposal Builder ' + TARGET_LABEL[p] + ' layout', surface: 'proposalBuilder', targets: [p, 'mixed'],
                     capture: function () {
                         if (!window.proposalBar || typeof window.getLocalUserSetting !== 'function') return undefined;
-                        if (typeof window.proposalBar.capturableLayout === 'function') return window.proposalBar.capturableLayout(p);      // v10.05.00: includes the header region (a not-yet-saved legacy header too)
+                        if (typeof window.proposalBar.capturableLayout === 'function') return window.proposalBar.capturableLayout(p);      // includes the header region (a not-yet-saved legacy header too)
                         const stored = window.getLocalUserSetting(path);
                         if (stored === undefined) return null;
                         return window.proposalBar.sanitizeLayout(stored, p) || null;
@@ -30835,7 +30934,7 @@
                     setPropWidth(v.mode);
                 }
             });
-            // Page 2 header: LEGACY unit (v10.05.00). The header now lives inside the Proposal Builder Desktop / Mobile layouts, so new profiles do not capture this unit any more;
+            // Page 2 header: LEGACY unit. The header now lives inside the Proposal Builder Desktop / Mobile layouts, so new profiles do not capture this unit any more;
             // an OLD profile that carries it is still read (every field range-checked), kept as the legacy header object (rollback compatibility) and converted into the Builder header.
             const HDR_NUM = { logoHeight: [8, 200, 36], titleFontSize: [6, 48, 12], versionBadgeFontSize: [6, 48, 11], buttonSize: [16, 96, 32], buttonGap: [0, 64, 6], headerHeight: [20, 400, 88],
                 headerOuterPadding: [0, 64, 8], containerGap: [0, 64, 8], stackGap: [0, 64, 4], splitGap: [0, 64, 4], cellPadding: [0, 64, 2] };
@@ -30897,7 +30996,7 @@
             }
             register({
                 id: 'page2.header', title: 'Page 2 header layout', surface: 'page2', targets: TARGETS.slice(),
-                capture: function () { return undefined; },      // v10.05.00: the header is captured inside proposalBuilder.desktop / .mobile
+                capture: function () { return undefined; },      // the header is captured inside proposalBuilder.desktop / .mobile
                 validate: cleanHeader,
                 apply: function (v) {
                     propSettings.page2Header = clone(v);
@@ -30906,7 +31005,7 @@
                     window.page2HeaderSelectedContainer = 0; window.page2HeaderSelectedStack = 0; window.page2HeaderSelectedSplit = 0;
                     if (window.sharedGridState) { window.sharedGridState.selectedContainer = 0; window.sharedGridState.selectedStack = 0; window.sharedGridState.selectedSplit = 0; }
                     if (typeof applyPage2HeaderSettings === 'function') applyPage2HeaderSettings();
-                    try {      // v10.05.00: convert the legacy header into the Proposal Builder header of the profile's target (nothing is discarded)
+                    try {      // convert the legacy header into the Proposal Builder header of the profile's target (nothing is discarded)
                         const tgt = applyCtx.target === 'mobile' ? 'mobile' : 'desktop';
                         if (window.proposalBar && typeof window.proposalBar.applyLegacyHeader === 'function' && !applyCtx.hdrIn[tgt]) window.proposalBar.applyLegacyHeader(tgt, v);
                     } catch (e) { console.error('Design profile: the legacy header could not be converted.', e); }
@@ -31235,7 +31334,7 @@
         })();
     </script>
     <script>
-        // === CUSTOM PROPOSAL PANEL (v10.03.00, Phase 1A) ===
+        // === CUSTOM PROPOSAL PANEL (Phase 1A) ===
         // The dynamic item list for a Custom / Standalone proposal. Deliberately NOT part of the Proposal Builder grid: the grid places fixed
         // components, this panel holds a list that grows. All edits go through window.customProposalApi (state + re-render); this file only draws
         // the panel and keeps it in step with the state (Proposal Type, Load, draft restore, New Quote all call syncCustomProposalUI through
@@ -31302,7 +31401,7 @@
                 style();
                 const pres = selectOf(api().presentations.map(k => [k, api().presentationLabels[k]]), 'combined', { id: 'cp-presentation' });
                 const title = el('input', { type: 'text', id: 'cp-title', maxLength: api().limits.title, placeholder: 'Optional heading for the package', autocomplete: 'off' });
-                // v10.04.00: job intent, scope terms (generic words that only shape the introduction) and the Other / Custom text
+                // job intent, scope terms (generic words that only shape the introduction) and the Other / Custom text
                 const intent = selectOf(api().actions.map(k => [k, api().actionLabels[k]]), '', { id: 'cp-intent' });
                 const jobRow = el('div', { className: 'cp-row' });
                 jobRow.appendChild(field('Job intent', intent, 'cp-grow'));
